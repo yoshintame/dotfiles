@@ -1,0 +1,101 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap 'homebrew/cask-fonts'
+
+brew font-hack-nerd-font # https://gist.github.com/davidteren/898f2dcccd42d9f8680ec69a3a5d350e
+
+
+# brew "autojump" # Shell extension to jump to frequently used directories
+# brew "awscli" # Official Amazon AWS command-line interface
+# brew "diff-so-fancy" # Good-lookin" diffs with diff-highlight and more
+# brew "docker-compose"
+# brew "gh" # GitHub command-line tool
+# brew "git-flow"
+# brew "heroku"
+# brew "jq" # Lightweight and flexible command-line JSON processor
+# brew "legit" # Command-line interface for Git, optimized for workflow simplicity
+# brew "mackup"
+# brew "q"
+# brew "reattach-to-user-namespace"  Reattach process (e.g., tmux) to background
+# brew "terminal-notifier"
+# brew "w3m" # Pager/text based browser
+# brew "zsh"
+# brew "zsh-completions"
+brew "ack" # Search tool like grep, but optimized for programmers
+brew "coreutils" # GNU File, Shell, and Text utilities
+brew "exa" # Better ls command
+brew "ffmpeg" 
+brew "findutils" # Collection of GNU find, xargs, and locate
+brew "git"
+brew "git-extras"
+brew "htop"
+brew "mas"
+brew "mosh" # Remote terminal application
+brew "mtr" # 'traceroute' and 'ping' in a single tool
+brew "nmap" # Port scanning utility for large networks
+brew "node"
+brew "nvm"
+brew "openconnect" # VPN client
+brew "ranger" # File browser
+brew "tmux" # Terminal multiplexer
+brew "trash" # CLI tool that moves files or folder to the trash
+brew "tree"
+brew "vim"
+brew "wget"
+
+
+# cask "alfred" # Alternatife for spotlight, using "raycast" insted
+# cask "cornerstone" # Subversion client
+# cask "diffmerge" # Visually compare and merge files
+# cask "licecap" # Animated screen capture application
+# cask "macdown" # Open-source Markdown editor
+# cask "private-internet-access" # VPN client
+# cask "razer-synapse"
+# cask "robo-3t" # MongoDB management tool
+# cask "sequel-pro" # MySQL/MariaDB database management platform
+# cask "sourcetree" # Graphical client for Git version control
+# cask "sublime-text2" # Text editor for code, markup and prose
+# cask "vagrant" # Development environment
+# cask "adguard" # Paywall
+cask "anydesk"
+cask "appcleaner" # Application uninstaller
+# cask "bartender" # Menu bar icon organizer (paywall)
+cask "betterdiscord-installer"
+cask "bettertouchtool" # Tool to FVcustomize input devices and automate computer systems (paywall)
+cask "cheatsheet" # Tool to list all active shortcuts of the current application
+# cask "cleanmymac" # Tool to remove unnecessary files and folders from disk (paywall)
+cask "clipy" # Clipboard extension app
+cask "coconutbattery" # Tool to show live information about the batteries in various devices
+cask "firefox"
+cask "google-chrome"
+cask "handbrake"
+cask "harvest" # Remove metadata files from external drives
+cask "iina" # Free and open-source media player
+cask "intellij-idea-ce"
+cask "iterm2" # Terminal emulator as alternative to Apple's Terminal app
+cask "jetbrains-toolbox"
+cask "microsoft-edge"
+cask "microsoft-excel"
+cask "microsoft-powerpoint"
+cask "microsoft-remote-desktop"
+cask "microsoft-word"
+cask "namechanger" # Rename a list of files quickly
+cask "notion"
+cask "onedrive"
+cask "pycharm-ce"
+cask "qlmarkdown" # QuickLook generator for Markdown files
+cask "qlstephen" # QuickLook plugin for plaintext files without an extension
+cask "raycast"
+cask "rectangle"
+cask "spotify"
+cask "steam"
+cask "suspicious-package" # Application for inspecting installer packages
+cask "telegram"
+cask "textexpander" # Inserts pre-made snippets of text anywhere
+cask "the-unarchiver" # Unpacks archive files
+cask "topnotch" # Utility to hide the notch
+cask "transmission" # Open-source BitTorrent client
+cask "visual-studio-code"
+cask "webstorm"
+cask "zoom"
+cask "altserver"

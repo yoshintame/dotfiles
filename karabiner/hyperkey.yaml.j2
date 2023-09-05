@@ -1,0 +1,50 @@
+{% macro action_generate(panel_number, key, description, from, to, to_if_alone, indentation=0) -%}
+{% set indent = ' ' * indentation %}
+{% if from is defined and from is not none %}
+{{ indent }}- description: "{{ description }}"
+{% else %}
+{{ indent }}- description: 'hyper{% if panels[panel_number] %} + {{ panels[panel_number] }}{% endif %} + {{ keys[key] }}: {{ description }}'
+{% endif %}
+{{ indent }}  type: basic
+{% if from is defined and from is not none %}
+{{ indent }}  from: { {{ from }} }
+{% else %}
+{{ indent }}  from: { key_code: {{ keys[key]  }}, modifiers: { mandatory: [ {% if panels[panel_number] %}{{ panels[panel_number] }}, {% endif %}{{ hyper }} ] } }
+{% endif %}
+{{ indent }}  to: [ {{ to }} ]
+{% if to_if_alone is defined and to_if_alone is not none %}
+{{ indent }}  to_if_alone: [ { {{ to_if_alone }} } ]
+{% endif %}
+{%- endmacro %}
+
+{% macro generate_comment(text, indentation=0) %}
+{% set indent = ' ' * indentation %}
+{% set comment_width = 58 %}
+{% set text_length = text|length %}
+{% set remaining_spaces = comment_width - text_length %}
+{% set closing_indentation = ' ' * remaining_spaces %}
+{{ indent }}#===========================================================#
+{{ indent }}# {{ text }}{{ closing_indentation }}#
+{{ indent }}#===========================================================#
+{% endmacro %}
+---
+title: Hyperkey
+version: 0.0.1
+maintainers: [ Yoshintame ]
+author: Yoshintame(m.ivanov0427@gmail.com)
+
+rules:
+{% for group in groups %}
+{{ generate_comment(group.name, 2)}}
+  - description: {{ group.name }}
+    manipulators:
+  {% for subgroup in group.subgroups %}
+    {% if subgroup.name is defined and subgroup.name is not none %}
+      # {{ subgroup.name }}
+    {% endif %}
+    {% for action in subgroup.actions %}
+{{ action_generate(action.panel, action.key, action.description, action.from, action.to, action.to_if_alone, indentation=6) }}
+
+    {% endfor %}
+  {% endfor %}
+{% endfor %}

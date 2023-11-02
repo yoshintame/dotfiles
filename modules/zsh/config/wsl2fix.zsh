@@ -1,0 +1,1 @@
+/Users/yoshintame/.dotfiles/modules/zsh/config/zsh/wsl2fix.zsh

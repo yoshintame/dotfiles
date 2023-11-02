@@ -1,0 +1,1 @@
+/Users/yoshintame/.dotfiles/modules/zsh/config/zsh/aliases/network-aliases.zsh

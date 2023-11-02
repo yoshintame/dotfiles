@@ -1,0 +1,211 @@
+[user]
+	name = Mikhail Ivanov
+	email = m.ivanov0427@gmail.com
+	signingkey = /Users/yoshintame/.ssh/id_rsa.pub
+
+[github]
+	user = yoshintame
+
+[credential]
+	helper = osxkeychain
+
+[color]
+	ui     = auto
+	branch = auto
+	diff   = auto
+	status = auto
+
+[color "branch"]
+	current = yellow reverse
+	local   = yellow
+	remote  = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old  = red bold
+	new  = green bold
+
+[color "status"]
+	added     = yellow
+	changed   = green
+	untracked = cyan
+
+[core]
+	excludesfile = ~/.gitignore_global
+	editor       = cursor --wait
+	mergeoptions = --no-ff --no-commit
+	autocrlf     = input
+	quotepath    = false
+	safecrlf     = warn
+
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = cursor --wait --diff $LOCAL $REMOTE
+[merge]
+	tool = vscode
+	log  = true
+[mergetool "vscode"]
+	cmd = cursor --wait $MERGED
+[apply]
+	#Detect whitespace errors when applying a patch
+	whitespace = fix
+
+[alias]
+	#used the most by me
+	aa  = add --all
+	cm  = commit -S -m
+	cma = !git add --all && git commit -S -m
+	co  = checkout
+	rv  = remote -v
+
+	#not signed
+	# cm  = commit -m
+	# cma = !git add --all && git commit -m
+
+	#checkouts
+	cb      = checkout -b
+	cob     = checkout -b
+	#checkout and track
+	ct      = checkout -t
+	cr      = checkout --
+	unstage = reset HEAD
+
+	#submodules
+	sm = "!f() { git submodule update --init --recursive $1; }; f"
+
+	#branch management
+	b  = branch
+	ba = branch -a
+	bd = branch -d
+	bD = branch -D
+	bm = branch -m
+
+	#diff and merge
+	d  = diff
+	dt = difftool
+	m  = merge
+	mt = mergetool
+
+	#rebases & squash
+	r  = rebase
+	rr = remote rm
+	rb  = rebase
+	rbi = rebase -i
+	rbc = rebase --continue
+	rba = rebase --abort
+	rbs = rebase --skip
+	rf  = reflog
+	sq = "!f() { git rebase -i HEAD~$1; }; f"
+	squash = "!f() { git rebase -i HEAD~$1; }; f"
+
+	#undo and reset commits
+	unstage = reset HEAD
+	undo = reset --soft HEAD
+	delete = reset --hard HEAD~1
+
+	#tags
+	t = tag -l
+
+	#stashes
+	stsh 	= stash --staged 			# stashes staged
+	stash	= stash						# stashes staged, modified
+	staash 	= stash --include-untracked # stashes staged, modified, untкacked
+	staaash = stash --all				# stashes staged, modified, untкacked, ignored
+
+	stash-staged = stash --staged
+    stash-unstaged = "!git stash push --staged && git stash push --include-untracked && git stash pop stash@{1}"
+	stash-all = stash --include-untracked
+	stash-alli = stash --all
+
+	sts 	= stash --staged
+	stu 	= "!git stash push --staged && git stash push --include-untracked && git stash pop stash@{1}"
+	sta		= stash --include-untracked
+	stai 	= stash --all
+
+	stl		= stash list
+	stpo	= stash pop
+	stpoi	= stash pop --index
+	stap	= stash apply
+	stapi	= stash apply --index
+
+	#commits
+	c = commit
+
+	#pushes & pulls
+	f   = fetch --prune
+	p   = push
+	ps  = push
+	pl  = pull
+	pur = pull --rebase
+	pr  = pull-request
+	psf = push --force
+	upm = !git fetch upstream && git merge upstream/master
+
+	#status & log
+	s  = status -sb
+	ss = status
+	v  = log --oneline --decorate --all --graph --simplify-by-decoration
+	va = log --oneline --decorate --all --graph
+	logs = log --color --graph --pretty=format:\"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset\" --abbrev-commit
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+	#show tracked branches
+	tracked = '!d() { git for-each-ref --format='%(refname:short)' refs/heads/ | while read b; do if r=$(git config --get branch.$b.remote); then m=$(git config --get branch.$b.merge); echo \"$b -> $r/${m##*/}\"; fi; done } ; d'
+
+	#`git di $number` shows the diff between the state `$number` revisions ago and the current state
+	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+	#show changes
+	wc  = whatchanged -p --abbrev-commit --pretty = medium
+	r   = reset
+	rhh = reset HEAD --hard
+
+	last = log -1 HEAD
+	latest = show --name-only --oneline HEAD
+	down = pull --rebase origin master
+	up = push -u origin master
+	save = "!git add -A; git commit ."
+	uptags = push --follow-tags
+	downtags = fetch --tags
+	backup = !file=../$(git describe --always).tar && echo "Creating $(readlink -f $file)" && tar cf $file .
+	please = push --force-with-lease
+	commend = commit --amend --no-edit
+	it = !git init && git commit -m “root” --allow-empty
+
+	shorty = status --short --branch
+	merc = merge --no-ff
+	grog = log --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
+
+	# push to the same branch name
+	p = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
+	# force push to the same branch name
+	fp = !git push origin $(git rev-parse --abbrev-ref HEAD) -f
+	# amend everything in the current commit
+	amend = !git add --all && git commit --amend --no-edit
+	# amend and force push
+	afp = !git amend && git fp
+
+	# stage and commit all the changes
+	c = !git add --all && git commit -m
+	# stage and commit all the changes with WIP as a commit message
+	wip = !git add --all && git commit -m 'WIP'
+	# drop current changes
+	drop = !git reset --hard HEAD
+
+	# give a quick look at the state of the repo
+	state = !git fetch --prune && git fetch --tags && clear && git branch -vv && git status
+	# list the n last commits
+	ll = !git log --oneline -n
+
+[init]
+	defaultBranch = main
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[include]
+	path = ~/.gitconfig.local

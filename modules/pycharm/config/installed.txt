@@ -1,0 +1,26 @@
+org.jetbrains.intellij.scripting-javascript
+net.antelle.intellij-xcode-dark-theme
+de.netnexus.camelcaseplugin
+Statistic
+com.markskelton.one-dark-theme
+Key Promoter X
+com.intellij.lang.jsgraphql
+com.mallowigi
+DBN
+com.github.copilot
+com.jetbrains.plugins.ini4idea
+ChatGPT
+Dart
+mobi.hsz.idea.gitignore
+net.seesharpsoft.intellij.plugins.csv
+com.godwin.json.parser
+GrepConsole
+ru.meanmail.plugin.requirements
+cn.yiiguxing.plugin.translate
+izhangzhihao.rainbow.brackets
+ru.adelf.idea.dotenv
+com.leinardi.pycharm.pylint
+com.intellij.ideolog
+com.tabnine.TabNine
+com.brandiico.jetbrains-nightfall-theme
+String Manipulation

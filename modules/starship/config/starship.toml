@@ -1,0 +1,156 @@
+# ~/.config/starship.toml
+
+# DEBUG via:
+# starship explain
+# STARSHIP_LOG=trace
+
+
+# Timeout for commands executed by starship (ms)
+command_timeout = 1000
+
+# Newline between commands
+add_newline = false
+
+# [line_break]
+# disabled = true
+
+# format = """$os $all"""
+
+format = """
+$os $username$hostname$directory$git_branch$git_status$git_commit$python$cmd_duration
+$character
+"""
+
+[character]
+success_symbol = ""
+error_symbol = ""
+
+[username]
+style_user = "white"
+style_root = "white"
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = true
+format = "on [$hostname](bold yellow) "
+disabled = false
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = true
+home_symbol = " ~"
+read_only_style = "197"
+read_only = "  "
+format = "at [$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+symbol = " "
+format = "via [$symbol$branch]($style) "
+# truncation_length = 4
+truncation_symbol = "…/"
+style = "bold green"
+
+[git_status]
+format = '[\($all_status$ahead_behind\)]($style) '
+style = "bold green"
+conflicted = "🏳"
+up_to_date = " "
+untracked = " "
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+stashed = " "
+modified = " "
+staged = '[++\($count\)](green)'
+renamed = "襁 "
+deleted = " "
+
+[kubernetes]
+format = 'via [ﴱ $context\($namespace\)](bold purple) '
+disabled = false
+
+[terraform]
+format = "via [ terraform $version]($style) 壟 [$workspace]($style) "
+disabled = true
+
+[vagrant]
+format = "via [ vagrant $version]($style) "
+disabled = true
+
+[docker_context]
+format = "via [ $context](bold blue) "
+disabled = true
+
+[helm]
+format = "via [ $version](bold purple) "
+disabled = true
+
+[python]
+symbol = " "
+python_binary = ["./venv/bin/python", "python3", "python", "python2"]
+disabled = true
+
+[nodejs]
+format = "via [ $version](bold green) "
+disabled = true
+
+[ruby]
+format = "via [ $version]($style) "
+disabled = true
+
+[os]
+format = '[$symbol](bold white)'
+disabled = false
+
+[os.symbols]
+Alpaquita = " "
+Alpine = ""
+Amazon = " "
+Android = " "
+Arch = ""
+Artix = " "
+# Aosc = ""
+CentOS = ""
+# CoreOS = ""
+Debian = ""
+# Devuan = ""
+DragonFly = " "
+# Elementary = ""
+Emscripten = " "
+EndeavourOS = " "
+Fedora = ""
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = ""
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Linux = " "
+Mabox = " "
+Macos = ""
+# Mageia = ""
+Manjaro = ""
+Mariner = " "
+MidnightBSD = " "
+Mint = ""
+NetBSD = " "
+NixOS = ""
+OpenBSD = "󰈺 "
+# Kali = "ﴣ"
+openSUSE = ""
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = ""
+Redhat = " "
+RedHatEnterprise = " "
+Redox = "󰀘 "
+# Rhel = ""
+# Sabayon = ""
+# Slackware = ""
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = ""
+Unknown = " "
+Windows = "󰍲 "

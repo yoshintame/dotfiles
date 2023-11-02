@@ -1,0 +1,304 @@
+set preview true
+set hidden true
+set drawbox false
+set icons true
+set dircounts true
+
+set incsearch true
+set incfilter true
+set findlen 0
+set anchorfind false
+set ignorecase true
+
+
+# Ctpv previewer integration
+set previewer ctpv
+set cleaner ctpvclear
+&ctpv -s $id
+&ctpvquit $id
+
+# Eza integration
+cmd on-select &{{
+    lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f")\""
+}}
+
+# Starship Promt integration
+cmd on-cd &{{
+    export STARSHIP_SHELL=
+    fmt="$(starship prompt | tr -d '\n')"
+    lf -remote "send $id set promptfmt \"$fmt\""
+}}
+on-cd
+
+# Fzf integration
+cmd fzf_jump ${{
+    res="$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')"
+    if [ -n "$res" ]; then
+        if [ -d "$res" ]; then
+            cmd="cd"
+        else
+            cmd="select"
+        fi
+        res="$(printf '%s' "$res" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+        lf -remote "send $id $cmd \"$res\""
+    fi
+}}
+
+cmd fzy ${{
+  path=$(ls -a1 | fzf -l "$(( $(tput lines) - 1 ))")
+  [ -z "$path" ] && exit
+  [ -d "$path" ] && cmd='cd' || cmd='select'
+  lf -remote "send $id $cmd '$path'"
+}}
+
+# Broot integration
+cmd broot_jump ${{
+  f=$(mktemp)
+  res="$(broot --outcmd $f && cat $f | sed 's/cd //')"
+  rm -f "$f"
+  if [ -f "$res" ]; then
+    cmd="select"
+  elif [ -d "$res" ]; then
+    cmd="cd"
+  fi
+  lf -remote "send $id $cmd \"$res\""
+}}
+
+# Zoxide integration
+cmd z %{{
+	result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+
+cmd zi ${{
+	result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+
+# Archive integration
+cmd unarchive ${{
+  case "$f" in
+      *.zip) unzip "$f" ;;
+      *.tar.gz) tar -xzvf "$f" ;;
+      *.tar.bz2) tar -xjvf "$f" ;;
+      *.tar) tar -xvf "$f" ;;
+      *) echo "Unsupported format" ;;
+  esac
+}}
+
+cmd zip %zip -r "$f" "$f"
+cmd tar %tar cvf "$f.tar" "$f"
+cmd targz %tar cvzf "$f.tar.gz" "$f"
+cmd tarbz2 %tar cjvf "$f.tar.bz2" "$f"
+
+# Trash-cli integration
+cmd trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    # extract the substring from start of string up to delimiter.
+    # this is the first "element" of the string.
+    file=${files%%;*}
+
+    trash-put "$(basename "$file")"
+
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd clear_trash %trash-empty
+
+cmd restore_trash ${{
+  trash-restore
+}}
+
+# Custom Functions
+cmd open ${{
+  case $(file --mime-type "$f" -bL) in
+      text/*|application/json) $EDITOR "$f";;
+      *) xdg-open "$f" ;;
+  esac
+}}
+
+cmd mkdir %{{
+  IFS=" "
+  mkdir -p -- "$*"
+  lf -remote "send $id select \"$*\""
+}}
+
+cmd mkfile ${{
+  printf "File Name: "
+  read ans
+  $EDITOR $ans
+}}
+
+cmd chmod ${{
+  printf "Mode Bits: "
+  read ans
+
+  for file in "$fx"
+  do
+    chmod $ans $file
+  done
+
+  lf -remote 'send reload'
+}}
+
+cmd sudomkfile ${{
+  printf "File Name: "
+  read ans
+  sudo $EDITOR $ans
+}}
+
+cmd stripspace %stripspace "$f"
+
+cmd select-files &{{
+    get_files() {
+        if [ "$lf_hidden" = 'false' ]; then
+            find "$PWD" -mindepth 1 -maxdepth 1 -type f -not -name '.*' -print0
+        else
+            find "$PWD" -mindepth 1 -maxdepth 1 -type f -print0
+        fi |
+        xargs -0 printf ' %q'
+    }
+
+    lf -remote "send $id :unselect; toggle $(get_files)"
+}}
+
+cmd select-dirs &{{
+    get_dirs() {
+        if [ "$lf_hidden" = 'false' ]; then
+            find "$PWD" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -print0
+        else
+            find "$PWD" -mindepth 1 -maxdepth 1 -type d -print0
+        fi |
+        xargs -0 printf ' %q'
+    }
+
+    lf -remote "send $id :unselect; toggle $(get_dirs)"
+}}
+
+# Filtering file selector
+map f :filter; set user_filter true
+
+cmap <right> &{{
+    # select and open file
+    if [ "$lf_user_filter" = true ]; then
+        lf -remote "send $id :cmd-enter; set user_filter false; setfilter; open"
+    else
+        lf -remote "send $id cmd-right"
+    fi
+}}
+cmap <left> &{{
+    # exit filter mode
+    if [ "$lf_user_filter" = true ]; then
+        lf -remote "send $id :cmd-escape; set user_filter false"
+    else
+        lf -remote "send $id cmd-left"
+    fi
+}}
+cmap <up> search-prev;
+cmap <down> search-next;
+
+# Other
+map . :read; cmd-history-prev; cmd-enter # Repeating the previous command by .
+
+# Bindings
+# Remove some defaults
+map m
+map o
+map n
+map "'"
+map '"'
+map d
+map c
+map e
+map g
+map D
+map t
+
+# Movment
+map h
+map j
+map k
+map l
+map j updir
+map i up
+map k down
+map l open
+
+
+# File Openers
+map ee $$cursor "$f"
+map u $view "$f"
+
+# Archive Mappings
+map az zip
+map at tar
+map ag targz
+map ab targz
+map au unarchive
+
+# Trash Mappings
+map dd trash
+
+map tc clear_trash
+map tr restore_trash
+map ss stripspace
+
+# Basic Functions
+map . set hidden!
+map p paste
+map x cut
+map y copy
+map <enter> open
+
+map mf mkfile
+map mr sudomkfile
+map md push :mkdir<space>
+map ms $mkscript
+
+map ch chmod
+map o open_config
+map br $vimv $fx
+map r rename
+map H top
+map L bottom
+map R reload
+map C clear
+map U unselect
+map / search
+map F find
+
+map <c-f> :fzf_jump
+
+
+# Shortcuts
+# map gtr cd ~/.local/share/Trash/files
+
+map gvv cd ~/Movies
+map gvm cd ~/Movies/movies
+map gvs cd ~/Movies/serials
+map gva cd ~/Movies/anime
+
+map gpp cd ~/Pictures
+map gps cd ~/Pictures/screenshots
+map gpw cd ~/Pictures/Wallpapers
+
+map gdv cd ~/Development
+map gdo cd ~/Documents
+map gD cd ~/Downloads
+map gde cd ~/Desktop
+
+map gdd cd ~/.dotfiles
+map gc cd ~/.config
+map gC cd ~/.local/share/cell
+map gl cd ~/.local
+map gE cd /etc
+map gU. cd /usr
+map gUs cd /usr/share
+
+map g` cd ~

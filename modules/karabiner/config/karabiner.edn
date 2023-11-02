@@ -1,0 +1,167 @@
+
+;; #  | means optional
+;; C  | left_command
+;; T  | left_control
+;; O  | left_option
+;; S  | left_shift
+;; F  | fn
+;; Q  | right_command
+;; W  | right_control
+;; E  | right_option
+;; R  | right_shift
+;; P  | caps_lock
+;; ## | optional any
+
+{
+ :templates {:alfred "osascript -e 'tell application id \"com.runningwithcrayons.Alfred\" to run trigger \"%s\" in workflow \"%s\" with argument \"%s\"'"
+             :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+             :open "open \"%s\""
+             :yabai "/Users/yoshintame/yabai/scripts/\"%s\""}
+
+ :tos {:delete-backward {:key delete_or_backspace}
+       :delete-forward {:key delete_forward}
+       :delete-word-backward {:key delete_or_backspace :modi [:left_option]}
+       :delete-word-forward {:key delete_forward :modi [:left_option]}
+       :delete-line-backward {:key delete_or_backspace :modi [:left_command]}
+       :delete-line-forward {:key delete_forward :modi [:left_command]}
+       :delete-file {:key delete_or_backspace :modi [:left_command]}
+
+       :navigate-backward {:key left_arrow}
+       :navigate-forward {:key right_arrow}
+       :navigate-up {:key up_arrow}
+       :navigate-down {:key down_arrow}
+       :navigate-word-backward {:key left_arrow :modi [:left_option]}
+       :navigate-word-forward {:key right_arrow :modi [:left_option]}
+       :navigate-line-backward {:key left_arrow :modi [:left_command]}
+       :navigate-line-forward {:key right_arrow :modi [:left_command]}
+       :navigate-page-up {:key page_up}
+       :navigate-page-down {:key page_down}
+       :navigate-page-start {:key home}
+       :navigate-page-end {:key end}
+
+       :undo {:key z :modi [:left_command]}
+       :redo {:key z :modi [:left_command :left_shift]}
+
+       :zoom-id {:key + :modi [:left_command]}
+       :zoom-out {:key - :modi [:left_command]}
+
+       :select-backward {:key left_arrow :modi [:left_shift]}
+       :select-forward {:key right_arrow :modi [:left_shift]}
+       :select-up {:key up_arrow :modi [:left_shift]}
+       :select-down {:key down_arrow :modi [:left_shift]}
+       :select-word-backward {:key left_arrow :modi [:left_shift :left_option]}
+       :select-word-forward {:key right_arrow :modi [:left_shift :left_option]}
+       :select-line-backward {:key left_arrow :modi [:left_shift :left_command]}
+       :select-line-forward {:key right_arrow :modi [:left_shift :left_command]}
+       :select-expand-vscode {:key left_arrow :modi [:left_shift :left_command :left_control]}
+       :select-shrink-vscode {:key right_arrow :modi [:left_shift :left_command :left_control]}
+
+       :tab-next {:key tab :modi [:left_control]}
+       :tab-prev {:key tab :modi [:left_control :left_shift]}
+       :win-next {:key grave_accent_and_tilde :modi [:left_command]} ;; setup required
+       :win-prev {:key grave_accent_and_tilde :modi [:left_command :left_shift]} ;; setup required
+       :app-next {:key tab :modi [:left_command :left_shift]}
+       :app-prev {:key tab :modi [:left_command]}
+
+       :win-fullscreen {:key f :modi [:left_control :left_command]}
+       :mouse-click {:pkey :button1}
+       :language-switch {:key spacebar :modi [:left_command]}
+
+       :win-split {:shell "/bin/bash ~/opt/shell_commands/window-split.sh"}
+       :win-unsplit {:shell "/bin/bash ~/opt/shell_commands/window-unsplit.sh"}
+
+       ;; Required rectangel as windows manager with default binds
+       :win-center {:key c :modi [:left_control :left_option]}
+       :win-maximaze {:key return_or_enter :modi [:left_control :left_option]}
+
+       :win-left {:key left_arrow :modi [:left_control :left_option]}
+       :win-right {:key right_arrow :modi [:left_control :left_option]}
+       :win-top {:key up_arrow :modi [:left_control :left_option]}
+       :win-bottom {:key down_arrow :modi [:left_control :left_option]}
+
+       :win-top-left {:key u :modi [:left_control :left_option]}
+       :win-top-right {:key i :modi [:left_control :left_option]}
+       :win-bottom-left {:key j :modi [:left_control :left_option]}
+       :win-bottom-right {:key k :modi [:left_control :left_option]}}
+
+ :main [{:des "layers"
+         :rules [[:!!##s ["s-layer" 1] nil {:afterup ["s-layer" 0] :alone :s}]
+                 [:!!##f ["f-layer" 1] nil {:afterup ["f-layer" 0] :alone :f}]
+                 [:!!##d ["d-layer" 1] nil {:afterup ["d-layer" 0] :alone :d}]]}
+
+        {:des "Hyperlock"
+         :rules [[:##caps_lock :!CTSleft_option]]} ;; Todo double tap to raycast
+
+        ;; {:des "Double Shift to capslock"
+        ;;  :rules [[:##left_shift [:left_shift ["shift-pressed" 1]] nil {:canceled :!Ospacebar}]]}
+
+        ;; {:des "Disable"
+        ;;  :rules [
+        ;;          [:##left_arrow :vk_none] ;; arrows
+        ;;          [:##down_arrow :vk_none]
+        ;;          [:##up_arrow :vk_none]
+        ;;          [:##right_arrow :vk_none]
+        ;;          [:##delete_or_backspace :vk_none] ;; delete
+        ;;          [:!Cspacebar :vk_none] ;; language switch
+        ;;         ]}
+
+        {:des "Miscs"
+         :rules [[:!!spacebar :language-switch]]}
+
+        {:des "Space to shift"
+         :rules [[:##spacebar :##left_shift nil {:alone :spacebar}]]}
+
+        {:des "Mouse"
+         :rules [[:!!return_or_enter :mouse-click]]}
+
+        {:des "Navigation"
+         :rules [[:condi :!s-layer :!d-layer :!f-layer]
+                 [:!!j :navigate-backward]
+                 [:!!l :navigate-forward]
+                 [:!!i :navigate-up]
+                 [:!!k :navigate-down]
+
+                 [:condi :d-layer :!s-layer :!f-layer]
+                 [:!!j :navigate-word-backward]
+                 [:!!l :navigate-word-forward]
+                 [:!!i :navigate-page-up]
+                 [:!!k :navigate-page-down]]}
+
+        {:des "Selection"
+         :rules [[:condi :s-layer :!d-layer :!f-layer]
+                 [:!!j :select-backward]
+                 [:!!l :select-forward]
+                 [:!!i :select-up]
+                 [:!!k :select-down]
+
+                 [:condi :s-layer :d-layer :!f-layer]
+                 [:!!j :select-word-backward]
+                 [:!!l :select-word-forward]
+                 [:!!i :select-shrink-vscode]
+                 [:!!k :select-expand-vscode]]}
+
+        {:des "Deletion"
+         :rules [[:condi :!f-layer :!d-layer :!s-layer]
+                 [:!!delete_or_backspace :delete-file]
+                 [:!!u :delete-backward]
+                 [:!!o :delete-forward]
+
+                 [:condi :d-layer :!s-layer :!f-layer]
+                 [:!!u :delete-word-backward]
+                 [:!!o :delete-word-forward]]}
+
+        {:des "Window managment"
+         :rules [[:!Oj :win-left]
+                 [:!Ol :win-right]
+                 [:!Oi :win-top]
+                 [:!Ocomma :win-bottom]
+
+                 [:!Ou :win-split]
+                 [:!Oo :win-unsplit]
+                 [:!Om :win-bottom-left]
+                 [:!Operiod :win-bottom-right]
+
+                 [:!Ok :win-maximaze]
+                 [:!Of :win-fullscreen]]}]}
+
+

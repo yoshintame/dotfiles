@@ -1,0 +1,1 @@
+/Users/yoshintame/.dotfiles/modules/zsh/config/zsh/aliases/shortcuts-aliases.zsh

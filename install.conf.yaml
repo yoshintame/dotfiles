@@ -1,0 +1,43 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+      force: true
+
+- clean: ["~"]
+
+- link:
+    ~/.config/zsh/:
+      path: modules/zsh/config/zsh/**
+      glob: true
+    ~/.zshrc: modules/zsh/config/.zshrc
+    ~/.zshenv: modules/zsh/config/.zshenv
+
+    ~/.config/nvim/:
+      path: modules/nvim/config/**
+      glob: true
+
+    ~/.gitconfig: modules/git/config/.gitconfig
+
+    ~/.config/starship.toml: modules/starship/config/starship.toml
+
+    ~/.config/yabai/yabairc: modules/yabai/config/.yabairc
+
+    # TODO: bagged? Wont work with /**
+    ~/.config/lf/:
+      path: modules/lf/config/
+      glob: true
+
+    ~/.warp/:
+      path: modules/warp/config/**
+      glob: true
+
+    ~/Library/Application Support/Cursor/:
+      path: modules/vscode/config/**
+      glob: true
+
+    ~/Library/Application Support/Code/:
+      path: modules/vscode/config/**
+      glob: true
+
+    ~/.config/karabiner.edn: modules/karabiner/config/karabiner.edn

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Activate</key>
+		<string>Normal</string>
+		<key>CreationDate</key>
+		<real>719522584.71118605</real>
+		<key>Macros</key>
+		<array>
+			<dict>
+				<key>Actions</key>
+				<array>
+					<dict>
+						<key>ActionUID</key>
+						<integer>9304</integer>
+						<key>DisplayKind</key>
+						<string>Window</string>
+						<key>HonourFailureSettings</key>
+						<true/>
+						<key>IncludeStdErr</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>ExecuteShellScript</string>
+						<key>Path</key>
+						<string></string>
+						<key>Source</key>
+						<string>Nothing</string>
+						<key>Text</key>
+						<string>spaceIndex=$(/opt/homebrew/bin/yabai  -m query --spaces --space | /opt/homebrew/bin/jq '.index')
+
+
+if [ "$spaceIndex" -ne 1 ]
+then
+    windowsCount=$(/opt/homebrew/bin/yabai -m query --spaces --space | /opt/homebrew/bin/jq '.windows | length')
+    if [ "$windowsCount" -le 2 ]
+    then
+        /opt/homebrew/bin/yabai -m space --destroy
+    else
+        /opt/homebrew/bin/yabai -m window --space first;
+    fi
+fi</string>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+						<key>TrimResults</key>
+						<true/>
+						<key>TrimResultsNew</key>
+						<true/>
+						<key>UseText</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>ActionUID</key>
+						<integer>9305</integer>
+						<key>MacroActionType</key>
+						<string>SetVariableToText</string>
+						<key>Text</key>
+						<string>false</string>
+						<key>Variable</key>
+						<string>yabaiSplit</string>
+					</dict>
+				</array>
+				<key>CreationDate</key>
+				<real>719520841.21410501</real>
+				<key>ModificationDate</key>
+				<real>719521424.82313502</real>
+				<key>Name</key>
+				<string>Window Unsplit </string>
+				<key>Triggers</key>
+				<array>
+					<dict>
+						<key>FireType</key>
+						<string>Pressed</string>
+						<key>KeyCode</key>
+						<integer>2</integer>
+						<key>MacroTriggerType</key>
+						<string>HotKey</string>
+						<key>Modifiers</key>
+						<integer>2560</integer>
+					</dict>
+				</array>
+				<key>UID</key>
+				<string>0D69CBDC-CD05-4100-82BB-5E3588D5BA51</string>
+			</dict>
+		</array>
+		<key>Name</key>
+		<string>Window Manager</string>
+		<key>ToggleMacroUID</key>
+		<string>B7A2063D-045C-40E8-A4B9-5EC5CF023ABF</string>
+		<key>UID</key>
+		<string>39A36BA0-90A2-42F6-BC58-05AFBC9DCA3D</string>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Activate</key>
+		<string>Normal</string>
+		<key>CreationDate</key>
+		<real>719522584.71118605</real>
+		<key>Macros</key>
+		<array>
+			<dict>
+				<key>Actions</key>
+				<array>
+					<dict>
+						<key>ActionUID</key>
+						<integer>9302</integer>
+						<key>DisplayKind</key>
+						<string>Variable</string>
+						<key>HonourFailureSettings</key>
+						<true/>
+						<key>IncludeStdErr</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>ExecuteShellScript</string>
+						<key>Path</key>
+						<string></string>
+						<key>Source</key>
+						<string>Nothing</string>
+						<key>Text</key>
+						<string>spaceIndex=$(/opt/homebrew/bin/yabai  -m query --spaces --space | /opt/homebrew/bin/jq '.index') # Current desktop index
+
+if [ "$spaceIndex" -eq 1 ]   # If current space is main stack space
+then
+    /opt/homebrew/bin/yabai  -m space --create # Create new space
+    /opt/homebrew/bin/yabai  -m window --space last # Move current window to last (new) space
+    /opt/homebrew/bin/yabai  -m space --focus last # Focus last (new)  space
+    spaceIndex=$(/opt/homebrew/bin/yabai  -m query --spaces --space | /opt/homebrew/bin/jq '.index') # Current desktop index
+fi	
+
+echo $spaceIndex
+
+# Add event handler on window-focused event
+/opt/homebrew/bin/yabai -m signal --add label=active-split-pending event=window_focused \
+   action="/Users/yoshintame/yabai/scripts/window-split-signal.sh $spaceIndex"</string>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+						<key>TrimResults</key>
+						<true/>
+						<key>TrimResultsNew</key>
+						<true/>
+						<key>UseText</key>
+						<true/>
+						<key>Variable</key>
+						<string>yabaiSplit</string>
+					</dict>
+					<dict>
+						<key>Action</key>
+						<string>ResizeWindowBy</string>
+						<key>ActionUID</key>
+						<integer>9358</integer>
+						<key>HeightExpression</key>
+						<string>300</string>
+						<key>HorizontalExpression</key>
+						<string>-748</string>
+						<key>MacroActionType</key>
+						<string>ManipulateWindow</string>
+						<key>TargetApplication</key>
+						<dict/>
+						<key>Targeting</key>
+						<string>FrontWindow</string>
+						<key>TargetingType</key>
+						<string>Front</string>
+						<key>VerticalExpression</key>
+						<string>0</string>
+						<key>WidthExpression</key>
+						<string>300</string>
+						<key>WindowIndexExpression</key>
+						<string>2</string>
+						<key>WindowName</key>
+						<string></string>
+					</dict>
+				</array>
+				<key>CreationDate</key>
+				<real>719520451.28491795</real>
+				<key>ModificationDate</key>
+				<real>719531004.24136996</real>
+				<key>Name</key>
+				<string>Window Split</string>
+				<key>Triggers</key>
+				<array>
+					<dict>
+						<key>FireType</key>
+						<string>Pressed</string>
+						<key>KeyCode</key>
+						<integer>1</integer>
+						<key>MacroTriggerType</key>
+						<string>HotKey</string>
+						<key>Modifiers</key>
+						<integer>2560</integer>
+					</dict>
+				</array>
+				<key>UID</key>
+				<string>41E506EC-5AD2-4E0A-9BFC-1C1918ECE31F</string>
+			</dict>
+		</array>
+		<key>Name</key>
+		<string>Window Manager</string>
+		<key>ToggleMacroUID</key>
+		<string>B7A2063D-045C-40E8-A4B9-5EC5CF023ABF</string>
+		<key>UID</key>
+		<string>39A36BA0-90A2-42F6-BC58-05AFBC9DCA3D</string>
+	</dict>
+</array>
+</plist>

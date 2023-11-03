@@ -65,7 +65,6 @@
 
        :win-fullscreen {:key f :modi [:left_control :left_command]}
        :mouse-click {:pkey :button1}
-       :language-switch {:key spacebar :modi [:left_command]}
 
        :win-split {:shell "/bin/bash ~/opt/shell_commands/window-split.sh"}
        :win-unsplit {:shell "/bin/bash ~/opt/shell_commands/window-unsplit.sh"}

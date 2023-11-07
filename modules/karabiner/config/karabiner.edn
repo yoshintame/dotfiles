@@ -41,6 +41,7 @@
 
        :undo {:key z :modi [:left_command]}
        :redo {:key z :modi [:left_command :left_shift]}
+       :language-switch {:key spacebar :modi [:left_command]}
 
        :zoom-id {:key + :modi [:left_command]}
        :zoom-out {:key - :modi [:left_command]}

@@ -39,8 +39,12 @@
        :navigate-page-start {:key home}
        :navigate-page-end {:key end}
 
-       :undo {:key z :modi [:left_command]}
-       :redo {:key z :modi [:left_command :left_shift]}
+       :_undo {:key z :modi [:left_command]}
+       :_redo {:key z :modi [:left_command :left_shift]}
+       :_copy {:key c :modi [:left_command]}
+       :_paste {:key v :modi [:left_command]}
+       :_cut {:key x :modi [:left_command]}
+
        :language-switch {:key spacebar :modi [:left_command]}
 
        :zoom-id {:key + :modi [:left_command]}
@@ -149,6 +153,13 @@
                  [:condi :d-layer :!s-layer :!f-layer]
                  [:!!u :delete-word-backward]
                  [:!!o :delete-word-forward]]}
+
+        {:des "Clipboard"
+         :rules [[:condi :!f-layer :!d-layer :!s-layer]
+                 [:!!z :_undo]
+                 [:!!x :_cut]
+                 [:!!c :_copy]
+                 [:!!v :_paste]]}
 
         {:des "Window managment"
          :rules [[:!Oj :win-left]

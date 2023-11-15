@@ -293,7 +293,7 @@ map gdo cd ~/Documents
 map gD cd ~/Downloads
 map gde cd ~/Desktop
 
-map gdd cd ~/.dotfiles
+map gdf cd ~/.dotfiles
 map gc cd ~/.config
 map gC cd ~/.local/share/cell
 map gl cd ~/.local

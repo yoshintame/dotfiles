@@ -17,6 +17,10 @@
       path: modules/nvim/config/**
       glob: true
 
+    ~/.hammerspoon/:
+      path: modules/hammerspoon/config/**
+      glob: true
+
     ~/.gitconfig: modules/git/config/.gitconfig
 
     ~/.config/starship.toml: modules/starship/config/starship.toml

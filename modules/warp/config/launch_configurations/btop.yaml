@@ -1,0 +1,10 @@
+---
+name: btop
+windows:
+  - tabs:
+      - title: btop
+        color: blue
+        layout:
+          cwd: /Users/yoshintame
+          commands:
+            - exec: btop

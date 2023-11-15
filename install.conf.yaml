@@ -36,11 +36,7 @@
       path: modules/warp/config/**
       glob: true
 
-    ~/Library/Application Support/Cursor/:
-      path: modules/vscode/config/**
-      glob: true
-
-    ~/Library/Application Support/Code/:
+    ~/Library/Application Support/Cursor/User/:
       path: modules/vscode/config/**
       glob: true
 

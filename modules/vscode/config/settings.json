@@ -9,7 +9,6 @@
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorStyle": "line-thin",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-
   "editor.find.addExtraSpaceOnTop": false,
   "editor.foldingImportsByDefault": true,
   "editor.fontFamily": "'SF Mono', Menlo, Monaco, 'Courier New', monospace",
@@ -35,7 +34,6 @@
   "extensions.autoUpdate": "onlyEnabledExtensions",
   "extensions.ignoreRecommendations": true,
   "files.autoSave": "afterDelay",
-
   "files.eol": "\n",
   "files.exclude": {
     "**/.deploy_git": true,
@@ -55,9 +53,13 @@
     "**/public": true,
     "**/rethinkdb_data": true,
     "**/test_assets": true,
-    "**/tmp": true
+    "**/tmp": true,
+    "**/.trunk/*actions/": true,
+    "**/.trunk/*logs/": true,
+    "**/.trunk/*notifications/": true,
+    "**/.trunk/*out/": true,
+    "**/.trunk/*plugins/": true
   },
-
   "files.insertFinalNewline": false,
   "files.simpleDialog.enable": true,
   "files.trimTrailingWhitespace": true,
@@ -82,7 +84,7 @@
   "security.workspace.trust.enabled": false,
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
-  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.fontSize": 11,
   "terminal.integrated.fontFamily": "'Hack Nerd Font'",
   "terminal.integrated.fontWeight": "300",
   "terminal.integrated.gpuAcceleration": "off",
@@ -159,7 +161,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "//": "Last update at 31/10/2023, 16:16:49",
+    "//": "Last update at 09/11/2023, 15:19:27",
     "*.asax": "$(capture).*.cs, $(capture).*.vb",
     "*.ascx": "$(capture).*.cs, $(capture).*.vb",
     "*.ashx": "$(capture).*.cs, $(capture).*.vb",
@@ -298,9 +300,7 @@
   "tailwind-fold.foldedText": "…",
   "tailwind-fold.foldedTextBackgroundColor": "#1f1f1f",
   "tailwind-fold.foldedTextColor": "#7e7e7e",
-  "tailwind-fold.foldStyle": "QUOTES",
   "tailwind-fold.showTailwindImage": false,
-  "tailwind-fold.unfoldIfLineSelected": true,
   "todohighlight.isEnable": false,
   "vscode_vibrancy.opacity": -1,
   "vscode_vibrancy.type": "sidebar",
@@ -316,6 +316,7 @@
   "svg.preview.mode": "svg",
   "typescript.updateImportsOnFileMove.enabled": "never",
   "tabnine.experimentalAutoImports": true,
+  "diffEditor.ignoreTrimWhitespace": false,
   "tailwindCSS.classAttributes": [
     "class",
     "className",
@@ -329,15 +330,46 @@
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 1000,
   "genieai.enableConversationHistory": true,
+  "workbench.colorTheme": "Xcode Default (Dark)",
+  "vim.normalModeKeyBindings": [
+    {
+      "before": ["h"],
+      "after": ["j"]
+    },
+    {
+      "before": ["j"],
+      "after": ["k"]
+    },
+    {
+      "before": ["k"],
+      "after": ["l"]
+    },
+    {
+      "before": ["l"],
+      "after": [";"]
+    }
+  ],
+  "window.zoomLevel": 1,
+  "trunk.trunkGrayOutNonBlockingIssues": false,
+  "files.watcherExclude": {
+    "**/.trunk/*actions/": true,
+    "**/.trunk/*logs/": true,
+    "**/.trunk/*notifications/": true,
+    "**/.trunk/*out/": true,
+    "**/.trunk/*plugins/": true
+  },
+  "window.commandCenter": 1,
+  "workbench.productIconTheme": "icons-carbon",
+  "tailwind-fold.unfoldedTextOpacity": 0.6,
+  "tailwind-fold.autoFold": false,
   "git.openRepositoryInParentFolders": "always",
   "terminal.external.osxExec": "warp.app",
   "git.autofetch": true,
-  "workbench.colorTheme": "Xcode Classic Dark",
+
   "calva.paredit.defaultKeyMap": "original",
   "git.confirmSync": false,
-  "diffEditor.ignoreTrimWhitespace": false,
+
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
-  },
-  "window.zoomLevel": 1
+  }
 }

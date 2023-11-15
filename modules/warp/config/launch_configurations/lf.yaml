@@ -1,0 +1,10 @@
+---
+name: lf
+windows:
+  - tabs:
+      - title: lf
+        color: green
+        layout:
+          cwd: /Users/yoshintame
+          commands:
+            - exec: lf

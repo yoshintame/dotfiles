@@ -3,7 +3,6 @@
 # ====== Variables =============================
 
 declare -A gaps
-declare -A color
 
 gaps["top"]="0"
 gaps["bottom"]="40"
@@ -52,6 +51,7 @@ yabai -m signal --remove active-split-pending
 
 yabai -m rule --add app="^System Settings" manage=off
 yabai -m rule --add app="^Easydict$" manage=off
+yabai -m rule --add app="^Hammerspoon" manage=off
 yabai -m rule --add app='^Arc$' title='^Space.*$' manage=off
 
 

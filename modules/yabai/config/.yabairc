@@ -55,6 +55,7 @@ yabai -m rule --add app="^Easydict$" manage=off
 yabai -m rule --add app='^Arc$' title='^Space.*$' manage=off
 
 
+# Fix strange layers behavior
 yabai -m signal --add event=application_front_switched action="yabai -m window --layer normal"
-
-
+yabai -m signal --add event=application_launched action="yabai -m window --layer normal"
+yabai -m signal --add event=window_created action="yabai -m window --layer normal"

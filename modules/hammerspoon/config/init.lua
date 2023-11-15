@@ -79,6 +79,7 @@ hs.hotkey.bind(WINDOW_LAYER_KEY, "C", launchOrFocusApp("Discord"))
 hs.hotkey.bind(WINDOW_LAYER_KEY, "R", launchOrFocusApp("System Settings"))
 hs.hotkey.bind(WINDOW_LAYER_KEY, "V", launchOrFocusWarpApp("btop"))
 hs.hotkey.bind(WINDOW_SUBLAYER_KEY, "V", launchOrFocusApp("Activity Monitor"))
+hs.hotkey.bind(WINDOW_LAYER_KEY, "B", launchOrFocusApp("Bitwarden"))
 hs.hotkey.bind({ "ctrl", "shift" }, "escape", launchOrFocusApp("Activity Monitor"))
 
 -- ================== Utilities ==================

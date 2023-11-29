@@ -191,7 +191,7 @@
 	c = !git add --all && git commit -m
 	# stage and commit all the changes with WIP as a commit message
 	wip = commit -m 'WIP: dont push this!' --no-verify
-	wipa = !git add --all && git commit -m 'WIP: dont push this!'
+	wipa = !git add --all && git commit -m 'WIP: dont push this!' --no-verify
 	# drop current changes
 	drop = !git reset --hard HEAD
 

@@ -101,9 +101,6 @@
          :rules [[:condi :hyper-layer]
                  [:spacebar :language-switch]]}
 
-        {:des "Space to shift"
-         :rules [[:##spacebar :##left_shift nil {:alone :spacebar}]]}
-
         {:des "Mouse"
          :rules [[:condi :hyper-layer]
                  [:return_or_enter :mouse-click]]}

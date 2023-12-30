@@ -52,6 +52,7 @@ yabai -m signal --remove active-split-pending
 yabai -m rule --add app="^System Settings" manage=off
 yabai -m rule --add app="^Easydict$" manage=off
 yabai -m rule --add app="^Hammerspoon" manage=off
+yabai -m rule --add app="^Color Picker" manage=off
 yabai -m rule --add app='^Arc$' title='^Space.*$' manage=off
 yabai -m rule --add app='^HyperSwitch$' layer=below
 
@@ -60,3 +61,4 @@ yabai -m rule --add app='^HyperSwitch$' layer=below
 yabai -m signal --add event=application_front_switched action="yabai -m window --layer normal"
 yabai -m signal --add event=application_launched action="yabai -m window --layer normal"
 yabai -m signal --add event=window_created action="yabai -m window --layer normal"
+yabai -m signal --add event=space_changed action="yabai -m window --layer normal"

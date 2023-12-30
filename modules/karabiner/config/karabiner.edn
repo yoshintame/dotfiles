@@ -165,6 +165,10 @@
                  [:z :_undo]
                  [:x :_cut]
                  [:c :_copy]
-                 [:v :_paste]]}]}
+                 [:v :_paste]
+
+                 [:condi :hyper-layer :!f-layer :!d-layer :s-layer]
+                 [:u :_undo]
+                 [:o :_redo]]}]}
 
 

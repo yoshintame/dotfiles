@@ -34,9 +34,11 @@
        :navigate-word-forward {:key right_arrow :modi [:left_option]}
        :navigate-line-backward {:key left_arrow :modi [:left_command]}
        :navigate-line-forward {:key right_arrow :modi [:left_command]}
+       :navigate-five-line-backward [{:key up_arrow}, {:key up_arrow}, {:key up_arrow}, {:key up_arrow}, {:key up_arrow}]
+       :navigate-five-line-forward [{:key down_arrow}, {:key down_arrow}, {:key down_arrow}, {:key down_arrow}, {:key down_arrow}]
        :navigate-page-up {:key page_up}
        :navigate-page-down {:key page_down}
-       :navigate-page-start {:key up_arrow  :modi [:left_command]}
+       :navigate-page-start {:key up_arrow :modi [:left_command]}
        :navigate-page-end {:key down_arrow :modi [:left_command]}
 
        :_undo {:key z :modi [:left_command]}
@@ -115,8 +117,8 @@
                  [:condi :hyper-layer :d-layer :!s-layer :!f-layer]
                  [:j :navigate-word-backward]
                  [:l :navigate-word-forward]
-                 [:i :navigate-page-up]
-                 [:k :navigate-page-down]
+                 [:i :navigate-five-line-backward]
+                 [:k :navigate-five-line-forward]
 
                  [:condi :hyper-layer :!d-layer :!s-layer :f-layer]
                  [:j :navigate-line-backward]

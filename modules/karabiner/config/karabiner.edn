@@ -36,8 +36,8 @@
        :navigate-line-forward {:key right_arrow :modi [:left_command]}
        :navigate-page-up {:key page_up}
        :navigate-page-down {:key page_down}
-       :navigate-page-start {:key home}
-       :navigate-page-end {:key end}
+       :navigate-page-start {:key up_arrow  :modi [:left_command]}
+       :navigate-page-end {:key down_arrow :modi [:left_command]}
 
        :_undo {:key z :modi [:left_command]}
        :_redo {:key z :modi [:left_command :left_shift]}
@@ -58,6 +58,8 @@
        :select-word-forward {:key right_arrow :modi [:left_shift :left_option]}
        :select-line-backward {:key left_arrow :modi [:left_shift :left_command]}
        :select-line-forward {:key right_arrow :modi [:left_shift :left_command]}
+       :select-page-start {:key up_arrow :modi [:left_shift :left_command]}
+       :select-page-end {:key down_arrow :modi [:left_shift :left_command]}
        :select-expand-vscode {:key left_arrow :modi [:left_shift :left_command :left_control]}
        :select-shrink-vscode {:key right_arrow :modi [:left_shift :left_command :left_control]}
 
@@ -89,90 +91,80 @@
        :win-bottom-right {:key k :modi [:left_control :left_option]}}
 
  :main [{:des "layers"
-         :rules [[:!!##s ["s-layer" 1] nil {:afterup ["s-layer" 0] :alone :s}]
-                 [:!!##f ["f-layer" 1] nil {:afterup ["f-layer" 0] :alone :f}]
-                 [:!!##d ["d-layer" 1] nil {:afterup ["d-layer" 0] :alone :d}]]}
-
-        {:des "Hyperlock"
-         :rules [[:##caps_lock :!CTSleft_option]]} ;; Todo double tap to raycast
-
-        ;; {:des "Double Shift to capslock"
-        ;;  :rules [[:##left_shift [:left_shift ["shift-pressed" 1]] nil {:canceled :!Ospacebar}]]}
-
-        ;; {:des "Disable"
-        ;;  :rules [
-        ;;          [:##left_arrow :vk_none] ;; arrows
-        ;;          [:##down_arrow :vk_none]
-        ;;          [:##up_arrow :vk_none]
-        ;;          [:##right_arrow :vk_none]
-        ;;          [:##delete_or_backspace :vk_none] ;; delete
-        ;;          [:!Cspacebar :vk_none] ;; language switch
-        ;;         ]}
+         :rules [[:##caps_lock ["hyper-layer" 1] nil {:afterup ["hyper-layer" 0] :alone :escape}]
+                 [:##d ["d-layer" 1] ["hyper-layer" 1] {:afterup ["d-layer" 0] :alone :d}]
+                 [:##s ["s-layer" 1] ["hyper-layer" 1] {:afterup ["s-layer" 0] :alone :s}]
+                 [:##f ["f-layer" 1] ["hyper-layer" 1] {:afterup ["f-layer" 0] :alone :f}]
+                 [:##left_command ["f-layer" 1] ["hyper-layer" 1] {:afterup ["f-layer" 0] :alone :left_command}]]}
 
         {:des "Miscs"
-         :rules [[:!!spacebar :language-switch]]}
+         :rules [[:condi :hyper-layer]
+                 [:spacebar :language-switch]]}
 
         {:des "Space to shift"
          :rules [[:##spacebar :##left_shift nil {:alone :spacebar}]]}
 
         {:des "Mouse"
-         :rules [[:!!return_or_enter :mouse-click]]}
+         :rules [[:condi :hyper-layer]
+                 [:return_or_enter :mouse-click]]}
 
         {:des "Navigation"
-         :rules [[:condi :!s-layer :!d-layer :!f-layer]
-                 [:!!j :navigate-backward]
-                 [:!!l :navigate-forward]
-                 [:!!i :navigate-up]
-                 [:!!k :navigate-down]
+         :rules [[:condi :hyper-layer :!s-layer :!d-layer :!f-layer]
+                 [:j :navigate-backward]
+                 [:l :navigate-forward]
+                 [:i :navigate-up]
+                 [:k :navigate-down]
 
-                 [:condi :d-layer :!s-layer :!f-layer]
-                 [:!!j :navigate-word-backward]
-                 [:!!l :navigate-word-forward]
-                 [:!!i :navigate-page-up]
-                 [:!!k :navigate-page-down]]}
+                 [:condi :hyper-layer :d-layer :!s-layer :!f-layer]
+                 [:j :navigate-word-backward]
+                 [:l :navigate-word-forward]
+                 [:i :navigate-page-up]
+                 [:k :navigate-page-down]
+
+                 [:condi :hyper-layer :!d-layer :!s-layer :f-layer]
+                 [:j :navigate-line-backward]
+                 [:l :navigate-line-forward]
+                 [:i :navigate-page-start]
+                 [:k :navigate-page-end]]}
 
         {:des "Selection"
-         :rules [[:condi :s-layer :!d-layer :!f-layer]
-                 [:!!j :select-backward]
-                 [:!!l :select-forward]
-                 [:!!i :select-up]
-                 [:!!k :select-down]
+         :rules [[:condi :hyper-layer :s-layer :!d-layer :!f-layer]
+                 [:j :select-backward]
+                 [:l :select-forward]
+                 [:i :select-up]
+                 [:k :select-down]
 
-                 [:condi :s-layer :d-layer :!f-layer]
-                 [:!!j :select-word-backward]
-                 [:!!l :select-word-forward]
-                 [:!!i :select-shrink-vscode]
-                 [:!!k :select-expand-vscode]]}
+                 [:condi :hyper-layer :s-layer :d-layer :!f-layer]
+                 [:j :select-word-backward]
+                 [:l :select-word-forward]
+                 [:i :select-shrink-vscode]
+                 [:k :select-expand-vscode]
+
+                 [:condi :hyper-layer :s-layer :!d-layer :f-layer]
+                 [:j :select-line-backward]
+                 [:l :select-line-forward]
+                 [:i :select-page-start]
+                 [:k :select-page-end]]}
 
         {:des "Deletion"
-         :rules [[:condi :!f-layer :!d-layer :!s-layer]
-                 [:!!delete_or_backspace :delete-file]
-                 [:!!u :delete-backward]
-                 [:!!o :delete-forward]
+         :rules [[:condi :hyper-layer :!f-layer :!d-layer :!s-layer]
+                 [:delete_or_backspace :delete-file]
+                 [:u :delete-backward]
+                 [:o :delete-forward]
 
-                 [:condi :d-layer :!s-layer :!f-layer]
-                 [:!!u :delete-word-backward]
-                 [:!!o :delete-word-forward]]}
+                 [:condi :hyper-layer :d-layer :!s-layer :!f-layer]
+                 [:u :delete-word-backward]
+                 [:o :delete-word-forward]
+
+                 [:condi :hyper-layer :!d-layer :!s-layer :f-layer]
+                 [:u :delete-line-backward]
+                 [:o :delete-line-forward]]}
 
         {:des "Clipboard"
-         :rules [[:condi :!f-layer :!d-layer :!s-layer]
-                 [:!!z :_undo]
-                 [:!!x :_cut]
-                 [:!!c :_copy]
-                 [:!!v :_paste]]}
-
-        {:des "Window managment"
-         :rules [[:!Oj :win-left]
-                 [:!Ol :win-right]
-                 [:!Oi :win-top]
-                 [:!Ocomma :win-bottom]
-
-                 [:!Ou :win-split]
-                 [:!Oo :win-unsplit]
-                 [:!Om :win-bottom-left]
-                 [:!Operiod :win-bottom-right]
-
-                 [:!Ok :win-maximaze]
-                 [:!Of :win-fullscreen]]}]}
+         :rules [[:condi :hyper-layer :!f-layer :!d-layer :!s-layer]
+                 [:z :_undo]
+                 [:x :_cut]
+                 [:c :_copy]
+                 [:v :_paste]]}]}
 
 

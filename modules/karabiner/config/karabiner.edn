@@ -13,10 +13,15 @@
 ;; ## | optional any
 
 {
+ :modifiers {:shift {:optional [:right_shift :left_shift]}}
+
  :templates {:alfred "osascript -e 'tell application id \"com.runningwithcrayons.Alfred\" to run trigger \"%s\" in workflow \"%s\" with argument \"%s\"'"
              :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
              :open "open \"%s\""
              :yabai "/Users/yoshintame/yabai/scripts/\"%s\""}
+
+ :input-sources {:us {:input_source_id "^com\\.apple\\.keylayout\\.ABC$"
+                      :language        "^en$"}}
 
  :tos {:delete-backward {:key delete_or_backspace}
        :delete-forward {:key delete_forward}
@@ -99,6 +104,13 @@
                  [:##f ["f-layer" 1] ["hyper-layer" 1] {:afterup ["f-layer" 0] :alone :f}]
                  [:##left_command ["f-layer" 1] ["hyper-layer" 1] {:afterup ["f-layer" 0] :alone :left_command}]]}
 
+        {:des "Rotate between QWERTY and COLEMAK layouts with FN+LCtrl"
+         :rules [[:!F#Pleft_control [["qwerty" 1][:noti :layers "QWERTY"]]["qwerty" 0]]
+                 [:!F#Pleft_control [["qwerty" 0][:noti :layers "COLMAK"]]["qwerty" 1]]]}
+
+        {:des "Cmd+Option+Shift+Esc to Reset All Layers"
+         :rules [[:!COTescape [["hyper-layer" 0] ["d-layer" 0], ["s-layer" 0], ["f-layer" 0], ["qwerty" 0]]]]}
+
         {:des "Miscs"
          :rules [[:condi :hyper-layer]
                  [:spacebar :language-switch]]}
@@ -168,6 +180,10 @@
 
                  [:condi :hyper-layer :!f-layer :!d-layer :s-layer]
                  [:u :_undo]
-                 [:o :_redo]]}]}
+                 [:o :_redo]]}
 
-
+       {:des "Colemak Layout"
+        :rules [[:condi :!qwerty :us]
+                [{:key :q :modi :shift} :q][{:key :w :modi :shift} :w][{:key :e :modi :shift} :f][{:key :r :modi :shift} :p][{:key :t :modi :shift} :b][{:key :y :modi :shift} :j][{:key :u :modi :shift} :l][{:key :i :modi :shift} :u][{:key :o :modi :shift} :y][{:key :p :modi :shift} :semicolon]
+                [{:key :a :modi :shift} :a][{:key :s :modi :shift} :r][{:key :d :modi :shift} :s][{:key :f :modi :shift} :t][{:key :g :modi :shift} :g][{:key :h :modi :shift} :m][{:key :j :modi :shift} :n][{:key :k :modi :shift} :e][{:key :l :modi :shift} :i][{:key :semicolon :modi :shift} :o]
+                [{:key :z :modi :shift} :x][{:key :x :modi :shift} :c][{:key :c :modi :shift} :d][{:key :v :modi :shift} :v][{:key :b :modi :shift} :z][{:key :n :modi :shift} :k][{:key :m :modi :shift} :h]]}]}

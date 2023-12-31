@@ -55,35 +55,37 @@
        :-m {:key :m}
 
        ; Named symbols
-       :exclaim {:key :1 :modi :shift}
-       :at {:key :2 :modi :shift}
-       :hash {:key :3 :modi :shift}
-       :dollar {:key :4 :modi :shift}
-       :percent {:key :5 :modi :shift}
-       :caret {:key :6 :modi :shift}
-       :ampersand {:key :7 :modi :shift}
-       :bullet {:key :8 :modi :shift}
-       :open_paren {:key :9 :modi :shift}
-       :close_paren {:key :0 :modi :shift}
-       :hyphen {:key :hyphen}
-       :underscore {:key :hyphen :modi :shift}
-       :equal {:key :equal_sign}
-       :plus {:key :equal_sign :modi :shift}
-       :semicolon {:key :semicolon}
-       :colon {:key :semicolon :modi :shift}
-       :open_bracket {:key :open_bracket}
-       :close_bracket {:key :close_bracket}
-       :open_brace {:key :open_bracket :modi :shift}
-       :close_brace {:key :close_bracket :modi :shift}
-       :less_than {:key :comma :modi :shift}
-       :greater_than {:key :period :modi :shift}
-       :backquote {:key :grave_accent_and_tilde}
-       :tilde {:key :grave_accent_and_tilde :modi :shift}
-       :dquote {:key :quote :modi :shift}
-       :pipe {:key :backslash :modi :shift}
-       :question {:key :slash :modi :shift}
-       :ls {:key :left_shift}
-       :rs {:key :right_shift}
+       :exclaim {:key :1 :modi :shift}                     ; !
+       :at {:key :2 :modi :shift}                          ; @
+       :hash {:key :3 :modi :shift}                        ; #
+       :dollar {:key :4 :modi :shift}                      ; $
+       :percent {:key :5 :modi :shift}                     ; %
+       :caret {:key :6 :modi :shift}                       ; ^
+       :ampersand {:key :7 :modi :shift}                   ; &
+       :bullet {:key :8 :modi :shift}                      ; *
+       :open_paren {:key :9 :modi :shift}                  ; (
+       :close_paren {:key :0 :modi :shift}                 ; )
+       :hyphen {:key :hyphen}                              ; -
+       :underscore {:key :hyphen :modi :shift}             ; _
+       :equal {:key :equal_sign}                           ; =
+       :plus {:key :equal_sign :modi :shift}               ; +
+       :comma {:key :comma}                                ; ,
+       :period {:key :period}                              ; .
+       :semicolon {:key :semicolon}                        ; ;
+       :colon {:key :semicolon :modi :shift}               ; :
+       :open_bracket {:key :open_bracket}                  ; [
+       :close_bracket {:key :close_bracket}                ; ]
+       :open_brace {:key :open_bracket :modi :shift}       ; {
+       :close_brace {:key :close_bracket :modi :shift}     ; }
+       :less_than {:key :comma :modi :shift}               ; <
+       :greater_than {:key :period :modi :shift}           ; >
+       :backquote {:key :grave_accent_and_tilde}           ; `
+       :tilde {:key :grave_accent_and_tilde :modi :shift}  ; ~
+       :dquote {:key :quote :modi :shift}                  ; "
+       :backslash {:key :backslash}                        ; \
+       :pipe {:key :backslash :modi :shift}                ; |
+       :slash {:key :slash}                                ; \
+       :question {:key :slash :modi :shift}                ; ?
 
        ; System-wide shortcuts
        :command_tab {:key :!Ctab}

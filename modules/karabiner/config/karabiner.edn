@@ -23,7 +23,87 @@
  :input-sources {:us {:input_source_id "^com\\.apple\\.keylayout\\.ABC$"
                       :language        "^en$"}}
 
- :tos {:delete-backward {:key delete_or_backspace}
+ :tos {; COLEMAK tos (for easier string sending)
+       :-q {:key :q}
+       :-w {:key :w}
+       :-f {:key :e}
+       :-p {:key :r}
+       :-g {:key :t}
+       :-j {:key :y}
+       :-l {:key :u}
+       :-u {:key :i}
+       :-y {:key :o}
+       :-semicolon {:key :semicolon}
+
+       :-a {:key :a}
+       :-r {:key :s}
+       :-s {:key :d}
+       :-t {:key :f}
+       :-d {:key :g}
+       :-h {:key :h}
+       :-n {:key :j}
+       :-e {:key :k}
+       :-i {:key :l}
+       :-o {:key :semicolon}
+
+       :-z {:key :grave_accent_and_tilde}
+       :-x {:key :z}
+       :-c {:key :x}
+       :-v {:key :c}
+       :-b {:key :v}
+       :-k {:key :n}
+       :-m {:key :m}
+
+       ; Named symbols
+       :exclaim {:key :1 :modi :shift}
+       :at {:key :2 :modi :shift}
+       :hash {:key :3 :modi :shift}
+       :dollar {:key :4 :modi :shift}
+       :percent {:key :5 :modi :shift}
+       :caret {:key :6 :modi :shift}
+       :ampersand {:key :7 :modi :shift}
+       :bullet {:key :8 :modi :shift}
+       :open_paren {:key :9 :modi :shift}
+       :close_paren {:key :0 :modi :shift}
+       :hyphen {:key :hyphen}
+       :underscore {:key :hyphen :modi :shift}
+       :equal {:key :equal_sign}
+       :plus {:key :equal_sign :modi :shift}
+       :semicolon {:key :semicolon}
+       :colon {:key :semicolon :modi :shift}
+       :open_bracket {:key :open_bracket}
+       :close_bracket {:key :close_bracket}
+       :open_brace {:key :open_bracket :modi :shift}
+       :close_brace {:key :close_bracket :modi :shift}
+       :less_than {:key :comma :modi :shift}
+       :greater_than {:key :period :modi :shift}
+       :backquote {:key :grave_accent_and_tilde}
+       :tilde {:key :grave_accent_and_tilde :modi :shift}
+       :dquote {:key :quote :modi :shift}
+       :pipe {:key :backslash :modi :shift}
+       :question {:key :slash :modi :shift}
+       :ls {:key :left_shift}
+       :rs {:key :right_shift}
+
+       ; System-wide shortcuts
+       :command_tab {:key :!Ctab}
+       :left_desktop {:key :!!left_arrow}
+       :right_desktop {:key :!!right_arrow}
+       :mission_control {:key :!!up_arrow}
+       :internet_query {:key :!!t}
+       :show_application_windows {:key :!!down_arrow}
+       :show_desktop {:key :f12}
+       :activate_spotlight {:key :!!spacebar}
+       :fullscreen_snapshot {:key :!CS3}
+       :window_snapshot {:key :!CS4}
+       :selection_snapshot {:key :!CS5}
+       :emoji_picker {:key :spacebar :modi [:control :command]} ;!CTspacebar
+       :system-new_tab {:key :!Ct}
+       :system-close_tab {:key :!Cw}
+       :system-force_quit_apps {:key :!COescape}
+
+       ; Actions
+       :delete-backward {:key delete_or_backspace}
        :delete-forward {:key delete_forward}
        :delete-word-backward {:key delete_or_backspace :modi [:left_option]}
        :delete-word-forward {:key delete_forward :modi [:left_option]}

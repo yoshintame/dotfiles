@@ -264,6 +264,11 @@
                  [:u :_undo]
                  [:o :_redo]]}
 
+       {:des "Symbols"
+        :rules [[:condi :hyper-layer :!f-layer :!d-layer :!s-layer]
+                [:g :comma]
+                [:h :period]]}
+
        {:des "Colemak Layout"
         :rules [[:condi :!qwerty :us]
                 [{:key :q :modi :shift} :q][{:key :w :modi :shift} :w][{:key :e :modi :shift} :f][{:key :r :modi :shift} :p][{:key :t :modi :shift} :b][{:key :y :modi :shift} :j][{:key :u :modi :shift} :l][{:key :i :modi :shift} :u][{:key :o :modi :shift} :y][{:key :p :modi :shift} :semicolon]

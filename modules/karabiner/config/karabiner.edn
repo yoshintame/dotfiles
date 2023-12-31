@@ -98,7 +98,7 @@
        :win-bottom-right {:key k :modi [:left_control :left_option]}}
 
  :main [{:des "layers"
-         :rules [[:##caps_lock ["hyper-layer" 1] nil {:afterup ["hyper-layer" 0] :alone :escape}]
+         :rules [[:##caps_lock ["hyper-layer" 1] nil {:afterup ["hyper-layer" 0]}]
                  [:##d ["d-layer" 1] ["hyper-layer" 1] {:afterup ["d-layer" 0] :alone :d}]
                  [:##s ["s-layer" 1] ["hyper-layer" 1] {:afterup ["s-layer" 0] :alone :s}]
                  [:##f ["f-layer" 1] ["hyper-layer" 1] {:afterup ["f-layer" 0] :alone :f}]

@@ -26,7 +26,7 @@ alias gcob='git checkout -b'
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gcapf="ga . && gca --no-edit && gp -f"
-alias gt="cd `git rev-parse --show-toplevel`"
+alias gt="cd 'git rev-parse --show-toplevel'"
 gpuo() {
     git push -u origin $(git rev-parse --abbrev-ref HEAD)
 }

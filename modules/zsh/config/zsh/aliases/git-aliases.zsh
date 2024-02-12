@@ -37,3 +37,12 @@ alias fetcherge='git fetch origin master-passing-tests && git merge origin/maste
 alias gch='git branch -v --sort=-committerdate | fzf --layout=reverse-list --bind "enter:execute(git checkout {1})+accept-non-empty"'
 
 alias grb='git branch -v --sort=-committerdate | fzf --layout=reverse-list --bind "enter:execute(git rebase {1})+accept-non-empty"'
+
+gwa() {
+    local worktree_name
+    local branch_name
+    branch_name="$1"
+    worktree_name=$(echo "$1" | sed 's/\//-/g')
+
+    git worktree add "$worktree_name" -b "$branch_name"
+}

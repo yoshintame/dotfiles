@@ -200,6 +200,11 @@
 	# list the n last commits
 	ll = !git log --oneline -n
 
+	# worktree
+    wa = worktree add
+    wr = worktree remove
+    wl = worktree list
+
 [init]
 	defaultBranch = main
 [gpg]

@@ -12,7 +12,9 @@
     "editor.defaultFormatter": "ms-python.autopep8"
   },
   "calva.paredit.defaultKeyMap": "original",
+  "cursor.cpp.disabledLanguages": ["plaintext", "yaml"],
   "debug.onTaskErrors": "debugAnyway",
+  "diffEditor.ignoreTrimWhitespace": false,
   "editor.accessibilitySupport": "off",
   "editor.codeActionsOnSave": {
     "source.fixAll": "never",
@@ -68,7 +70,6 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "//": "Last update at 15/02/2024, 00:21:58",
     "*.asax": "$(capture).*.cs, $(capture).*.vb",
     "*.ascx": "$(capture).*.cs, $(capture).*.vb",
     "*.ashx": "$(capture).*.cs, $(capture).*.vb",
@@ -110,6 +111,7 @@
     ".env": "*.env, .env.*, .envrc, env.d.ts",
     ".gitignore": ".gitattributes, .gitmodules, .gitmessage, .mailmap, .git-blame*",
     ".project": ".classpath",
+    "//": "Last update at 15/02/2024, 00:21:58",
     "BUILD.bazel": "*.bzl, *.bazel, *.bazelrc, bazel.rc, .bazelignore, .bazelproject, WORKSPACE",
     "CMakeLists.txt": "*.cmake, *.cmake.in, .cmake-format.yaml, CMakePresets.json, CMakeCache.txt",
     "Cargo.toml": ".clippy.toml, .rustfmt.toml, cargo.lock, clippy.toml, cross.toml, rust-toolchain.toml, rustfmt.toml",
@@ -159,8 +161,8 @@
     "**/*.log.*": true,
     "**/*.min.*": true,
     "**/*.scssc": true,
-    "**/.deploy_git": true,
     "**/.DS_Store": true,
+    "**/.deploy_git": true,
     "**/.git": true,
     "**/.hg": true,
     "**/.svn": true,
@@ -190,16 +192,18 @@
     "**/.trunk/*plugins/": true
   },
   "genieai.enableConversationHistory": true,
-  "git.autofetch": true,
   "git.autoStash": true,
+  "git.autofetch": true,
   "git.confirmSync": false,
   "git.openRepositoryInParentFolders": "always",
+  "git.untrackedChanges": "separate",
   "github.copilot.enable": {
     "*": true,
     "markdown": true,
     "plaintext": false,
     "yaml": false
   },
+  "gitlens.views.commitDetails.files.layout": "tree",
   "i18n-ally.autoDetection": false,
   "i18n-ally.displayLanguage": "en",
   "i18n-ally.ignoredLocales": [],
@@ -292,17 +296,13 @@
   "workbench.editor.limit.perEditorGroup": true,
   "workbench.editor.limit.value": 5,
   "workbench.fontAliasing": "antialiased",
+  "workbench.iconTheme": "pcode-icon-theme-dark-spesifik",
+  "workbench.layoutControl.enabled": false,
   "workbench.list.smoothScrolling": true,
   "workbench.preferredDarkColorTheme": "Xcode Classic Dark",
   "workbench.startupEditor": "newUntitledFile",
   "workbench.statusBar.visible": true,
   "workbench.tree.expandMode": "singleClick",
   "workbench.tree.indent": 20,
-  "workbench.tree.renderIndentGuides": "none",
-  "cursor.cpp.disabledLanguages": ["plaintext", "yaml"],
-  "diffEditor.ignoreTrimWhitespace": false,
-  "workbench.iconTheme": "pcode-icon-theme-dark-spesifik",
-  "workbench.layoutControl.enabled": false,
-  "git.untrackedChanges": "separate",
-  "gitlens.views.commitDetails.files.layout": "tree"
+  "workbench.tree.renderIndentGuides": "none"
 }

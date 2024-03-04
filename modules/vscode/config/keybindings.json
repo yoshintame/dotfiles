@@ -1,34 +1,5 @@
 [
   {
-    "key": "cmd+escape",
-    "command": "workbench.action.terminal.toggleTerminal"
-  },
-  {
-    "key": "cmd+t",
-    "command": "workbench.action.terminal.new",
-    "when": "terminalFocus"
-  },
-  {
-    "key": "cmd+w",
-    "command": "workbench.action.terminal.kill",
-    "when": "terminalFocus"
-  },
-  {
-    "key": "cmd+backspace",
-    "command": "workbench.action.terminal.clear",
-    "when": "terminalFocus"
-  },
-  {
-    "key": "cmd+left",
-    "command": "workbench.action.terminal.focusPrevious",
-    "when": "terminalFocus"
-  },
-  {
-    "key": "cmd+right",
-    "command": "workbench.action.terminal.focusNext",
-    "when": "terminalFocus"
-  },
-  {
     "key": "cmd+shift+m",
     "command": "fileutils.moveFile"
   },
@@ -42,23 +13,53 @@
     "when": "editorTextFocus"
   },
   {
-    "key": "ctrl+shift+alt+cmd+r",
+    "key": "cmd+r",
     "command": "workbench.action.tasks.runTask"
   },
   {
-    "key": "ctrl+shift+alt+cmd+e",
+    "key": "cmd+e",
     "command": "workbench.action.toggleSidebarVisibility"
   },
   {
-    "key": "cmd+b",
-    "command": "-workbench.action.toggleSidebarVisibility"
-  },
-  {
-    "key": "ctrl+shift+alt+cmd+y",
+    "key": "cmd+j",
     "command": "workbench.action.togglePanel"
   },
   {
-    "key": "cmd+j",
-    "command": "-workbench.action.togglePanel"
+    "key": "cmd+shift+o",
+    "command": "projectManager.listGitProjects#sideBarGit"
+  },
+  {
+    "key": "cmd+e",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "cmd+e",
+    "command": "workbench.files.action.focusFilesExplorer",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "a",
+    "command": "explorer.newFile",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "r",
+    "command": "renameFile",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "c",
+    "command": "filesExplorer.copy",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "p",
+    "command": "filesExplorer.paste",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "d",
+    "command": "deleteFile",
+    "when": "filesExplorerFocus && !inputFocus"
   }
 ]

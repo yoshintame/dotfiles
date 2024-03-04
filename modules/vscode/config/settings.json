@@ -201,6 +201,7 @@
   "editor.accessibilitySupport": "off",
   "editor.bracketPairColorization.enabled": false,
   "editor.bracketPairColorization.independentColorPoolPerBracketType": false,
+  "editor.cursorSurroundingLines": 5,
   "editor.detectIndentation": false,
   "editor.find.addExtraSpaceOnTop": false,
   "editor.foldingImportsByDefault": true,
@@ -214,9 +215,12 @@
   "editor.hover.delay": 200,
   "editor.hover.sticky": true,
   "editor.inlineSuggest.enabled": true,
+  "editor.linkedEditing": true,
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.overviewRulerBorder": false,
   "editor.renderWhitespace": "boundary",
+  "editor.suggest.insertMode": "replace",
+  "editor.suggestFontSize": 14,
   "editor.suggestSelection": "first",
   "editor.unicodeHighlight.invisibleCharacters": false,
   "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?",
@@ -234,17 +238,17 @@
   "workbench.tree.expandMode": "singleClick",
 
   // Format, lint and LSP
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "never",
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "never"
-  },
+  "editor.formatOnPaste": true,
   "files.autoSave": "afterDelay",
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": true,
+    "source.organizeImports": true,
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "explicit"
+  },
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-  "editor.formatOnPaste": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },
@@ -262,23 +266,62 @@
     "jsonc",
     "json5"
   ],
-  "prettier.useEditorConfig": true,
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "typescript.updateImportsOnFileMove.enabled": "never",
-  "javascript.updateImportsOnFileMove.enabled": "never",
-  "[go]": {
-    "editor.defaultFormatter": "golang.go"
-  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "prettier.useEditorConfig": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8"
   },
+  "sortJSON.orderOverride": [
+    "name",
+    "version",
+    "main",
+    "module",
+    "types",
+    "typings",
+    "files",
+    "publishConfig",
+    "repository",
+    "scripts",
+    "prefix",
+    "description",
+    "body"
+  ],
+  "sortJSON.orderUnderride": [
+    "resolutions",
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "cSpell.userWords"
+  ],
 
   // Git
   "git.enableCommitSigning": true,
@@ -369,8 +412,15 @@
   "security.promptForLocalFileProtocolHandling": false,
   "security.workspace.trust.enabled": false,
   "update.mode": "manual",
+  "update.showReleaseNotes": false,
 
   // OTHER EXTENSIONS
+  "errorLens.fontStyleItalic": true,
+  "i18n-ally.autoDetection": false,
+  "i18n-ally.displayLanguage": "en",
+  "i18n-ally.ignoredLocales": [],
+  "iconify.annotations": true,
+  "iconify.inplace": true,
   "projectManager.git.baseFolders": ["~"],
   "projectManager.sortList": "Recent",
   "svg.preview.mode": "svg",
@@ -386,11 +436,6 @@
     "variants",
     "variant"
   ],
-  "i18n-ally.autoDetection": false,
-  "i18n-ally.displayLanguage": "en",
-  "i18n-ally.ignoredLocales": [],
-  "iconify.annotations": true,
-  "iconify.inplace": true,
 
   // File nesting
   "explorer.fileNesting.enabled": true,

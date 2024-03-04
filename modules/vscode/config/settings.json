@@ -73,7 +73,6 @@
     ".title-label h2": "visibility: hidden; position: relative;",
     ".title-label h2:after": "visibility: visible; position: absolute; top: 0; left: 0; content: 'EXPLORER'"
   },
-  "breadcrumbs.enabled": false,
   "debug.onTaskErrors": "debugAnyway",
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.accessibilitySupport": "off",
@@ -96,12 +95,11 @@
   "editor.hover.sticky": true,
   "editor.inlineSuggest.enabled": true,
   "editor.lineHeight": 18,
-  "editor.minimap.enabled": false,
-  "editor.minimap.renderCharacters": false,
+  "editor.minimap.enabled": true,
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.renderWhitespace": "boundary",
   "editor.scrollbar.horizontalScrollbarSize": 8,
-  "editor.scrollbar.verticalScrollbarSize": 8,
+  "editor.scrollbar.verticalScrollbarSize": 0,
   "editor.stickyScroll.enabled": false,
   "editor.suggestSelection": "first",
   "editor.tabSize": 4,
@@ -160,7 +158,7 @@
     "**/test_assets": true,
     "**/tmp": true
   },
-  "files.insertFinalNewline": false,
+  "files.insertFinalNewline": true,
   "files.simpleDialog.enable": true,
   "files.trimTrailingWhitespace": true,
   "files.watcherExclude": {
@@ -438,5 +436,20 @@
   "window.density.editorTabHeight": "compact",
   "git-graph.commitDetailsView.location": "Docked to Bottom",
   "git.enableCommitSigning": true,
-  "git.enableSmartCommit": true
+  "editor.stickyScroll.scrollWithEditor": false,
+  "workbench.tree.enableStickyScroll": false,
+  "editor.gotoLocation.multipleTypeDefinitions": "gotoAndPeek",
+  "editor.gotoLocation.multipleReferences": "gotoAndPeek",
+  "editor.gotoLocation.multipleImplementations": "gotoAndPeek",
+  "editor.gotoLocation.multipleDefinitions": "gotoAndPeek",
+  "editor.gotoLocation.multipleDeclarations": "gotoAndPeek",
+  "editor.hover.delay": 200,
+  "editor.formatOnPaste": true,
+  "editor.minimap.size": "fit",
+  "editor.minimap.scale": 3,
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.maxColumn": 80,
+  "breadcrumbs.enabled": false,
+  "editor.scrollbar.vertical": "hidden",
+  "editor.minimap.showSlider": "always"
 }

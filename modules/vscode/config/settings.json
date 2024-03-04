@@ -451,5 +451,7 @@
   "editor.minimap.maxColumn": 80,
   "breadcrumbs.enabled": false,
   "editor.scrollbar.vertical": "hidden",
-  "editor.minimap.showSlider": "always"
+  "editor.minimap.showSlider": "always",
+  "projectManager.git.baseFolders": ["~"],
+  "projectManager.sortList": "Recent"
 }

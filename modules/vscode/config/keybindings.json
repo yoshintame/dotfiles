@@ -1,13 +1,5 @@
 [
   {
-    "key": "cmd+shift+m",
-    "command": "fileutils.moveFile"
-  },
-  {
-    "key": "cmd+shift+r",
-    "command": "fileutils.renameFile"
-  },
-  {
     "key": "cmd+shift+r",
     "command": "workbench.action.reloadWindow",
     "when": "editorTextFocus"
@@ -17,16 +9,32 @@
     "command": "workbench.action.tasks.runTask"
   },
   {
-    "key": "cmd+e",
-    "command": "workbench.action.toggleSidebarVisibility"
-  },
-  {
     "key": "cmd+j",
     "command": "workbench.action.togglePanel"
   },
   {
     "key": "cmd+shift+o",
     "command": "projectManager.listGitProjects#sideBarGit"
+  },
+
+  // File actions
+  {
+    "key": "cmd+shift+m",
+    "command": "fileutils.moveFile"
+  },
+  {
+    "key": "cmd+shift+r",
+    "command": "fileutils.renameFile"
+  },
+  {
+    "key": "cmd+shift+n",
+    "command": "fileutils.newFile"
+  },
+
+  // Explorer
+  {
+    "key": "cmd+shift+e",
+    "command": "workbench.action.toggleSidebarVisibility"
   },
   {
     "key": "cmd+e",
@@ -38,9 +46,14 @@
     "when": "editorTextFocus"
   },
   {
-    "key": "a",
+    "key": "n",
     "command": "explorer.newFile",
     "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "shift+n",
+    "command": "explorer.newFolder",
+    "when": "explorerViewletFocus"
   },
   {
     "key": "r",
@@ -61,5 +74,20 @@
     "key": "d",
     "command": "deleteFile",
     "when": "filesExplorerFocus && !inputFocus"
+  },
+
+  // Other
+  {
+    "command": "-editor.action.selectAll",
+    "key": "cmd+a"
+  },
+  {
+    "command": "editor.action.selectAll",
+    "key": "cmd+a"
+  },
+  {
+    "key": "enter",
+    "command": "closeFindWidget",
+    "when": "editorFocus && findWidgetVisible && !isComposing"
   }
 ]

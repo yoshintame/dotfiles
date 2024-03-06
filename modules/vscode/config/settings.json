@@ -241,8 +241,8 @@
   "editor.formatOnPaste": true,
   "files.autoSave": "afterDelay",
   "editor.codeActionsOnSave": {
-    "source.addMissingImports": true,
-    "source.organizeImports": true,
+    "source.addMissingImports": "explicit",
+    "source.organizeImports": "explicit",
     "source.fixAll": "never",
     "source.fixAll.eslint": "explicit"
   },

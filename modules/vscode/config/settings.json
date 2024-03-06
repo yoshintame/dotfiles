@@ -29,6 +29,7 @@
   "workbench.activityBar.location": "hidden",
   "workbench.layoutControl.enabled": false,
   "workbench.LayoutControl.enabled": false,
+  "editor.lineNumbers": "off",
 
   // Cursor
   "editor.cursorSmoothCaretAnimation": "on",
@@ -42,13 +43,12 @@
 
   // Scroll and minimap
   "editor.scrollbar.horizontalScrollbarSize": 8,
-  "editor.scrollbar.verticalScrollbarSize": 0,
+  "editor.scrollbar.verticalScrollbarSize": 8,
   "editor.minimap.enabled": false,
   "editor.minimap.scale": 1,
   "editor.minimap.renderCharacters": false,
   "editor.minimap.maxColumn": 120,
   "editor.minimap.showSlider": "always",
-  "editor.scrollbar.vertical": "hidden",
   "editor.stickyScroll.enabled": false,
   "editor.stickyScroll.scrollWithEditor": false,
   "workbench.tree.enableStickyScroll": false,
@@ -268,7 +268,6 @@
   ],
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "prettier.useEditorConfig": true,

@@ -18,18 +18,18 @@
   },
 
   // File actions
-  {
-    "key": "cmd+shift+m",
-    "command": "fileutils.moveFile"
-  },
-  {
-    "key": "cmd+shift+r",
-    "command": "fileutils.renameFile"
-  },
-  {
-    "key": "cmd+shift+n",
-    "command": "fileutils.newFile"
-  },
+  //   {
+  //     "key": "cmd+shift+m",
+  //     "command": "fileutils.moveFile"
+  //   },
+  //   {
+  //     "key": "cmd+shift+r",
+  //     "command": "fileutils.renameFile"
+  //   },
+  //   {
+  //     "key": "cmd+shift+n",
+  //     "command": "fileutils.newFile"
+  //   },
 
   // Explorer
   {

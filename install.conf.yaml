@@ -7,37 +7,59 @@
 - clean: ["~"]
 
 - link:
+    # zsh
     ~/.config/zsh/:
       path: modules/zsh/config/zsh/**
       glob: true
     ~/.zshrc: modules/zsh/config/.zshrc
     ~/.zshenv: modules/zsh/config/.zshenv
 
+    # neovim
     ~/.config/nvim/:
       path: modules/nvim/config/**
       glob: true
 
+    # hammerspoon
     ~/.hammerspoon/:
       path: modules/hammerspoon/config/**
       glob: true
 
+    # git
     ~/.gitconfig: modules/git/config/.gitconfig
 
+    # starship
     ~/.config/starship.toml: modules/starship/config/starship.toml
 
+    # yabai
     ~/.config/yabai/yabairc: modules/yabai/config/.yabairc
 
+    # lf
     # TODO: bagged? Wont work with /**
     ~/.config/lf/:
       path: modules/lf/config/
       glob: true
 
+    # warp
     ~/.warp/:
       path: modules/warp/config/**
       glob: true
 
+    # vscode
     ~/Library/Application Support/Cursor/User/:
       path: modules/vscode/config/**
       glob: true
 
+    ~/Library/Application Support/Code/User/:
+      path: modules/vscode/config/**
+      glob: true
+
+    ~/.cursor/extensions/:
+      path: modules/vscode/theme/**
+      glob: true
+
+    ~/.vscode/extensions/:
+      path: modules/vscode/theme/**
+      glob: true
+
+    # karabiner
     ~/.config/karabiner.edn: modules/karabiner/config/karabiner.edn

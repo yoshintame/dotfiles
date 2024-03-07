@@ -1,7 +1,32 @@
 {
   // APPEARANCE
-  "workbench.colorTheme": "Xcode Classic (Dark)",
+  "workbench.colorTheme": "True Vibrant (Xcode tokens)",
   "workbench.iconTheme": "pcode-icon-theme-dark-spesifik",
+
+  // Apc
+  "apc.electron": {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "frame": false,
+    "vibrancy": "under-window",
+    "visualEffectState": "active"
+  },
+  "apc.header": {
+    "height": 34
+  },
+  "apc.listRow": {
+    "height": 21
+  },
+  "apc.menubar.compact": true,
+  "apc.sidebar.titlebar": {
+    "fontSize": 12,
+    "height": 38
+  },
+  "apc.statusBar": {
+    "height": 24
+  },
+  "apc.imports": [
+    "${userHome}/.cursor/extensions/true-vibrant-vscode-theme/themes/true-vibrant-color-theme.css"
+  ],
 
   // Fonts
   "apc.font.family": "Cascadia Code",
@@ -52,148 +77,6 @@
   "editor.stickyScroll.enabled": false,
   "editor.stickyScroll.scrollWithEditor": false,
   "workbench.tree.enableStickyScroll": false,
-
-  // Apc
-  "apc.electron": {
-    "backgroundColor": "rgba(0, 0, 0, 0)",
-    "frame": false,
-    "vibrancy": "under-window",
-    "visualEffectState": "active"
-  },
-  "apc.header": {
-    "height": 34
-  },
-  "apc.listRow": {
-    "height": 21
-  },
-  "apc.menubar.compact": true,
-  "apc.sidebar.titlebar": {
-    "fontSize": 12,
-    "height": 38
-  },
-  "apc.statusBar": {
-    "height": 24
-  },
-  "apc.stylesheet": {
-    ".quick-input-widget": "top: 45px !important",
-
-    // Cursor chat md blocks fix
-    ".ai-chat-scrollable .monaco-editor": "background: transparent !important;",
-    ".anysphere-markdown-container-root .monaco-editor .monaco-editor-background": "background: transparent !important;",
-
-    // Cursor Active Bar Fix
-    ".sidebar > div > div > div:nth-child(1) > div": "background: transparent !important;",
-
-    ".monaco-list-rows": "background: transparent !important;",
-    ".monaco-tree-sticky-container": "background: #262626 !important; backdrop-filter: blur(1.5rem)",
-
-    // Scrollbar
-    ".scrollbar.horizontal": "hight: 8px !important;",
-    ".scrollbar.horizontal .slider": "border-radius: 9999px !important; hight: 8px !important;",
-    ".scrollbar.vertical": "width: 8px !important;",
-    ".scrollbar.vertical .slider": "border-radius: 9999px !important; width: 8px !important;",
-
-    // Title
-    ".title-actions .actions-container": "display: none;",
-    ".title-label h2": "visibility: hidden; position: relative;",
-    ".title-label h2:after": "visibility: visible; position: absolute; top: 0; left: 0; content: 'EXPLORER'"
-  },
-  "workbench.colorCustomizations": {
-    // Activiry Bar
-    "activityBar.background": "#00000090",
-    "activityBar.border": "#00000000",
-    "activityBar.dropBackground": "#00000000",
-    "activityBarBadge.background": "#00000000",
-
-    // Scroll Bar
-    "scrollbar.shadow": "#00000000",
-    "scrollbarSlider.activeBackground": "#00000000",
-
-    // Tabs
-    "editorGroupHeader.tabsBackground": "#00000080",
-    "editorGroupHeader.tabsBorder": "#00000000",
-    "tab.activeBackground": "#00000000",
-    "tab.activeBorder": "#00000000",
-    "tab.activeBorderTop": "#d0d0d0",
-    "tab.border": "#00000000",
-    "tab.hoverBackground": "#00000030",
-    "tab.hoverBorder": "#00000000",
-    "tab.inactiveBackground": "#00000000",
-
-    // Other
-    "breadcrumb.background": "#00000020",
-
-    // Editor
-    "editor.background": "#00000025",
-    "editorGroup.emptyBackground": "#00000090",
-    "editorGutter.background": "#00000020",
-    "editorOverviewRuler.background": "#00000000",
-
-    // Panel
-    "panel.background": "#00000000",
-    "panel.border": "#00000000",
-
-    "peekViewEditor.background": "#00000030",
-    "peekViewEditorGutter.background": "#00000030",
-    "peekViewResult.background": "#00000030",
-    "peekViewTitle.background": "#00000020",
-
-    // Sidebar
-    "sideBar.background": "#00000090", // TODO: try 50
-    "sideBar.border": "#00000000",
-    "sideBar.dropBackground": "#00000000",
-    "sideBarSectionHeader.background": "#00000000",
-
-    // Status Bar
-    "statusBar.background": "#00000090",
-    "statusBar.border": "#00000000",
-    "statusBarItem.remoteBackground": "#00000000",
-
-    // Title Bar
-    "titleBar.activeBackground": "#00000020",
-    "titleBar.border": "#00000000",
-    "titleBar.inactiveBackground": "#00000000",
-
-    // Terminal
-    "terminal.background": "#00000020",
-    "terminal.ansiBlack": "#000000",
-    "terminal.ansiBlue": "#2b4fff",
-    "terminal.ansiBrightBlack": "#2f2f2f",
-    "terminal.ansiBrightBlue": "#5c78ff",
-    "terminal.ansiBrightCyan": "#5ac8ff",
-    "terminal.ansiBrightGreen": "#905aff",
-    "terminal.ansiBrightMagenta": "#5ea2ff",
-    "terminal.ansiBrightRed": "#ba5aff",
-    "terminal.ansiBrightWhite": "#ffffff",
-    "terminal.ansiBrightYellow": "#685aff",
-    "terminal.ansiCyan": "#28b9ff",
-    "terminal.ansiGreen": "#7129ff",
-    "terminal.ansiMagenta": "#2883ff",
-    "terminal.ansiRed": "#a52aff",
-    "terminal.ansiWhite": "#cfcfcf",
-    "terminal.ansiYellow": "#3d2aff",
-    "terminal.border": "#80808059",
-    "terminal.foreground": "#cccccc",
-    "terminal.selectionBackground": "#ffffff40",
-    "terminalCursor.background": "#000000",
-    "terminalCursor.foreground": "#ffffff",
-
-    // Widgets
-    "editorWidget.background": "#101010",
-    "widget.shadow": "#00000000",
-    "widget.border": "#191919",
-    "editorWidget.border": "#191919",
-    "editorSuggestWidget.border": "#191919",
-    "editorHoverWidget.border": "#191919",
-    "debugExceptionWidget.border": "#191919",
-
-    // Notatifications
-    "notificationCenter.border": "#191919",
-    "notificationCenterHeader.background": "#101010",
-    "notificationToast.border": "#191919",
-    "notifications.background": "#101010",
-    "notifications.border": "#191919"
-  },
 
   // UX
   "debug.onTaskErrors": "debugAnyway",

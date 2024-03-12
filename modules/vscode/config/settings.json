@@ -1,6 +1,5 @@
 {
-  // APPEARANCE
-  "workbench.colorTheme": "True Vibrant (Xcode tokens)",
+  "workbench.colorTheme": "True Vibrant (Xcode)",
   "workbench.iconTheme": "pcode-icon-theme-dark-spesifik",
 
   // Apc
@@ -40,9 +39,7 @@
   "terminal.integrated.fontWeight": "300",
   "terminal.integrated.lineHeight": 1.23,
   "workbench.fontAliasing": "antialiased",
-
-  // Layout
-  "breadcrumbs.enabled": false,
+  "breadcrumbs.symbolPath": "off",
   "editor.tabSize": 4,
   "explorer.compactFolders": false,
   "files.simpleDialog.enable": true,
@@ -54,7 +51,6 @@
   "workbench.activityBar.location": "hidden",
   "workbench.layoutControl.enabled": false,
   "workbench.LayoutControl.enabled": false,
-  "editor.lineNumbers": "off",
 
   // Cursor
   "editor.cursorSmoothCaretAnimation": "on",

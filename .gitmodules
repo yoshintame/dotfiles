@@ -5,3 +5,6 @@
 [submodule "modules/vscode/theme/true-vibrant-vscode-theme"]
 	path = modules/vscode/theme/true-vibrant-vscode-theme
 	url = git@github.com:Yoshintame/true-vibrant-vscode-theme.git
+[submodule "modules/karabiner/config"]
+	path = modules/karabiner/config
+	url = git@github.com:Yoshintame/karabiner-config.git

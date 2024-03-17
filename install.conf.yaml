@@ -61,5 +61,7 @@
       path: modules/vscode/theme/**
       glob: true
 
-    # karabiner
-    ~/.config/karabiner.edn: modules/karabiner/config/karabiner.edn
+    # obsidian
+    ~/yoshintame-obsidian-vault/.obsidian:
+      path: modules/obsidian/config/**
+      glob: true

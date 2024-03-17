@@ -1,0 +1,175 @@
+{
+  "main": {
+    "id": "74c82be42f0ba836",
+    "type": "split",
+    "children": [
+      {
+        "id": "0082564198221485",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b48479a58dfde8a7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Grafana dashboard panel JSON generator.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1c9dbbce567253f9",
+    "type": "split",
+    "children": [
+      {
+        "id": "0a71aee145de07dc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1e33857c29def394",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "c1a12d5b20ea3af1",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "0c9b9725c55ec974",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          },
+          {
+            "id": "c54f6ef0b6a62f7e",
+            "type": "leaf",
+            "state": {
+              "type": "com.maxymillion.zen",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 237.5
+  },
+  "right": {
+    "id": "2552c34a2010671f",
+    "type": "split",
+    "children": [
+      {
+        "id": "927623b5cbb05d08",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d7e365970fab89a4",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Grafana dashboard panel JSON generator.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "8218051cf2222e0a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Grafana dashboard panel JSON generator.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a4ec00f343b5ac6f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": false
+              }
+            }
+          },
+          {
+            "id": "1bb966fa39304dcf",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Grafana dashboard panel JSON generator.md"
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 362.5,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "workspaces:Manage workspace layouts": false
+    }
+  },
+  "active": "b48479a58dfde8a7",
+  "lastOpenFiles": [
+    "Brew.md",
+    "Git.md",
+    "Grafana dashboard panel JSON generator.md",
+    "Untitled.md",
+    "Untitled.canvas",
+    "Untitled 2.canvas",
+    "Untitled 1.md",
+    "Untitled 1.canvas",
+    "telegram-cloud-photo-size-2-5341387308773002781-y.jpg",
+    "2023-11-01.md",
+    "Untitled 3.canvas",
+    "test/Untitled.md",
+    "test"
+  ]
+}

@@ -1,3 +1,5 @@
+require("starship"):setup()
+
 -- Remove borders
 function Manager:render(area)
 	local chunks = self:layout(area)

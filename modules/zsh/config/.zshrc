@@ -1,7 +1,3 @@
-# Fig pre
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
-
-
 # Aliases
 [[ -f "$HOME/.config/zsh/aliases/base-aliases.zsh" ]] && source ~/.config/zsh/aliases/base-aliases.zsh
 [[ -f "$HOME/.config/zsh/aliases/docker-aliases.zsh" ]] && source ~/.config/zsh/aliases/docker-aliases.zsh
@@ -19,16 +15,8 @@
 # Load Starship
 eval "$(starship init zsh)"
 
-# Load Rtx
-# eval "$(~/bin/rtx activate zsh)"
-
-# # Load Direnv
-# eval "$(direnv hook zsh)"
-
-export PATH="$HOME/bin:$PATH"
-
-# Fig post
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+# Load Zoxide
+eval "$(zoxide init zsh)"
 
 # Pnpm
 export PNPM_HOME="/Users/yoshintame/Library/pnpm"
@@ -37,4 +25,14 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
+# Code plugins
+PATH=~/.console-ninja/.bin:$PATH
+
 printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh" }}\x9c'
+
+# bun completions
+[ -s "/Users/yoshintame/.bun/_bun" ] && source "/Users/yoshintame/.bun/_bun"
+
+# Binds
+bindkey -s '^o' 'fj^M' # TODO not workingj
+

@@ -24,7 +24,7 @@ edit = [
     { run = '${EDITOR:=vi} "$@"', desc = "Editor (all)", for = "macos" },
 ]
 open = [
-	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
+	{ run = 'open "$@"', desc = "Open", for = "macos" },
 ]
 reveal = [
 	{ run = 'xdg-open "$(dirname "$0")"',            desc = "Reveal", for = "linux" },
@@ -37,7 +37,7 @@ extract = [
 	{ run = 'unar "%1"', desc = "Extract here", for = "windows" },
 ]
 play = [
-	{ run = 'echo "$0"', desc = "Play", for = "macos" },
+	{ run = '${PLAY} "$@"', desc = "Play", for = "macos" },
 
 ]
 

@@ -65,3 +65,12 @@
     ~/yoshintame-obsidian-vault/.obsidian:
       path: modules/obsidian/config/**
       glob: true
+
+    # yazip
+    ~/.config/yazi/:
+      path: modules/yazi/config/**
+      glob: true
+
+    ~/.config/yazi/scripts/:
+      path: modules/yazi/scripts/**
+      glob: true

@@ -70,6 +70,9 @@ preloaders = [
 	# PDF
 	{ mime = "application/pdf", run = "pdf" },
 ]
+prepend_previewers = [
+  { name = "*.md", run = "glow" },
+]
 previewers = [
 	{ name = "*/", run = "folder", sync = true },
 	# Code

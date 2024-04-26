@@ -12,3 +12,6 @@
 [submodule "modules/karabiner/config"]
 	path = modules/karabiner/config
 	url = git@github.com:Yoshintame/karabiner-config.git
+[submodule "modules/yazi/config/plugins/glow.yazi"]
+	path = modules/yazi/config/plugins/glow.yazi
+	url = https://github.com/Reledia/glow.yazi.git

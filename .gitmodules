@@ -2,6 +2,10 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
+[submodule "dotbot-ifplatform"]
+	path = dotbot-ifplatform
+	url = https://github.com/ssbanerje/dotbot-ifplatform.git
+
 [submodule "modules/vscode/theme/true-vibrant-vscode-theme"]
 	path = modules/vscode/theme/true-vibrant-vscode-theme
 	url = git@github.com:Yoshintame/true-vibrant-vscode-theme.git

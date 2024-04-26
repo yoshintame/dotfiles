@@ -13,12 +13,13 @@ keymap = [
 	{ on = [ "<C-z>" ], run = "suspend",            desc = "Suspend the process" },
 
 	# Navigation
-	{ on = [ "k" ], run = "arrow -1", desc = "Move cursor up" },
-	{ on = [ "j" ], run = "arrow 1",  desc = "Move cursor down" },
+	{ on = [ "i" ], run = "arrow -1", desc = "Move cursor up" },
+	{ on = [ "k" ], run = "arrow 1",  desc = "Move cursor down" },
+    { on = [ "<Up>" ],    run = "arrow -1", desc = "Move cursor up" },
+	{ on = [ "<Down>" ],  run = "arrow 1",  desc = "Move cursor down" },
 
-	{ on = [ "K" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
-	{ on = [ "J" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
-
+	{ on = [ "I" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
+	{ on = [ "K" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
 	{ on = [ "<S-Up>" ],   run = "arrow -5", desc = "Move cursor up 5 lines" },
 	{ on = [ "<S-Down>" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
 
@@ -32,24 +33,25 @@ keymap = [
 	{ on = [ "<PageUp>" ],     run = "arrow -100%", desc = "Move cursor up one page" },
 	{ on = [ "<PageDown>" ],   run = "arrow 100%",  desc = "Move cursor down one page" },
 
-	{ on = [ "h" ], run = "leave", desc = "Go back to the parent directory" },
-	{ on = [ "l" ], run = "enter", desc = "Enter the child directory" },
+    { on = [ "g", "g" ], run = "arrow -99999999", desc = "Move cursor to the top" },
+	{ on = [ "G" ],      run = "arrow 99999999",  desc = "Move cursor to the bottom" },
 
-	{ on = [ "H" ], run = "back",    desc = "Go back to the previous directory" },
+
+	{ on = [ "j" ], run = "leave", desc = "Go back to the parent directory" },
+    { on = [ "l" ], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
+	{ on = [ "<Left>" ],  run = "leave",    desc = "Go back to the parent directory" },
+	{ on = [ "<Right>" ], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
+
+	{ on = [ "J" ], run = "back",    desc = "Go back to the previous directory" },
 	{ on = [ "L" ], run = "forward", desc = "Go forward to the next directory" },
+    { on = [ "<S-Left>" ], run = "back",    desc = "Go back to the previous directory" },
+	{ on = [ "<S-Right>" ], run = "forward", desc = "Go forward to the next directory" },
+
 
 	{ on = [ "<A-k>" ], run = "seek -5", desc = "Seek up 5 units in the preview" },
 	{ on = [ "<A-j>" ], run = "seek 5",  desc = "Seek down 5 units in the preview" },
 	{ on = [ "<A-PageUp>" ],   run = "seek -5", desc = "Seek up 5 units in the preview" },
 	{ on = [ "<A-PageDown>" ], run = "seek 5",  desc = "Seek down 5 units in the preview" },
-
-	{ on = [ "<Up>" ],    run = "arrow -1", desc = "Move cursor up" },
-	{ on = [ "<Down>" ],  run = "arrow 1",  desc = "Move cursor down" },
-	{ on = [ "<Left>" ],  run = "leave",    desc = "Go back to the parent directory" },
-	{ on = [ "<Right>" ], run = "enter",    desc = "Enter the child directory" },
-
-	{ on = [ "g", "g" ], run = "arrow -99999999", desc = "Move cursor to the top" },
-	{ on = [ "G" ],      run = "arrow 99999999",  desc = "Move cursor to the bottom" },
 
 	# Selection
 	{ on = [ "<Space>" ], run = [ "select --state=none", "arrow 1" ], desc = "Toggle the current selection state" },
@@ -71,7 +73,7 @@ keymap = [
 	{ on = [ "P" ],         run = "paste --force",              desc = "Paste the files (overwrite if the destination exists)" },
 	{ on = [ "-" ],         run = "link",                       desc = "Symlink the absolute path of files" },
 	{ on = [ "_" ],         run = "link --relative",            desc = "Symlink the relative path of files" },
-	{ on = [ "d" ],         run = "remove",                     desc = "Move the files to the trash" },
+	{ on = [ "d", "d" ],    run = "remove --force",             desc = "Move the files to the trash" },
 	{ on = [ "D" ],         run = "remove --permanently",       desc = "Permanently delete the files" },
 	{ on = [ "a" ],         run = "create",                     desc = "Create a file or directory (ends with / for directories)" },
 	{ on = [ "r" ],         run = "rename --cursor=before_ext", desc = "Rename a file or directory" },
@@ -146,7 +148,7 @@ keymap = [
 	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "Go to the config directory" },
 	{ on = [ "g", "d" ],       run = "cd ~/Downloads",   desc = "Go to the downloads directory" },
 	{ on = [ "g", "t" ],       run = "cd /tmp",          desc = "Go to the temporary directory" },
-	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Go to a directory interactively" },
+	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Go t   o a directory interactively" },
 
 	# Help
 	{ on = [ "~" ], run = "help", desc = "Open help" },
@@ -180,11 +182,11 @@ keymap = [
 	{ on = [ "<C-q>" ],   run = "close",          desc = "Cancel selection" },
 	{ on = [ "<Enter>" ], run = "close --submit", desc = "Submit the selection" },
 
-	{ on = [ "k" ], run = "arrow -1", desc = "Move cursor up" },
-	{ on = [ "j" ], run = "arrow 1",  desc = "Move cursor down" },
+	{ on = [ "i" ], run = "arrow -1", desc = "Move cursor up" },
+	{ on = [ "k" ], run = "arrow 1",  desc = "Move cursor down" },
 
-	{ on = [ "K" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
-	{ on = [ "J" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
+	{ on = [ "I" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
+	{ on = [ "K" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
 
 	{ on = [ "<Up>" ],   run = "arrow -1", desc = "Move cursor up" },
 	{ on = [ "<Down>" ], run = "arrow 1",  desc = "Move cursor down" },
@@ -212,7 +214,7 @@ keymap = [
 	{ on = [ "V" ], run = [ "move -999", "visual", "move 999" ], desc = "Enter visual mode and select all" },
 
 	# Character-wise movement
-	{ on = [ "h" ],       run = "move -1", desc = "Move back a character" },
+	{ on = [ "j" ],       run = "move -1", desc = "Move back a character" },
 	{ on = [ "l" ],       run = "move 1",  desc = "Move forward a character" },
 	{ on = [ "<Left>" ],  run = "move -1", desc = "Move back a character" },
 	{ on = [ "<Right>" ], run = "move 1",  desc = "Move forward a character" },
@@ -220,7 +222,7 @@ keymap = [
 	{ on = [ "<C-f>" ],   run = "move 1",  desc = "Move forward a character" },
 
 	# Word-wise movement
-	{ on = [ "b" ],     run = "backward",              desc = "Move back to the start of the current or previous word" },
+	{ on = [ "b " ],     run = "backward",              desc = "Move back to the start of the current or previous word" },
 	{ on = [ "w" ],     run = "forward",               desc = "Move forward to the start of the next word" },
 	{ on = [ "e" ],     run = "forward --end-of-word", desc = "Move forward to the end of the current or next word" },
 	{ on = [ "<A-b>" ], run = "backward",              desc = "Move back to the start of the current or previous word" },
@@ -271,8 +273,8 @@ keymap = [
 	{ on = [ "<Tab>" ],   run = "close --submit",                             desc = "Submit the completion" },
 	{ on = [ "<Enter>" ], run = [ "close --submit", "close_input --submit" ], desc = "Submit the completion and input" },
 
-	{ on = [ "<A-k>" ], run = "arrow -1", desc = "Move cursor up" },
-	{ on = [ "<A-j>" ], run = "arrow 1",  desc = "Move cursor down" },
+	{ on = [ "<A-i>" ], run = "arrow -1", desc = "Move cursor up" },
+	{ on = [ "<A-k>" ], run = "arrow 1",  desc = "Move cursor down" },
 
 	{ on = [ "<Up>" ],   run = "arrow -1", desc = "Move cursor up" },
 	{ on = [ "<Down>" ], run = "arrow 1",  desc = "Move cursor down" },
@@ -292,11 +294,11 @@ keymap = [
 	{ on = [ "<C-q>" ], run = "close",  desc = "Hide the help" },
 
 	# Navigation
-	{ on = [ "k" ], run = "arrow -1", desc = "Move cursor up" },
-	{ on = [ "j" ], run = "arrow 1",  desc = "Move cursor down" },
+	{ on = [ "i" ], run = "arrow -1", desc = "Move cursor up" },
+	{ on = [ "k" ], run = "arrow 1",  desc = "Move cursor down" },
 
-	{ on = [ "K" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
-	{ on = [ "J" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
+	{ on = [ "I" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
+	{ on = [ "K" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
 
 	{ on = [ "<Up>" ],   run = "arrow -1", desc = "Move cursor up" },
 	{ on = [ "<Down>" ], run = "arrow 1",  desc = "Move cursor down" },

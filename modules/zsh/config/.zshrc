@@ -14,14 +14,7 @@
 [[ -f "$HOME/.config/zsh/functions.zsh" ]] && source ~/.config/zsh/functions.zsh
 [[ -f "$HOME/.config/zsh/wsl2fix.zsh" ]] && source ~/.config/zsh/wsl2fix.zsh
 [[ -f "$HOME/.config/zsh/goto.zsh" ]] && source ~/.config/zsh/goto.zsh
-
-# Load LFCD
-LFCD="$GOPATH/src/github.com/gokcehan/lf/etc/lfcd.sh"  # source
-LFCD="/Users/yoshintame/.config/lf/scripts/lfcd.sh"  #  pre-built binary, make sure to use absolute path
-if [ -f "$LFCD" ]; then
-    source "$LFCD"
-fi
-bindkey -s '^o' 'lfcd^M' # TODO not working
+[[ -f "$HOME/.config/yazi/scripts/yy.sh" ]] && source ~/.config/yazi/scripts/yy.sh
 
 # Load Starship
 eval "$(starship init zsh)"

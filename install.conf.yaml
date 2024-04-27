@@ -74,3 +74,8 @@
     ~/.config/yazi/scripts/:
       path: modules/yazi/scripts/**
       glob: true
+
+    # fish
+    ~/.config/fish/:
+      path: modules/fish/config/**
+      glob: true

@@ -118,6 +118,7 @@ rules = [
 	{ name = "*.class", text = "", fg = "#cc3e44" },
 	{ name = "*.cs"   , text = "󰌛", fg = "#596706" },
 	{ name = "*.css"  , text = "", fg = "#42a5f5" },
+    { name = "*.cjs"  , text = "", fg = "#F1F134" },
 	{ name = "*.elm"  , text = "", fg = "#4391d2" },
 	{ name = "*.fish" , text = "", fg = "#4d5a5e" },
 	{ name = "*.go"   , text = "", fg = "#519aba" },

@@ -37,8 +37,7 @@ extract = [
 	{ run = 'unar "%1"', desc = "Extract here", for = "windows" },
 ]
 play = [
-	{ run = '${PLAY} "$@"', desc = "Play", for = "macos" },
-
+    { run = 'iina --no-stdin "$@"', desc = "Play", for = "macos" },
 ]
 
 [open]

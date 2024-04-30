@@ -1,6 +1,3 @@
-require("starship"):setup()
-
--- Remove borders
 function Manager:render(area)
 	local chunks = self:layout(area)
 
@@ -14,3 +11,5 @@ function Manager:render(area)
 	}
 end
 
+require("zoxide"):setup { update_db = true }
+require("starship"):setup()

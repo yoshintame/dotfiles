@@ -13,6 +13,8 @@ keymap = [
 	{ on = [ "<C-z>" ], run = "suspend",            desc = "Suspend the process" },
 
 	# Navigation
+	{ on = [ "f" ], run = "cd --interactive", desc = "Go to a directory interactively" },
+
 	{ on = [ "i" ], run = "arrow -1", desc = "Move cursor up" },
 	{ on = [ "k" ], run = "arrow 1",  desc = "Move cursor down" },
     { on = [ "<Up>" ],    run = "arrow -1", desc = "Move cursor up" },
@@ -99,7 +101,7 @@ keymap = [
 	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy the name of the file without the extension" },
 
 	# Filter
-	{ on = [ "f" ], run = "filter --smart", desc = "Filter the files" },
+	{ on = [ "h" ], run = "filter --smart", desc = "Filter the files" },
 
 	# Find
 	{ on = [ "/" ], run = "find --smart",            desc = "Find next file" },
@@ -148,7 +150,6 @@ keymap = [
 	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "Go to the config directory" },
 	{ on = [ "g", "d" ],       run = "cd ~/Downloads",   desc = "Go to the downloads directory" },
 	{ on = [ "g", "t" ],       run = "cd /tmp",          desc = "Go to the temporary directory" },
-	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Go t   o a directory interactively" },
 
 	# Help
 	{ on = [ "~" ], run = "help", desc = "Open help" },
@@ -222,7 +223,7 @@ keymap = [
 	{ on = [ "<C-f>" ],   run = "move 1",  desc = "Move forward a character" },
 
 	# Word-wise movement
-	{ on = [ "b " ],     run = "backward",              desc = "Move back to the start of the current or previous word" },
+	{ on = [ "b " ],    run = "backward",              desc = "Move back to the start of the current or previous word" },
 	{ on = [ "w" ],     run = "forward",               desc = "Move forward to the start of the next word" },
 	{ on = [ "e" ],     run = "forward --end-of-word", desc = "Move forward to the end of the current or next word" },
 	{ on = [ "<A-b>" ], run = "backward",              desc = "Move back to the start of the current or previous word" },

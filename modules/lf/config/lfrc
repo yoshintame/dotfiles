@@ -27,12 +27,15 @@ cmd on-cd &{{
     export STARSHIP_SHELL=
     fmt="$(starship prompt | tr -d '\n')"
     lf -remote "send $id set promptfmt \"$fmt\""
+
+    zoxide add "$PWD"
 }}
 on-cd
 
 # Fzf integration
+# Find in current dir and cd to it
 cmd fzf_jump ${{
-    res="$(find . -maxdepth 3 | fzf --reverse --header='Jump to location')"
+    res="$(find . | fzf --reverse --header='Jump to location' --color=16)"
     if [ -n "$res" ]; then
         if [ -d "$res" ]; then
             cmd="cd"
@@ -65,12 +68,13 @@ cmd broot_jump ${{
 }}
 
 # Zoxide integration
-cmd z %{{
+cmd zoxide %{{
 	result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
 	lf -remote "send $id cd \"$result\""
 }}
 
-cmd zi ${{
+cmd zoxidei ${{
+    clear
 	result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
 	lf -remote "send $id cd \"$result\""
 }}
@@ -106,6 +110,49 @@ cmd trash ${{
     else
       files="${files#*;}"
     fi
+  done
+}}
+
+cmd dropover ${{
+  # Check for the existence of the ~/dropover directory and create it if necessary
+  [ ! -d "$HOME/dropover" ] && mkdir -p "$HOME/dropover"
+
+  # Get the list of selected files and folders
+  files=$(printf "$fx" | tr '\n' ';')
+
+  while [ "$files" ]; do
+    # Extract the first element from the list
+    file=${files%%;*}
+
+    # Get the absolute path of the file
+    realpath=$(realpath "$file")
+
+    # Get the base name of the file, removing the dot at the beginning if its a dotfile
+    basename=$(basename "$file" | sed 's/^\.//')
+
+    # Check if a file or symbolic link with the same name already exists in the ~/dropover folder
+    target="$HOME/dropover/$basename"
+    if [ -e "$target" ] || [ -L "$target" ]; then
+      # Initialize the duplicate index
+      duplicate_index=1
+      while [ -e "$target-$duplicate_index" ] || [ -L "$target-$duplicate_index" ]; do
+        ((duplicate_index++))
+      done
+      target="$target-$duplicate_index"
+    fi
+
+    # Create the symbolic link, taking into account the duplicate index if necessary
+    ln -s "$realpath" "$target"
+
+    # Remove the processed element from the list
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+
+    # Schedule the cleanup of the ~/dropover directory in 1 minute
+    echo "rm -rf $HOME/dropover/*" | at now + 1 minute
   done
 }}
 
@@ -230,6 +277,7 @@ map i up
 map k down
 map l open
 
+map n dropover
 
 # File Openers
 map ee $$cursor "$f"
@@ -273,8 +321,6 @@ map U unselect
 map / search
 map F find
 
-map <c-f> :fzf_jump
-
 
 # Shortcuts
 # map gtr cd ~/.local/share/Trash/files
@@ -290,7 +336,7 @@ map gpw cd ~/Pictures/Wallpapers
 
 map gdv cd ~/Development
 map gdo cd ~/Documents
-map gD cd ~/Downloads
+map gdl cd ~/Downloads
 map gde cd ~/Desktop
 
 map gdf cd ~/.dotfiles

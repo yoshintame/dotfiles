@@ -12,3 +12,13 @@ set -gx PLAY iina
 set -gx FZF_COMPLETION_OPTS '--color=16 --layout=reverse --inline-info'
 set -gx FZF_DEFAULT_OPTS '--color=16 --layout=reverse --inline-info'
 
+set -gx PATH bin $PATH
+set -gx PATH ~/bin $PATH
+set -gx PATH ~/.local/bin $PATH
+
+# NodeJS
+set -gx PATH node_modules/.bin $PATH
+
+# Go
+set -g GOPATH $HOME/go
+set -gx PATH $GOPATH/bin $PATH

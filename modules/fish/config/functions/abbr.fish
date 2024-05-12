@@ -25,6 +25,8 @@ alias grep="grep --color"
 abbr edit "cursor"
 abbr e "cursor"
 alias ee="cursor ."
+abbr o "open"
+alias oo="open ."
 abbr del "trash"
 abbr sdel "sudo rm -rf"
 alias cpwd='pwd | tr -d "\n" | pbcopy'
@@ -37,17 +39,28 @@ alias cat="bat"
 
 # brew
 abbr binst "brew install"
+abbr bi "brew install"
 
 # node
+abbr n "npm"
+abbr ninst "npm install"
+abbr ni "npm install"
+alias nd="npm dev"
+alias ns="npm start"
+
 abbr pn "pnpm"
-abbr px "pnpx"
 abbr pninst "pnpm install"
+abbr pni "pnpm install"
+alias pnd="pnpm dev"
+alias pns="pnpm start"
+alias px "pnpx"
 
 # python
 abbr py "python"
 abbr python "python3"
 abbr pip "pip3"
 abbr pinst "pip3 install"
+abbr pi "pip3 install"
 
 # network
 abbr ip "dig +short myip.opendns.com @resolver1.opendns.com"
@@ -69,3 +82,6 @@ abbr dotfiles "cd ~/.dotfiles"
 # dotfiles
 alias dotapply="dotbot -c ~/.dotfiles/install.conf.yaml"
 alias dotedit="cursor ~/.dotfiles"
+
+# yazi
+alias f="yy"

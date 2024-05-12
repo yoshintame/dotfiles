@@ -7,4 +7,3 @@ function yy --description "Run yazi and cd to the directory it returns"
 	rm -f -- "$tmp"
 end
 
-alias f="yy"

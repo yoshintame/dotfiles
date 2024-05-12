@@ -22,3 +22,7 @@ set -gx PATH node_modules/.bin $PATH
 # Go
 set -g GOPATH $HOME/go
 set -gx PATH $GOPATH/bin $PATH
+
+# Path
+set -g TRASH $HOME/.Trash
+set -g DOTFILES $HOME/.dotfiles

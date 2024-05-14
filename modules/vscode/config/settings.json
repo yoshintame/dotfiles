@@ -24,7 +24,7 @@
     "height": 24
   },
   "apc.imports": [
-    "${userHome}/.cursor/extensions/true-vibrant-vscode-theme/themes/true-vibrant-color-theme.css"
+    "${userHome}/.cursor/extensions/true-vibrant-vscode-theme/css/true-vibrant-color-theme.css"
   ],
 
   // Fonts
@@ -109,6 +109,7 @@
   "emmet.triggerExpansionOnTab": false,
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
+  "workbench.editor.labelFormat": "short",
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.perEditorGroup": true,
   "workbench.editor.limit.value": 6,

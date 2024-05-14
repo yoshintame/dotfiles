@@ -6,8 +6,6 @@ spoon.ReloadConfiguration.watch_paths = { os.getenv("HOME") .. "/.dotfiles/modul
 spoon.ReloadConfiguration:start()
 
 
--- ================== Window Switcher ==================
-
 YABAI_PENDING_SPACE = nil
 YABAI_PATH = "/opt/homebrew/bin/yabai "
 JQ_PATH = "/opt/homebrew/bin/jq "
@@ -16,11 +14,6 @@ HYPER_KEY = { "alt", "shift", "ctrl", "cmd" }
 WINDOW_LAYER_KEY = { "alt" }
 WINDOW_SUBLAYER_KEY = { "alt", "shift" }
 
-require('yabai')
-yabaiSendMessage({ "signal", "--remove", "active-split-pending" }, nil, true)
-
-
--- TODO: add yabai pending handling
 local function launchOrFocusWarpApp(name)
     return function()
         local app = hs.application.get("Warp")
@@ -35,33 +28,11 @@ end
 
 local function launchOrFocusApp(name)
     return function()
-        if YABAI_PENDING_SPACE then
-            yabaiSendMessage({ "signal", "--remove", "active-split-pending" }, nil, true)
-
-            local output = yabaiSendMessage({ "query", "--windows" }, nil, true)
-            local windows = hs.json.decode(output)
-            local windowId = nil
-
-            for _, window in pairs(windows) do
-                if window.app == name then
-                    print(window.app)
-                    windowId = window.id
-                    break
-                end
-            end
-
-            yabaiSendMessage({ "window", tostring(windowId), "--space", tostring(YABAI_PENDING_SPACE) }, nil, true)
-            YABAI_PENDING_SPACE = nil
-        else
-            hs.application.launchOrFocus(name)
-        end
+        hs.application.launchOrFocus(name)
     end
 end
 
 -- ================== Binds ==================
-
-hs.hotkey.bind({ "shift", "ctrl" }, "s", function() yabaiSplit() end)
-hs.hotkey.bind({ "shift", "ctrl" }, "d", function() yabaiUnsplit() end)
 
 hs.hotkey.bind(WINDOW_LAYER_KEY, "Q", launchOrFocusApp("Telegram"))
 hs.hotkey.bind(WINDOW_LAYER_KEY, "W", launchOrFocusApp("Warp"))

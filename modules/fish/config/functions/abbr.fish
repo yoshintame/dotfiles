@@ -1,15 +1,16 @@
-abbr cd 'c'
-abbr .. 'c ..'
-abbr ... 'c ../..'
-abbr .... 'c ../../..'
-abbr .4 'c ../../..'
-abbr ..... 'c ../../../..'
-abbr .5 'c ../../../..'
-abbr / 'c /'
-abbr ~ 'c ~'
-abbr - 'c -'
-abbr c.. "c .."
-abbr cd.. "c .."
+alias cf 'zi'
+alias c 'z'
+alias .. 'z ..'
+alias ... 'z ../..'
+alias .... 'z ../../..'
+alias .4 'z ../../..'
+alias ..... 'z ../../../..'
+alias .5 'z ../../../..'
+alias / 'z /'
+alias ~ 'z ~'
+alias - 'z -'
+alias c.. "z .."
+alias cd.. "z .."
 
 abbr md 'mkdir -p'
 abbr rd 'rmdir'

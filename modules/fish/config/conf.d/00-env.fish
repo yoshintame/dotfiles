@@ -12,6 +12,9 @@ set -gx PLAY iina
 set -gx FZF_COMPLETION_OPTS '--color=16 --layout=reverse --inline-info'
 set -gx FZF_DEFAULT_OPTS '--color=16 --layout=reverse --inline-info'
 
+# Zoxide
+set -U zoxide_cmd c
+
 set -gx PATH bin $PATH
 set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
@@ -26,3 +29,4 @@ set -gx PATH $GOPATH/bin $PATH
 # Path
 set -g TRASH $HOME/.Trash
 set -g DOTFILES $HOME/.dotfiles
+

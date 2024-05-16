@@ -1,7 +1,3 @@
-starship init fish | source
-
-thefuck --alias | source
-
 # source fisher plugins
 set --query _fisher_path_initialized && exit
 set --global _fisher_path_initialized

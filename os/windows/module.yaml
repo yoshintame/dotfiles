@@ -1,0 +1,50 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+      force: true
+
+- clean: ["~"]
+
+- create:
+    ~/dev/work:
+
+- link:
+#     # git
+#     ~/.gitconfig: modules/git/config/.gitconfig
+
+    # starship
+    ~/.config/starship.toml: modules/starship/config/starship.toml
+
+    # posh
+    ~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1:  modules/posh/config/yoshintame.settings.ps1
+    ~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1:  modules/posh/config/yoshintame.settings.ps1
+
+    # windows-terminal
+    ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json: modules/windows-terminal/config/settings.json
+
+    # vscode
+    ~/AppData/Roaming/Code/User/:
+      path: modules/vscode/config/**
+      glob: true
+
+    ~/AppData/Roaming/Cursor/User/:
+      path: modules/vscode/config/**
+      glob: true
+
+    ~/.cursor/extensions/:
+      path: modules/vscode/theme/**
+      glob: true
+
+    ~/.vscode/extensions/:
+      path: modules/vscode/theme/**
+      glob: true
+
+    # yazi
+    ~/.config/yazi/:
+      path: modules/yazi/config/**
+      glob: true
+
+    ~/.config/yazi/scripts/:
+      path: modules/yazi/scripts/**
+      glob: true

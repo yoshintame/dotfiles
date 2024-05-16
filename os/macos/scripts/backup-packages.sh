@@ -3,14 +3,11 @@
 ####################################################################################
 # Set up paths
 ####################################################################################
-BACKUP_DIR="$HOME/.dotfiles"
-mkdir -p "$BACKUP_DIR"
-
-PACKAGE_DUMP_DIR="$BACKUP_DIR/packages_dump"
+PACKAGE_DUMP_DIR="$HOME/.dotfiles/os/macos/packages"
 mkdir -p "$PACKAGE_DUMP_DIR"
 
-echo "🛳  Cruising over to $BACKUP_DIR"
-cd $BACKUP_DIR
+echo "🛳  Cruising over to $PACKAGE_DUMP_DIR"
+cd $PACKAGE_DUMP_DIR
 
 ####################################################################################
 # Dump from package managers
@@ -58,7 +55,4 @@ if cargo install --list | awk '!x[$1]++ {print $1}' > "$PACKAGE_DUMP_DIR/cargo";
 else
     echo "⛔️ Could not export Cargo packages"
 fi
-
-# Check git status
-git status
 

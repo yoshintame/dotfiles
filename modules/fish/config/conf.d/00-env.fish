@@ -27,3 +27,6 @@ set -gx PATH $GOPATH/bin $PATH
 set -g TRASH $HOME/.Trash
 set -g DOTFILES $HOME/.dotfiles
 
+# Fisher
+set -Ux fisher_path /Users/yoshintame/.config/fish/fisher_plugins
+

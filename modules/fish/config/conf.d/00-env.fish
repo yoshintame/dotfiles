@@ -26,3 +26,4 @@ set -gx PATH $GOPATH/bin $PATH
 # Path
 set -g TRASH $HOME/.Trash
 set -g DOTFILES $HOME/.dotfiles
+

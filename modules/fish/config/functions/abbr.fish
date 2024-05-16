@@ -1,13 +1,16 @@
-abbr .. 'cd ..'
-abbr ... 'cd ../..'
-abbr .... 'cd ../../..'
-abbr .4 'cd ../../..'
-abbr ..... 'cd ../../../..'
-abbr .5 'cd ../../../..'
-abbr / 'cd /'
-abbr ~ 'cd ~'
-abbr - 'cd -'
-abbr cd.. "cd .."
+alias cf 'zi'
+alias c 'z'
+alias .. 'z ..'
+alias ... 'z ../..'
+alias .... 'z ../../..'
+alias .4 'z ../../..'
+alias ..... 'z ../../../..'
+alias .5 'z ../../../..'
+alias / 'z /'
+alias ~ 'z ~'
+alias - 'z -'
+alias c.. "z .."
+alias cd.. "z .."
 
 abbr md 'mkdir -p'
 abbr rd 'rmdir'
@@ -47,6 +50,7 @@ abbr ninst "npm install"
 abbr ni "npm install"
 alias nd="npm run dev"
 alias ns="npm run start"
+abbr nr="npm run"
 
 abbr pn "pnpm"
 abbr pninst "pnpm install"
@@ -61,6 +65,8 @@ abbr bi "bun install"
 alias bd="bun run dev"
 alias bs="bun run start"
 abbr bx="bun exec"
+abbr br="bun run"
+
 
 # python
 abbr py "python"

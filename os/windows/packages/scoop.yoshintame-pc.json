@@ -1,0 +1,144 @@
+{
+    "apps": [
+        {
+            "Name": "7zip",
+            "Info": "",
+            "Version": "23.01",
+            "Updated": "2024-05-14T06:12:59.4855445+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "bat",
+            "Info": "",
+            "Version": "0.24.0",
+            "Updated": "2024-05-14T09:06:30.4545267+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "curl",
+            "Info": "",
+            "Version": "8.7.1_9",
+            "Updated": "2024-05-14T06:13:00.6857643+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "eza",
+            "Info": "",
+            "Version": "0.18.15",
+            "Updated": "2024-05-14T09:05:39.5851326+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "fd",
+            "Info": "",
+            "Version": "10.1.0",
+            "Updated": "2024-05-14T08:31:51.8419385+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "flow",
+            "Info": "Install failed",
+            "Version": null,
+            "Updated": "2024-05-14T10:53:21.135386+03:00",
+            "Source": null
+        },
+        {
+            "Name": "fzf",
+            "Info": "",
+            "Version": "0.52.1",
+            "Updated": "2024-05-14T08:31:53.4308425+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "gh",
+            "Info": "",
+            "Version": "2.49.2",
+            "Updated": "2024-05-14T06:10:16.1641351+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "Hack-NF",
+            "Info": "",
+            "Version": "3.2.1",
+            "Updated": "2024-05-14T09:11:16.0562367+03:00",
+            "Source": "nerd-fonts"
+        },
+        {
+            "Name": "Hack-NF-Mono",
+            "Info": "",
+            "Version": "3.2.1",
+            "Updated": "2024-05-14T09:11:14.0283641+03:00",
+            "Source": "nerd-fonts"
+        },
+        {
+            "Name": "jq",
+            "Info": "",
+            "Version": "1.7.1",
+            "Updated": "2024-05-14T06:13:01.4215933+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "nvm",
+            "Info": "",
+            "Version": "1.1.12",
+            "Updated": "2024-05-14T08:26:49.4293784+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "poppler",
+            "Info": "",
+            "Version": "24.02.0-0",
+            "Updated": "2024-05-14T08:31:55.4952864+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "ripgrep",
+            "Info": "",
+            "Version": "14.1.0",
+            "Updated": "2024-05-14T08:31:56.4482469+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "starship",
+            "Info": "",
+            "Version": "1.18.2",
+            "Updated": "2024-05-14T08:37:31.430491+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "unar",
+            "Info": "",
+            "Version": "1.8.1",
+            "Updated": "2024-05-14T08:31:57.5318691+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "yazi",
+            "Info": "",
+            "Version": "0.2.5",
+            "Updated": "2024-05-14T08:32:23.5667938+03:00",
+            "Source": "main"
+        },
+        {
+            "Name": "zoxide",
+            "Info": "",
+            "Version": "0.9.4",
+            "Updated": "2024-05-14T08:31:58.4713125+03:00",
+            "Source": "main"
+        }
+    ],
+    "buckets": [
+        {
+            "Name": "main",
+            "Source": "https://github.com/ScoopInstaller/Main.git",
+            "Updated": "2024-05-14T07:26:34+03:00",
+            "Manifests": 1325
+        },
+        {
+            "Name": "nerd-fonts",
+            "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
+            "Updated": "2024-05-13T01:16:23+03:00",
+            "Manifests": 336
+        }
+    ]
+}

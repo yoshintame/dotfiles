@@ -2,7 +2,12 @@
   "promptDelete": false,
   "strictLineBreaks": true,
   "showLineNumber": false,
-  "tabSize": 4,
+  "tabSize": 2,
   "showIndentGuide": false,
-  "readableLineLength": false
+  "readableLineLength": true,
+  "propertiesInDocument": "visible",
+  "alwaysUpdateLinks": true,
+  "trashOption": "local",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "notes"
 }

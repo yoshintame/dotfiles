@@ -4,22 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "0082564198221485",
+        "id": "ab6e769af303934b",
         "type": "tabs",
         "children": [
           {
-            "id": "b48479a58dfde8a7",
+            "id": "cb8cd8c95c0f3c04",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Grafana dashboard panel JSON generator.md",
+                "file": "notes/Git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "d3b31ab2285018d6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "notes/HyperX Cloud Alpha Quite mic FIX.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -48,8 +61,8 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
-                "matchingCase": false,
+                "query": "mic",
+                "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
@@ -66,18 +79,19 @@
             }
           },
           {
-            "id": "c54f6ef0b6a62f7e",
+            "id": "e083bd2f793e35f0",
             "type": "leaf",
             "state": {
-              "type": "com.maxymillion.zen",
+              "type": "tagfolder-view",
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 237.5
+    "width": 292.5026054382324
   },
   "right": {
     "id": "2552c34a2010671f",
@@ -93,14 +107,14 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Grafana dashboard panel JSON generator.md",
-                "collapseAll": false,
-                "extraContext": false,
+                "file": "notes/HyperX Cloud Alpha Quite mic FIX.md",
+                "collapseAll": true,
+                "extraContext": true,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
                 "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               }
             }
           },
@@ -110,9 +124,9 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Grafana dashboard panel JSON generator.md",
-                "linksCollapsed": false,
-                "unlinkedCollapsed": true
+                "file": "notes/HyperX Cloud Alpha Quite mic FIX.md",
+                "linksCollapsed": true,
+                "unlinkedCollapsed": false
               }
             }
           },
@@ -122,8 +136,8 @@
             "state": {
               "type": "tag",
               "state": {
-                "sortOrder": "frequency",
-                "useHierarchy": false
+                "sortOrder": "alphabetical",
+                "useHierarchy": true
               }
             }
           },
@@ -133,43 +147,96 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Grafana dashboard panel JSON generator.md"
+                "file": "notes/HyperX Cloud Alpha Quite mic FIX.md"
               }
             }
+          },
+          {
+            "id": "38e9401882ccbafd",
+            "type": "leaf",
+            "state": {
+              "type": "tags-overview-view",
+              "state": {}
+            }
+          },
+          {
+            "id": "595694dc5043e32f",
+            "type": "leaf",
+            "state": {
+              "type": "git-history-view",
+              "state": {}
+            }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 362.5,
-    "collapsed": true
+    "width": 362.5
   },
   "left-ribbon": {
     "hiddenItems": {
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "workspaces:Manage workspace layouts": false
+      "workspaces:Manage workspace layouts": false,
+      "obsidian-importer:Open Importer": false
     }
   },
-  "active": "b48479a58dfde8a7",
+  "active": "d3b31ab2285018d6",
   "lastOpenFiles": [
-    "Brew.md",
-    "Git.md",
-    "Grafana dashboard panel JSON generator.md",
-    "Untitled.md",
+    "daily/2024-06-03.md",
+    "notes/Git.md",
+    "assets/telegram-cloud-photo-size-2-5341387308773002781-y.jpg",
+    "daily/2024-04-25.md",
+    "export/notes/Как быть стоиком - Античная философия и современная жизнь. Массимо Пильюччи.md",
+    "notes/Как быть стоиком - Античная философия и современная жизнь. Массимо Пильюччи.md",
+    "daily/31 декабря 2023 - 3 января 2024.md",
+    "daily/2024-04-06.md",
+    "daily/2024-04-09.md",
+    "daily/2024-04-10.md",
+    "daily/2024-04-12.md",
+    "daily/2024-04-13.md",
+    "daily/2024-04-19.md",
+    "daily/2024-04-16.md",
+    "daily/2024-04-14.md",
+    "daily/2024-04-21.md",
+    "notes/Реаляционные базы данных.md",
+    "export.zip",
+    "zijtnPrA",
+    "export/notes/Что есть я.md",
+    "export/notes/Ценность тебя для кого-то как смысл жизни.md",
+    "export/notes/Цветы зла  (Aku no Hana) - рецензия.md",
+    "export/notes/Хаос.md",
+    "export/notes/Улучшение сортировки в расширении spicetify.md",
+    "export/notes/Удалённо.md",
+    "export/notes/Теория автоматов КР.md",
+    "export/notes/Тезисы.md",
+    "export/notes/Сонный паралич, бред, кошмар.md",
+    "export/notes/Смысл.md",
+    "export/notes/Untitled.canvas",
+    "export/notes",
+    "export/daily",
+    "export/assets/йфафц.png",
+    "export/assets/Снимок.png",
+    "export/assets/Скеллиге__копия.png",
+    "export/assets/Новиград.png",
+    "export/assets/Велен.png",
+    "export/assets/telegram-cloud-photo-size-2-5341387308773002781-y.jpg",
+    "export/assets/aeddd28c0ea34a10ae896cefa9da91af.PNG.png",
+    "export/assets/Untitled.png",
+    "export/assets/Untitled 9.png",
+    "export/assets",
+    "export/gele-subo-fe.zip",
+    "export",
+    "craft-notes/Craft Handbook.assets/Netflix Culture.pdf",
+    "craft-notes/Craft Handbook.assets/1997 Letter To Shareholders.pdf",
+    "craft-notes/Study/University/Диплом/Презентация.assets",
+    "notes/Untitled.canvas",
     "Untitled.canvas",
     "Untitled 2.canvas",
-    "Untitled 1.md",
     "Untitled 1.canvas",
-    "telegram-cloud-photo-size-2-5341387308773002781-y.jpg",
-    "2023-11-01.md",
-    "Untitled 3.canvas",
-    "test/Untitled.md",
-    "test"
+    "Untitled 3.canvas"
   ]
 }

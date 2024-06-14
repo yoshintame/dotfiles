@@ -30,15 +30,15 @@ tap "homebrew/cask-fonts"
 #############################################################
 # Command Line                                              #
 #############################################################
-# brew "fish"        # Shell
-brew "zsh"
+brew "fish"        # Shell
+# brew "zsh"
 brew "starship"    # Cross-shell prompt - Rust
 
 # CLI Essentials
-# brew "neovim"       # Text editor
-# brew "tmux"         # Term multiplexer
+brew "neovim"       # Text editor
+brew "tmux"         # Term multiplexer
 brew "git"          # Version controll
-brew "topgrade"     # Upgrade all the things - Rust
+# brew "topgrade"     # Upgrade all the things - Rust
 
 # CLI Basics
 brew "ack"          # Search tool like grep, but faster

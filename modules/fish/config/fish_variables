@@ -22,6 +22,7 @@ SETUVAR --export EXA_LO_OPTIONS:\x2d\x2doneline
 SETUVAR --export EXA_LT_OPTIONS:\x2d\x2dtree\x1e\x2d\x2dlevel
 SETUVAR --export EXA_L_OPTIONS:\x1d
 SETUVAR --export EXA_STANDARD_OPTIONS:\x2d\x2dgroup\x1e\x2d\x2dheader\x1e\x2d\x2dgroup\x2ddirectories\x2dfirst\x1e\x2d\x2dicons
+SETUVAR --export SSH_AUTH_SOCK:/Users/yoshintame/Library/Group\x20Containers/2BUA8C4S2C\x2ecom\x2e1password/t/agent\x2esock
 SETUVAR --export XDG_CACHE_HOME:/Users/yoshintame/\x2ecache
 SETUVAR --export XDG_CONFIG_HOME:/Users/yoshintame/\x2econfig
 SETUVAR --export XDG_DATA_HOME:/Users/yoshintame/\x2elocal/share

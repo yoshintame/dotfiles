@@ -44,5 +44,8 @@
   "Components@@folder-font-bold": true,
   "Components@@vault-name-display-select": "vault-name-hide",
   "Components@@file-icon-remove": false,
-  "Components@@colorful-folder": false
+  "Components@@colorful-folder": false,
+  "title@@enable-mica": true,
+  "encore-settings@@encore-translucency": true,
+  "encore-settings@@theme-dark": "encore-theme-dark-glass-royale"
 }

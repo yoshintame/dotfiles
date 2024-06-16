@@ -1,6 +1,7 @@
 [submodule "dotbot"]
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
+	ignore = dirty
 
 [submodule "modules/vscode/theme/true-vibrant-vscode-theme"]
 	path = modules/vscode/theme/true-vibrant-vscode-theme

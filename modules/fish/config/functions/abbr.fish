@@ -11,9 +11,9 @@ alias .... 'z ../../..'
 alias .4 'z ../../..'
 alias ..... 'z ../../../..'
 alias .5 'z ../../../..'
-alias / 'z /'
-alias ~ 'z ~'
-alias - 'z -'
+abbr / 'z /'
+abbr ~ 'z ~'
+abbr - 'z -'
 alias c.. "z .."
 alias cd.. "z .."
 
@@ -58,13 +58,13 @@ alias pnd="pnpm dev"
 alias pns="pnpm start"
 abbr px "pnpx"
 
-abbr b "bun"
+# abbr b "bun"
 alias binst "bun install"
 alias bi "bun install"
 alias bd="bun run dev"
 alias bs="bun run start"
-abbr bx="bun exec"
-abbr br="bun run"
+# abbr bx="bun exec"
+# abbr br="bun run"
 
 # python
 abbr py "python"
@@ -91,6 +91,6 @@ alias dev "cd ~/Development"
 alias dotfiles "cd ~/.dotfiles"
 
 # dotfiles
-alias dotapply="dotbot -c ~/.dotfiles/install.conf.yaml"
+alias dotapply="dotbot -c ~/.dotfiles/os/macos/module.yaml"
 alias dotedit="cursor ~/.dotfiles"
 

@@ -118,6 +118,7 @@
     stash-unstaged = "!git stash push --staged && git stash push --include-untracked && git stash pop stash@{1}"
 	stash-all = stash --include-untracked
 	stash-alli = stash --all
+    stash-history = "!git log --oneline --grep=WIP $(git fsck --no-reflog | awk '/dangling commit/ { print $3 }')"
 
 	sts 	= stash --staged
 	stu 	= "!git stash push --staged && git stash push --include-untracked && git stash pop stash@{1}"

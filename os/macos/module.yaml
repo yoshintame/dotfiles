@@ -3,8 +3,10 @@
       relink: true
       create: true
       force: true
+    clean:
+      recursive: true
 
-- clean: ["~"]
+- clean: ["~/.dotfiles", "~/.config", "~/.dotfiles-ansible"]
 
 - link:
     # zsh

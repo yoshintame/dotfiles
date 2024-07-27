@@ -10,8 +10,8 @@
     ~/dev/work:
 
 - link:
-#     # git
-#     ~/.gitconfig: modules/git/config/.gitconfig
+    # git
+    ~/.gitconfig: modules/git/config/.gitconfig
 
     # starship
     ~/.config/starship.toml: modules/starship/config/starship.toml

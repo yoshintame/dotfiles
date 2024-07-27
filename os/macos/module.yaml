@@ -9,6 +9,9 @@
 - clean: ["~/.dotfiles", "~/.config", "~/.dotfiles-ansible"]
 
 - link:
+    # packages
+    ~/.config/packages: os/macos/packages
+
     # zsh
     ~/.config/zsh/:
       path: modules/zsh/config/zsh/**

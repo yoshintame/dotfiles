@@ -1,356 +1,244 @@
-###############################################################
-# ~/.Brewfile - Software Installs for MacOS                   #
-#                                                             #
-# List of packages to be installed / updated via Homebrew     #
-# Apps are sorted by category, and arranged alphabetically    #
-# Be sure to delete / comment out anything you do not need    #
-# Usage, run: $ brew bundle --global --file $HOME/.Brewfile   #
-# Source GH repository: https://github.com/edheltzel/Brewfile #
-# See brew docs for more info: https://docs.brew.sh/Manpage   #
-#                                                             #
-###############################################################
-
-# Options
-cask_args appdir: "/Applications", require_sha: true
-
-# Taps
 tap "candid82/brew"
+tap "charmbracelet/tap"
+tap "felixkratz/formulae"
 tap "gromgit/fuse"
 tap "homebrew/bundle"
-tap "homebrew/cask"
+tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
 tap "mas-cli/tap"
+tap "osx-cross/arm"
+tap "osx-cross/avr"
 tap "oven-sh/bun"
 tap "potatolabs/git-redate"
-tap "spicetify/tap"
-tap "yqrashawn/goku"
-tap "homebrew/cask-fonts"
-
-#############################################################
-# Command Line                                              #
-#############################################################
-brew "fish"        # Shell
-# brew "zsh"
-brew "starship"    # Cross-shell prompt - Rust
-
-# CLI Essentials
-brew "neovim"       # Text editor
-brew "tmux"         # Term multiplexer
-brew "git"          # Version controll
-# brew "topgrade"     # Upgrade all the things - Rust
-
-# CLI Basics
-brew "ack"          # Search tool like grep, but faster
-brew "aria2"        # Resuming download util (better wget)
-brew "bat"          # Output highlighting (better cat) - Rust
-brew "brew-cask-completion" # Fish shell completion for brew cask
-brew "cmake"        # Build system
-brew "coreutils"    # GNU core utilities (those that come with macOS are outdated)
-brew "ctags"        # Tag generator for programming languages
-brew "diff-so-fancy"# Readable file compares (better diff)
-brew "duf"          # Get info on mounted disks (better df) - Go
-brew "duti"         # Set default apps for file types
-brew "entr"         # Run command whenever file changes
-brew "eza"          # Listing files with info (better ls) - Rust
-brew "exiftool"     # Read, write and modify exif data
-brew "lf"           # File manager - Go
-brew "fd"           # Find files - Rust
-brew "fzf"          # Fuzzy finder
-brew "grc"          # Colorize terminal output
-brew "hyperfine"    # Benchmarking for arbitrary commands
-brew "jdupes"       # Duplicate file finder
-brew "jq"           # JSON parser, output and query files
-brew "just"         # Powerful command runner (better make)
-brew "mas"          # Mac App Store CLI
-brew "most"         # Multi-window scroll pager (better less)
-brew "procs"        # Advanced process viewer (better ps) - Rust
-brew "ripgrep"      # Searching within files (better grep) - Rust
-brew "rsync"        # Fast incremental file transfer
-brew "sd"           # RegEx find and replace (better sed) - Rust
-brew "tokei"        # Count lines of code (better cloc) - Rust
-brew "trash-cli"    # Recover and restore removed files
-brew "tree"
-brew "watchexec"    # Run command whenever file changes - Rust
-brew "zoxide"       # Auto-learning navigation (better cd) - Rust
-
-# CLI Image Processing and Compression
-# brew "gdk-pixbuf" # Image loading library
-# brew "graphicsmagick" # Image manipulation
-# brew "imagemagick" # Image manipulation
-# brew "jpegoptim" # JPEG image compressionjk
-# brew "mozjpeg" # JPEG image compression
-# brew "optipng" # PNG image compression
-# brew "pango" # Text layout and rendering
-
-# CLI Monitoring and Performance Apps
-# brew "bottom"       # Resource monitor (better top) - Rust
-# brew "glances"      # Resource monitor + web and API
-# brew "goaccess"     # Web log analyzer and viewer
-brew "bmon"         # Bandwidth utilization monitor
-brew "btop"         # Resource monitor (better top) - C++
-brew "ctop"         # Container metrics and monitoring - Go
-brew "dua-cli"      # Disk usage analyzer and monitor (better du)
-brew "gping"        # Interactive ping tool, with graph
-
-# CLI Development Suits
-brew "lazydocker"   # Full Docker management app - Go
-brew "gitui"        # A replacement for lazygit - Full Git management app - Rust
-
-# CLI Docs and Cheatsheets
-brew "navi"         # Browse, search, read cheat sheets
-brew "tealdeer"     # Read cheat sheets (better tldr) - Rust
-
-# CLI Misc
-brew "chafa"        # Image to ASCII art
-brew "cowsay"       # Have an ASCII cow say your message
-brew "figlet"       # Output text as big ASCII art text
-brew "neofetch"     # Show system data and ditstro info
-brew "pv"           # Pipe viewer, with animation options
-brew "glow"         # Terminal markdown reader - Go
-
-#############################################################
-# Software Development                                      #
-#############################################################
-
-# Development Apps
-# cask "dbeaver-community"            # Database management
-# cask "devtoys"                      # Dev tools/utilities for Mac
-# cask "intellij-idea-ce"
-# cask "jetbrains-toolbox"
-# cask "macdown" # Open-source Markdown editor
-# cask "pycharm-ce"
-# cask "sequel-pro"                   # MySQL database management
-# cask "sublime-text2" # Text editor for code, markup and prose
-# cask "typora"                       # Just a simple markdown editor
-# cask "webstorm"
-# cask "mongodb-compass"
-# cask "vagrant" # Development environment
-cask "insomnia"
-cask "fork"                         # Git visual client
-cask "jetbrains-toolbox"            # Jetbrains editors
-cask "visual-studio-code"           # Default text editor
-cask "visual-studio-code-insiders"  # Nightly text editor
-
-# Terminal
-# cask "alacritty"
-# cask "hyper"
-# cask "iterm2"
-# cask "kitty"
-# cask "termius"
-cask "warp"
-
-# Development Langs, Compilers, Package Managers and SDKs
-# brew "node"             # Node.js -->  Use rtx
-# brew "fnm"
-# brew "nvm"
-# brew "postgresql@14"    # PostgreSQL database engine
-brew "bun"                # All-in-one toolkit for JS/TS
-brew "fig"                # Commandline Utility for any terminal
-brew "mariadb", restart_service: true
+tap "trntv/sshed"
+tap "xwjdsh/tap"
+brew "python@3.12"
+brew "ansible"
+brew "jpeg-xl"
+brew "aom"
+brew "bat"
+brew "gcc"
+brew "btop"
+brew "glib"
+brew "cowsay"
+brew "diff-so-fancy"
+brew "duti"
+brew "libgit2"
+brew "eza"
+brew "fd"
+brew "unbound"
+brew "gnutls"
+brew "harfbuzz"
+brew "leptonica"
+brew "libass"
+brew "pango"
+brew "tesseract"
+brew "ffmpeg"
+brew "fish"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "git-extras"
+brew "gitui"
+brew "glow"
+brew "libusb"
+brew "gnupg"
+brew "gum"
+brew "highlight"
+brew "httpie"
+brew "jq"
+brew "just"
+brew "lazydocker"
+brew "lazygit"
+brew "lolcat"
+brew "mtr"
+brew "neofetch"
+brew "neovim"
+brew "nginx"
+brew "nmap"
+brew "node"
+brew "openconnect"
+brew "pipx"
 brew "pnpm"
-brew "poetry"             # Python project manager
-brew "python"             # Python 2
-brew "python3"            # Python 3
-brew "rtx"                # Switching node versions
-brew "sqlite"             # SQLite database engine
-
-# DevOps SCMs and CI/CD Tools
-# brew "ansible"          # Automation
-# brew "curl"             # Command line HTTP client
-# brew "dive"             # Docker image viewer
-# brew "orbstack"         # Docker image viewer
-brew "curlie"             # Command line HTTP client - Go
-brew "docker"             # Containers
-
-# Development Utils
-# brew "git-delta"        # Git diff viewer
-# brew "git-flow-avh"     # Git extensions to provide high-level repository operations
-# brew "lighttpd"         # Lightweight web server
-# brew "miniserve"        # Static file server
-# brew "mkcert"           # Local HTTPS development
-# brew "scc"              # Source code counter - Go
-# brew "tig"              # Text-mode interface for git
-# cask "mactex"           # LaTeX typesetting system
-brew "gh"                 # Interact with GitHub PRs, issues, repos
-brew "git-extras"         # Extra git commands for common tasks
-brew "git-lfs"            # Git Large File Storage
-brew "git-secret"         # Encrypt files in git repos
-brew "watchexec"          # Watch a directory and execute a command when files change
-brew "wget"               # wget with IRI support
-brew "zaquestion/tap/lab" # GitLab CLI
-
-# Network and Security Testing
-# brew 'bettercap'      # Network, scanning and moniroting
-# brew 'wrk'            # HTTP benchmarking
-#cask 'burp-suite'     # Web security testing
-#cask 'owasp-zap'      # Web app security scanner
-#cask 'wireshark'      # Network analyzer + packet capture
-brew 'ngrep'          # grep for network traffic
-brew 'nmap'           # Port scanning
-
-# Security Utilities
-# brew 'clamav'            # Open source virus scanning suite
-# brew 'git-crypt'         # Transparent encryption for git repos
-# brew 'gnupg'             # GNU Privacy Guard
-# brew 'nss'               # Network Security Services
-#cask 'veracrypt'         # File and volume encryption
-brew 'bcrypt'            # Encryption utility, using blowfish
-brew 'dnscrypt-proxy'    # Proxy for using encrypted DNS
-brew 'lynis'             # Scan system for common security issues
-brew 'openssl'           # Cryptography and SSL/TLS Toolkit
-brew 'rkhunter'          # Search / detect potential root kits
-brew 'ssh-copy-id'       # Copy SSH keys to remote hosts
-cask 'gpg-suite'         # GPG encryption files
-
-#############################################################
-# Desktop Applications                                      #
-#############################################################
-
-# Creativity
-# cask 'nucleo'               # Icon manager
-# cask 'principle'            # Prototyping tool
-cask 'figma'                # Design tool
-
-# Media
-# brew 'handbrake'           # Video transcoder
-# brew 'pandoc'                                # Universal file converter
-# cask 'boom'                                  # Audio enhancer
-# cask 'kap'                                   # Screen recorder
-# cask 'transmission'                          # Torrent client
-brew 'webp'                                  # WebP image format
-brew 'youtube-dl'                            # YouTube video downloader
-cask 'iina'                                  # Media player
-cask 'imageoptim'                            # Image compression
-cask 'spotify', args: { require_sha: false } # Propietary music streaming
-
-# Personal Applications
-# cask "forkgram-telegram"
-# cask "obsidian"
-# cask 'cyberduck'      # Mount remote storage locations
-cask "craft"
-cask "onedrive"
+brew "poetry"
+brew "python@3.11"
+brew "ripgrep"
+brew "speedtest-cli"
+brew "starship"
+brew "telnet"
+brew "terminal-notifier"
+brew "thefuck"
+brew "tig"
+brew "tmux"
+brew "tree"
+brew "unar"
+brew "wget"
+brew "yamllint"
+brew "yazi"
+brew "yq"
+brew "zoxide"
+brew "koekeishiya/formulae/yabai"
+brew "mas-cli/tap/mas"
+brew "oven-sh/bun/bun"
+brew "xwjdsh/tap/manssh"
+cask "1password"
+cask "1password-cli"
+cask "adguard"
+cask "altserver"
+cask "anydesk"
+cask "appcleaner"
+cask "arc"
+cask "barrier"
+cask "bettertouchtool"
+cask "cursor"
+cask "discord"
+cask "docker"
+cask "figma"
+cask "font-cascadia-code"
+cask "font-cascadia-mono"
+cask "font-fira-code"
+cask "font-fira-code-nerd-font"
+cask "font-fira-mono"
+cask "font-fira-mono-nerd-font"
+cask "font-geist"
+cask "font-geist-mono"
+cask "font-geist-mono-nerd-font"
+cask "font-hack-nerd-font"
+cask "font-ibm-plex-mono"
+cask "font-input"
+cask "font-jetbrains-mono"
+cask "font-jetbrains-mono-nerd-font"
+cask "fork"
+cask "hammerspoon"
+cask "handbrake"
+cask "height"
+cask "iina"
+cask "insomnia"
+cask "karabiner-elements"
+cask "knockknock"
+cask "lastfm"
+cask "launchcontrol"
+cask "microsoft-office"
+cask "microsoft-remote-desktop"
 cask "qbittorrent"
+cask "qlstephen"
+cask "raycast"
+cask "setapp"
+cask "spotify"
+cask "steam"
 cask "teamspeak-client"
 cask "telegram"
-cask 'authy'          # 2FA app
-cask 'bitwarden'      # Password manager
-cask 'discord'        # Chat app
-cask 'dropbox'        # Cloud storage
-cask 'notion'         # Workspace app
-cask 'signal'         # Link to encrypted mobile messenger
+cask "warp"
 cask "zoom"
-cask "steam"
-
-# Utility Applications
-cask "altserver"
-cask 'namechanger' # Rename files in bulk
-cask 'onyx'        # System maintenance
-
-# Browsers
-# cask "firefox"
-# cask "google-chrome"
-# cask "microsoft-edge"
-# cask "orion"
-# cask "sigmaos"
-# cask "vivaldi"
-cask 'choosy'                    # Choose which browser to open links in
-cask 'firefox-developer-edition' # Firefox dev edition
-cask 'responsively'              # Responsive web design testing
-cask 'safari-technology-preview' # Safari tech preview
-cask "arc"
-
-### Remote Access ###
-cask "anydesk"
-cask "barrier" # Software that mimics the functionality of a KVM switch
-cask "moonlight" # Remote games
-cask "rustdesk"
-
-### Remote Access ###
-cask "anydesk"
-cask "barrier" # Software that mimics the functionality of a KVM switch
-cask "moonlight" # Remote games
-cask "rustdesk"
-
-# Fonts
-tap 'homebrew/cask-fonts'
-cask 'font-fira-code-nerd-font'
-cask 'font-jetbrains-mono-nerd-font'
-cask 'font-inter'
-
-#############################################################
-# MacOS-Specific Stuff                                      #
-#############################################################
-
-# Mac OS Quick-Look Plugins
-cask 'qlcolorcode'    # QL for code with highlighting
-cask 'qlimagesize'    # QL for size info for images
-cask 'qlmarkdown'     # QL for markdown files
-cask 'qlprettypatch'  # QL for patch / diff files
-cask 'qlstephen'      # QL for dev text files
-cask 'qlvideo'        # QL for video formats
-cask 'quicklook-csv'  # QL for tables in CSV format
-cask 'quicklook-json', args: { require_sha: false } # QL for JSON, with trees
-cask 'quicklookapk',   args: { require_sha: false } # QL for Android APKs
-cask 'webpquicklook',  args: { require_sha: false } # QL for WebP image files
-
-# Mac OS Mods and Imrovments
-# cask "bartender"          # Menu bar icon organizer (setapp)
-# cask "coconutbattery"     # Tool to show live information about the batteries in various devices
-# cask "hiddenbar"          # Using Bartender
-# cask "launchcontrol"
-# cask "rectangle"          # Yabai is better
-# cask "stats"              # Using iStats (setapp)
-# cask 'aflred'             # Spotlight alternative with better search
-# cask 'alt-tab'            # Much better alt-tab window switcher / using bartender insted
-# cask 'espanso'            # Text expander - cross platforma
-# cask 'hiddenbar'          # Hide / show annoying menubar icons / using hyperswitch insted
-# cask 'mjolnir'            # Util for loading Lua automations
-# cask 'typinator'          # Text expander - macOS only
-brew 'm-cli'                # All in one MacOS management CLI app: m help
-cask "bettertouchtool"      # Tool to FVcustomize input devices and automate computer systems (paywall)
-cask "topnotch"             # Utility to hide the notch
-cask 'openinterminal'       # Finder button, opens directory in terminal
-cask 'raycast', args: { require_sha: false }  # Spotlight alternative
-
-# Mac OS Utility Apps
-# cask 'stats'              # System resource usage in menubar
-# cask 'little-snitch'       # Firewall app viewing / blocking traffic
-cask "airfoil" # Audio server needed for discord streaming
-cask "the-unarchiver" # Unpacks archive files
-cask 'keka'                 # File archiver and extractor
-
-# Mac OS Clean utilities
-# cask "cleanmymac" # Tool to remove unnecessary files and folders from disk (paywall)
-cask "appcleaner" # Application uninstaller
-cask "knockknock"
-cask "setapp"
-
-# Other
-brew "reattach-to-user-namespace"  # Reattach process (e.g., tmux) to background
-brew "terminal-notifier"
-brew "zsh-completions"
-brew "aom"
-brew "bitwarden-cli" # Password manager
-brew "ffmpeg"
-brew "fileicon"
-brew "graphviz"
-brew "harfbuzz"
-brew "jpeg-xl"
-brew "koekeishiya/formulae/yabai"
-brew "libarchive"
-brew "libass"
-brew "librsvg"
-# brew "mosh" # Remote terminal application
-# brew "mtr" # "traceroute" and "ping" in a single tool
-brew "mysql-client"
-brew "netpbm"
-brew "openconnect" # VPN client
-brew "smartmontools"
-brew "speedtest-cli"
-brew "spicetify/tap/spicetify-cli"
-brew "telnet"
-brew "tesseract"
-brew "yqrashawn/goku/goku"
-brew "font-hack-nerd-font" # https://gist.github.com/davidteren/898f2dcccd42d9f8680ec69a3a5d350e
+mas "Anybox", id: 1593408455
+mas "Consent-O-Matic", id: 1606897889
+mas "Cubox", id: 1113361350
+mas "Dropover", id: 1355679052
+mas "Effie", id: 1597914599
+mas "Fantastical", id: 975937182
+mas "FoXray", id: 6448898396
+mas "Hand Mirror", id: 1502839586
+mas "Ikes - idea storage", id: 1515855107
+mas "Infuse", id: 1136220934
+mas "Klack", id: 6446206067
+mas "Lookupper", id: 1667225994
+mas "NextDNS", id: 1464122853
+mas "Noted", id: 1446580517
+mas "Outline", id: 1356178125
+mas "Pluto", id: 1544577573
+mas "rcmd", id: 1596283165
+mas "TickTick", id: 966085870
+mas "Ulysses", id: 1225570693
+mas "Video Speed Controller", id: 1588368612
+mas "WhatsApp", id: 1147396723
+mas "Wonder Wallpapers", id: 6446110290
+mas "Xcode", id: 497799835
+vscode "farosystemappender constructor"
+vscode "1password.op-vscode"
+vscode "aaron-bond.better-comments"
+vscode "alefragnani.bookmarks"
+vscode "alefragnani.project-manager"
+vscode "antfu.file-nesting"
+vscode "arzg.xcode-theme"
+vscode "be5invis.vscode-custom-css"
+vscode "birdgg.raysocode"
+vscode "blair-c.tailwind-to-css-snippets"
+vscode "bmalehorn.vscode-fish"
+vscode "bradlc.vscode-tailwindcss"
+vscode "bungcip.better-toml"
+vscode "cardinal90.multi-cursor-case-preserve"
+vscode "chakrounanas.turbo-console-log"
+vscode "codeium.codeium"
+vscode "codezombiech.gitignore"
+vscode "davidanson.vscode-markdownlint"
+vscode "dbaeumer.vscode-eslint"
+vscode "donjayamanne.githistory"
+vscode "drcika.apc-extension"
+vscode "dsznajder.es7-react-js-snippets"
+vscode "ecmel.vscode-html-css"
+vscode "editorconfig.editorconfig"
+vscode "esbenp.prettier-vscode"
+vscode "evertonvargas.reactfastproductive"
+vscode "formulahendry.docker-explorer"
+vscode "github.remotehub"
+vscode "github.vscode-github-actions"
+vscode "gitworktrees.git-worktrees"
+vscode "golang.go"
+vscode "gruntfuggly.todo-tree"
+vscode "gustavoprietodepaula.anysphere-modern"
+vscode "hnw.vscode-auto-open-markdown-preview"
+vscode "ibm.output-colorizer"
+vscode "jannisx11.batch-rename-extension"
+vscode "jkjustjoshing.vscode-text-pastry"
+vscode "jock.svg"
+vscode "joshbolduc.commitlint"
+vscode "kenhowardpdx.vscode-gist"
+vscode "knisterpeter.vscode-github"
+vscode "lehni.vscode-fix-checksums"
+vscode "maptz.camelcasenavigation"
+vscode "mateocerquetella.xcode-12-theme"
+vscode "meganrogge.template-string-converter"
+vscode "mhutchie.git-graph"
+vscode "michelemelluso.gitignore"
+vscode "miguelsolorio.min-theme"
+vscode "miguelsolorio.symbols"
+vscode "mikestead.dotenv"
+vscode "mohammadbaqer.better-folding"
+vscode "mohsen1.prettify-json"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-vscode.remote-repositories"
+vscode "ms-vsliveshare.vsliveshare"
+vscode "naumovs.color-highlight"
+vscode "ohanedan.lowlight-go-errors"
+vscode "orta.vscode-jest"
+vscode "p1c2u.docker-compose"
+vscode "philstainer.git-worktree"
+vscode "pojokcode.pcode-icon"
+vscode "psulek-solo.zodschema-generator"
+vscode "quicktype.quicktype"
+vscode "redhat.ansible"
+vscode "redhat.vscode-yaml"
+vscode "richie5um2.vscode-sort-json"
+vscode "ritwickdey.liveserver"
+vscode "shd101wyy.markdown-preview-enhanced"
+vscode "sleistner.vscode-fileutils"
+vscode "stivo.tailwind-fold"
+vscode "supermaven.supermaven"
+vscode "tamasfe.even-better-toml"
+vscode "tyriar.sort-lines"
+vscode "uctakeoff.vscode-counter"
+vscode "undefined_publisher.true-vibrant"
+vscode "unifiedjs.vscode-mdx"
+vscode "vincaslt.highlight-matching-tag"
+vscode "vitest.explorer"
+vscode "vscodeindexgeneratorplugin.vscode-index-generator-plugin"
+vscode "wallabyjs.console-ninja"
+vscode "wholroyd.jinja"
+vscode "wmaurer.change-case"
+vscode "wmontalvo.vsc-meta-snippet"
+vscode "yoavbls.pretty-ts-errors"
+vscode "yzhang.markdown-all-in-one"
 

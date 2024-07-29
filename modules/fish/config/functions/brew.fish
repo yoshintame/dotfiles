@@ -27,6 +27,8 @@ function brew
             case 'remove'
                 command brew remove $args[2..-1]
                 brew bundle dump --file=~/.config/packages/Brewfile --force
+            case 'dump'
+                brew bundle dump --file=~/.config/packages/Brewfile --force
             case '*'
                 command brew $argv
         end

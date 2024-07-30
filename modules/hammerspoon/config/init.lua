@@ -6,10 +6,6 @@ spoon.ReloadConfiguration.watch_paths = { os.getenv("HOME") .. "/.dotfiles/modul
 spoon.ReloadConfiguration:start()
 
 
-YABAI_PENDING_SPACE = nil
-YABAI_PATH = "/opt/homebrew/bin/yabai "
-JQ_PATH = "/opt/homebrew/bin/jq "
-
 HYPER_KEY = { "alt", "shift", "ctrl", "cmd" }
 WINDOW_LAYER_KEY = { "alt" }
 WINDOW_SUBLAYER_KEY = { "alt", "shift" }

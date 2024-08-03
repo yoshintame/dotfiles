@@ -73,6 +73,7 @@ keymap = [
 	{ on = [ "X" ],         run = "unyank",                     desc = "Cancel the yank status of files" },
     { on = [ "p" ],         run = "plugin --sync smart-paste",  desc = "Paste into the hovered directory or CWD" },
 	{ on = [ "P" ],         run = "paste --force",              desc = "Paste the files (overwrite if the destination exists)" },
+    { on = [ "C" ],         run = "plugin ouch --args=zip",     desc = "Compress with ouch" },
 	{ on = [ "-" ],         run = "link",                       desc = "Symlink the absolute path of files" },
 	{ on = [ "_" ],         run = "link --relative",            desc = "Symlink the relative path of files" },
 	{ on = [ "d", "d" ],    run = "remove --force",             desc = "Move the files to the trash" },

@@ -33,8 +33,8 @@ reveal = [
 	{ run = '''exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
 extract = [
-	{ run = 'unar "$1"', desc = "Extract here", for = "unix" },
-	{ run = 'unar "%1"', desc = "Extract here", for = "windows" },
+	{ run = 'ouch d -y "%*"', desc = "Extract here with ouch", for = "windows" },
+	{ run = 'ouch d -y "$@"', desc = "Extract here with ouch", for = "unix" },
 ]
 play = [
     { run = 'iina --no-stdin "$@"', desc = "Play", for = "macos" },
@@ -87,8 +87,8 @@ previewers = [
 	# PDF
 	{ mime = "application/pdf", run = "pdf" },
 	# Archive
-	{ mime = "application/*zip", run = "archive" },
-	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", run = "archive" },
+	{ mime = "application/*zip", run = "ouch" },
+	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", run = "ouch" },
 	# Fallback
 	{ name = "*", run = "file" },
 ]

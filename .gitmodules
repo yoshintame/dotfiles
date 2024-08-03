@@ -15,3 +15,6 @@
 [submodule "modules/yazi/config/plugins/starship.yazi"]
 	path = modules/yazi/config/plugins/starship.yazi
 	url = https://github.com/Rolv-Apneseth/starship.yazi.git
+[submodule "modules/yazi/config/plugins/ouch.yazi"]
+	path = modules/yazi/config/plugins/ouch.yazi
+	url = https://github.com/ndtoan96/ouch.yazi.git

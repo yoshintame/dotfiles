@@ -7,6 +7,6 @@ function dot
         case 'edit'
             $EDITOR $DOTFILES
         case '*'
-            echo "Usage: dot <apply|go|edit>"
+            echo "Usage: dot <link|go|edit>"
     end
 end

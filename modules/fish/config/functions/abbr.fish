@@ -40,38 +40,39 @@ alias oo="open ."
 alias cpwd='pwd | tr -d "\n" | pbcopy'
 
 # brew
-alias binst "brew install"
-alias bi "brew install"
+abbr br "brew"
+alias brinst "brew install"
+alias bri "brew install"
+alias brs="brew search"
+alias brd="brew dump"
 
 # node
-abbr n "npm"
-alias ninst "npm install"
-alias ni "npm install"
-alias nd="npm run dev"
-alias ns="npm run start"
-abbr nr="npm run"
+abbr np "npm"
+alias npinst "npm install"
+alias npi "npm install"
+alias npd="npm run dev"
+alias nps="npm run start"
+abbr npr="npm run"
 
 abbr pn "pnpm"
 alias pninst "pnpm install"
 alias pni "pnpm install"
 alias pnd="pnpm dev"
 alias pns="pnpm start"
-abbr px "pnpx"
+abbr pnx "pnpx"
 
 # abbr b "bun"
-alias binst "bun install"
-alias bi "bun install"
-alias bd="bun run dev"
-alias bs="bun run start"
-# abbr bx="bun exec"
-# abbr br="bun run"
+alias buinst "bun install"
+alias bui "bun install"
+alias bud="bun run dev"
+alias bus="bun run start"
 
 # python
-abbr py "python"
+abbr py "python3"
 abbr python "python3"
 abbr pip "pip3"
-alias pinst "pip3 install"
-alias pi "pip3 install"
+alias pyinst "pip3 install"
+alias pyi "pip3 install"
 
 # network
 alias ip "dig +short myip.opendns.com @resolver1.opendns.com"

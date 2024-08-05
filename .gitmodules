@@ -9,22 +9,3 @@
 [submodule "modules/karabiner/config"]
 	path = modules/karabiner/config
 	url = git@github.com:Yoshintame/karabiner-config.git
-[submodule "modules/yazi/config/plugins/glow.yazi"]
-	path = modules/yazi/config/plugins/glow.yazi
-	url = https://github.com/Reledia/glow.yazi.git
-[submodule "modules/yazi/config/plugins/starship.yazi"]
-	path = modules/yazi/config/plugins/starship.yazi
-	url = https://github.com/Rolv-Apneseth/starship.yazi.git
-[submodule "modules/yazi/config/plugins/fish.yazi"]
-	path = modules/yazi/config/plugins/fish.yazi
-	url = https://github.com/AnirudhG07/fish.yazi.git
-[submodule "modules/yazi/config/plugins/current-size.yazi"]
-	path = modules/yazi/config/plugins/current-size.yazi
-	url = https://gitee.com/DreamMaoMao/current-size.yazi.git
-[submodule "modules/yazi/config/plugins/ouch.yazi"]
-	path = modules/yazi/config/plugins/ouch.yazi
-	url = https://github.com/ndtoan96/ouch.yazi.git
-[submodule "modules/yazi/config/plugins/relative-motions.yazi"]
-	path = modules/yazi/config/plugins/relative-motions.yazi
-	url = https://github.com/dedukun/relative-motions.yazi.git
-	branch = 0.2.5

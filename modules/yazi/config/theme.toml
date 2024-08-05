@@ -1,3 +1,10 @@
+# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+"$schema" = "https://yazi-rs.github.io/schemas/theme.json"
+
+[flavor]
+use = ""
+
 [manager]
 cwd = { fg = "#5bb6f9" }
 
@@ -29,7 +36,7 @@ border_symbol = "│"
 border_style  = { fg = "#7f849c" }
 
 # Highlighting
-# syntect_theme = "~/.config/yazi/Catppuccin-mocha.tmTheme"
+syntect_theme = ""
 
 [status]
 separator_open  = ""
@@ -79,7 +86,6 @@ separator_style = { fg = "#585b70" }
 
 [help]
 on      = { fg = "#f5c2e7" }
-exec    = { fg = "#5bb6f9" }
 desc    = { fg = "#9399b2" }
 hovered = { bg = "#585b70", bold = true }
 footer  = { fg = "#45475a", bg = "#cdd6f4" }
@@ -107,7 +113,6 @@ rules = [
 	{ name = "*", fg = "#ffffff" },
 	{ name = "*/", fg = "#6277f7" }
 ]
-
 
 [icon]
 

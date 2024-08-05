@@ -1,0 +1,12 @@
+[plugin]
+deps = [
+    { use = "Rolv-Apneseth/starship", commit = "5abe29e" },
+    { use = "dedukun/relative-motions", commit = "73f5542" },
+    { use = "Reledia/glow", commit = "536185a" },
+    { use = "yazi-rs/plugins#max-preview", commit = "39f2753" },
+    { use = "yazi-rs/plugins#hide-preview", commit = "39f2753" },
+    { use = "ndtoan96/ouch", commit = "251da69" }
+]
+
+[flavor]
+deps = []

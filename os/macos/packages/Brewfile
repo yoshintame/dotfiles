@@ -89,6 +89,7 @@ cask "zoom"
 mas "Dropover", id: 1355679052
 mas "FoXray", id: 6448898396
 mas "Klack", id: 6446206067
+mas "Xcode", id: 497799835
 vscode "1password.op-vscode"
 vscode "aaron-bond.better-comments"
 vscode "alefragnani.bookmarks"

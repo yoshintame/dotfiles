@@ -6,19 +6,12 @@
     clean:
       recursive: true
 
-- clean: ["~/.dotfiles", "~/.config", "~/.dotfiles-ansible"]
+- clean: ["~/.dotfiles", "~/.config"]
 
 - link:
     # packages
     ~/.config/packages: os/macos/packages
     ~/.local/share/pnpm/global/5/package.json: os/macos/packages/package.json
-
-    # zsh
-    ~/.config/zsh/:
-      path: modules/zsh/config/zsh/**
-      glob: true
-    ~/.zshrc: modules/zsh/config/.zshrc
-    ~/.zshenv: modules/zsh/config/.zshenv
 
     # neovim
     ~/.config/nvim/:
@@ -35,15 +28,6 @@
 
     # starship
     ~/.config/starship.toml: modules/starship/config/starship.toml
-
-    # yabai
-    ~/.config/yabai/yabairc: modules/yabai/config/.yabairc
-
-    # lf
-    # TODO: bagged? Wont work with /**
-    ~/.config/lf/:
-      path: modules/lf/config/
-      glob: true
 
     # warp
     ~/.warp/:
@@ -67,12 +51,7 @@
       path: modules/vscode/theme/**
       glob: true
 
-    # obsidian
-    ~/yoshintame-obsidian-vault/.obsidian:
-      path: modules/obsidian/config/**
-      glob: true
-
-    # yazip
+    # yazi
     ~/.config/yazi/:
       path: modules/yazi/config/**
       glob: true

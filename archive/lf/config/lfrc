@@ -135,7 +135,7 @@ cmd dropover ${{
     if [ -e "$target" ] || [ -L "$target" ]; then
       # Initialize the duplicate index
       duplicate_index=1
-      while [ -e "$target-$duplicate_index" ] || [ -L "$target-$duplicate_index" ]; do
+      while [ -e "$target-$duplicate_index" ] || [ -L "$target-$dupфlicate_index" ]; do
         ((duplicate_index++))
       done
       target="$target-$duplicate_index"

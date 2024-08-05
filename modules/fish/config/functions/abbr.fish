@@ -31,9 +31,9 @@ abbr sdel "sudo rm -rf"
 abbr cp 'cp -r'
 abbr ln 'ln -s'
 
-alias edit "cursor"
-alias e "cursor"
-alias ee="cursor ."
+alias edit "$EDITOR"
+alias e "$EDITOR"
+alias ee="$EDITOR ."
 abbr o "open"
 alias oo="open ."
 

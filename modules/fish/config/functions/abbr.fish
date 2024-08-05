@@ -85,12 +85,3 @@ alias -a wget "wget -c"
 # fast edit
 alias edithostfile "sudo $EDITOR /etc/hosts"
 alias editssh "sudo $EDITOR ~/.ssh"
-
-# fast cd
-alias dev "cd ~/Development"
-alias dotfiles "cd ~/.dotfiles"
-
-# dotfiles
-alias dotapply="dotbot -c ~/.dotfiles/os/macos/module.yaml"
-alias dotedit="cursor ~/.dotfiles"
-

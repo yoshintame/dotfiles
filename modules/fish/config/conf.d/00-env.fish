@@ -24,8 +24,7 @@ set -g GOPATH $HOME/go
 set -gx PATH $GOPATH/bin $PATH
 
 # Path
-set -g TRASH $HOME/.Trash
-set -g DOTFILES $HOME/.dotfiles
+set -gx TRASH $HOME/.Trash
 
 # Fisher
 set -Ux fisher_path /Users/yoshintame/.config/fish/fisher_plugins
@@ -34,3 +33,6 @@ set -Ux fisher_path /Users/yoshintame/.config/fish/fisher_plugins
 set -e SSH_AUTH_SOCK
 set -Ux SSH_AUTH_SOCK ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
+# Dofiles
+set -gx DOTFILES $HOME/.dotfiles
+set -gx DOTFILES_CONFIG $DOTFILES/os/macos/module.yaml

@@ -95,7 +95,8 @@ keymap = [
 	{ on = "<C-s>",         run = "search none",                 desc = "Cancel the ongoing search" },
 	{ on = "z",             run = "plugin zoxide",               desc = "Jump to a directory using zoxide" },
 	{ on = "Z",             run = "plugin fzf",                  desc = "Jump to a directory or reveal a file using fzf" },
-    { on = [ "C" ],         run = "plugin ouch --args=zip",      desc = "Compress with ouch" },
+    { on = "C",             run = "plugin ouch --args=zip",      desc = "Compress with ouch" },
+    { on = "N",             run = "plugin dropover",            desc = "Trigger dropover for selected or hovered files" },
 
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Set linemode to size" },

@@ -5,7 +5,8 @@ deps = [
     { use = "Reledia/glow", commit = "536185a" },
     { use = "yazi-rs/plugins#max-preview", commit = "39f2753" },
     { use = "yazi-rs/plugins#hide-preview", commit = "39f2753" },
-    { use = "ndtoan96/ouch", commit = "251da69" }
+    { use = "ndtoan96/ouch", commit = "251da69" },
+    { use = "yazi-rs/plugins#full-border", commit = "39f2753" }
 ]
 
 [flavor]

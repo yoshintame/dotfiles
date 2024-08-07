@@ -20,18 +20,24 @@ function M:launchOrFocusApp(name)
 end
 
 function M:bindHotkeys(mapping)
-    for app, keyInfo in pairs(mapping) do
-        local mods = keyInfo[1]
-        local key = keyInfo[2]
-        local isWarp = keyInfo.isWarp
+    for app, keyInfos in pairs(mapping) do
+        if type(keyInfos[1][1]) ~= "table" then
+            keyInfos = { keyInfos }
+        end
 
-        hs.hotkey.bind(mods, key, function()
-            if isWarp then
-                self:launchOrFocusWarpApp(app)
-            else
-                self:launchOrFocusApp(app)
-            end
-        end)
+        for _, keyInfo in ipairs(keyInfos) do
+            local mods = keyInfo[1]
+            local key = keyInfo[2]
+            local isWarp = keyInfo.isWarp
+
+            hs.hotkey.bind(mods, key, function()
+                if isWarp then
+                    self:launchOrFocusWarpApp(app)
+                else
+                    self:launchOrFocusApp(app)
+                end
+            end)
+        end
     end
 end
 

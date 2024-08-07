@@ -7,6 +7,8 @@ spoon.ReloadConfiguration:start()
 
 hs.loadSpoon("AppLauncher")
 spoon.AppLauncher:bindHotkeys({
+    ["1password"]          = { { "alt"                  }, "1" },
+
     ["Telegram"]           = { { "alt"                  }, "Q" },
     ["Warp"]               = { { "alt"                  }, "W" },
     ["Wezterm"]            = { { "alt", "shift"         }, "W" },
@@ -26,7 +28,6 @@ spoon.AppLauncher:bindHotkeys({
     ["btop"]               = { { "alt"                  }, "V", isWarp = true },
     ["Activity Monitor"]   ={{ { "alt", "shift"         }, "V" },
                              { {        "shift", "ctrl" }, "escape" }},
-    ["1password"]          = { { "alt"                  }, "B" },
 })
 
 hs.loadSpoon("WindowManager"):start()

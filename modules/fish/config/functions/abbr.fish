@@ -5,15 +5,6 @@ alias fc "fzf"
 abbr grep "rg"
 abbr cat "bat"
 
-alias .. 'z ..'
-alias ... 'z ../..'
-alias .... 'z ../../..'
-alias .4 'z ../../..'
-alias ..... 'z ../../../..'
-alias .5 'z ../../../..'
-abbr / 'z /'
-abbr ~ 'z ~'
-abbr - 'z -'
 alias c.. "z .."
 alias cd.. "z .."
 

@@ -64,3 +64,7 @@
     ~/.config/fish/:
       path: modules/fish/config/**
       glob: true
+    # wezterm
+    ~/.config/wezterm/:
+      path: modules/wezterm/config/**
+      glob: true

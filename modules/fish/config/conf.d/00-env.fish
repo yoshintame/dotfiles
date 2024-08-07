@@ -8,6 +8,9 @@ set -gx EDITOR cursor
 set -gx VISUAL cursor
 set -gx PLAY iina
 
+# Zoxide
+set -u zoxide_cmd j
+
 # FZF
 set -gx FZF_COMPLETION_OPTS '--color=16 --layout=reverse --inline-info'
 set -gx FZF_DEFAULT_OPTS '--color=16 --layout=reverse --inline-info'

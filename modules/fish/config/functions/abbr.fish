@@ -1,12 +1,7 @@
-alias cf 'zi'
-alias c 'z'
 alias f "yy"
 alias fc "fzf"
 abbr grep "rg"
 abbr cat "bat"
-
-alias c.. "z .."
-alias cd.. "z .."
 
 abbr mkdir 'mkdir -p'
 abbr md 'mkdir -p'

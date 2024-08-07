@@ -23,8 +23,6 @@ alias ee "$EDITOR ."
 abbr o "open"
 alias oo "open ."
 
-alias cpwd 'pwd | tr -d "\n" | pbcopy'
-
 # brew
 abbr br "brew"
 alias brinst "brew install"

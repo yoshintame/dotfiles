@@ -32,7 +32,6 @@
 	untracked = cyan
 
 [core]
-	excludesfile = ~/.gitignore_global
 	editor       = cursor --wait
 	mergeoptions = --no-ff --no-commit
 	autocrlf     = input

@@ -24,7 +24,7 @@
       glob: true
 
     # git
-    ~/.gitconfig: modules/git/config/.gitconfig
+    ~/.config/git: modules/git/config
 
     # starship
     ~/.config/starship.toml: modules/starship/config/starship.toml

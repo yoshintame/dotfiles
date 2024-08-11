@@ -26,6 +26,9 @@
     # git
     ~/.config/git: modules/git/config
 
+    # karabiner
+    ~/.config/karabiner/karabiner.json: modules/karabiner/config/build/karabiner.json
+
     # starship
     ~/.config/starship.toml: modules/starship/config/starship.toml
 

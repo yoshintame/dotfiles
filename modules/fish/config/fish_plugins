@@ -1,5 +1,4 @@
 jorgebucaran/fisher
-gazorby/fish-abbreviation-tips
 kidonng/zoxide.fish
 patrickf1/fzf.fish
 jorgebucaran/autopair.fish
@@ -9,7 +8,6 @@ mattmc3/magic-enter.fish
 halostatue/fish-utils-core
 halostatue/fish-utils
 eth-p/fish-plugin-sudo
-kpbaks/autols.fish
 gazorby/fish-exa
 gazorby/fish-finders
 jhillyerd/plugin-git

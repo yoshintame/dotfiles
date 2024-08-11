@@ -1,7 +1,9 @@
 # Ensure critical universals exist
 set -qU XDG_CONFIG_HOME; or set -Ux XDG_CONFIG_HOME $HOME/.config
 set -qU XDG_DATA_HOME; or set -Ux XDG_DATA_HOME $HOME/.local/share
+set -q XDG_STATE_HOME; or set -Ux XDG_STATE_HOME $HOME/.local/state
 set -qU XDG_CACHE_HOME; or set -Ux XDG_CACHE_HOME $HOME/.cache
+set -q __fish_cache_dir; or set -Ux __fish_cache_dir $XDG_CACHE_HOME/fish
 
 # Main
 set -gx EDITOR cursor

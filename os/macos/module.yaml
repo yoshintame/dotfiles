@@ -71,3 +71,6 @@
     ~/.config/wezterm/:
       path: modules/wezterm/config/**
       glob: true
+    # btop
+    ~/.config/btop/: modules/btop/config/
+

@@ -1,3 +1,7 @@
+if not status --is-interactive
+    exit
+end
+
 # brew
 abbr br "brew"
 abbr bri "brew install"

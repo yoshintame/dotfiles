@@ -1,38 +1,3 @@
-# utils
-alias fc "fzf"
-alias grep "rg"
-alias cat "bat"
-
-# file operations
-alias md 'mkdir -p'
-alias mf 'touch' # auto create dirs (-p)
-alias ml 'ln -s'
-alias ma 'ouch compress'
-
-alias cp 'cp -Ri'
-alias mv 'mv -i'
-
-alias rd 'rmdir'
-alias rm 'rm -ri'
-alias rmf 'rm -rif'
-
-alias tm 'gtrash put -v'
-alias ts 'gtrash summary'
-alias tf 'gtrash find'
-alias tr 'gtrash restore'
-alias trg 'gtrash restore-group'
-
-alias ad 'ouch decompress'
-alias al 'ouch list'
-
-# openers
-alias edit "$EDITOR"
-alias e "$EDITOR"
-alias ee "$EDITOR ."
-alias o "open"
-alias oo "open ."
-alias oa 'open -a'
-
 # brew
 abbr br "brew"
 abbr bri "brew install"
@@ -75,6 +40,18 @@ abbr bus "bun run start"
 abbr bub "bun run build"
 abbr but "bun test"
 
+# fisher
+abbr fi "fisher"
+abbr fii "fisher install"
+abbr fiu "fisher update"
+abbr fir "fisher remove"
+abbr fil "fisher list"
+
+# dot
+abbr de "dot edit"
+abbr dg "dot go"
+abbr dl "dot link"
+
 # docker
 abbr dk "docker"
 abbr dc "docker compose"
@@ -84,17 +61,3 @@ abbr py "python3"
 abbr python "python3"
 abbr pip "pip3"
 abbr pyi "pip3 install"
-
-
-# network
-alias ip "dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip "ipconfig getifaddr en0"
-alias ips "ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)\|[a-fA-F0-9:]\+\)' | sed -e 's/inet6* //'"
-alias sniff "sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
-alias httpdump "sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
-alias whois "grc whois" # colorized whois
-
-# SSH and localhost
-alias hostfile 'eval sudo $EDITOR /etc/hosts'
-alias editssh 'eval $EDITOR ~/.ssh'
-alias lssh 'grep -w -i Host ~/.ssh/config | sed s/Host//'

@@ -41,3 +41,10 @@ set -Ux SSH_AUTH_SOCK ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/age
 # Dofiles
 set -gx DOTFILES $HOME/.dotfiles
 set -gx DOTFILES_CONFIG $DOTFILES/os/macos/module.yaml
+
+# GRC
+set -gx grc_plugin_ignore_execs ls
+
+# Fish
+set -gx fish_function_path $__fish_config_dir/functions/aliases $fish_function_path
+

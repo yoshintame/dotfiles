@@ -1,0 +1,96 @@
+---
+description: Dock
+data:
+  com.apple.dock:
+    # Turn off Spaces auto-switching
+    workspaces-auto-swoosh: false
+
+    # Show only open applications in the Dock
+    static-only: true
+
+    # Wipe all (default) app icons from the Dock.
+    persistent-apps: []
+
+    # Don’t show recent applications in Dock
+    show-recents: false
+
+    # Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate
+    tilesize: 36
+
+    # Set Dock to auto-hide and its auto-hiding delay
+    autohide: true
+    autohide-delay: 1.0
+    autohide-time-modifier: 0
+
+    # Change minimize/maximize window effect
+    mineffect: scale
+
+    # Enable highlight hover effect for the grid view of a stack (Dock)
+    mouse-over-hilite-stack: true
+
+    # Minimize windows into their application’s icon
+    minimize-to-application: true
+
+    # Enable spring loading for all Dock items
+    enable-spring-load-actions-on-all-items: true
+
+    # Show indicator lights for open applications in the Dock
+    show-process-indicators: true
+
+    # Don’t animate opening applications from the Dock
+    launchanim: false
+
+    # TODO: make notepad
+    # Hot corners
+    # Possible values:
+    #  0: no-op
+    #  2: Mission Control
+    #  3: Show application windows
+    #  4: Desktop
+    #  5: Start screen saver
+    #  6: Disable screen saver
+    #  7: Dashboard
+    # 10: Put display to sleep
+    # 11: Launchpad
+    # 12: Notification Center
+    # 13: Lock Screen
+
+    # Top left screen corner
+    wvous-tl-corner: 0
+    wvous-tl-modifier: 0
+
+    # Top right screen corner
+    wvous-tr-corner: 0
+    wvous-tr-modifier: 0
+
+    # Bottom left screen corner
+    wvous-bl-corner: 0
+    wvous-bl-modifier: 0
+
+    # Bottom right screen corner
+    wvous-br-corner: 0
+    wvous-br-modifier: 0
+
+
+    # Speed up Mission Control animations
+    expose-animation-duration: 0.1
+
+    # Don’t group windows by application in Mission Control
+    # (i.e. use the old Exposé behavior instead)
+    expose-group-by-app: false
+
+    # Don’t show Dashboard as a Space
+    dashboard-in-overlay: true
+
+    # Don’t automatically rearrange Spaces based on most recent use
+    mru-spaces: false
+
+    # Make Dock icons of hidden applications translucent
+    showhidden: true
+
+    # Disable the Launchpad gesture (pinch with thumb and three fingers)
+    # showLaunchpadGestureEnabled: 0
+
+  com.apple.dashboard:
+    # Disable Dashboard
+    # mcx-disabled: true

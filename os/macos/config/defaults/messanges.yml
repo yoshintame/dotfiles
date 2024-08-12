@@ -1,0 +1,14 @@
+---
+description: Messages
+kill: ["Messages"]
+data:
+  com.apple.messageshelper.MessageController:
+    SOInputLineSettings:
+      # Disable smart quotes as it’s annoying for messages that contain code
+      automaticQuoteSubstitutionEnabled: false
+
+      # Disable automatic emoji substitution (i.e. use plain text smileys)
+      automaticEmojiSubstitutionEnablediMessage: false
+
+      # Disable continuous spell checking
+      continuousSpellCheckingEnabled: false

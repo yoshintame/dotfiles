@@ -1,0 +1,22 @@
+---
+description: Screen
+data:
+  # Require password immediately after sleep or screen saver begins
+  com.apple.screensaver:
+    askForPassword: 1
+    askForPasswordDelay: 0
+
+  com.apple.screencapture:
+    # Save screenshots to the desktop
+    location: "${HOME}/Pictures/Screenshots"
+
+    # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+    type: "png"
+
+    # Disable shadow in screenshots
+    disable-shadow: true
+
+  NSGlobalDomain:
+    # Enable subpixel font rendering on non-Apple LCDs
+    # Reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
+    AppleFontSmoothing: 1

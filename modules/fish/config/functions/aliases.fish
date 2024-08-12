@@ -5,7 +5,6 @@ aliases add cat "bat"
 
 # file operations
 aliases add md 'mkdir -p'
-aliases add mf 'touch' # auto create dirs (-p)
 aliases add ml 'ln -s'
 aliases add ma 'ouch compress'
 

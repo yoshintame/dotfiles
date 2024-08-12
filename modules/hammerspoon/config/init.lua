@@ -30,4 +30,4 @@ spoon.AppLauncher:bindHotkeys({
                              { {        "shift", "ctrl" }, "escape" }},
 })
 
-hs.loadSpoon("WindowManager"):start()
+

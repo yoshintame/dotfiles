@@ -1,5 +1,4 @@
 # utils
-alias f "yy"
 alias fc "fzf"
 alias grep "rg"
 alias cat "bat"
@@ -26,7 +25,6 @@ alias trg 'gtrash restore-group'
 alias ad 'ouch decompress'
 alias al 'ouch list'
 
-
 # openers
 alias edit "$EDITOR"
 alias e "$EDITOR"
@@ -34,7 +32,6 @@ alias ee "$EDITOR ."
 alias o "open"
 alias oo "open ."
 alias oa 'open -a'
-
 
 # brew
 abbr br "brew"
@@ -86,7 +83,7 @@ abbr dc "docker compose"
 abbr py "python3"
 abbr python "python3"
 abbr pip "pip3"
-alias pyi "pip3 install"
+abbr pyi "pip3 install"
 
 
 # network

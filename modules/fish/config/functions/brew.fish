@@ -1,4 +1,4 @@
-function brew
+function brew --wraps='command brew' --description 'Wrapper for the brew command with additional functionality'
     set -l flags
     set -l args
 

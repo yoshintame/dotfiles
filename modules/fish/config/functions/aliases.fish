@@ -2,6 +2,7 @@
 aliases add fc "fzf"
 aliases add grep "rg"
 aliases add cat "bat"
+aliases add vim "nvim"
 
 # file operations
 aliases add md 'mkdir -p'

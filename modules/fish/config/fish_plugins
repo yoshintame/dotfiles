@@ -8,8 +8,8 @@ mattmc3/magic-enter.fish
 halostatue/fish-utils-core
 halostatue/fish-utils
 eth-p/fish-plugin-sudo
-gazorby/fish-exa
 gazorby/fish-finders
 jhillyerd/plugin-git
 joseluisq/gitnow
 oh-my-fish/plugin-thefuck
+plttn/fish-eza

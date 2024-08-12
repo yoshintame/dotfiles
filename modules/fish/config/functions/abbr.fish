@@ -38,13 +38,14 @@ alias oa 'open -a'
 
 # brew
 abbr br "brew"
-alias bri "brew install"
-alias brr "brew uninstall"
-alias brl "brew list"
-alias bru "brew upgrade"
-alias brud "brew update"
-alias brs "brew search"
-alias brd "brew dump"
+abbr bri "brew install"
+abbr brr "brew uninstall"
+abbr brl "brew list"
+abbr bru "brew upgrade"
+abbr brud "brew update"
+abbr brs "brew search"
+abbr brd "brew dump"
+abbr brup "brew update && brew upgrade && brew cleanup"
 
 # node
 abbr np "npm"

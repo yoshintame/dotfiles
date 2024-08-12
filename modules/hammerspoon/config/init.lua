@@ -10,8 +10,8 @@ spoon.AppLauncher:bindHotkeys({
     ["1password"]          = { { "alt"                  }, "1" },
 
     ["Telegram"]           = { { "alt"                  }, "Q" },
-    ["Warp"]               = { { "alt"                  }, "W" },
-    ["Wezterm"]            = { { "alt", "shift"         }, "W" },
+    ["Wezterm"]            = { { "alt"                  }, "W" },
+    ["Warp"]               = { { "alt", "shift"         }, "W" },
     ["lf"]                 = { { "alt"                  }, "E", isWarp = true },
     ["Finder"]             = { { "alt", "shift"         }, "E" },
     ["System Settings"]    = { { "alt"                  }, "R" },
@@ -19,6 +19,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Arc"]                = { { "alt"                  }, "A" },
     ["Safari"]             = { { "alt", "shift"         }, "A" },
     ["Spotify"]            = { { "alt"                  }, "S" },
+    ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Cursor"]             = { { "alt"                  }, "D" },
     ["Visual Studio Code"] = { { "alt", "shift"         }, "D" },
 

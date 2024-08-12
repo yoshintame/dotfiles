@@ -69,3 +69,7 @@ abbr py "python3"
 abbr python "python3"
 abbr pip "pip3"
 abbr pyi "pip3 install"
+
+# utils
+abbr --add sp speedtest
+abbr --add cl clear

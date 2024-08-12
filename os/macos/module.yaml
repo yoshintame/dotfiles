@@ -67,10 +67,10 @@
     ~/.config/fish/:
       path: modules/fish/config/**
       glob: true
+
     # wezterm
-    ~/.config/wezterm/:
-      path: modules/wezterm/config/**
-      glob: true
+    ~/.config/wezterm/: modules/wezterm/config/
+
     # btop
     ~/.config/btop/: modules/btop/config/
 

@@ -48,3 +48,10 @@ set -gx grc_plugin_ignore_execs ls
 # Fish
 set -gx fish_function_path $__fish_config_dir/functions/aliases $fish_function_path
 
+# SmartEmptyLine
+set -gx SMART_RIGHT_CMD "f"
+set -gx SMART_RIGHT_GIT_CMD "f"
+set -gx SMART_LEFT_CMD ".."
+set -gx SMART_LEFT_GIT_CMD ".."
+set -gx SMART_ENTER_CMD "ls"
+set -gx SMART_ENTER_GIT_CMD "git status -sb"

@@ -39,8 +39,7 @@ function on_arrow
     end
 end
 
-bind \e\[A "on_arrow up-line $SMART_UP_CMD $SMART_UP_GIT_CMD"
-bind \e\[B "on_arrow down-line $SMART_DOWN_CMD $SMART_DOWN_GIT_CMD"
 bind \e\[D "on_arrow backward-char $SMART_LEFT_CMD $SMART_LEFT_GIT_CMD"
 bind \e\[C "on_arrow forward-char $SMART_RIGHT_CMD $SMART_RIGHT_GIT_CMD"
 bind \r "on_enter"
+

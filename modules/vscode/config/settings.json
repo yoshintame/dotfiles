@@ -24,7 +24,7 @@
     "height": 24
   },
   "apc.imports": [
-    "${userHome}/.cursor/extensions/true-vibrant-vscode-theme/css/true-vibrant-color-theme.css"
+    "${userHome}/.cursor/extensions/true-vibrant-vscode-theme/themes/true-vibrant-color-theme.css"
   ],
 
   // Fonts

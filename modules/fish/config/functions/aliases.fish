@@ -3,6 +3,9 @@ aliases add fc "fzf"
 aliases add grep "rg"
 aliases add cat "bat"
 aliases add vim "nvim"
+aliases add vi "nvim"
+aliases add lg "lazygit"
+aliases add ld "lazydocker"
 aliases add f "yy"
 
 # file operations

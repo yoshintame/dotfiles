@@ -3,6 +3,7 @@ aliases add fc "fzf"
 aliases add grep "rg"
 aliases add cat "bat"
 aliases add vim "nvim"
+aliases add f "yy"
 
 # file operations
 aliases add md 'mkdir -p'
@@ -46,3 +47,4 @@ aliases add hostfile 'eval sudo $EDITOR /etc/hosts'
 aliases add editssh 'eval $EDITOR ~/.ssh'
 aliases add lssh 'grep -w -i Host ~/.ssh/config | sed s/Host//'
 
+# TODO: move aliases and abbrs to separate directories

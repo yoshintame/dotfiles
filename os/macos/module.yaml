@@ -74,3 +74,5 @@
     # btop
     ~/.config/btop/: modules/btop/config/
 
+    # bat
+    ~/.config/bat: modules/bat/config

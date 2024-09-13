@@ -1,0 +1,4 @@
+style = "compact"
+
+[sync]
+records = true

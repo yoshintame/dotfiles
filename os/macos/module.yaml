@@ -76,3 +76,6 @@
 
     # bat
     ~/.config/bat: modules/bat/config
+
+    # autin
+    ~/.config/atuin: modules/atuin/config

@@ -79,3 +79,8 @@
 
     # autin
     ~/.config/atuin: modules/atuin/config
+
+    # lazygit
+    ~/.config/lazygit: modules/lazygit/config
+
+

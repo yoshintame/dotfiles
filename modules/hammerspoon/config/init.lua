@@ -12,7 +12,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Telegram"]           = { { "alt"                  }, "Q" },
     ["Wezterm"]            = { { "alt"                  }, "W" },
     ["Warp"]               = { { "alt", "shift"         }, "W" },
-    ["lf"]                 = { { "alt"                  }, "E", isWarp = true },
+    ["Things3"]            = { { "alt"                  }, "E" },
     ["Finder"]             = { { "alt", "shift"         }, "E" },
     ["System Settings"]    = { { "alt"                  }, "R" },
 
@@ -26,9 +26,9 @@ spoon.AppLauncher:bindHotkeys({
     ["Figma"]              = { { "alt"                  }, "Z" },
     ["Insomnia"]           = { { "alt"                  }, "X" },
     ["Discord"]            = { { "alt"                  }, "C" },
-    ["btop"]               = { { "alt"                  }, "V", isWarp = true },
+    ["FoXray"]             = { { "alt"                  }, "V" },
     ["Activity Monitor"]   ={{ { "alt", "shift"         }, "V" },
                              { {        "shift", "ctrl" }, "escape" }},
 })
 
-
+hs.loadSpoon("WindowManager"):start()

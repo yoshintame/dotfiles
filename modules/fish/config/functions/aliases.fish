@@ -29,6 +29,10 @@ aliases add trg 'gtrash restore-group'
 aliases add ad 'ouch decompress'
 aliases add al 'ouch list'
 
+# languages
+aliases add python "python3"
+aliases add pip "pip3"
+
 # openers
 aliases add edit "$EDITOR"
 aliases add e "$EDITOR"

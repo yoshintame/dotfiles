@@ -12,7 +12,3 @@ if type -q starship
 else
     echo "Warning: starship is not installed"
 end
-
-# Enable promt transience
-enable_transience
-

@@ -1,2 +1,2 @@
-brew install yazi ffmpegthumbnailer unar jq poppler fd ripgrep fzf zoxide glow
+brew install yazi ffmpegthumbnailer unar jq poppler fd ripgrep fzf zoxide glow imagemagick
 brew tap homebrew/cask-fonts && brew install --cask font-symbols-only-nerd-font

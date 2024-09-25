@@ -1,12 +1,12 @@
 [plugin]
 deps = [
-    { use = "Rolv-Apneseth/starship", commit = "5abe29e" },
-    { use = "dedukun/relative-motions", commit = "73f5542" },
-    { use = "Reledia/glow", commit = "536185a" },
-    { use = "yazi-rs/plugins#max-preview", commit = "39f2753" },
-    { use = "yazi-rs/plugins#hide-preview", commit = "39f2753" },
-    { use = "ndtoan96/ouch", commit = "251da69" },
-    { use = "yazi-rs/plugins#full-border", commit = "39f2753" }
+    { use = "Rolv-Apneseth/starship", rev = "5abe29e" },
+    { use = "dedukun/relative-motions", rev = "73f5542" },
+    { use = "Reledia/glow", rev = "536185a" },
+    { use = "yazi-rs/plugins:max-preview", rev = "39f2753" },
+    { use = "yazi-rs/plugins:hide-preview", rev = "39f2753" },
+    { use = "ndtoan96/ouch", rev = "251da69" },
+    { use = "yazi-rs/plugins:full-border", rev = "39f2753" }
 ]
 
 [flavor]

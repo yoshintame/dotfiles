@@ -83,4 +83,5 @@
     # lazygit
     ~/.config/lazygit: modules/lazygit/config
 
-
+    # aerospace
+    ~/.config/aerospace: modules/aerospace/config

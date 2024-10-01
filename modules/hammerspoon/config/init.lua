@@ -21,13 +21,12 @@ spoon.AppLauncher:bindHotkeys({
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Cursor"]             = { { "alt"                  }, "D" },
-    ["Visual Studio Code"] = { { "alt", "shift"         }, "D" },
+    ["Height"]             = { { "alt", "shift"         }, "D" },
 
     ["Figma"]              = { { "alt"                  }, "Z" },
     ["Insomnia"]           = { { "alt"                  }, "X" },
     ["Discord"]            = { { "alt"                  }, "C" },
-    ["FoXray"]             = { { "alt"                  }, "V" },
-    ["Activity Monitor"]   ={{ { "alt", "shift"         }, "V" },
+    ["Activity Monitor"]   ={{ { "alt"                  }, "V" },
                              { {        "shift", "ctrl" }, "escape" }},
 })
 

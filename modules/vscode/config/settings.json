@@ -81,7 +81,7 @@
   "editor.cursorSurroundingLines": 5,
   "editor.detectIndentation": false,
   "editor.find.addExtraSpaceOnTop": false,
-  "editor.foldingImportsByDefault": true,
+  "editor.foldingImportsByDefault": false,
   "editor.formatOnSave": true,
   "editor.gotoLocation.multipleDeclarations": "gotoAndPeek",
   "editor.gotoLocation.multipleDefinitions": "gotoAndPeek",

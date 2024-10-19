@@ -6,7 +6,6 @@ aliases add vim "nvim"
 aliases add vi "nvim"
 aliases add lg "lazygit"
 aliases add ld "lazydocker"
-aliases add f "yy"
 
 aliases add l "eza -a --group --header --group-directories-first --git --icons --hyperlink"
 aliases add lo "eza -a --group --header --group-directories-first --git --icons --oneline --hyperlink"

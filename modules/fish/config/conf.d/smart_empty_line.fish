@@ -41,5 +41,6 @@ end
 
 bind \e\[D "on_arrow backward-char $SMART_LEFT_CMD $SMART_LEFT_GIT_CMD"
 bind \e\[C "on_arrow forward-char $SMART_RIGHT_CMD $SMART_RIGHT_GIT_CMD"
+bind \e\[1\;3C "on_arrow forward-char $SMART_RIGHT_OPT_CMD $SMART_RIGHT_OPT_GIT_CMD"
 bind \r "on_enter"
 

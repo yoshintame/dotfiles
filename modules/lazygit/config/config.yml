@@ -5,10 +5,27 @@ gui:
   showRandomTip: false
   nerdFontsVersion: "3"
   windowSize: half
+  statusPanelView: allBranchesLog
+
 git:
   paging:
-    colorArg: always
+    # Delta
     pager: delta --paging=never
+
+    # # Difftastic
+    # externalDiffCommand: difft --color=always --display=inline
+
+os:
+  edit: "$EDITOR {{filename}}"
+  editAtLine: "$EDITOR -g --block {{filename}}:{{line}}"
+  editInTerminal: false
+  openDirInEditor: '$EDITOR {{dir}}'
+  open: "open {{filename}}"
+
+keybinding:
+  universal:
+    goInto: <right>
+    nextBlock: <disabled>
 
 customCommands:
   # Commit with commitizen
@@ -98,7 +115,7 @@ customCommands:
     context: remoteBranches
     description: tig branch (`t` again to browse files at revision)
     subprocess: true
-    
+
   # File histroy via Tig
   - key: t
     command: tig {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}

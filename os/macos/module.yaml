@@ -85,3 +85,5 @@
 
     # aerospace
     ~/.config/aerospace: modules/aerospace/config
+    # gitui
+    ~/.config/gitui: modules/gitui/config

@@ -46,7 +46,8 @@ set -gx DOTFILES_CONFIG $DOTFILES/os/macos/module.yaml
 set -gx grc_plugin_ignore_execs ls
 
 # Fish
-set -gx fish_function_path $__fish_config_dir/functions/aliases $fish_function_path
+set -gx aliases_path $__fish_config_dir/aliases
+set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[2..]
 
 # SmartEmptyLine
 set -gx SMART_RIGHT_CMD "yy"

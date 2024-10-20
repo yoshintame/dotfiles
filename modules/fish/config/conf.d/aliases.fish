@@ -2,12 +2,12 @@ function aliases
     switch $argv[1]
         case 'add'
             alias $argv[2..-1]
-            funcsave -d $__fish_config_dir/functions/aliases $argv[2]
+            funcsave -d $aliases_path $argv[2]
         case 'update'
-            rm -rf $__fish_config_dir/functions/aliases
+            rm -rf $aliases_path
             source $__fish_config_dir/functions/aliases.fish
         case 'remove'
-            rm -rf $__fish_config_dir/functions/aliases
+            rm -rf $aliases_path
         case 'source'
             source $__fish_config_dir/functions/aliases.fish
         case \*

@@ -24,10 +24,11 @@ aliases add rd 'rmdir'
 aliases add rm 'rm -ri'
 aliases add rmf 'rm -rif'
 
-aliases add tm 'gtrash put -v'
-aliases add ts 'gtrash summary'
-aliases add tf 'gtrash find'
-aliases add tr 'gtrash restore'
+aliases add tr 'gtrash put -v'
+aliases add trs 'gtrash summary'
+aliases add trf 'gtrash find'
+aliases add trr 'gtrash restore'
+aliases add trl 'gtrash find -n 1 --restore -f'
 aliases add trg 'gtrash restore-group'
 
 aliases add ad 'ouch decompress'
@@ -58,4 +59,3 @@ aliases add hostfile 'eval sudo $EDITOR /etc/hosts'
 aliases add editssh 'eval $EDITOR ~/.ssh'
 aliases add lssh 'grep -w -i Host ~/.ssh/config | sed s/Host//'
 
-# TODO: move aliases and abbrs to separate directories

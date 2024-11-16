@@ -4,21 +4,17 @@
 palette = "catppuccin_macchiato"
 add_newline = true
 
-format = """$character$os$all
-"""
-
-[character]
-format = ''
+format = """$os$all$character"""
 
 [username]
 style_user = "white"
 style_root = "white"
 format = "[$user]($style) "
 disabled = false
-show_always = true
+show_always = false
 
 [hostname]
-# ssh_only = true
+ssh_only = true
 ssh_symbol = " "
 format = "on [$hostname](bold yellow) "
 disabled = true
@@ -54,12 +50,12 @@ renamed = ''
 deleted = ''
 
 [os]
-format = '[$symbol](bold white) '
+format = '$symbol '
 disabled = false
 
 [package]
 symbol = "󰏗 "
-
+disabled = true
 
 [kubernetes]
 format = 'via [ﴱ $context\($namespace\)](bold purple) '

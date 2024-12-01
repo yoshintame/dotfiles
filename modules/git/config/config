@@ -217,3 +217,9 @@
 	path = ~/.gitconfig.local
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[includeIf "gitdir:~/Development/work/sber/"]
+    path = ~/.config/git/config-sber
+
+[includeIf "gitdir:~/Development/work/vtb/"]
+    path = ~/.config/git/config-vtb

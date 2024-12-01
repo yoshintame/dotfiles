@@ -1,3 +1,5 @@
 .DS_Store
 .clj-kondo
 .lsp
+modules/git/config/config-sber
+modules/git/config/config-vtb

@@ -1,8 +1,12 @@
 {
   "dependencies": {
-    "eslint": "^9.7.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.9.0",
+    "lighthouse": "^12.2.0",
     "npm-check": "^6.0.1",
+    "oclif": "^4.15.28",
+    "openapi-typescript": "^7.4.3",
     "prettier": "^3.3.3",
-    "tsx": "^4.16.2"
+    "tsx": "^4.17.0"
   }
 }

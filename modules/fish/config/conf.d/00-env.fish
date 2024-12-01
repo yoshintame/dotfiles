@@ -51,6 +51,9 @@ set -gx DOTFILES_CONFIG $DOTFILES/os/macos/module.yaml
 # GRC
 set -gx grc_plugin_ignore_execs ls
 
+# Mise
+set -gx MISE_ENV_FILE .env
+
 # Fish
 set -gx aliases_path $__fish_config_dir/aliases
 set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[2..]

@@ -126,6 +126,10 @@ wp-content/themes/twenty*/
 *.sql
 *.sqlite
 
+
+### mise ###
+mise.local.toml
+
 ### Go ###
 *.exe
 *.exe~

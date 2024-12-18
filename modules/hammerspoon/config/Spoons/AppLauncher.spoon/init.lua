@@ -29,12 +29,17 @@ function M:bindHotkeys(mapping)
             local mods = keyInfo[1]
             local key = keyInfo[2]
             local isWarp = keyInfo.isWarp
+            local keyboardLayout = keyInfo.keyboardLayout
 
             hs.hotkey.bind(mods, key, function()
                 if isWarp then
                     self:launchOrFocusWarpApp(app)
                 else
                     self:launchOrFocusApp(app)
+                end
+
+                if keyboardLayout then
+                    hs.keycodes.setLayout(keyboardLayout)
                 end
             end)
         end

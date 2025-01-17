@@ -1,0 +1,33 @@
+# Appearance
+theme = tokyo-night
+background-opacity = 0.75
+background-blur-radius = 50
+window-padding-y = 2,0
+window-padding-x = 6,6
+# window-decoration = false
+macos-titlebar-style = hidden
+cursor-style = bar
+background = #000000
+foreground = #deddda
+
+# Font
+font-size = 16
+font-family = GeistMono Nerd Font Mono
+
+# Behaviors
+confirm-close-surface = false
+
+# Keybindings
+keybind = super+t=esc
+keybind = super+w=esc:text
+
+keybind = super+1=esc:text
+keybind = super+2=esc:text
+keybind = super+3=esc:text
+keybind = super+4=esc:text
+keybind = super+5=esc:text
+keybind = super+6=esc:text
+keybind = super+7=esc:text
+keybind = super+8=esc:text
+keybind = super+9=esc:text
+

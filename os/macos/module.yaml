@@ -99,3 +99,6 @@
     ~/.config/tmux/:
       path: modules/tmux/config/**
       glob: true
+
+    # ghostty
+    ~/.config/ghostty: modules/ghostty/config

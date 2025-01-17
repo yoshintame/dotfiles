@@ -30,10 +30,12 @@ abbr nprt "npm run test"
 
 abbr pn "pnpm"
 abbr pni "pnpm install"
+abbr pnig "pnpm install --global"
 abbr pnd "pnpm uninstall"
 abbr pnu "pnpm update"
 abbr pnl "pnpm list"
-abbr pnlg 'pnpm list -g'
+abbr pnlg 'pnpm list --global'
+abbr pnt "pnpm run test"
 abbr pnr "pnpm run"
 abbr pnrd "pnpm run dev"
 abbr pnrs "pnpm run start"

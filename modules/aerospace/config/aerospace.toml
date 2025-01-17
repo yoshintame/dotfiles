@@ -5,13 +5,15 @@ accordion-padding = 0
 default-root-container-layout = 'accordion'
 default-root-container-orientation = 'auto'
 
-[gaps]
-inner.horizontal = 0
-inner.vertical =   0
-outer.left =       0
-outer.bottom =     0
-outer.top =        0
-outer.right =      0
+[gaps.inner]
+horizontal = 0
+vertical = 0
+
+[gaps.outer]
+left = 0
+bottom = 0
+top = 0
+right = 0
 
 [mode.main.binding]
 alt-shift-semicolon = 'mode service'
@@ -20,3 +22,5 @@ alt-shift-semicolon = 'mode service'
 esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 backspace = ['close-all-windows-but-current', 'mode main']
+comma = 'layout accordion'
+

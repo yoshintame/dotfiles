@@ -1,33 +1,67 @@
-$schema": "https://json-schema.org/draft/2020-12/schema"
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+notARepository: "skip"
+promptToReturnFromSubprocess: false
 
 gui:
+  nerdFontsVersion: "3"
+  skipDiscardChangeWarning: false
+  skipStashWarning: true
+  skipNoStagedFilesWarning: false
+  commitLength:
+    show: true
+  scrollHeight: 1
+  scrollOffMargin: 5
+  windowSize: half
   showPanelJumps: false
   showRandomTip: false
-  nerdFontsVersion: "3"
-  windowSize: half
   statusPanelView: allBranchesLog
+  showBottomLine: false
+  commandLogSize: 2
 
 git:
+  log:
+    showGraph: always
+    showWholeGraph: false
+  branchLogCmd:
+    'git log --graph --color=always --abbrev-commit --decorate --date=relative
+    --pretty=format:"%C(auto)%h: %s (%C(blue)%an %C(white)|
+    %C(cyan)%ad%C(white))" {{branchName}} --'
+
   paging:
     # Delta
-    pager: delta --paging=never
+    pager: delta --dark --paging=never
 
-    # # Difftastic
+    # Difftastic
     # externalDiffCommand: difft --color=always --display=inline
+  skipHookPrefix: WIP
+  overrideGpg: true
 
 os:
   edit: "$EDITOR {{filename}}"
   editAtLine: "$EDITOR -g --block {{filename}}:{{line}}"
   editInTerminal: false
-  openDirInEditor: '$EDITOR {{dir}}'
+  openDirInEditor: "$EDITOR {{dir}}"
   open: "open {{filename}}"
 
 keybinding:
   universal:
+    # return: <left> TODO: problem with text inputs
     goInto: <right>
+    prevBlock: <disabled>
     nextBlock: <disabled>
 
 customCommands:
+  - key: "R"
+    command: "gh repo view --web"
+    description: "view repo on github"
+    context: "global"
+    loadingText: "opening github..."
+    subprocess: false
+
+  - key: "F"
+    command: "git push --force-with-lease --no-verify"
+    context: "localBranches"
+
   # Commit with commitizen
   - key: "C"
     command: 'git commit -m "{{ .Form.Type }}{{if .Form.Scopes}}({{ .Form.Scopes }}){{end}}: {{ .Form.Description }}"'
@@ -38,38 +72,27 @@ customCommands:
         title: "Select the type of change you are committing."
         key: "Type"
         options:
-          - name: "Feature"
-            description: "a new feature"
+          - name: "feat"
             value: "feat"
-          - name: "Code Refactoring"
-            description: "A code change that neither fixes a bug nor adds a feature"
+          - name: "refactor"
             value: "refactor"
-          - name: "Fix"
-            description: "a bug fix"
+          - name: "fix"
             value: "fix"
-          - name: "Chores"
-            description: "Other changes that don't modify src or test files"
+          - name: "chore"
             value: "chore"
-          - name: "Tests"
-            description: "Adding missing tests or correcting existing tests"
+          - name: "test"
             value: "test"
-          - name: "Builds"
-            description: "Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)"
+          - name: "build"
             value: "build"
-          - name: "Continuous Integration"
-            description: "Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)"
+          - name: "ci"
             value: "ci"
-          - name: "Documentation"
-            description: "Documentation only changes"
+          - name: "docs"
             value: "docs"
-          - name: "Styles"
-            description: "Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)"
+          - name: "style"
             value: "style"
-          - name: "Performance Improvements"
-            description: "A code change that improves performance"
+          - name: "perf"
             value: "perf"
-          - name: "Reverts"
-            description: "Reverts a previous commit"
+          - name: "revert"
             value: "revert"
       - type: "input"
         title: "Enter the scope(s) of this change."

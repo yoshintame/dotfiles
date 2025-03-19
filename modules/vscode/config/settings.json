@@ -427,8 +427,12 @@
     "launchpad": false
   },
   "gitlens.graph.dimMergeCommits": true,
-  "console-ninja.featureSet": "Community",
-
+  "console-ninja.featureSet": "Pro",
+  "jest.runMode": {
+    "type": "on-demand",
+    "deferred": true
+  },
+  
   // File nesting
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,

@@ -1,50 +1,101 @@
 [
+  // Task
   {
-    "key": "cmd+shift+r",
-    "command": "workbench.action.reloadWindow",
-    "when": "editorTextFocus"
-  },
-  {
-    "key": "cmd+r",
+    "key": "cmd+t",
     "command": "workbench.action.tasks.runTask"
   },
+
+  // Git Project Manager
   {
-    "key": "cmd+j",
-    "command": "workbench.action.togglePanel"
+    "key": "shift+cmd+o",
+    "command": "gitProjectManager.openProjectNewWindow"
   },
   {
-    "key": "cmd+shift+o",
-    "command": "projectManager.listGitProjects#sideBarGit"
+    "key": "alt+cmd+n",
+    "command": "-gitProjectManager.openProjectNewWindow"
   },
 
-  // File actions
-  //   {
-  //     "key": "cmd+shift+m",
-  //     "command": "fileutils.moveFile"
-  //   },
-  //   {
-  //     "key": "cmd+shift+r",
-  //     "command": "fileutils.renameFile"
-  //   },
-  //   {
-  //     "key": "cmd+shift+n",
-  //     "command": "fileutils.newFile"
-  //   },
-
-  // Explorer
+  // Toggle Maximized Panel Terminal
   {
-    "key": "cmd+shift+e",
-    "command": "workbench.action.toggleSidebarVisibility"
+    "key": "cmd+e",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.toggleMaximizedPanel",
+        "workbench.action.terminal.focus"
+      ]
+    }
   },
   {
     "key": "cmd+e",
-    "command": "workbench.action.toggleSidebarVisibility"
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.toggleMaximizedPanel",
+        "workbench.action.closePanel"
+      ]
+    },
+    "when": "focusedView == terminal"
+  },
+
+  // Terminal tab actions
+  {
+    "key": "cmd+t",
+    "command": "workbench.action.terminal.new",
+    "when": "focusedView == terminal"
   },
   {
-    "key": "cmd+e",
-    "command": "workbench.files.action.focusFilesExplorer",
-    "when": "editorTextFocus"
+    "key": "cmd+w",
+    "command": "workbench.action.terminal.kill",
+    "when": "focusedView == terminal"
   },
+  {
+    "key": "cmd+1",
+    "command": "workbench.action.terminal.focusAtIndex1",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+2",
+    "command": "workbench.action.terminal.focusAtIndex2",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+3",
+    "command": "workbench.action.terminal.focusAtIndex3",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+4",
+    "command": "workbench.action.terminal.focusAtIndex4",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+5",
+    "command": "workbench.action.terminal.focusAtIndex5",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+6",
+    "command": "workbench.action.terminal.focusAtIndex6",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+7",
+    "command": "workbench.action.terminal.focusAtIndex7",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+8",
+    "command": "workbench.action.terminal.focusAtIndex8",
+    "when": "focusedView == terminal"
+  },
+  {
+    "key": "cmd+9",
+    "command": "workbench.action.terminal.focusAtIndex9",
+    "when": "focusedView == terminal"
+  },
+
+  // Explorer file/folder actions
   {
     "key": "n",
     "command": "explorer.newFile",
@@ -53,7 +104,7 @@
   {
     "key": "shift+n",
     "command": "explorer.newFolder",
-    "when": "explorerViewletFocus"
+    "when": "explorerViewletFocus && !inputFocus"
   },
   {
     "key": "r",
@@ -61,7 +112,7 @@
     "when": "filesExplorerFocus && !inputFocus"
   },
   {
-    "key": "c",
+    "key": "y",
     "command": "filesExplorer.copy",
     "when": "filesExplorerFocus && !inputFocus"
   },
@@ -78,16 +129,33 @@
 
   // Other
   {
-    "command": "-editor.action.selectAll",
-    "key": "cmd+a"
-  },
-  {
-    "command": "editor.action.selectAll",
-    "key": "cmd+a"
-  },
-  {
     "key": "enter",
     "command": "closeFindWidget",
     "when": "editorFocus && findWidgetVisible && !isComposing"
+  },
+
+  // Rename symbol
+  {
+    "key": "cmd+r",
+    "command": "editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "f2",
+    "command": "-editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+
+  // Refactor
+  {
+    "key": "shift+cmd+r",
+    "command": "editor.action.refactor",
+    "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly"
+  },
+
+  // Restart vscode
+  {
+    "key": "shift+alt+r",
+    "command": "workbench.action.reloadWindow"
   }
 ]

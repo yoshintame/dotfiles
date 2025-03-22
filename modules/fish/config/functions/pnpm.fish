@@ -8,22 +8,26 @@ function run_pnpm_run_dev_or_start
         return
     end
 
-    set -l has_dev (test (jq -r '.scripts.dev' package.json) != "null")
-    set -l has_start (test (jq -r '.scripts.start' package.json) != "null")
+    set -l dev_exists 0
+    test (jq -r '.scripts.dev' package.json) != "null"
+    and set dev_exists 1
 
-    if test $has_dev -a $has_start
+    set -l start_exists 0
+    test (jq -r '.scripts.start' package.json) != "null"
+    and set start_exists 1
+
+    if test $dev_exists -eq 1 -a $start_exists -eq 1
         echo "Warning: Both 'dev' and 'start' scripts found in package.json"
         command pnpm $argv
-    else if test $has_dev
+    else if test $dev_exists -eq 1
         command pnpm run dev
-    else if test $has_start
+    else if test $start_exists -eq 1
         command pnpm run start
     else
         echo "Warning: Neither 'dev' nor 'start' scripts found in package.json"
         command pnpm $argv
     end
 end
-
 function pnpm --wraps='command pnpm' --description 'Wrapper for the pnpm command with additional functionality'
     switch (count $argv)
         case 1

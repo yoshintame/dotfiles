@@ -10,8 +10,8 @@ spoon.AppLauncher:bindHotkeys({
     ["1password"]          = { { "alt"                  }, "1" },
 
     ["Telegram"]           = { { "alt"                  }, "Q" },
-    ["Kitty"]              = { { "alt"                  }, "W"  ,  keyboardLayout = "ABC" },
-    ["Warp"]               = { { "alt", "shift"         }, "W" },
+    ["Warp"]               = { { "alt"                  }, "W"  ,  keyboardLayout = "ABC" },
+    ["Kitty"]              = { { "alt", "shift"         }, "W" },
     ["Things3"]            = { { "alt"                  }, "E" },
     ["Finder"]             = { { "alt", "shift"         }, "E" },
     ["System Settings"]    = { { "alt"                  }, "R" },

@@ -6,7 +6,7 @@
 ratio          = [ 1, 2, 3 ]
 sort_by        = "alphabetical"
 sort_sensitive = false
-sort_reverse 	 = false
+sort_reverse   = false
 sort_dir_first = true
 sort_translit  = false
 linemode       = "none"
@@ -14,12 +14,15 @@ show_hidden    = true
 show_symlink   = true
 scrolloff      = 5
 mouse_events   = [ "click", "scroll" ]
+title_format   = "Yazi: {cwd}"
 
 [preview]
+wrap            = "no"
 tab_size        = 2
 max_width       = 600
 max_height      = 900
 cache_dir       = ""
+image_delay     = 30
 image_filter    = "triangle"
 image_quality   = 75
 sixel_fraction  = 15
@@ -31,6 +34,8 @@ ueberzug_offset = [ 0, 0, 0, 0 ]
 edit = [
     { run = '${EDITOR:=vi} "$0"', desc = "Editor", for = "macos" },
     { run = '${EDITOR:=vi} "$@"', desc = "Editor (all)", for = "macos" },
+    { run = 'code %*',    orphan = true, desc = "code",           for = "windows" },
+	{ run = 'code -w %*', block = true,  desc = "code (block)",   for = "windows" },
 ]
 open = [
 	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
@@ -77,7 +82,7 @@ rules = [
 	{ mime = "*/javascript", use = [ "edit", "reveal" ] },
 
     # Empty file
-	{ mime = "inode/x-empty", use = [ "edit", "reveal" ] },
+	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
 
     # Fallback
 	{ mime = "*", use = [ "open", "reveal" ] },
@@ -93,7 +98,6 @@ suppress_preload = false
 
 
 [plugin]
-
 fetchers = [
 	# Mimetype
 	{ id = "mime", name = "*", run = "mime", if = "!mime", prio = "high" },
@@ -101,6 +105,19 @@ fetchers = [
     # Git
     { id = "git",   name = "*",     run  = "git"},
     { id = "git",   name = "*/",    run  = "git"}
+]
+spotters = [
+	{ name = "*/", run = "folder" },
+	# Code
+	{ mime = "text/*", run = "code" },
+	{ mime = "application/{mbox,javascript,wine-extension-ini}", run = "code" },
+	# Image
+	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+	{ mime = "image/*", run = "image" },
+	# Video
+	{ mime = "video/*", run = "video" },
+	# Fallback
+	{ name = "*", run = "file" },
 ]
 preloaders = [
 	# Image
@@ -112,15 +129,15 @@ preloaders = [
 	{ mime = "application/pdf", run = "pdf" },
 	# Font
 	{ mime = "font/*", run = "font" },
-	{ mime = "application/vnd.ms-opentype", run = "font" },
+	{ mime = "application/ms-opentype", run = "font" },
 ]
 previewers = [
 	{ name = "*/", run = "folder", sync = true },
     # Markdown
     { name = "*.md", run = "glow" },
 	# Code
-	{ mime = "text/*", run = "code" },
-	{ mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
+    { mime = "text/*", run = "code" },
+	{ mime = "application/{mbox,javascript,wine-extension-ini}", run = "code" },
 	# JSON
 	{ mime = "application/{json,x-ndjson}", run = "json" },
 	# Image
@@ -135,7 +152,9 @@ previewers = [
 	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar,iso9660-image}", run = "ouch" },
 	# Font
 	{ mime = "font/*", run = "font" },
-	{ mime = "application/vnd.ms-opentype", run = "font" },
+    { mime = "application/ms-opentype", run = "font" },
+    # Empty file
+	{ mime = "inode/empty", run = "empty" },
 	# Fallback
 	{ name = "*", run = "file" },
 ]
@@ -149,7 +168,7 @@ cd_origin = "top-center"
 cd_offset = [ 0, 2, 50, 3 ]
 
 # create
-create_title  = "Create:"
+create_title  = [ "Create:", "Create (dir):" ]
 create_origin = "top-center"
 create_offset = [ 0, 2, 50, 3 ]
 
@@ -198,10 +217,28 @@ quit_title  = "{n} task{s} running, sure to quit? (y/N)"
 quit_origin = "top-center"
 quit_offset = [ 0, 2, 50, 3 ]
 
-[select]
-open_title  = "Open with:"
-open_origin = "hovered"
-open_offset = [ 0, 1, 50, 7 ]
+[confirm]
+# trash
+trash_title 	= "Trash {n} selected file{s}?"
+trash_origin	= "center"
+trash_offset	= [ 0, 0, 70, 20 ]
+
+# delete
+delete_title 	= "Permanently delete {n} selected file{s}?"
+delete_origin	= "center"
+delete_offset	= [ 0, 0, 70, 20 ]
+
+# overwrite
+overwrite_title   = "Overwrite file?"
+overwrite_content = "Will overwrite the following file:"
+overwrite_origin  = "center"
+overwrite_offset  = [ 0, 0, 50, 15 ]
+
+# quit
+quit_title   = "Quit?"
+quit_content = "The following tasks are still running, are you sure you want to quit?"
+quit_origin  = "center"
+quit_offset  = [ 0, 0, 50, 15 ]
 
 [which]
 sort_by        = "none"
@@ -209,5 +246,3 @@ sort_sensitive = false
 sort_reverse   = false
 sort_translit  = false
 
-[log]
-enabled = false

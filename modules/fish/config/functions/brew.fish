@@ -19,7 +19,7 @@ function brew --wraps='command brew' --description 'Wrapper for the brew command
         switch $args[1]
             case 'install'
                 if test (count $args) -eq 1
-                    brew bundle install --cleanup --file=~/.config/packages/Brewfile --no-lock $flags
+                    brew bundle install --cleanup --file=~/.config/packages/Brewfile $flags
                 else
                     command brew install $args[2..-1]
                     brew bundle dump --file=~/.config/packages/Brewfile --force

@@ -157,5 +157,27 @@
   {
     "key": "shift+alt+r",
     "command": "workbench.action.reloadWindow"
+  },
+
+  // Find by arrows
+  {
+    "key": "alt+down",
+    "command": "-history.showNext",
+    "when": "historyNavigationForwardsEnabled && historyNavigationWidgetFocus && !isComposing && !suggestWidgetVisible"
+  },
+  {
+    "key": "alt+down",
+    "command": "editor.action.nextMatchFindAction",
+    "when": "historyNavigationForwardsEnabled && historyNavigationWidgetFocus && !isComposing && !suggestWidgetVisible"
+  },
+  {
+    "key": "alt+up",
+    "command": "-history.showPrevious",
+    "when": "historyNavigationBackwardsEnabled && historyNavigationWidgetFocus && !isComposing && !suggestWidgetVisible"
+  },
+  {
+    "key": "alt+up",
+    "command": "editor.action.previousMatchFindAction",
+    "when": "historyNavigationBackwardsEnabled && historyNavigationWidgetFocus && !isComposing && !suggestWidgetVisible"
   }
 ]

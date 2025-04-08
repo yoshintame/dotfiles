@@ -83,6 +83,26 @@ abbr dc "docker compose"
 abbr py "python"
 abbr pyi "pip install"
 
+abbr p "uv"
+abbr pr "uv run"
+abbr pini "uv init"
+abbr pa "uv add"
+abbr pd "uv remove"
+abbr ps "uv sync"
+abbr pl "uv lock"
+abbr pe "uv export"
+abbr pt "uv tree"
+abbr ptl "uv tool"
+abbr ppy "uv python"
+abbr pp "uv pip"
+abbr pv "uv venv"
+abbr pb "uv build"
+abbr ppu "uv publish"
+abbr pc "uv cache"
+abbr psf "uv self"
+abbr pver "uv version"
+abbr ph "uv help"
+
 # utils
 abbr --add sp speedtest
 abbr --add cl clear

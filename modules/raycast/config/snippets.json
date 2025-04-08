@@ -1,0 +1,332 @@
+[
+  {
+    "keyword": "!cmd",
+    "name": "Command",
+    "text": "⌘"
+  },
+  {
+    "keyword": "!caps",
+    "name": "Caps Lock",
+    "text": "⇪"
+  },
+  {
+    "keyword": "!shift",
+    "name": "Shift",
+    "text": "⇧"
+  },
+  {
+    "keyword": "!opt",
+    "name": "Option",
+    "text": "⌥"
+  },
+  {
+    "keyword": "!ctrl",
+    "name": "Control",
+    "text": "⌃"
+  },
+  {
+    "keyword": "!backspace",
+    "name": "Backspace",
+    "text": "⌫"
+  },
+  {
+    "keyword": "!esc",
+    "name": "Escape",
+    "text": "⎋"
+  },
+  {
+    "keyword": "!tab",
+    "name": "Tab",
+    "text": "⇥"
+  },
+  {
+    "keyword": "!return",
+    "name": "Return",
+    "text": "⏎"
+  },
+  {
+    "keyword": "!apple",
+    "name": "Apple",
+    "text": ""
+  },
+  {
+    "keyword": "!dot",
+    "name": "Middle Dot",
+    "text": "·"
+  },
+  {
+    "keyword": "!circle",
+    "name": "Circle",
+    "text": "●"
+  },
+  {
+    "keyword": "!x",
+    "name": "Multiplication",
+    "text": "×"
+  },
+  {
+    "keyword": "!division",
+    "name": "Division",
+    "text": "÷"
+  },
+  {
+    "keyword": "!+-",
+    "name": "Plus Minus",
+    "text": "±"
+  },
+  {
+    "keyword": "!left",
+    "name": "Arrow Left",
+    "text": "←"
+  },
+  {
+    "keyword": "!up",
+    "name": "Arrow Up",
+    "text": "↑"
+  },
+  {
+    "keyword": "!right",
+    "name": "Arrow Right",
+    "text": "→"
+  },
+  {
+    "keyword": "!down",
+    "name": "Arrow Down",
+    "text": "↓"
+  },
+  {
+    "keyword": "!upleft",
+    "name": "Arrow Up Left",
+    "text": "↖"
+  },
+  {
+    "keyword": "!upright",
+    "name": "Arrow Up Right",
+    "text": "↗︎"
+  },
+  {
+    "keyword": "!downleft",
+    "name": "Arrow Down Left",
+    "text": "↙"
+  },
+  {
+    "keyword": "!downright",
+    "name": "Arrow Down Right",
+    "text": "↘"
+  },
+  {
+    "keyword": "!longright",
+    "name": "Arrow Long Right",
+    "text": "⟶"
+  },
+  {
+    "keyword": "!longleft",
+    "name": "Arrow Long Left",
+    "text": "⟵"
+  },
+  {
+    "keyword": "!undo",
+    "name": "Undo",
+    "text": "↺"
+  },
+  {
+    "keyword": "!redo",
+    "name": "Redo",
+    "text": "↻"
+  },
+
+  {
+    "keyword": "!date",
+    "name": "Current Date",
+    "text": "The date is {date}."
+  },
+  {
+    "keyword": "!time",
+    "name": "Current Time",
+    "text": "The current time is {time}."
+  },
+  {
+    "keyword": "!datetime",
+    "name": "Current Date and Time",
+    "text": "The current date and time is {datetime}."
+  },
+  {
+    "keyword": "!day",
+    "name": "Weekday",
+    "text": "Today is {day}."
+  },
+  {
+    "keyword": "!nextyear",
+    "name": "1 Year from Today",
+    "text": "1 year from today will be {day +1y}."
+  },
+  {
+    "keyword": "!day+4",
+    "name": "4 Days from Today",
+    "text": "4 days from today will be {day +4d}."
+  },
+  {
+    "keyword": "!wn",
+    "name": "Week Number",
+    "text": "This week number is {date \"w\"}."
+  },
+  {
+    "keyword": "!nwk",
+    "name": "Next Week Number",
+    "text": "Next week number is {date +7d \"w\"}."
+  },
+  {
+    "keyword": "!gbp",
+    "name": "Sterling",
+    "text": "£"
+  },
+  {
+    "keyword": "!eur",
+    "name": "Euro",
+    "text": "€"
+  },
+  {
+    "keyword": "!yen",
+    "name": "Yen",
+    "text": "¥"
+  },
+  {
+    "keyword": "!usd",
+    "name": "Dollar",
+    "text": "$"
+  },
+  {
+    "keyword": "!inr",
+    "name": "Indian Rupee",
+    "text": "₹"
+  },
+  {
+    "keyword": "!fr",
+    "name": "Franc",
+    "text": "₣"
+  },
+  {
+    "keyword": "!krw",
+    "name": "Won",
+    "text": "₩"
+  },
+  {
+    "keyword": "!php",
+    "name": "Peso",
+    "text": "₱"
+  },
+  {
+    "keyword": "!ngn",
+    "name": "Naira",
+    "text": "₦"
+  },
+  {
+    "keyword": "!thb",
+    "name": "Baht",
+    "text": "฿"
+  },
+  {
+    "keyword": "!vnd",
+    "name": "Dong",
+    "text": "₫"
+  },
+  {
+    "keyword": "!btc",
+    "name": "Bitcoin",
+    "text": "₿"
+  },
+  {
+    "keyword": "!eth",
+    "name": "Ethereum",
+    "text": "Ξ"
+  },
+
+  {
+    "keyword": "!pasgen",
+    "name": "Password gen",
+    "text": "{uuid}"
+  },
+
+  {
+    "keyword": "!bd",
+    "name": "Birthday",
+    "text": "24.08.2001"
+  },
+  {
+    "keyword": "!fullnr",
+    "name": "Full Name",
+    "text": "Иванов Михаил Андреевич"
+  },
+  {
+    "keyword": "!fnr",
+    "name": "First Name",
+    "text": "Михаил"
+  },
+  {
+    "keyword": "!lnr",
+    "name": "Last Name",
+    "text": "Иванов"
+  },
+  {
+    "keyword": "!mnr",
+    "name": "Middle Name",
+    "text": "Андреевич"
+  },
+  {
+    "keyword": "!inr",
+    "name": "Name with initials",
+    "text": "Иванов М.А."
+  },
+  {
+    "keyword": "!fullne",
+    "name": "Full Name",
+    "text": "Mikhail Ivanov Andreevich"
+  },
+  {
+    "keyword": "!fne",
+    "name": "First Name",
+    "text": "Mikhail"
+  },
+  {
+    "keyword": "!lne",
+    "name": "Last Name",
+    "text": "Ivanov"
+  },
+  {
+    "keyword": "!mne",
+    "name": "Middle Name",
+    "text": "Andreevich"
+  },
+  {
+    "keyword": "!ine",
+    "name": "Name with initials",
+    "text": "Ivanov M.A."
+  },
+  {
+    "keyword": "!un",
+    "name": "Username",
+    "text": "yoshintame"
+  },
+  {
+    "keyword": "!gm1",
+    "name": "Email (gmail main)",
+    "text": "m.ivanov0427@gmail.com"
+  },
+  {
+    "keyword": "!gm2",
+    "name": "Email (google secondary)",
+    "text": "ursus.michael@gmail.com"
+  },
+  {
+    "keyword": "!pnr",
+    "name": "Phone number",
+    "text": "+79162999311"
+  },
+  {
+    "keyword": "!pnt",
+    "name": "Phone number",
+    "text": "0991671150"
+  }
+]
+
+

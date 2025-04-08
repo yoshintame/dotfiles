@@ -16,6 +16,24 @@ abbr brd "brew dump"
 abbr brup "brew update && brew upgrade && brew cleanup"
 
 # node
+abbr n "bun"
+abbr na "bun add"
+abbr nini "bun init"
+abbr ni "bun install"
+abbr nig "bun install --global"
+abbr nd "bun remove"
+abbr nu "bun update"
+abbr nb "bun bundle"
+abbr nl 'bun pm ls'
+abbr nlg 'bun pm ls -g'
+abbr nr 'bun run'
+abbr nrd "bun run dev"
+abbr nrs "bun run start"
+abbr nrb "bun run build"
+abbr nrl "bun run lint"
+abbr nrt "bun run typecheck"
+abbr nx "bun x"
+
 abbr np "npm"
 abbr npi "npm install"
 abbr npd "npm uninstall"
@@ -44,17 +62,6 @@ abbr pnrt "pnpm run test"
 abbr pnrl "pnpm run lint"
 abbr pnrt "pnpm run typecheck"
 abbr pnx "pnpx"
-
-abbr bu "bun"
-abbr bui "bun install"
-abbr bud "bun remove"
-abbr buu "bun update"
-abbr bulg 'bun pm ls'
-abbr bulg 'bun pm ls -g'
-abbr burd "bun run dev"
-abbr burs "bun run start"
-abbr burb "bun run build"
-abbr burt "bun test"
 
 # fisher
 abbr fi "fisher"

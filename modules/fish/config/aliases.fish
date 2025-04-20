@@ -11,6 +11,10 @@ aliases add l "eza -a --group --header --group-directories-first --git --icons -
 aliases add lo "eza -a --group --header --group-directories-first --git --icons --oneline --hyperlink"
 aliases add la "eza -a --group --header --group-directories-first --git --icons --oneline --hyperlink"
 aliases add ll "eza -a --group --header --group-directories-first --git --icons --long --hyperlink"
+aliases add lt "eza -a --group --header --group-directories-first --git --icons --tree --hyperlink"
+aliases add lt1 "eza -a --group --header --group-directories-first --git --icons --tree --level=1 --hyperlink"
+aliases add lt2 "eza -a --group --header --group-directories-first --git --icons --tree --level=2 --hyperlink"
+aliases add lt3 "eza -a --group --header --group-directories-first --git --icons --tree --level=3 --hyperlink"
 
 # file operations
 aliases add md 'mkdir -p'

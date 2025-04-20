@@ -3,17 +3,17 @@ if not status --is-interactive
 end
 
 # brew
-abbr br "brew"
-abbr bri "brew install"
-abbr bric "brew install --cask"
-abbr brd "brew uninstall"
-abbr brl "brew list"
-abbr bru "brew upgrade"
-abbr brud "brew update"
-abbr brs "brew search"
-abbr brsc "brew search --cask"
-abbr brd "brew dump"
-abbr brup "brew update && brew upgrade && brew cleanup"
+abbr b "brew"
+abbr bi "brew install"
+abbr bic "brew install --cask"
+abbr bd "brew uninstall"
+abbr bl "brew list"
+abbr bu "brew upgrade"
+abbr bud "brew update"
+abbr bs "brew search"
+abbr bsc "brew search --cask"
+abbr bp "brew dump"
+abbr bup "brew update && brew upgrade && brew cleanup"
 
 # node
 abbr n "bun"
@@ -104,5 +104,6 @@ abbr pver "uv version"
 abbr ph "uv help"
 
 # utils
-abbr --add sp speedtest
-abbr --add cl clear
+abbr sp speedtest
+abbr cl clear
+abbr ltl lt --level

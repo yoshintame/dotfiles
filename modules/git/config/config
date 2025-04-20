@@ -53,6 +53,8 @@
 [apply]
 	#Detect whitespace errors when applying a patch
 	whitespace = fix
+[push]
+	autoSetupRemote = true
 
 [alias]
 	#used the most by me
@@ -220,6 +222,9 @@
 	path = ~/.gitconfig.local
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[push]
+	autoSetupRemote = true
 
 [includeIf "gitdir:~/Development/work/sber/"]
     path = ~/.config/git/config-sber

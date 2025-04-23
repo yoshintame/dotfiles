@@ -4,7 +4,6 @@
   "custom-ui-style.electron": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "frame": false,
-    "vibrancy": "under-window",
     "visualEffectState": "active"
   },
   "custom-ui-style.font.sansSerif": "Cascadia Code, -apple-system",

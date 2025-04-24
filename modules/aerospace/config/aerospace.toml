@@ -1,4 +1,4 @@
-after-startup-command = ["aerospace layout accordion"]
+after-startup-command = ["layout accordion"]
 
 start-at-login = true
 

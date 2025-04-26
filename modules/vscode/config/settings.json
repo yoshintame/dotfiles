@@ -70,17 +70,6 @@
       "content": "\"EXPLORER\""
     }
   },
-  "apc.listRow": {
-    "height": 21
-  },
-  "apc.menubar.compact": true,
-  "apc.sidebar.titlebar": {
-    "fontSize": 12,
-    "height": 38
-  },
-  "apc.statusBar": {
-    "height": 24
-  },
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "editor.fontFamily": "FiraCode Nerd Font",
   "editor.fontLigatures": false,
@@ -98,7 +87,6 @@
   "window.commandCenter": false,
   "window.dialogStyle": "custom",
   "window.titleBarStyle": "native",
-  "workbench.LayoutControl.enabled": false,
 
   // Cursor
   "editor.cursorSmoothCaretAnimation": "on",
@@ -164,7 +152,6 @@
   "workbench.editor.limit.perEditorGroup": true,
   "workbench.editor.limit.value": 6,
   "workbench.list.smoothScrolling": true,
-  "workbench.startupEditor": "none",
   "workbench.tree.expandMode": "singleClick",
   "editor.suggest.showWords": false,
   "cursor.cpp.disabledLanguages": ["plaintext", "yaml"],
@@ -262,12 +249,6 @@
   "git.autoStash": true,
   "git.confirmSync": false,
   "git.openRepositoryInParentFolders": "always",
-  "github.copilot.enable": {
-    "*": true,
-    "markdown": true,
-    "plaintext": false,
-    "yaml": false
-  },
 
   // Exclude
   "files.exclude": {
@@ -287,10 +268,10 @@
     "**/.trunk/*plugins/": true,
     "**/cache": true,
     "**/db.json": true,
-    "**/dist": true,
+    "**/dist": false,
     "**/lcov-report": true,
     "**/node_modules": false,
-    "**/public": true,
+    "**/public": false,
     "**/rethinkdb_data": true,
     "**/test_assets": true,
     "**/tmp": true
@@ -319,7 +300,8 @@
     "**/.gitignore": true,
     "**/.vscodeignore": true,
     "**/bower_components": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/.specstory": false
   },
   "files.watcherExclude": {
     "**/.trunk/*actions/": true,
@@ -373,13 +355,6 @@
   "update.showReleaseNotes": false,
 
   // OTHER EXTENSIONS
-  "errorLens.fontStyleItalic": true,
-  "i18n-ally.autoDetection": false,
-  "i18n-ally.displayLanguage": "en",
-  "i18n-ally.ignoredLocales": [],
-  "iconify.annotations": true,
-  "iconify.inplace": true,
-  "projectManager.sortList": "Recent",
   "svg.preview.mode": "svg",
   "tailwind-fold.autoFold": false,
   "tailwind-fold.foldedText": "…",
@@ -395,19 +370,6 @@
   ],
   "projectNameInStatusBar.align": "left",
   "projectNameInStatusBar.alignPriority": 0,
-  "projectManager.git.ignoredFolders": [
-    "node_modules",
-    "out",
-    "typings",
-    "test",
-    ".haxelib",
-    ".Trash"
-  ],
-  "projectManager.git.maxDepthRecursion": 0,
-  "projectManager.showProjectNameInStatusBar": false,
-  "projectManager.ignoreProjectsWithinProjects": true,
-  "projectManager.showParentFolderInfoOnDuplicates": true,
-  "projectManager.git.baseFolders": ["~/Development", "~/.dotfiles"],
   "gitProjectManager.baseProjectsFolders": ["~/Development", "~/.dotfiles"],
   "gitProjectManager.maxDepthRecursion": 0,
   "gitProjectManager.openInNewWindow": true,
@@ -427,18 +389,23 @@
   },
   "gitlens.graph.dimMergeCommits": true,
   "console-ninja.featureSet": "Pro",
-  "jest.runMode": {
-    "type": "on-demand",
-    "deferred": true
-  },
   "semanticdiff.diff.contextLines": 30,
   "semanticdiff.closeOriginalTab": true,
+  "console-ninja.outputMode": "In View",
+  "console-ninja.dateTimeDisplayMode": "None",
+  "playwright.reuseBrowser": true,
+  "gitlens.gitCommands.skipConfirmations": [
+    "fetch:command",
+    "stash-push:command",
+    "stash-apply:command",
+    "switch:command"
+  ],
 
   // File nesting
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "//": "Last update at 07/04/2025, 10:00:35",
+    "//": "Last update at 24/04/2025, 18:21:18",
     ".clang-tidy": ".clang-format, .clangd, compile_commands.json",
     ".env": "*.env, .env.*, .envrc, env.d.ts",
     ".gitignore": ".gitattributes, .gitmodules, .gitmessage, .lfsconfig, .mailmap, .git-blame*",
@@ -598,6 +565,43 @@
       ]
     },
     {
+      "key": ",",
+      "name": "+Settings",
+      "type": "bindings",
+      "bindings": [
+        {
+          "key": "w",
+          "name": "Settings (UI)",
+          "type": "command",
+          "command": "workbench.action.openSettings",
+          "args": "ui"
+        },
+        {
+          "key": "s",
+          "name": "Settings (JSON)",
+          "type": "command",
+          "command": "workbench.action.openSettingsJson"
+        },
+        {
+          "key": "i",
+          "name": "Keybindings (UI)",
+          "type": "command",
+          "command": "workbench.action.openGlobalKeybindings"
+        },
+        {
+          "key": "k",
+          "name": "Keybindings (JSON)",
+          "type": "command",
+          "command": "workbench.action.openGlobalKeybindingsFile"
+        },
+        {
+          "key": "s",
+          "name": "Snippets",
+          "type": "command"
+        }
+      ]
+    },
+    {
       "key": "f",
       "name": "+File",
       "type": "bindings",
@@ -691,29 +695,147 @@
       "type": "bindings",
       "bindings": [
         {
+          "key": "s",
+          "name": "+Stash",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "l",
+              "name": "Apply latest",
+              "type": "command",
+              "command": "git.stashApplyLatest"
+            },
+            {
+              "key": "a",
+              "name": "Apply",
+              "type": "command",
+              "command": "gitlens.stashApply"
+            },
+            {
+              "key": "d",
+              "name": "Drop",
+              "type": "command",
+              "command": "gitlens.gitCommands.stash.drop"
+            },
+            {
+              "key": "p",
+              "name": "Pop",
+              "type": "command",
+              "command": "gitlens.gitCommands.stash.pop"
+            },
+            {
+              "key": "g",
+              "name": "stash staGed",
+              "type": "command",
+              "command": "git.stashStaged"
+            },
+            {
+              "key": "s",
+              "name": "Stash all",
+              "type": "command",
+              "command": "git.stashIncludeUntracked"
+            },
+            {
+              "key": "i",
+              "name": "lIst",
+              "type": "command",
+              "command": "gitlens.gitCommands.stash.list"
+            }
+          ]
+        },
+
+        {
+          "key": "p",
+          "name": "Push",
+          "type": "command",
+          "command": "git.push"
+        },
+        {
+          "key": "P",
+          "name": "Push force",
+          "type": "command",
+          "command": "gitlens.pushRepositories"
+        },
+
+        {
+          "key": "l",
+          "name": "Pull",
+          "type": "command",
+          "command": "git.pull"
+        },
+        {
+          "key": "L",
+          "name": "Pull (with rebase)",
+          "type": "command",
+          "command": "git.pullRebase"
+        },
+
+        {
           "key": "b",
-          "name": "Checkout",
-          "type": "command",
-          "command": "git.checkout"
+          "name": "+Branch",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "s",
+              "name": "Switch",
+              "type": "command",
+              "command": "gitlens.gitCommands.switch"
+            },
+            {
+              "key": "c",
+              "name": "Create",
+              "type": "command",
+              "command": "gitlens.gitCommands.branch.create"
+            },
+            {
+              "key": "r",
+              "name": "Rename",
+              "type": "command",
+              "command": "gitlens.gitCommands.branch.rename"
+            },
+            {
+              "key": "d",
+              "name": "Delete",
+              "type": "command",
+              "command": "gitlens.gitCommands.branch.delete"
+            },
+            {
+              "key": "p",
+              "name": "Prune",
+              "type": "command",
+              "command": "gitlens.gitCommands.branch.prune"
+            }
+          ]
         },
+
         {
-          "key": "c",
-          "name": "Commit",
-          "type": "command",
-          "command": "git.commit"
+          "key": "r",
+          "name": "+Remote",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "b",
+              "name": "Open branch",
+              "type": "command",
+              "command": "gitlens.gitCommands.switch"
+            }
+          ]
         },
-        {
-          "key": "d",
-          "name": "Delete Branch",
-          "type": "command",
-          "command": "git.deleteBranch"
-        },
+
         {
           "key": "f",
           "name": "Fetch",
           "type": "command",
           "command": "git.fetch"
         },
+
+        {
+          "key": "c",
+          "name": "Commit",
+          "type": "command",
+          "command": "git.commit"
+        },
+
         {
           "key": "i",
           "name": "Init",
@@ -725,24 +847,6 @@
           "name": "Merge",
           "type": "command",
           "command": "git.merge"
-        },
-        {
-          "key": "s",
-          "name": "Status",
-          "type": "command",
-          "command": "workbench.view.scm"
-        },
-        {
-          "key": "S",
-          "name": "Stage",
-          "type": "command",
-          "command": "git.stage"
-        },
-        {
-          "key": "U",
-          "name": "Unstage",
-          "type": "command",
-          "command": "git.unstage"
         }
       ]
     },
@@ -1011,7 +1115,7 @@
           "command": "workbench.action.splitEditorDown"
         },
         {
-          "key": "/",
+          "key": "\\",
           "name": "Split editor right",
           "type": "command",
           "command": "workbench.action.splitEditor"
@@ -1107,13 +1211,7 @@
           "command": "workbench.action.joinAllGroups"
         },
         {
-          "key": "d",
-          "name": "Close editor group",
-          "type": "command",
-          "command": "workbench.action.closeEditorsInGroup"
-        },
-        {
-          "key": "x",
+          "key": "w",
           "name": "Close all editor groups",
           "type": "command",
           "command": "workbench.action.closeAllGroups"
@@ -1445,9 +1543,5 @@
       "type": "command",
       "command": "workbench.action.focusEighthEditorGroup"
     }
-  ],
-  "console-ninja.outputMode": "In View",
-  "console-ninja.dateTimeDisplayMode": "None",
-  "playwright.reuseBrowser": true,
-  "diffEditor.maxComputationTime": 0
+  ]
 }

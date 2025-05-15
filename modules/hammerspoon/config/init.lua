@@ -7,14 +7,13 @@ spoon.ReloadConfiguration:start()
 
 hs.loadSpoon("AppLauncher")
 spoon.AppLauncher:bindHotkeys({
-    ["1password"]          = { { "alt"                  }, "1" },
+    ["1password"]          = { { "alt"                  }, "1" ,  keyboardLayout = "ABC" },
 
     ["Telegram"]           = { { "alt"                  }, "Q" },
     ["Warp"]               = { { "alt"                  }, "W"  ,  keyboardLayout = "ABC" },
-    ["Kitty"]              = { { "alt", "shift"         }, "W" },
+    ["Kitty"]              = { { "alt", "shift"         }, "W"  ,  keyboardLayout = "ABC" },
     ["Things3"]            = { { "alt"                  }, "E" },
-    ["Finder"]             = { { "alt", "shift"         }, "E" },
-    ["System Settings"]    = { { "alt"                  }, "R" },
+    ["Finder"]             = { { "alt", "shift"         }, "E"  ,  keyboardLayout = "ABC" },
 
     ["Arc"]                = { { "alt"                  }, "A" },
     ["Safari"]             = { { "alt", "shift"         }, "A" },
@@ -27,7 +26,10 @@ spoon.AppLauncher:bindHotkeys({
     ["Insomnia"]           = { { "alt"                  }, "X" },
     ["Discord"]            = { { "alt"                  }, "C" },
     ["Activity Monitor"]   ={{ { "alt"                  }, "V" },
+                             { { "alt"                  }, "escape" },
                              { {        "shift", "ctrl" }, "escape" }},
+
+    ["System Settings"]    = { { "alt"                  }, "," },
 })
 
 

@@ -7,7 +7,7 @@
 
   // Git Project Manager
   {
-    "key": "shift+cmd+o",
+    "key": "cmd+o",
     "command": "gitProjectManager.openProjectNewWindow"
   },
   {
@@ -16,27 +16,27 @@
   },
 
   // Toggle Maximized Panel Terminal
-  {
-    "key": "cmd+e",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.toggleMaximizedPanel",
-        "workbench.action.terminal.focus"
-      ]
-    }
-  },
-  {
-    "key": "cmd+e",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.toggleMaximizedPanel",
-        "workbench.action.closePanel"
-      ]
-    },
-    "when": "focusedView == terminal"
-  },
+  //   {
+  //     "key": "cmd+e",
+  //     "command": "runCommands",
+  //     "args": {
+  //       "commands": [
+  //         "workbench.action.toggleMaximizedPanel",
+  //         "workbench.action.terminal.focus"
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     "key": "cmd+e",
+  //     "command": "runCommands",
+  //     "args": {
+  //       "commands": [
+  //         "workbench.action.toggleMaximizedPanel",
+  //         "workbench.action.closePanel"
+  //       ]
+  //     },
+  //     "when": "focusedView == terminal"
+  //   },
 
   // Terminal tab actions
   {
@@ -179,5 +179,68 @@
     "key": "alt+up",
     "command": "editor.action.previousMatchFindAction",
     "when": "historyNavigationBackwardsEnabled && historyNavigationWidgetFocus && !isComposing && !suggestWidgetVisible"
+  },
+
+  // Which key
+  {
+    "key": "ctrl+shift+alt+cmd+'",
+    "command": "whichkey.show"
+  },
+
+  // Open
+  {
+    "key": "shift+cmd+o",
+    "command": "workbench.action.files.openFileFolder",
+    "when": "isMacNative && openFolderWorkspaceSupport"
+  },
+
+  {
+    "key": "cmd+g",
+    "command": "runCommands",
+    "args": {
+      "commands": ["workbench.view.scm", "git.openChange"]
+    },
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "shift+cmd+g",
+    "command": "runCommands",
+    "args": {
+      "commands": ["workbench.view.scm", "git-graph.view"]
+    },
+    "when": "workbench.scm.active"
+  },
+
+  // Open File explorer, if already opened - focus active file. If opening from git diff, then open diffing file in editor
+  {
+    "key": "cmd+e",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.view.explorer",
+        {
+          "command": "git.openFile",
+          "args": [],
+          "when": "config.git.enabled && !git.missing && gitOpenRepositoryCount != '0' && resourceScheme =~ /^git$|^file$/"
+        }
+      ]
+    }
+  },
+  {
+    "key": "cmd+e",
+    "command": "workbench.files.action.showActiveFileInExplorer",
+    "when": "filesExplorerFocus"
+  },
+
+  {
+    "key": "cmd+i",
+    "command": "composerMode.agent"
+  },
+
+  // Unbind defaults
+  {
+    "key": "cmd+g",
+    "command": "-editor.action.nextMatchFindAction",
+    "when": "editorFocus"
   }
 ]

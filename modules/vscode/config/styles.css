@@ -1,0 +1,46 @@
+/* Palete modal */
+.quick-input-widget {
+  top: 45px !important;
+}
+
+/* Scrollbar */
+.scrollbar.horizontal {
+  height: 8px !important;
+}
+.scrollbar.horizontal .slider {
+  border-radius: 9999px !important;
+  height: 8px !important;
+}
+.scrollbar.vertical {
+  width: 8px !important;
+}
+.scrollbar.vertical .slider {
+  border-radius: 9999px !important;
+  width: 8px !important;
+}
+
+/* Title */
+.title-actions .actions-container {
+  display: none;
+}
+.title-label h2 {
+  visibility: hidden;
+  position: relative;
+}
+.title-label h2:after {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "EXPLORER";
+}
+
+/* Tab Bar size */
+.title.tabs.show-file-icons {
+  height: 34px !important;
+  --editor-group-tab-height: 34px !important;
+}
+
+.quick-input-widget {
+  top: 45px !important;
+}

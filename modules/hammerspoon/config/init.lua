@@ -12,7 +12,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Telegram"]           = { { "alt"                  }, "Q" },
     ["Warp"]               = { { "alt"                  }, "W"  ,  keyboardLayout = "ABC" },
     ["Kitty"]              = { { "alt", "shift"         }, "W"  ,  keyboardLayout = "ABC" },
-    ["Things3"]            = { { "alt"                  }, "E" },
+    ["Tana"]               = { { "alt"                  }, "E" },
     ["Finder"]             = { { "alt", "shift"         }, "E"  ,  keyboardLayout = "ABC" },
 
     ["Arc"]                = { { "alt"                  }, "A" },

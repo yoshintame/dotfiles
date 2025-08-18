@@ -12,7 +12,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Telegram"]           = { { "alt"                  }, "Q" },
     ["Warp"]               = { { "alt"                  }, "W"  ,  keyboardLayout = "ABC" },
     ["Kitty"]              = { { "alt", "shift"         }, "W"  ,  keyboardLayout = "ABC" },
-    ["Things3"]            = { { "alt"                  }, "E" },
+    ["Tana"]               = { { "alt"                  }, "E" },
     ["Finder"]             = { { "alt", "shift"         }, "E"  ,  keyboardLayout = "ABC" },
 
     ["Arc"]                = { { "alt"                  }, "A" },
@@ -20,7 +20,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Cursor"]             = { { "alt"                  }, "D" },
-    ["Linear"]             = { { "alt", "shift"         }, "D" },
+    ["Height"]             = { { "alt", "shift"         }, "D" },
 
     ["Figma"]              = { { "alt"                  }, "Z" },
     ["Insomnia"]           = { { "alt"                  }, "X" },

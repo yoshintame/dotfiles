@@ -51,7 +51,6 @@ customCommands:
     description: "view repo on github"
     context: "global"
     loadingText: "opening github..."
-    subprocess: false
 
   - key: "F"
     command: "git push --force-with-lease --no-verify"
@@ -98,50 +97,55 @@ customCommands:
       - type: "confirm"
         title: "Is the commit message correct?"
         body: "{{ .Form.Type }}{{if .Form.Scopes}}({{ .Form.Scopes }}){{end}}: {{ .Form.Description }}"
-    subprocess: true
+    output: terminal
 
   # Blame via Tig
   - key: b
     command: tig blame -- {{.SelectedFile.Name}}
     context: files
     description: blame file at tree
-    subprocess: true
+    output: terminal
+
   - key: b
     command: tig blame {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}
     context: commitFiles
     description: blame file at revision
-    subprocess: true
+    output: terminal
+
   - key: B
     command: tig blame -- {{.SelectedCommitFile.Name}}
     context: commitFiles
     description: blame file at tree
-    subprocess: true
+    output: terminal
 
   # Browse files at revision via Tig
   - key: t
     command: tig show {{.SelectedSubCommit.Sha}}
     context: subCommits
     description: tig commit (`t` again to browse files at revision)
-    subprocess: true
+    output: terminal
+
   - key: t
     command: tig show {{.SelectedLocalBranch.Name}}
     context: localBranches
     description: tig branch (`t` again to browse files at revision)
-    subprocess: true
+    output: terminal
+
   - key: t
     command: tig show {{.SelectedRemoteBranch.RemoteName}}/{{.SelectedRemoteBranch.Name}}
     context: remoteBranches
     description: tig branch (`t` again to browse files at revision)
-    subprocess: true
+    output: terminal
 
   # File histroy via Tig
   - key: t
     command: tig {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}
     context: commitFiles
     description: tig file (history of commits affecting file)
-    subprocess: true
+    output: terminal
+
   - key: t
     command: tig -- {{.SelectedFile.Name}}
     context: files
     description: tig file (history of commits affecting file)
-    subprocess: true
+    output: terminal

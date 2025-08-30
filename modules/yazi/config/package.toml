@@ -14,34 +14,24 @@ rev = "bd3eaa5"
 hash = "92b5c58159a51c567f82b618cee2b78"
 
 [[plugin.deps]]
-use = "yazi-rs/plugins:max-preview"
-rev = "b12a9ab"
-hash = "a8025f2bb311e869069364fba01abffc"
-
-[[plugin.deps]]
-use = "yazi-rs/plugins:hide-preview"
-rev = "b12a9ab"
-hash = "53f826884e2c7e521cecc492a7f31d7e"
-
-[[plugin.deps]]
 use = "ndtoan96/ouch"
-rev = "2496cd9"
-hash = "5b9dea47776a30946cfbf83232d18fb1"
+rev = "0742fff"
+hash = "2bd799b42b8e42b8ef100310be71f8d1"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "b12a9ab"
-hash = "1f3dad061209081a6b04dd6ff2cb06c7"
+rev = "de53d90"
+hash = "3996fc74044bc44144b323686f887e1"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "b12a9ab"
-hash = "2f1053f89d1a301a648ab181d0948e38"
+rev = "de53d90"
+hash = "1adc12c2b2b025411ab61eb8f0879574"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "b12a9ab"
-hash = "e0ada736ea676c2bbb3ec705a49526ef"
+rev = "de53d90"
+hash = "63b6c222bf2103b3023389dde5e2ecfe"
 
 [[plugin.deps]]
 use = "orhnk/system-clipboard"
@@ -50,8 +40,13 @@ hash = "9b8f2573da54334b04747e51556040cc"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "b12a9ab"
-hash = "7918aab6a71caf31b58411f789195677"
+rev = "de53d90"
+hash = "56fdabc96fc1f4d53c96eb884b02a5be"
+
+[[plugin.deps]]
+use = "boydaihungst/pref-by-location"
+rev = "68f006d"
+hash = "67b7a8c5d39cba04d8e3c2f3581a3ab4"
 
 [flavor]
 deps = []

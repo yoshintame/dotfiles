@@ -684,6 +684,13 @@
               "command": "git.stashIncludeUntracked"
             },
             {
+              "key": "u",
+              "name": "Stash unstaged",
+              "type": "command",
+              "command": "workbench.action.tasks.runTask",
+              "args": "Git: Stash unstaged"
+            },
+            {
               "key": "w",
               "name": "Stash all (WIP)",
               "type": "command",
@@ -711,13 +718,15 @@
           "key": "p",
           "name": "Push",
           "type": "command",
-          "command": "git.push"
+          "command": "workbench.action.tasks.runTask",
+          "args": "Git: Push"
         },
         {
           "key": "P",
           "name": "Push force",
           "type": "command",
-          "command": "gitlens.pushRepositories"
+          "command": "workbench.action.tasks.runTask",
+          "args": "Git: Push (Force)"
         },
         {
           "key": "l",
@@ -730,6 +739,25 @@
           "name": "Pull (with rebase)",
           "type": "command",
           "command": "git.pullRebase"
+        },
+        {
+          "key": "h",
+          "name": "+History",
+          "type": "bindings",
+          "bindings": [
+            {
+              "key": "l",
+              "name": "Line",
+              "type": "command",
+              "command": "gitlens.showLineHistoryView"
+            },
+            {
+              "key": "f",
+              "name": "File",
+              "type": "command",
+              "command": "gitlens.showFileHistoryView"
+            }
+          ]
         },
         {
           "key": "b",
@@ -812,7 +840,8 @@
           "key": "c",
           "name": "Commit",
           "type": "command",
-          "command": "git.commit"
+          "command": "workbench.action.tasks.runTask",
+          "args": "Git: Commit"
         },
         {
           "key": "C",
@@ -1242,6 +1271,12 @@
           "name": "Find all references",
           "type": "command",
           "command": "editor.action.referenceSearch.trigger"
+        },
+        {
+          "key": "c",
+          "name": "Change Case",
+          "type": "command",
+          "command": "extension.changeCase.commands"
         },
         {
           "key": "u",

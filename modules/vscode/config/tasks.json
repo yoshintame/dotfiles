@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git: Stash unstaged",
+      "type": "shell",
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "isBackground": true,
+      "command": "git stash push --staged && git stash push --include-untracked && git stash pop stash@{1}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Push",
+      "type": "shell",
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "close": true
+      },
+      "isBackground": true,
+      "command": "git push",
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Push (Force)",
+      "type": "shell",
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "close": true
+      },
+      "isBackground": true,
+      "command": "git push --force-with-lease",
+      "problemMatcher": []
+    },
+    {
+      "label": "Git: Commit",
+      "type": "shell",
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "close": true
+      },
+      "isBackground": true,
+      "command": "git commit",
+      "problemMatcher": []
+    }
+  ]
+}

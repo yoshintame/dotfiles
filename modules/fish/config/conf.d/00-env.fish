@@ -57,13 +57,3 @@ set -gx MISE_ENV_FILE .env
 # Fish
 set -gx aliases_path $__fish_config_dir/aliases
 set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[2..]
-
-# SmartEmptyLine
-set -gx SMART_RIGHT_CMD "yy"
-set -gx SMART_RIGHT_GIT_CMD "yy"
-set -gx SMART_RIGHT_OPT_CMD "ji"
-set -gx SMART_RIGHT_OPT_GIT_CMD "ji"
-set -gx SMART_LEFT_CMD ".."
-set -gx SMART_LEFT_GIT_CMD ".."
-set -gx SMART_ENTER_CMD "ls"
-set -gx SMART_ENTER_GIT_CMD "git status -sb"

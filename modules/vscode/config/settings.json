@@ -86,6 +86,8 @@
   "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?",
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 1000,
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+
   "emmet.showSuggestionsAsSnippets": true,
   "emmet.triggerExpansionOnTab": false,
   "explorer.confirmDelete": false,
@@ -96,6 +98,7 @@
   "workbench.editor.limit.value": 6,
   "workbench.list.smoothScrolling": true,
   "workbench.tree.expandMode": "singleClick",
+  "workbench.editor.revealIfOpen": true,
   "editor.suggest.showWords": false,
   "cursor.cpp.disabledLanguages": ["plaintext", "yaml"],
   "window.customTitleBarVisibility": "never",
@@ -195,6 +198,7 @@
   "git.openRepositoryInParentFolders": "always",
   "git.allowNoVerifyCommit": true,
   "git.confirmNoVerifyCommit": false,
+  "git.enableSmartCommit": true,
 
   // Exclude
   "files.exclude": {
@@ -335,12 +339,12 @@
   },
   "gitlens.graph.dimMergeCommits": true,
   "git-graph.commitDetailsView.location": "Docked to Bottom",
-  "console-ninja.featureSet": "Pro",
+  "console-ninja.featureSet": "Community",
   "semanticdiff.diff.contextLines": 30,
   "semanticdiff.closeOriginalTab": true,
   "console-ninja.outputMode": "In View",
   "console-ninja.dateTimeDisplayMode": "None",
-  "playwright.reuseBrowser": true,
+  "playwright.reuseBrowser": false,
   "gitlens.gitCommands.skipConfirmations": [
     "fetch:command",
     "stash-push:command",

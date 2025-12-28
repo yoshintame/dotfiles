@@ -37,6 +37,9 @@ function on_arrow
             commandline -f execute
         end
     else
+        if commandline --selection-start >/dev/null 2>&1
+            commandline -f end-selection
+        end
         commandline -f $direction
     end
 end

@@ -11,7 +11,12 @@ set -gx VISUAL cursor
 set -gx PLAY iina
 
 # Zoxide
-set -u zoxide_cmd j
+if type -q zoxide
+    set -u zoxide_cmd j
+else
+    echo "Warning: zoxide is not installed"
+end
+
 
 # FZF
 set -gx FZF_COMPLETION_OPTS '--color=16 --layout=reverse --inline-info'

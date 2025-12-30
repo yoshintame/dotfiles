@@ -62,3 +62,6 @@ set -gx MISE_ENV_FILE .env
 # Fish
 set -gx aliases_path $__fish_config_dir/aliases
 set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[2..]
+
+# Brew
+set -Ux HOMEBREW_NO_ENV_HINTS 1

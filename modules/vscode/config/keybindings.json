@@ -15,29 +15,6 @@
     "command": "-gitProjectManager.openProjectNewWindow"
   },
 
-  // Toggle Maximized Panel Terminal
-  //   {
-  //     "key": "cmd+e",
-  //     "command": "runCommands",
-  //     "args": {
-  //       "commands": [
-  //         "workbench.action.toggleMaximizedPanel",
-  //         "workbench.action.terminal.focus"
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     "key": "cmd+e",
-  //     "command": "runCommands",
-  //     "args": {
-  //       "commands": [
-  //         "workbench.action.toggleMaximizedPanel",
-  //         "workbench.action.closePanel"
-  //       ]
-  //     },
-  //     "when": "focusedView == terminal"
-  //   },
-
   // Terminal tab actions
   {
     "key": "cmd+t",
@@ -194,35 +171,107 @@
     "when": "isMacNative && openFolderWorkspaceSupport"
   },
 
+
+  // Layout shortcuts
+  {
+    "key": "cmd+shift+f",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.findInFiles",
+        "workbench.action.moveSideBarLeft"
+      ]
+    },
+    "when": "workbench.scm.active && !auxiliaryBarVisible"
+  },
+  {
+    "key": "cmd+shift+f",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.findInFiles",
+        "workbench.action.moveSideBarLeft",
+        "workbench.action.toggleAuxiliaryBar"
+      ]
+    },
+    "when": "workbench.scm.active && auxiliaryBarVisible"
+  },
+
   {
     "key": "cmd+g",
     "command": "runCommands",
     "args": {
-      "commands": ["workbench.view.scm", "git.openChange"]
+      "commands": [
+        "workbench.view.scm",
+        "git.openChange",
+        "workbench.action.moveSideBarLeft"
+      ]
     },
-    "when": "workbench.scm.active"
+    "when": "workbench.scm.active && !auxiliaryBarVisible"
+  },
+  {
+    "key": "cmd+g",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.view.scm",
+        "git.openChange",
+        "workbench.action.moveSideBarLeft",
+        "workbench.action.toggleAuxiliaryBar"
+      ]
+    },
+    "when": "workbench.scm.active && auxiliaryBarVisible"
+  },
+
+  {
+    "key": "shift+cmd+g",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.view.scm",
+        "git-graph.view",
+        "workbench.action.moveSideBarLeft"
+      ]
+    },
+    "when": "workbench.scm.active && !auxiliaryBarVisible"
   },
   {
     "key": "shift+cmd+g",
     "command": "runCommands",
     "args": {
-      "commands": ["workbench.view.scm", "git-graph.view"]
+      "commands": [
+        "workbench.view.scm",
+        "git-graph.view",
+        "workbench.action.toggleAuxiliaryBar",
+        "workbench.action.moveSideBarLeft"
+      ]
     },
-    "when": "workbench.scm.active"
+    "when": "workbench.scm.active && auxiliaryBarVisible"
   },
 
   // Open File explorer, if already opened - focus active file. If opening from git diff, then open diffing file in editor
   {
     "key": "cmd+e",
     "command": "runCommands",
+    "when": "auxiliaryBarVisible",
     "args": {
       "commands": [
         "workbench.view.explorer",
-        {
-          "command": "git.openFile",
-          "args": [],
-          "when": "config.git.enabled && !git.missing && gitOpenRepositoryCount != '0' && resourceScheme =~ /^git$|^file$/"
-        }
+        "git.openFile",
+        "workbench.action.moveSideBarLeft",
+        "workbench.action.toggleAuxiliaryBar"
+      ]
+    }
+  },
+  {
+    "key": "cmd+e",
+    "command": "runCommands",
+    "when": "!auxiliaryBarVisible",
+    "args": {
+      "commands": [
+        "workbench.view.explorer",
+        "workbench.action.moveSideBarLeft",
+        "git.openFile"
       ]
     }
   },
@@ -232,9 +281,17 @@
     "when": "filesExplorerFocus"
   },
 
+  // Open AI Chat on the left side
   {
-    "key": "cmd+i",
-    "command": "composerMode.agent"
+    "key": "cmd+l",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "aichat.newchataction",
+        "workbench.action.moveSideBarRight",
+        "workbench.action.closeSidebar"
+      ]
+    }
   },
 
   // Unbind defaults
@@ -242,5 +299,9 @@
     "key": "cmd+g",
     "command": "-editor.action.nextMatchFindAction",
     "when": "editorFocus"
+  },
+  {
+    "key": "cmd+l",
+    "command": "-aichat.newchataction"
   }
 ]

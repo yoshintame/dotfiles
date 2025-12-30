@@ -1,4 +1,7 @@
 style = "compact"
+invert = true
+show_tabs = false
+show_help = false
 
 [sync]
 records = true

@@ -25,9 +25,6 @@
 
     # git
     ~/.config/git: modules/git/config
-    ~/.local/bin/:
-      path: modules/git/scripts/**
-      glob: true
 
     # karabiner
     ~/.config/karabiner/karabiner.json: modules/karabiner/config/build/karabiner.json

@@ -72,10 +72,10 @@
       glob: true
 
     # wezterm
-    ~/.config/wezterm/: modules/wezterm/config/
+    ~/.config/wezterm: modules/wezterm/config
 
     # btop
-    ~/.config/btop/: modules/btop/config/
+    ~/.config/btop: modules/btop/config
 
     # bat
     ~/.config/bat: modules/bat/config

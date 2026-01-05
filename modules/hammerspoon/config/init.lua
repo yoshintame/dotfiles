@@ -16,7 +16,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Finder"]             = { { "alt", "shift"         }, "E"  ,  keyboardLayout = "ABC" },
 
     ["Arc"]                = { { "alt"                  }, "A" },
-    ["Safari"]             = { { "alt", "shift"         }, "A" },
+    ["ChatGPT"]            = { { "alt", "shift"         }, "A" },
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Cursor"]             = { { "alt"                  }, "D" },

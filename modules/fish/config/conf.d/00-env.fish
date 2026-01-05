@@ -65,3 +65,7 @@ set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[
 
 # Brew
 set -Ux HOMEBREW_NO_ENV_HINTS 1
+
+# Bun
+set -gx PATH $HOME/.cache/.bun/install/global/node_modules/.bin $PATH
+

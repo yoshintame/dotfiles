@@ -160,7 +160,7 @@
 
   // Which key
   {
-    "key": "ctrl+shift+alt+cmd+'",
+    "key": "ctrl+shift+alt+cmd+1",
     "command": "whichkey.show"
   },
 
@@ -170,7 +170,6 @@
     "command": "workbench.action.files.openFileFolder",
     "when": "isMacNative && openFolderWorkspaceSupport"
   },
-
 
   // Layout shortcuts
   {

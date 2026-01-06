@@ -7,8 +7,7 @@ set brewcmds (
         /usr/local/bin/brew
     )
 if test (count $brewcmds) -eq 0
-    echo >&2 "brew command not found. Install from https://brew.sh"
-    return 1
+    return 0
 end
 $brewcmds[1] shellenv | source
 
@@ -40,3 +39,4 @@ end
 
 # Other homebrew vars.
 set -q HOMEBREW_NO_ANALYTICS || set -gx HOMEBREW_NO_ANALYTICS 1
+set -Ux HOMEBREW_NO_ENV_HINTS 1

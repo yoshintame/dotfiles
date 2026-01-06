@@ -5,6 +5,7 @@ set -q XDG_STATE_HOME; or set -Ux XDG_STATE_HOME $HOME/.local/state
 set -qU XDG_CACHE_HOME; or set -Ux XDG_CACHE_HOME $HOME/.cache
 set -q __fish_cache_dir; or set -Ux __fish_cache_dir $XDG_CACHE_HOME/fish
 
+
 # Main
 set -gx EDITOR cursor
 set -gx VISUAL cursor
@@ -17,7 +18,6 @@ else
     echo "Warning: zoxide is not installed"
 end
 
-
 # FZF
 set -gx FZF_COMPLETION_OPTS '--color=16 --layout=reverse --inline-info'
 set -gx FZF_DEFAULT_OPTS "\
@@ -27,10 +27,6 @@ set -gx FZF_DEFAULT_OPTS "\
 --color=selected-bg:#45475a \
 --multi
  --layout=reverse"
-
-set -gx PATH bin $PATH
-set -gx PATH ~/bin $PATH
-set -gx PATH ~/.local/bin $PATH
 
 # NodeJS
 set -gx PATH node_modules/.bin $PATH
@@ -62,9 +58,6 @@ set -gx MISE_ENV_FILE .env
 # Fish
 set -gx aliases_path $__fish_config_dir/aliases
 set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[2..]
-
-# Brew
-set -Ux HOMEBREW_NO_ENV_HINTS 1
 
 # Bun
 set -gx PATH $HOME/.cache/.bun/install/global/node_modules/.bin $PATH

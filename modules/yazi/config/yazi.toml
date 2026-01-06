@@ -1,3 +1,4 @@
+# source: https://github.com/sxyazi/yazi/blob/shipped/yazi-config/preset/yazi-default.toml
 # A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
@@ -29,35 +30,38 @@ ueberzug_scale  = 1
 ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
-# TODO: set EDITOR to block = true and add VISUAL with orphan = true
 edit = [
-    { run = '${EDITOR:=vi} "$0"', desc = "Editor", for = "macos" },
-    { run = '${EDITOR:=vi} "$@"', desc = "Editor (all)", for = "macos" },
-    { run = 'code %*',    orphan = true, desc = "code",           for = "windows" },
-	{ run = 'code -w %*', block = true,  desc = "code (block)",   for = "windows" },
-]
-open = [
-	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
-	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
-	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
-	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
-]
-reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
-	{ run = 'open -R "$1"',                         desc = "Reveal", for = "macos" },
-	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
-	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
-	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
-]
-extract = [
-	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
-	{ run = 'ya pub extract --list %*',   desc = "Extract here", for = "windows" },
+	{ run = "${EDITOR:-vi} %s", desc = "$EDITOR",      for = "unix", block = true },
+	{ run = "code %s",          desc = "code",         for = "windows", orphan = true },
+	{ run = "code -w %s",       desc = "code (block)", for = "windows", block = true },
 ]
 play = [
-    { run = 'iina --no-stdin "$@"', desc = "Play", for = "macos" },
-	{ run = 'mpv --force-window "$@"', orphan = true, for = "unix" },
-	{ run = 'mpv --force-window %*', orphan = true, for = "windows" },
-	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
+	{ run = "xdg-open %s1",                desc = "Play", for = "linux" },
+	{ run = "open %s",                     desc = "Play", for = "macos" },
+	{ run = 'start "" %s1', orphan = true, desc = "Play", for = "windows" },
+	{ run = "termux-open %s1",             desc = "Play", for = "android" },
+	{ run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
+	{ run = "mediainfo %s1 & pause", block = true, desc = "Show media info", for = "windows" },
+]
+open = [
+	{ run = "xdg-open %s1",    desc = "Open", for = "linux" },
+	{ run = "open %s",         desc = "Open", for = "macos" },
+	{ run = 'start "" %s1',    desc = "Open", for = "windows", orphan = true },
+	{ run = "termux-open %s1", desc = "Open", for = "android" },
+]
+reveal = [
+	{ run = "xdg-open %d1",         desc = "Reveal", for = "linux" },
+	{ run = "open -R %s1",          desc = "Reveal", for = "macos" },
+	{ run = "explorer /select,%s1", desc = "Reveal", for = "windows", orphan = true },
+	{ run = "termux-open %d1",      desc = "Reveal", for = "android" },
+	{ run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
+]
+extract = [
+	{ run = "ya pub extract --list %s", desc = "Extract here" },
+]
+download = [
+	{ run = "ya emit download --open %S", desc = "Download and open" },
+	{ run = "ya emit download %S",        desc = "Download" },
 ]
 
 [open]
@@ -77,6 +81,8 @@ rules = [
 	{ mime = "*/javascript", use = [ "edit", "reveal" ] },
 	# Empty file
 	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
+	# Virtual file system
+	{ mime = "vfs/{absent,stale}", use = "download" },
 	# Fallback
 	{ url = "*", use = [ "open", "reveal" ] },
 ]
@@ -86,13 +92,15 @@ micro_workers    = 10
 macro_workers    = 10
 bizarre_retry    = 3
 image_alloc      = 536870912  # 512MB
-image_bound      = [ 5000, 5000 ]
+image_bound      = [ 10000, 10000 ]
 suppress_preload = false
 
 [plugin]
 fetchers = [
 	# Mimetype
-	{ id = "mime", url = "*", run = "mime.local", prio = "high" },
+	{ id = "mime", url = "*/",         run = "mime.dir", prio = "high" },
+	{ id = "mime", url = "local://*",  run = "mime.local", prio = "high" },
+	{ id = "mime", url = "remote://*", run = "mime.remote", prio = "high" },
 
     # Git
     { id = "git",   url = "*",     run  = "git"},
@@ -109,6 +117,10 @@ spotters = [
 	{ mime = "image/*", run = "image" },
 	# Video
 	{ mime = "video/*", run = "video" },
+	# Virtual file system
+	{ mime = "vfs/*", run = "vfs" },
+	# Error
+	{ mime = "null/*", run = "null" },
 	# Fallback
 	{ url = "*", run = "file" },
 ]
@@ -151,10 +163,12 @@ previewers = [
 	# Font
 	{ mime = "font/*", run = "font" },
 	{ mime = "application/ms-opentype", run = "font" },
-    # Markdown
-    { url = "*.md", run = "glow" },
 	# Empty file
 	{ mime = "inode/empty", run = "empty" },
+	# Virtual file system
+	{ mime = "vfs/*", run = "vfs" },
+	# Error
+	{ mime = "null/*", run = "null" },
 	# Fallback
 	{ url = "*", run = "file" },
 ]
@@ -230,4 +244,3 @@ sort_by        = "none"
 sort_sensitive = false
 sort_reverse   = false
 sort_translit  = false
-

@@ -3,20 +3,21 @@ require("starship"):setup()
 require("relative-motions"):setup({ show_numbers="relative", show_motion = true })
 require("dropover"):setup({ watch_dir="/Users/yoshintame/.local/share/dropover" })
 
-th.git = th.git or {}
-th.git.modified = ui.Style():fg("yellow"):bold()
-th.git.added = ui.Style():fg("green"):bold()
-th.git.untracked = ui.Style():fg("green"):bold()
-th.git.ignored = ui.Style():fg("gray"):bold()
-th.git.deleted = ui.Style():fg("red"):bold()
-th.git.updated = ui.Style():fg("yellow"):bold()
+th.git = {
+  modified = ui.Style():fg("yellow"):bold(),
+  added = ui.Style():fg("green"):bold(),
+  untracked = ui.Style():fg("green"):bold(),
+  ignored = ui.Style():fg("gray"):bold(),
+  deleted = ui.Style():fg("red"):bold(),
+  updated = ui.Style():fg("yellow"):bold(),
 
-th.git.modified_sign = "M"
-th.git.added_sign = "A"
-th.git.untracked_sign = "U"
-th.git.ignored_sign = "I"
-th.git.deleted_sign = "D"
-th.git.updated_sign = "U"
+  modified_sign = "M",
+  added_sign = "A",
+  untracked_sign = "U",
+  ignored_sign = "I",
+  deleted_sign = "D",
+  updated_sign = "U",
+}
 
 require("git"):setup()
 

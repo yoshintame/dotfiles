@@ -21,14 +21,10 @@ aliases add md 'mkdir -p'
 aliases add ml 'ln -s'
 aliases add ma 'ouch compress'
 
-aliases add cp 'cp -Ri'
-aliases add mv 'mv -i'
+aliases add cp 'cp -R'
 
-aliases add rd 'rmdir'
-aliases add rm 'rm -ri'
-aliases add rmf 'rm -rif'
+aliases add rm 'gtrash put -rv'
 
-aliases add tr 'gtrash put -v'
 aliases add trs 'gtrash summary'
 aliases add trf 'gtrash find'
 aliases add trr 'gtrash restore'

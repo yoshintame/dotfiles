@@ -1,0 +1,11 @@
+[tools]
+bun = "latest"
+go = "latest"
+node = "lts"
+pnpm = "latest"
+python = "latest"
+uv = "latest"
+
+[settings]
+python.uv_venv_auto = true
+color_theme = "catppuccin"

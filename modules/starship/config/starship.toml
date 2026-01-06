@@ -66,6 +66,9 @@ format = "via [ terraform $version]($style) 壟 [$workspace]($style) "
 [vagrant]
 format = "via [ vagrant $version]($style) "
 
+[container]
+disabled = true
+
 [docker_context]
 format = "via [ $context](bold blue) "
 

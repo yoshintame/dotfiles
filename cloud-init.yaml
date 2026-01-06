@@ -1,0 +1,10 @@
+#cloud-config
+
+package_update: true
+packages:
+  - curl
+  - xz-utils
+  - git
+
+runcmd:
+  - su - yoshintame -c "cd ~/Development/projects/nix/nix-files && bash instal.sh lasthaze-server"

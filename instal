@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOST="${1:-}"
+
+if [ -z "${HOST}" ]; then
+  echo "HOST is required: $0 <host>" >&2
+  exit 2
+fi
+
+if ! command -v nix >/dev/null 2>&1; then
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+fi
+
+if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+elif [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]; then
+  . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+fi
+
+cd "${ROOT}"
+export FLAKE_ROOT="${ROOT}"
+export NIX_CONFIG="experimental-features = nix-command flakes"
+
+case "$(uname -s)" in
+  Darwin)
+    nix --extra-experimental-features "nix-command flakes" run github:lnl7/nix-darwin/nix-darwin-25.05#darwin-rebuild -- --impure switch --flake "${ROOT}#${HOST}"
+    ;;
+  Linux)
+    nix --extra-experimental-features "nix-command flakes" run github:nix-community/home-manager/release-25.05 -- switch --impure --flake "${ROOT}#${HOST}"
+    ;;
+  *)
+    echo "Unsupported OS: $(uname -s)" >&2
+    exit 1
+    ;;
+esac

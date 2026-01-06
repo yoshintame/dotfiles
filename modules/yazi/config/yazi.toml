@@ -138,6 +138,12 @@ preloaders = [
 	{ mime = "application/ms-opentype", run = "font" },
 ]
 previewers = [
+	# piper.yazi examples - https://github.com/yazi-rs/plugins/tree/main/piper.yazi#examples
+	{ url = "*.tar*", run = 'piper --format=url -- tar tf "$1"' },
+	{ url = "*.csv", run = 'piper -- bat -p --color=always "$1"' },
+	{ url = "*.md", run = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"' },
+	{ mime = "application/sqlite3", run = 'piper -- sqlite3 "$1" ".schema --indent"' },
+	{ url = "*/", run = 'piper -- eza -TL=3 --color=always --icons=always --group-directories-first --no-quotes "$1"' },
 	{ url = "*/", run = "folder" },
 	# Code
 	{ mime = "text/*", run = "code" },
@@ -169,8 +175,8 @@ previewers = [
 	{ mime = "vfs/*", run = "vfs" },
 	# Error
 	{ mime = "null/*", run = "null" },
-	# Fallback
-	{ url = "*", run = "file" },
+	# Fallback - hexyl via piper instead of default file command
+	{ url = "*", run = 'piper -- hexyl --border=none --terminal-width=$w "$1"' },
 ]
 
 [input]

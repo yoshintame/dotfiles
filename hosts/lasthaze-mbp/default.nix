@@ -45,6 +45,7 @@ in {
         ../../modules/starship
         ../../modules/btop
         ../../modules/nvim
+        ../../modules/mise
       ];
 
       home.stateVersion = "25.05";

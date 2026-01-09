@@ -4,6 +4,6 @@ function yy --description "Run yazi and cd to the directory it returns"
 	if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
 		cd -- "$cwd"
 	end
-	rm -f -- "$tmp"
+	command rm -f -- "$tmp"
 end
 

@@ -23,11 +23,11 @@ git:
     showGraph: always
     showWholeGraph: false
   branchLogCmd: 'git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=format:"%C(auto)%h: %s (%C(blue)%an %C(white)| %C(cyan)%ad%C(white))" {{branchName}} --'
-  paging:
-    # Delta
-    pager: delta --dark --paging=never
-    # Difftastic
-    # externalDiffCommand: difft --color=always --display=inline
+  pagers:
+    - # Delta
+      pager: delta --dark --paging=never
+      # Difftastic
+      # externalDiffCommand: difft --color=always --display=inline
   skipHookPrefix: WIP
   overrideGpg: true
 

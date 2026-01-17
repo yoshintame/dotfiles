@@ -17,6 +17,7 @@ hs = {}
 ---@class spoon
 ---@field ReloadConfiguration ReloadConfiguration
 ---@field AppLauncher AppLauncher
+---@field Hammerflow Hammerflow
 spoon = {}
 
 ---@class ReloadConfiguration
@@ -30,6 +31,13 @@ local ReloadConfiguration = {}
 ---@field launchOrFocusApp fun(self: AppLauncher, name: string)
 ---@field launchOrFocusWarpApp fun(self: AppLauncher, name: string)
 local AppLauncher = {}
+
+---@class Hammerflow
+---@field auto_reload boolean
+---@field loadFirstValidTomlFile fun(paths: string[])
+---@field registerFunctions fun(...: any)
+---@field registerFormat fun(opts: table)
+local Hammerflow = {}
 
 ---@class ipc
 ---@field cliInstall fun()

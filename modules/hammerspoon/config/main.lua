@@ -36,9 +36,11 @@ local reload = spoon.LeaderFlow.actions.reload
 
 spoon.LeaderFlow:setup({
     leader = { mods = {}, key = "F18" },
+    abortOnMouseClick = true,
+    
     ui = {
         show = true,
-        escapeKey = { {}, "F18" },
+        escapeKey = { { {}, "F18" }, { {}, "escape" } },
         helperEntryEachLine = 3,
         format = {
             atScreenEdge = 0,
@@ -56,6 +58,7 @@ spoon.LeaderFlow:setup({
             textSize = 12
         }
     },
+
     spec = {
         { "p", "Passwords", shortcut("cmd shift space") },
         { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
@@ -136,4 +139,5 @@ spoon.LeaderFlow:setup({
         }},
     }
 })
+
 

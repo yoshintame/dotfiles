@@ -30,10 +30,10 @@ local function create_links(urls)
 end
 
 local function add_index_to_name(url, index)
-    local name = url:stem()
-    local ext = url:name():sub(#name + 1)
+    local stem = url.stem or ""
+    local ext = url.ext and ("." .. url.ext) or ""
 
-    return Url(url:parent() .. "/" .. name .. "_" .. index .. ext)
+    return url.parent:join(stem .. "_" .. index .. ext)
 end
 
 local function get_unique_path(url)
@@ -68,7 +68,7 @@ local get_selected_or_hovered = ya.sync(function()
 end)
 
 local function exit_visual_mode()
-    ya.manager_emit("escape", { visual = true })
+    ya.emit("escape", { visual = true })
 end
 
 local function schedule_cleanup(watch_dir)
@@ -91,7 +91,7 @@ return {
         local urls = get_selected_or_hovered()
 
         for i, path in ipairs(urls) do
-            urls[i] = { original = path, link = get_unique_path(watch_dir .. "/" .. path:name()) }
+            urls[i] = { original = path, link = get_unique_path(Url(watch_dir):join(path.name)) }
         end
 
         create_links(urls)

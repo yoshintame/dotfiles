@@ -34,10 +34,27 @@ f = ["text:Mikhail Ivanov Andreevich", "Full Name"]
 n = ["text:Mikhail", "First Name"]
 l = ["text:Ivanov", "Last Name"]
 i = ["text:Ivanov M.A.", "Name with initials"]
+u = ["text:yoshintame", "Username"]
 p = ["text:79162999311", "Phone"]
 s = ["text:770867661", "Intr. Passport"]
 d = ["text:24.08.2001", "Birthday"]
 a = ["text:Apt 1115, 1333 The Line Wongsawang", "Address"]
+t = ["text:Current Date", "TODO: Current Date"]
+
+# TODO: Add keys for other modifiers
+[e.k]
+label = "[keys]"
+shift = "text:⇧"
+ctrl = "text:⌃"
+alt = "text:⌥"
+cmd = "text:⌘"
+fn = "text:fn"
+capslock = "text:⇪"
+left = "text:←"
+right = "text:→"
+up = "text:↑"
+down = "text:↓"
+escape = "text:⎋"
 
 [e.m]
 m = ["text:m.ivanov0427@gmail.com", "Main"]

@@ -5,6 +5,8 @@
 ---@field hotkey table
 ---@field keycodes table
 ---@field pathwatcher table
+---@field console hs.console
+---@field notify hs.notify
 ---@field reload function
 ---@field configdir string
 ---@field spoons table
@@ -13,6 +15,18 @@
 ---@field ipc table
 ---@field loadSpoon fun(name: string): boolean
 hs = {}
+
+---@class hs.console
+---@field printStyledtext fun(text: any)
+hs.console = {}
+
+---@class hs.notify
+---@field new fun(opts: { title?: string, informativeText?: string }): hs.notify.object
+hs.notify = {}
+
+---@class hs.notify.object
+---@field send fun(self: hs.notify.object)
+local _hs_notify_object = {}
 
 ---@class spoon
 ---@field ReloadConfiguration ReloadConfiguration

@@ -5,18 +5,10 @@ set -q XDG_STATE_HOME; or set -Ux XDG_STATE_HOME $HOME/.local/state
 set -qU XDG_CACHE_HOME; or set -Ux XDG_CACHE_HOME $HOME/.cache
 set -q __fish_cache_dir; or set -Ux __fish_cache_dir $XDG_CACHE_HOME/fish
 
-
 # Main
 set -gx EDITOR cursor
 set -gx VISUAL cursor
 set -gx PLAY iina
-
-# Zoxide
-if type -q zoxide
-    set -u zoxide_cmd j
-else
-    echo "Warning: zoxide is not installed"
-end
 
 # FZF
 set -gx FZF_COMPLETION_OPTS '--color=16 --layout=reverse --inline-info'
@@ -52,8 +44,7 @@ set -gx DOTFILES_CONFIG $DOTFILES/os/macos/module.yaml
 # GRC
 set -gx grc_plugin_ignore_execs ls
 
-# Mise
-set -gx MISE_ENV_FILE .env
+
 
 # Fish
 set -gx aliases_path $__fish_config_dir/aliases

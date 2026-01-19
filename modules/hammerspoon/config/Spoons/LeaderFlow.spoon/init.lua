@@ -93,7 +93,7 @@ end
 -- Public API:
 -- spoon.LeaderFlow:setup({
 --   leader = { mods = {}, key = "F18" },
---   ui = { show = true, escapeKey = {{}, "F18"}, helperEntryEachLine = 3, format = {...} },
+--   ui = { show = true, escapeKey = { { {}, "F18" }, { {}, "escape" } }, helperEntryEachLine = 3, format = {...} },
 --   spec = {...},
 -- })
 function obj:setup(cfg)
@@ -108,6 +108,8 @@ function obj:setup(cfg)
   if ui.escapeKey ~= nil then spoon.RecursiveBinder.escapeKey = ui.escapeKey end
   if ui.helperEntryEachLine ~= nil then spoon.RecursiveBinder.helperEntryEachLine = ui.helperEntryEachLine end
   if ui.format ~= nil then spoon.RecursiveBinder.helperFormat = ui.format end
+
+  if cfg.abortOnMouseClick ~= nil then spoon.RecursiveBinder.abortOnMouseClick = cfg.abortOnMouseClick end
 
   local keys = compileSpec(cfg.spec or {})
 

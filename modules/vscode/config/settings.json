@@ -699,19 +699,6 @@
           ]
         },
         {
-          "key": "r",
-          "name": "+Remote",
-          "type": "bindings",
-          "bindings": [
-            {
-              "key": "b",
-              "name": "Open branch",
-              "type": "command",
-              "command": "gitlens.gitCommands.switch"
-            }
-          ]
-        },
-        {
           "key": "f",
           "name": "Fetch",
           "type": "command",
@@ -768,6 +755,12 @@
           "name": "Merge",
           "type": "command",
           "command": "git.merge"
+        },
+        {
+          "key": "R",
+          "name": "Open Repository on Remote",
+          "type": "command",
+          "command": "gitlens.openRepoOnRemote"
         }
       ]
     },
@@ -1971,5 +1964,5 @@
         }
       }
     ]
-  }
+}
 }

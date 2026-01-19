@@ -1,0 +1,68 @@
+leader_key = "f18"
+leader_key_mods = ""
+auto_reload = true
+toast_on_reload = false
+show_ui = true
+key_maps_per_line = 3
+
+p = ["shortcut:cmd shift space", "Passwords"]
+t = ["raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D", "Translator"]
+
+[u]
+label = "[utils]"
+c = ["shortcut:cmd alt ctrl p", "Color Picker"]
+r = ["shortcut:cmd alt ctrl o", "Roulette"]
+e = ["raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "Emojis"]
+
+[l]
+label = "[links]"
+g = "https://github.com/yoshintame"
+y = 'https://youtube.com'
+m = "https://www.google.com/maps"
+
+[r]
+label = "[ru snippets]"
+f = ["text:Иванов Михаил Андреевич", "Full Name"]
+n = ["text:Михаил", "First Name"]
+l = ["text:Иванов", "Last Name"]
+i = ["text:Иванов М.А.", "Name with initials"]
+p = ["text:79162999311", "Phone"]
+
+[e]
+label = "[snippets]"
+f = ["text:Mikhail Ivanov Andreevich", "Full Name"]
+n = ["text:Mikhail", "First Name"]
+l = ["text:Ivanov", "Last Name"]
+i = ["text:Ivanov M.A.", "Name with initials"]
+p = ["text:79162999311", "Phone"]
+s = ["text:770867661", "Intr. Passport"]
+d = ["text:24.08.2001", "Birthday"]
+a = ["text:Apt 1115, 1333 The Line Wongsawang", "Address"]
+
+[e.m]
+m = ["text:m.ivanov0427@gmail.com", "Main"]
+u = ["text:ursus.michael@gmail.com", "Ursus"]
+v = ["text:vbirf2001@gmail.com", "Vbirf"]
+
+[d]
+label = "[development]"
+g = ["raycast://extensions/moored/git-repos/list", "Git Repos"]
+
+[s]
+label = "[screenshots]"
+s = ["shortcut:cmd shift 2", "Area"]
+w = ["shortcut:cmd shift 3", "Window"]
+f = ["shortcut:cmd shift 1", "Fullscreen"]
+c = ["shortcut:cmd shift 4", "Text (OCR)"]
+r = ["shortcut:cmd shift 5", "Record"]
+l = ["shortcut:cmd shift 6", "Scroll"]
+
+[a]
+label = "[AI]"
+a = ["shortcut:alt space", "Overlay"]
+g = ["ChatGPT", "ChatGPT"]
+
+[h]
+label = "[hammerspoon]"
+r = "reload"
+

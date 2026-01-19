@@ -6,6 +6,7 @@
   programs.fish.enable = true;
 
   home.packages = with pkgs; [
+    pkgs-unstable.mise
     grc
     thefuck
     eza

@@ -99,6 +99,8 @@ end
 function obj:setup(cfg)
   cfg = cfg or {}
 
+  -- Bundle RecursiveBinder as an internal dependency (same pattern as Hammerflow.spoon)
+  package.path = package.path .. ";" .. hs.configdir .. "/Spoons/LeaderFlow.spoon/Spoons/?.spoon/init.lua"
   hs.loadSpoon("RecursiveBinder")
 
   local ui = cfg.ui or {}

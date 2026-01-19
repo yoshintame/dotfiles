@@ -29,7 +29,8 @@ hs.loadSpoon("LeaderFlow")
 
 local shortcut = spoon.LeaderFlow.actions.shortcut
 local text = spoon.LeaderFlow.actions.text
-local openURL = spoon.LeaderFlow.actions.openURL
+local currentDate = spoon.LeaderFlow.actions.currentDate
+local url = spoon.LeaderFlow.actions.openURL
 local raycast = spoon.LeaderFlow.actions.raycast
 local launch = spoon.LeaderFlow.actions.launch
 local reload = spoon.LeaderFlow.actions.reload
@@ -37,7 +38,7 @@ local reload = spoon.LeaderFlow.actions.reload
 spoon.LeaderFlow:setup({
     leader = { mods = {}, key = "F18" },
     abortOnMouseClick = true,
-    
+
     ui = {
         show = true,
         escapeKey = { { {}, "F18" }, { {}, "escape" } },
@@ -70,9 +71,9 @@ spoon.LeaderFlow:setup({
         }},
 
         { "l", "[links]", {
-            { "g", "github.com/yoshintame", openURL("https://github.com/yoshintame") },
-            { "y", "youtube.com", openURL("https://youtube.com") },
-            { "m", "google.com/maps", openURL("https://www.google.com/maps") },
+            { "g", "github.com/yoshintame", url("https://github.com/yoshintame") },
+            { "y", "youtube.com", url("https://youtube.com") },
+            { "m", "google.com/maps", url("https://www.google.com/maps") },
         }},
 
         { "r", "[ru snippets]", {
@@ -93,7 +94,7 @@ spoon.LeaderFlow:setup({
             { "s", "Intr. Passport", text("770867661") },
             { "d", "Birthday", text("24.08.2001") },
             { "a", "Address", text("Apt 1115, 1333 The Line Wongsawang") },
-            { "t", "TODO: Current Date", text("Current Date") },
+            { "t", "Current Date", currentDate() },
 
             { "k", "[keys]", {
                 { "shift", "⇧", text("⇧") },

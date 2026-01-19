@@ -42,7 +42,22 @@ function obj.actions.shortcut(keystroke)
 end
 
 function obj.actions.text(s)
-  return function() hs.eventtap.keyStrokes(s) end
+  return function()
+    local out = s
+    if type(s) == "function" then
+      out = s()
+    end
+    if out == nil then out = "" end
+    hs.eventtap.keyStrokes(tostring(out))
+  end
+end
+
+function obj.actions.currentDate()
+  return obj.actions.text(function()
+    local t = os.date("*t")
+    local months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
+    return string.format("%d %s %d", t.day, months[t.month], t.year)
+  end)
 end
 
 function obj.actions.launch(app)

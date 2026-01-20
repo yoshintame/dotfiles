@@ -13,7 +13,7 @@ spoon.AppLauncher:bindHotkeys({
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Cursor"]             = { { "alt"                  }, "D" },
-    ["Linear"]             = { { "alt", "shift"         }, "D" },
+    ["Jira"]               = { { "alt", "shift"         }, "D" },
 
     ["Figma"]              = { { "alt"                  }, "Z" },
     ["Insomnia"]           = { { "alt"                  }, "X" },

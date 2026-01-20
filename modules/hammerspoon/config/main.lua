@@ -32,6 +32,7 @@ local text = spoon.LeaderFlow.actions.text
 local currentDate = spoon.LeaderFlow.actions.currentDate
 local url = spoon.LeaderFlow.actions.openURL
 local raycast = spoon.LeaderFlow.actions.raycast
+local code = spoon.LeaderFlow.actions.code
 local launch = spoon.LeaderFlow.actions.launch
 local reload = spoon.LeaderFlow.actions.reload
 
@@ -119,6 +120,15 @@ spoon.LeaderFlow:setup({
 
         { "d", "[development]", {
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
+
+            { "o", "Open Project", {
+                { "c", "CRM", code("~/Development/work/senat-exchange/crm-frontend") },
+                { "d", "dotfiles", code("~/.dotfiles") },
+                { "k", "karabiner", code("~/.dotfiles/modules/karabiner/config") },
+                { "h", "hammerspoon", code("~/.dotfiles/modules/hammerspoon/config") },
+                { "f", "fish", code("~/.dotfiles/modules/fish/config") },
+                { "v", "vscode", code("~/.dotfiles/modules/vscode/config") },
+            } },
         }},
 
         { "s", "[screenshots]", {

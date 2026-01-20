@@ -1,17 +1,12 @@
----@diagnostic disable: undefined-global, undefined-field
-
-local obj = {}
+local obj = {
+  name = "LeaderFlow",
+  version = "1.0",
+  author = "yoshintame",
+  homepage = "",
+  license = "MIT",
+  actions = {},
+}
 obj.__index = obj
-
--- Metadata
-obj.name = "LeaderFlow"
-obj.version = "1.0"
-obj.author = "yoshintame"
-obj.homepage = ""
-obj.license = "MIT"
-
--- action helpers exposed for config files
-obj.actions = {}
 
 local function parseKeystroke(keystroke)
   local parts = {}
@@ -25,6 +20,24 @@ end
 local function sh_open(target, background)
   local flag = background and "-g " or ""
   hs.execute(string.format("open %s%q", flag, target))
+end
+
+function obj.actions.cli(command, with_user_env)
+  return function()
+    local cmd = command
+    if type(cmd) == "function" then
+      cmd = cmd()
+    end
+    if cmd == nil then cmd = "" end
+    local exec = hs.execute
+    exec(tostring(cmd), with_user_env ~= false)
+  end
+end
+
+function obj.actions.code(path)
+  return obj.actions.cli(function()
+    return string.format("cursor %q", tostring(path))
+  end)
 end
 
 function obj.actions.openURL(url)

@@ -1,0 +1,10 @@
+---
+name: yazi
+windows:
+  - tabs:
+      - title: yazi
+        color: yellow
+        layout:
+          cwd: /Users/yoshintame/Downloads
+          commands:
+            - exec: yy

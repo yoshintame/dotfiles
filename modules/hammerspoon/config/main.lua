@@ -4,6 +4,8 @@ spoon.AppLauncher:bindHotkeys({
 
     ["Telegram"]           = { { "alt"                  }, "Q" },
     ["Warp"]               = { { "alt"                  }, "W", keyboardLayout = "ABC" },
+    ["yazi"]               = { { "alt"                  }, "R", isWarp = true, keyboardLayout = "ABC" },
+    ["btop"]               = { { "alt"                  }, "B", isWarp = true, keyboardLayout = "ABC" },
     ["Kitty"]              = { { "alt", "shift"         }, "W", keyboardLayout = "ABC" },
     ["Tana"]               = { { "alt"                  }, "E" },
     ["Finder"]             = { { "alt", "shift"         }, "E", keyboardLayout = "ABC" },
@@ -75,6 +77,11 @@ spoon.LeaderFlow:setup({
             { "g", "github.com/yoshintame", url("https://github.com/yoshintame") },
             { "y", "youtube.com", url("https://youtube.com") },
             { "m", "google.com/maps", url("https://www.google.com/maps") },
+            { "l", "[localhost]", {
+                    { "c", "CRM", url("http://localhost:4003") },
+                    { "t", "TG-Mini", url("http://localhost:8004") },
+                    { "4", "404", url("http://localhost:4040") },
+                }},
         }},
 
         { "r", "[ru snippets]", {

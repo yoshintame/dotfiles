@@ -2,6 +2,7 @@
 bun = "latest"
 go = "latest"
 node = "lts"
+npm = "latest"
 pnpm = "latest"
 python = "latest"
 uv = "latest"

@@ -64,8 +64,21 @@ spoon.LeaderFlow:setup({
     },
 
     spec = {
+        { "t", "[text]", {
+            { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
+            { "f", "Fix", shortcut("cmd alt ctrl shift 1") },
+        }},
+
+        { "c", "Case", {
+            { "k", "Kebab", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Kebab%20Case%22%7D") },
+            { "s", "Snake", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Snake%20Case%22%7D") },
+            { "c", "Camel", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Camel%20Case%22%7D") },
+            { "u", "Upper", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Upper%20Case%22%7D") },
+            { "l", "Lower", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Lower%20Case%22%7D") },
+            { "o", "Constant", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Constant%20Case%22%7D") },
+        }},
+
         { "p", "Passwords", shortcut("cmd shift space") },
-        { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
 
         { "u", "[utils]", {
             { "c", "Color Picker", shortcut("cmd alt ctrl p") },
@@ -93,14 +106,15 @@ spoon.LeaderFlow:setup({
         }},
 
         { "e", "[snippets]", {
+            -- tg
             { "f", "Full Name", text("Mikhail Ivanov Andreevich") },
             { "n", "First Name", text("Mikhail") },
             { "l", "Last Name", text("Ivanov") },
             { "i", "Name with initials", text("Ivanov M.A.") },
             { "u", "Username", text("yoshintame") },
-            { "p", "Phone", text("79162999311") },
+            { "p", "Phone", text("0991671150") },
             { "s", "Intr. Passport", text("770867661") },
-            { "d", "Birthday", text("24.08.2001") },
+            { "b", "Birthday", text("24.08.2001") },
             { "a", "Address", text("Apt 1115, 1333 The Line Wongsawang") },
             { "t", "Current Date", currentDate() },
 

@@ -729,8 +729,21 @@
           "key": "c",
           "name": "Commit",
           "type": "command",
-          "command": "workbench.action.tasks.runTask",
-          "args": "Git: Commit"
+          "command": "runCommands",
+          "args": {
+            "commands": [
+              {
+                "command": "workbench.view.scm"
+              },
+              {
+                "command": "workbench.action.tasks.runTask",
+                "args": "Git: Commit"
+              },
+              {
+                "command": "cursor.generateGitCommitMessage"
+              }
+            ]
+          }
         },
         {
           "key": "C",
@@ -1965,5 +1978,11 @@
         }
       }
     ]
-}
+  },
+  "gitlens.plusFeatures.enabled": false,
+  "gitlens.advanced.messages": {
+    "suppressGitDisabledWarning": true,
+    "suppressGitMissingWarning": true
+  },
+  "workbench.panel.opensMaximized": "always"
 }

@@ -248,6 +248,23 @@
     "when": "workbench.scm.active && auxiliaryBarVisible"
   },
 
+  // Toggle maximized panel (while “Workbench › Panel: Opens Maximized” = “always”, not working https://forum.cursor.com/t/workbench-panel-opens-maximized/141064?u=yoshintame)
+  {
+    "key": "cmd+j",
+    "command": "workbench.action.closePanel"
+  },
+  {
+    "key": "cmd+j",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.toggleMaximizedPanel",
+        "workbench.action.focusPanel"
+      ]
+    },
+    "when": "!terminalFocus"
+  },
+
   // Open File explorer, if already opened - focus active file. If opening from git diff, then open diffing file in editor
   {
     "key": "cmd+e",

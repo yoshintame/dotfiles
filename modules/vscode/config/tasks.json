@@ -51,15 +51,10 @@
       "label": "Git: Commit",
       "type": "shell",
       "presentation": {
-        "echo": false,
-        "reveal": "silent",
-        "focus": true,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": true,
-        "close": true
+        "reveal": "always",
+        "showReuseMessage": false,
+        "clear": true
       },
-      "isBackground": true,
       "command": "git commit",
       "problemMatcher": []
     }

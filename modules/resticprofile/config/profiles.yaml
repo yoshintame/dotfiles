@@ -1,0 +1,173 @@
+version: "2"
+
+global:
+  default-command: snapshots
+
+groups:
+  local:
+    profiles:
+      - development-local-fast
+      - home-local
+
+  b2:
+    profiles:
+      - development-b2
+      - home-b2
+
+  full:
+    profiles:
+      - development-local-fast
+      - home-local
+      - development-b2
+      - home-b2
+
+profiles:
+  base:
+    initialize: true
+    # Create this file locally (do NOT commit secrets):
+    #   ~/.config/resticprofile/development.key
+    password-file: "{{ .Env.HOME }}/.config/resticprofile/development.key"
+
+    backup:
+      exclude:
+        - "/**/node_modules"
+        - "/**/.venv"
+        - "/**/.DS_Store"
+        - "/Backups/restic/**"
+        - "/.config/resticprofile/*.key"
+      exclude-caches: true
+      one-file-system: false
+      no-error-on-warning: true
+
+  repo-local:
+    inherit: base
+    repository: "local:{{ .Env.HOME }}/Backups/restic/main"
+    lock: "/tmp/resticprofile-local.lock"
+    run-before:
+      - "mkdir -p {{ .Env.HOME }}/Backups/restic"
+
+  repo-b2:
+    inherit: base
+    # Single B2 repository for all profiles (bucket: blackgaze)
+    # Requires env vars:
+    #   B2_ACCOUNT_ID
+    #   B2_ACCOUNT_KEY
+    repository: "b2:blackgaze:restic/main"
+    lock: "/tmp/resticprofile-b2.lock"
+
+  # Fast dev backups: every 30 minutes, local only, no prune here.
+  development-local-fast:
+    inherit: repo-local
+    backup:
+      source-base: "{{ .Env.HOME }}/Development"
+      source:
+        - "."
+      tag:
+        - development
+        - fast
+        - "{{ .Profile.Name }}"
+
+  # Maintenance job (run weekly): forget/prune for dev snapshots in the local repo.
+  development-local-maint:
+    inherit: repo-local
+    retention:
+      after-backup: false
+      prune: true
+      # Keep dense dev snapshots only for a short window
+      keep-within: 2d
+      keep-daily: 14
+      keep-weekly: 8
+      keep-monthly: 6
+      tag: true
+      host: true
+
+  development-b2:
+    inherit: repo-b2
+    backup:
+      source-base: "{{ .Env.HOME }}/Development"
+      source:
+        - "."
+      tag:
+        - development
+        - "{{ .Profile.Name }}"
+
+  # Maintenance job (run weekly): forget/prune for dev snapshots in the B2 repo.
+  development-b2-maint:
+    inherit: repo-b2
+    retention:
+      after-backup: false
+      prune: true
+      keep-within: 2d
+      keep-daily: 14
+      keep-weekly: 8
+      keep-monthly: 6
+      tag: true
+      host: true
+
+  home-local:
+    inherit: repo-local
+    backup:
+      source-base: "{{ .Env.HOME }}"
+      source:
+        - ".ssh"
+        - ".config"
+        - ".dotfiles"
+        - "Documents"
+        - "Pictures"
+        - "remnote"
+        - "Backups"
+        - ".zsh_history"
+        - ".bash_history"
+        - ".history.db"
+        - ".gnupg"
+        - ".local/share/fish/fish_history"
+      tag:
+        - home
+        - "{{ .Profile.Name }}"
+
+  home-b2:
+    inherit: repo-b2
+    backup:
+      source-base: "{{ .Env.HOME }}"
+      source:
+        - ".ssh"
+        - ".config"
+        - ".dotfiles"
+        - "Documents"
+        - "Pictures"
+        - "remnote"
+        - "Backups"
+        - ".zsh_history"
+        - ".bash_history"
+        - ".history.db"
+        - ".gnupg"
+        - ".local/share/fish/fish_history"
+      tag:
+        - home
+        - "{{ .Profile.Name }}"
+
+  # Maintenance job (run weekly): forget/prune for home snapshots in the local repo.
+  home-local-maint:
+    inherit: repo-local
+    retention:
+      after-backup: false
+      prune: true
+      keep-within: 30d
+      keep-daily: 7
+      keep-weekly: 4
+      keep-monthly: 6
+      tag: true
+      host: true
+
+  # Maintenance job (run weekly): forget/prune for home snapshots in the B2 repo.
+  home-b2-maint:
+    inherit: repo-b2
+    retention:
+      after-backup: false
+      prune: true
+      keep-within: 30d
+      keep-daily: 7
+      keep-weekly: 4
+      keep-monthly: 6
+      tag: true
+      host: true

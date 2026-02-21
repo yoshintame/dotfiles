@@ -1,44 +1,52 @@
+# resticprofile config: Strategy 2 — backup to local repo, then restic copy to B2.
+# See modules/resticprofile/backup-plan.md for full architecture and scheduling.
+# Secrets: ~/.config/resticprofile/repo.key, b2.env, notify.env (do NOT commit).
+
 version: "2"
 
 global:
   default-command: snapshots
 
 groups:
-  local:
+  backup:
     profiles:
-      - development-local-fast
-      - home-local
-
-  b2:
+      - development
+      - home
+  full-cycle:
     profiles:
-      - development-b2
-      - home-b2
-
-  full:
+      - development
+      - home
+      - copy-to-b2
+  maintenance:
     profiles:
-      - development-local-fast
-      - home-local
-      - development-b2
-      - home-b2
+      - maint-local
+      - maint-b2
+  check:
+    profiles:
+      - check-local
+      - check-b2
 
 profiles:
+  # --- Base: password, global excludes, notification hooks ---
   base:
     initialize: true
-    # Create this file locally (do NOT commit secrets):
-    #   ~/.config/resticprofile/development.key
-    password-file: "{{ .Env.HOME }}/.config/resticprofile/development.key"
-
+    password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
     backup:
       exclude:
-        - "/**/node_modules"
-        - "/**/.venv"
-        - "/**/.DS_Store"
+        - "**/node_modules"
+        - "**/.venv"
+        - "**/.DS_Store"
         - "/Backups/restic/**"
         - "/.config/resticprofile/*.key"
       exclude-caches: true
       one-file-system: false
       no-error-on-warning: true
+      run-after:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' backup"
+      run-after-fail:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' backup"
 
+  # --- Local repository (hub for all backups) ---
   repo-local:
     inherit: base
     repository: "local:{{ .Env.HOME }}/Backups/restic/main"
@@ -46,17 +54,15 @@ profiles:
     run-before:
       - "mkdir -p {{ .Env.HOME }}/Backups/restic"
 
+  # --- B2 repository (offsite copy); needs B2_ACCOUNT_ID, B2_ACCOUNT_KEY ---
   repo-b2:
     inherit: base
-    # Single B2 repository for all profiles (bucket: blackgaze)
-    # Requires env vars:
-    #   B2_ACCOUNT_ID
-    #   B2_ACCOUNT_KEY
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     repository: "b2:blackgaze:restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
-  # Fast dev backups: every 30 minutes, local only, no prune here.
-  development-local-fast:
+  # --- Backup: Development (every 30 min) — local only ---
+  development:
     inherit: repo-local
     backup:
       source-base: "{{ .Env.HOME }}/Development"
@@ -64,47 +70,13 @@ profiles:
         - "."
       tag:
         - development
-        - fast
         - "{{ .Profile.Name }}"
+      schedule: "*:00,30"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-development.log"
 
-  # Maintenance job (run weekly): forget/prune for dev snapshots in the local repo.
-  development-local-maint:
-    inherit: repo-local
-    retention:
-      after-backup: false
-      prune: true
-      # Keep dense dev snapshots only for a short window
-      keep-within: 2d
-      keep-daily: 14
-      keep-weekly: 8
-      keep-monthly: 6
-      tag: true
-      host: true
-
-  development-b2:
-    inherit: repo-b2
-    backup:
-      source-base: "{{ .Env.HOME }}/Development"
-      source:
-        - "."
-      tag:
-        - development
-        - "{{ .Profile.Name }}"
-
-  # Maintenance job (run weekly): forget/prune for dev snapshots in the B2 repo.
-  development-b2-maint:
-    inherit: repo-b2
-    retention:
-      after-backup: false
-      prune: true
-      keep-within: 2d
-      keep-daily: 14
-      keep-weekly: 8
-      keep-monthly: 6
-      tag: true
-      host: true
-
-  home-local:
+  # --- Backup: Home (daily 02:00) — local only ---
+  home:
     inherit: repo-local
     backup:
       source-base: "{{ .Env.HOME }}"
@@ -116,58 +88,98 @@ profiles:
         - "Pictures"
         - "remnote"
         - "Backups"
+        - ".gnupg"
         - ".zsh_history"
         - ".bash_history"
         - ".history.db"
-        - ".gnupg"
         - ".local/share/fish/fish_history"
       tag:
         - home
         - "{{ .Profile.Name }}"
+      schedule: "2:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-home.log"
 
-  home-b2:
-    inherit: repo-b2
-    backup:
-      source-base: "{{ .Env.HOME }}"
-      source:
-        - ".ssh"
-        - ".config"
-        - ".dotfiles"
-        - "Documents"
-        - "Pictures"
-        - "remnote"
-        - "Backups"
-        - ".zsh_history"
-        - ".bash_history"
-        - ".history.db"
-        - ".gnupg"
-        - ".local/share/fish/fish_history"
-      tag:
-        - home
-        - "{{ .Profile.Name }}"
+  # --- Copy: local repo → B2 (every 3 hours) ---
+  copy-to-b2:
+    inherit: repo-local
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
+    copy:
+      initialize: true
+      initialize-copy-chunker-params: true
+      repository: "b2:blackgaze:restic/main"
+      password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
+      schedule: "0,3,6,9,12,15,18,21:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-copy-to-b2.log"
+      run-after:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' copy"
+      run-after-fail:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' copy"
 
-  # Maintenance job (run weekly): forget/prune for home snapshots in the local repo.
-  home-local-maint:
+  # --- Maintenance: forget + prune local (Sunday 04:00) ---
+  maint-local:
     inherit: repo-local
     retention:
       after-backup: false
       prune: true
-      keep-within: 30d
-      keep-daily: 7
-      keep-weekly: 4
+      group-by: "host,tags"
+      keep-within: 1d
+      keep-daily: 14
+      keep-weekly: 8
       keep-monthly: 6
       tag: true
       host: true
+      schedule: "sun 4:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-local.log"
+      run-after:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' retention"
+      run-after-fail:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' retention"
 
-  # Maintenance job (run weekly): forget/prune for home snapshots in the B2 repo.
-  home-b2-maint:
+  # --- Maintenance: forget + prune B2 (Sunday 05:00) ---
+  maint-b2:
     inherit: repo-b2
     retention:
       after-backup: false
       prune: true
-      keep-within: 30d
-      keep-daily: 7
-      keep-weekly: 4
-      keep-monthly: 6
+      group-by: "host,tags"
+      keep-daily: 30
+      keep-weekly: 12
+      keep-monthly: 12
+      keep-yearly: 3
       tag: true
       host: true
+      schedule: "sun 5:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-b2.log"
+      run-after:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' retention"
+      run-after-fail:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' retention"
+
+  # --- Check: local repo (1st of month, 06:00) ---
+  check-local:
+    inherit: repo-local
+    check:
+      schedule: "*-*-01 6:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-local.log"
+      run-after:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' check"
+      run-after-fail:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' check"
+
+  # --- Check: B2 repo (1st of month, 07:00); read-data-subset 5% for partial verify ---
+  check-b2:
+    inherit: repo-b2
+    check:
+      read-data-subset: "5%"
+      schedule: "*-*-01 7:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-b2.log"
+      run-after:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' check"
+      run-after-fail:
+        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' check"

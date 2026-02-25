@@ -1,6 +1,5 @@
 # resticprofile config: Strategy 2 — backup to local repo, then restic copy to B2.
-# See modules/resticprofile/backup-plan.md for full architecture and scheduling.
-# Secrets: ~/.config/resticprofile/repo.key, b2.env, notify.env (do NOT commit).
+# See modules/resticprofile/backup-plan.md for full architecture.
 
 version: "2"
 
@@ -27,7 +26,9 @@ groups:
       - check-b2
 
 profiles:
-  # --- Base: password, global excludes, notification hooks ---
+  default:
+    inherit: repo-local
+
   base:
     initialize: true
     password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
@@ -36,15 +37,89 @@ profiles:
         - "**/node_modules"
         - "**/.venv"
         - "**/.DS_Store"
-        - "/Backups/restic/**"
-        - "/.config/resticprofile/*.key"
+        - "**/Backups/restic/**"
+        - "**/.config/resticprofile/*.key"
       exclude-caches: true
       one-file-system: false
       no-error-on-warning: true
       run-after:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' backup"
+        # Telegram success notification
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-success
+          --tag "hc-{{ .Profile.Name }}-backup-success"
+          -t "Backup Success: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: backup\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
+          -vv
       run-after-fail:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' backup"
+        # Telegram + email failure notification + HC.io fail ping
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-fail
+          --tag "hc-{{ .Profile.Name }}-backup-fail"
+          -t "Backup FAILED: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: backup\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
+          -vv
+
+    copy:
+      run-after:
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-success
+          --tag "hc-{{ .Profile.Name }}-success"
+          -t "Copy Success: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: copy\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
+          -vv
+      run-after-fail:
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-fail
+          --tag "hc-{{ .Profile.Name }}-fail"
+          -t "Copy FAILED: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: copy\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
+          -vv
+
+    forget:
+      run-after:
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-success
+          --tag "hc-{{ .Profile.Name }}-success"
+          -t "Forget/Prune Success: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: forget\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
+          -vv
+      run-after-fail:
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-fail
+          --tag "hc-{{ .Profile.Name }}-fail"
+          -t "Forget/Prune FAILED: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: forget\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
+          -vv
+
+    check:
+      run-after:
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-success
+          -t "Check Success: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: check\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
+          -vv
+      run-after-fail:
+        - >-
+          apprise
+          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
+          --tag backup-fail
+          -t "Check FAILED: {{ .Profile.Name }}"
+          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: check\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
+          -vv
 
   # --- Local repository (hub for all backups) ---
   repo-local:
@@ -58,10 +133,9 @@ profiles:
   repo-b2:
     inherit: base
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
-    repository: "b2:blackgaze:restic/main"
+    repository: "b2:yoshintame:restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
-  # --- Backup: Development (every 30 min) — local only ---
   development:
     inherit: repo-local
     backup:
@@ -75,7 +149,6 @@ profiles:
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-development.log"
 
-  # --- Backup: Home (daily 02:00) — local only ---
   home:
     inherit: repo-local
     backup:
@@ -100,78 +173,55 @@ profiles:
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-home.log"
 
-  # --- Copy: local repo → B2 (every 3 hours) ---
   copy-to-b2:
     inherit: repo-local
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     copy:
       initialize: true
       initialize-copy-chunker-params: true
-      repository: "b2:blackgaze:restic/main"
+      repository: "b2:yoshintame:restic/main"
       password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
       schedule: "0,3,6,9,12,15,18,21:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-copy-to-b2.log"
-      run-after:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' copy"
-      run-after-fail:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' copy"
 
-  # --- Maintenance: forget + prune local (Sunday 04:00) ---
   maint-local:
     inherit: repo-local
-    retention:
-      after-backup: false
-      prune: true
+    forget:
       group-by: "host,tags"
       keep-within: 1d
       keep-daily: 14
       keep-weekly: 8
       keep-monthly: 6
-      tag: true
+      prune: true
       host: true
+      tag: true
       schedule: "sun 4:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-local.log"
-      run-after:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' retention"
-      run-after-fail:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' retention"
 
-  # --- Maintenance: forget + prune B2 (Sunday 05:00) ---
   maint-b2:
     inherit: repo-b2
-    retention:
-      after-backup: false
-      prune: true
+    forget:
       group-by: "host,tags"
       keep-daily: 30
       keep-weekly: 12
       keep-monthly: 12
       keep-yearly: 3
-      tag: true
+      prune: true
       host: true
+      tag: true
       schedule: "sun 5:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-b2.log"
-      run-after:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' retention"
-      run-after-fail:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' retention"
 
-  # --- Check: local repo (1st of month, 06:00) ---
   check-local:
     inherit: repo-local
     check:
       schedule: "*-*-01 6:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-local.log"
-      run-after:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' check"
-      run-after-fail:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' check"
 
-  # --- Check: B2 repo (1st of month, 07:00); read-data-subset 5% for partial verify ---
   check-b2:
     inherit: repo-b2
     check:
@@ -179,7 +229,3 @@ profiles:
       schedule: "*-*-01 7:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-b2.log"
-      run-after:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh success '{{ .Profile.Name }}' check"
-      run-after-fail:
-        - "{{ .Env.HOME }}/.local/bin/restic-notify.sh failure '{{ .Profile.Name }}' check"

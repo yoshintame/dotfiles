@@ -670,31 +670,31 @@
               "key": "s",
               "name": "Switch",
               "type": "command",
-              "command": "gitlens.gitCommands.switch"
+              "command": "gitlens.git.branch.switch"
             },
             {
               "key": "c",
               "name": "Create",
               "type": "command",
-              "command": "gitlens.gitCommands.branch.create"
+              "command": "gitlens.git.branch.create"
             },
             {
               "key": "r",
               "name": "Rename",
               "type": "command",
-              "command": "gitlens.gitCommands.branch.rename"
+              "command": "gitlens.git.branch.rename"
             },
             {
               "key": "d",
               "name": "Delete",
               "type": "command",
-              "command": "gitlens.gitCommands.branch.delete"
+              "command": "gitlens.git.branch.delete"
             },
             {
               "key": "p",
               "name": "Prune",
               "type": "command",
-              "command": "gitlens.gitCommands.branch.prune"
+              "command": "gitlens.git.branch.prune"
             }
           ]
         },

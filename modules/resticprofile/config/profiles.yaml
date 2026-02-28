@@ -45,79 +45,79 @@ profiles:
       run-after:
         # Telegram success notification
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           --tag "hc-{{ .Profile.Name }}-backup-success"
-          -t "Backup Success: {{ .Profile.Name }}"
+          -t "🟢 Backup Success: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: backup\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
           -vv
       run-after-fail:
         # Telegram + email failure notification + HC.io fail ping
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           --tag "hc-{{ .Profile.Name }}-backup-fail"
-          -t "Backup FAILED: {{ .Profile.Name }}"
+          -t "🔴 Backup FAILED: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: backup\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
           -vv
 
     copy:
       run-after:
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           --tag "hc-{{ .Profile.Name }}-success"
-          -t "Copy Success: {{ .Profile.Name }}"
+          -t "🟢 Copy Success: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: copy\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
           -vv
       run-after-fail:
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           --tag "hc-{{ .Profile.Name }}-fail"
-          -t "Copy FAILED: {{ .Profile.Name }}"
+          -t "🔴 Copy FAILED: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: copy\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
           -vv
 
     forget:
       run-after:
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           --tag "hc-{{ .Profile.Name }}-success"
-          -t "Forget/Prune Success: {{ .Profile.Name }}"
+          -t "🟢 Forget/Prune Success: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: forget\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
           -vv
       run-after-fail:
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           --tag "hc-{{ .Profile.Name }}-fail"
-          -t "Forget/Prune FAILED: {{ .Profile.Name }}"
+          -t "🔴 Forget/Prune FAILED: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: forget\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
           -vv
 
     check:
       run-after:
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
-          -t "Check Success: {{ .Profile.Name }}"
+          -t "🟢 Check Success: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: check\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
           -vv
       run-after-fail:
         - >-
-          apprise
+          apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
-          -t "Check FAILED: {{ .Profile.Name }}"
+          -t "🔴 Check FAILED: {{ .Profile.Name }}"
           -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: check\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
           -vv
 

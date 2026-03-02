@@ -5,15 +5,16 @@ version: "2"
 
 global:
   default-command: snapshots
+  scheduler: crond
 
 groups:
-  backup:
+  all:
     profiles:
-      - development
+      - dev
       - home
   full-cycle:
     profiles:
-      - development
+      - dev
       - home
       - copy-to-b2
   maintenance:
@@ -27,7 +28,7 @@ groups:
 
 profiles:
   default:
-    inherit: repo-local
+    inherit: local
 
   base:
     initialize: true
@@ -122,7 +123,7 @@ profiles:
           -vv
 
   # --- Local repository (hub for all backups) ---
-  repo-local:
+  local:
     inherit: base
     repository: "local:{{ .Env.HOME }}/Backups/restic/main"
     lock: "/tmp/resticprofile-local.lock"
@@ -130,27 +131,26 @@ profiles:
       - "mkdir -p {{ .Env.HOME }}/Backups/restic"
 
   # --- B2 repository (offsite copy); needs B2_ACCOUNT_ID, B2_ACCOUNT_KEY ---
-  repo-b2:
+  b2:
     inherit: base
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     repository: "b2:yoshintame:restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
-  development:
-    inherit: repo-local
+  dev:
+    inherit: local
     backup:
       source-base: "{{ .Env.HOME }}/Development"
       source:
         - "."
       tag:
-        - development
         - "{{ .Profile.Name }}"
       schedule: "*:00,30"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-development.log"
+      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-dev.log"
 
   home:
-    inherit: repo-local
+    inherit: local
     backup:
       source-base: "{{ .Env.HOME }}"
       source:
@@ -168,13 +168,12 @@ profiles:
         - ".local/share/fish/fish_history"
       tag:
         - home
-        - "{{ .Profile.Name }}"
       schedule: "2:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-home.log"
 
   copy-to-b2:
-    inherit: repo-local
+    inherit: local
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     copy:
       initialize: true
@@ -186,7 +185,7 @@ profiles:
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-copy-to-b2.log"
 
   maint-local:
-    inherit: repo-local
+    inherit: local
     forget:
       group-by: "host,tags"
       keep-within: 1d
@@ -201,7 +200,7 @@ profiles:
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-local.log"
 
   maint-b2:
-    inherit: repo-b2
+    inherit: b2
     forget:
       group-by: "host,tags"
       keep-daily: 30
@@ -216,14 +215,14 @@ profiles:
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-b2.log"
 
   check-local:
-    inherit: repo-local
+    inherit: local
     check:
       schedule: "*-*-01 6:00"
       schedule-permission: user
       schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-local.log"
 
   check-b2:
-    inherit: repo-b2
+    inherit: b2
     check:
       read-data-subset: "5%"
       schedule: "*-*-01 7:00"

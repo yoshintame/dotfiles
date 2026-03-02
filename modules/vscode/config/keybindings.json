@@ -310,6 +310,57 @@
     }
   },
 
+  // Open Claude Code sidebar on the left side
+  {
+    "key": "cmd+i",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "claudeVSCodeSidebar.focus",
+        "workbench.action.moveSideBarLeft"
+      ]
+    },
+    "when": "!auxiliaryBarVisible"
+  },
+  {
+    "key": "cmd+i",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "claudeVSCodeSidebar.focus",
+        "workbench.action.moveSideBarLeft",
+        "workbench.action.toggleAuxiliaryBar"
+      ]
+    },
+    "when": "auxiliaryBarVisible"
+  },
+  // Open Claude Code sidebar + insert selection as @mention
+  {
+    "key": "cmd+i",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "claudeVSCodeSidebar.focus",
+        "workbench.action.moveSideBarLeft",
+        "claude-vscode.insertAtMention"
+      ]
+    },
+    "when": "!auxiliaryBarVisible && editorHasSelection"
+  },
+  {
+    "key": "cmd+i",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "claudeVSCodeSidebar.focus",
+        "workbench.action.moveSideBarLeft",
+        "workbench.action.toggleAuxiliaryBar",
+        "claude-vscode.insertAtMention"
+      ]
+    },
+    "when": "auxiliaryBarVisible && editorHasSelection"
+  },
+
   // Unbind defaults
   {
     "key": "cmd+g",
@@ -319,5 +370,9 @@
   {
     "key": "cmd+l",
     "command": "-aichat.newchataction"
+  },
+  {
+    "key": "cmd+i",
+    "command": "-composerMode.agent"
   }
 ]

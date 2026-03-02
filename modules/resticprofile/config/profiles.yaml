@@ -1,30 +1,25 @@
-# resticprofile config: Strategy 2 — backup to local repo, then restic copy to B2.
-# See modules/resticprofile/backup-plan.md for full architecture.
+# yaml-language-server: $schema=https://creativeprojects.github.io/resticprofile/jsonschema/config.json
 
 version: "2"
 
 global:
   default-command: snapshots
   scheduler: crond
+  restic-binary: /opt/homebrew/bin/restic
 
 groups:
   all:
     profiles:
       - dev
       - home
-  full-cycle:
-    profiles:
-      - dev
-      - home
-      - copy-to-b2
   maintenance:
     profiles:
-      - maint-local
-      - maint-b2
+      - local-ops
+      - b2-ops
   check:
     profiles:
-      - check-local
-      - check-b2
+      - local-ops
+      - b2-ops
 
 profiles:
   default:
@@ -46,7 +41,7 @@ profiles:
       run-after:
         # Telegram success notification
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           --tag "hc-{{ .Profile.Name }}-backup-success"
@@ -56,7 +51,7 @@ profiles:
       run-after-fail:
         # Telegram + email failure notification + HC.io fail ping
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           --tag "hc-{{ .Profile.Name }}-backup-fail"
@@ -67,7 +62,7 @@ profiles:
     copy:
       run-after:
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           --tag "hc-{{ .Profile.Name }}-success"
@@ -76,7 +71,7 @@ profiles:
           -vv
       run-after-fail:
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           --tag "hc-{{ .Profile.Name }}-fail"
@@ -87,7 +82,7 @@ profiles:
     forget:
       run-after:
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           --tag "hc-{{ .Profile.Name }}-success"
@@ -96,7 +91,7 @@ profiles:
           -vv
       run-after-fail:
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           --tag "hc-{{ .Profile.Name }}-fail"
@@ -107,7 +102,7 @@ profiles:
     check:
       run-after:
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-success
           -t "🟢 Check Success: {{ .Profile.Name }}"
@@ -115,7 +110,7 @@ profiles:
           -vv
       run-after-fail:
         - >-
-          apprise -e
+          /opt/homebrew/bin/apprise -e
           -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
           --tag backup-fail
           -t "🔴 Check FAILED: {{ .Profile.Name }}"
@@ -147,7 +142,7 @@ profiles:
         - "{{ .Profile.Name }}"
       schedule: "*:00,30"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-dev.log"
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
 
   home:
     inherit: local
@@ -170,9 +165,9 @@ profiles:
         - home
       schedule: "2:00"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-home.log"
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
 
-  copy-to-b2:
+  local-to-b2:
     inherit: local
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     copy:
@@ -182,9 +177,9 @@ profiles:
       password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
       schedule: "0,3,6,9,12,15,18,21:00"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-copy-to-b2.log"
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-b2.log"
 
-  maint-local:
+  local-ops:
     inherit: local
     forget:
       group-by: "host,tags"
@@ -197,9 +192,13 @@ profiles:
       tag: true
       schedule: "sun 4:00"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-local.log"
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
+    check:
+      schedule: "*-*-01 6:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
 
-  maint-b2:
+  b2-ops:
     inherit: b2
     forget:
       group-by: "host,tags"
@@ -212,19 +211,9 @@ profiles:
       tag: true
       schedule: "sun 5:00"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-maint-b2.log"
-
-  check-local:
-    inherit: local
-    check:
-      schedule: "*-*-01 6:00"
-      schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-local.log"
-
-  check-b2:
-    inherit: b2
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log"
     check:
       read-data-subset: "5%"
       schedule: "*-*-01 7:00"
       schedule-permission: user
-      schedule-log: "{{ .Env.TMPDIR }}/resticprofile-check-b2.log"
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log"

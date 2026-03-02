@@ -10,11 +10,12 @@ backup profile="all":
 
 # Copy local repo → B2
 push:
-    resticprofile -n copy-to-b2 copy
+    resticprofile -n local-to-b2 copy
 
 # Full cycle: backup all + copy to B2
 backup-and-push:
-    resticprofile -n full-cycle backup
+    resticprofile -n all backup
+    resticprofile -n local-to-b2 copy
 
 # List snapshots: [local|b2] [all|dev|home]
 snapshots repo="local" tag="":
@@ -28,7 +29,7 @@ snapshots repo="local" tag="":
 stats profile="dev":
     #!/usr/bin/env sh
     if [ "{{profile}}" = "b2" ]; then
-        resticprofile -n maint-b2 stats
+        resticprofile -n b2-ops stats
     else
         resticprofile -n {{profile}} stats
     fi
@@ -38,8 +39,8 @@ maintenance target="all":
     #!/usr/bin/env sh
     case "{{target}}" in
         all)   resticprofile -n maintenance forget ;;
-        local) resticprofile -n maint-local forget ;;
-        b2)    resticprofile -n maint-b2 forget ;;
+        local) resticprofile -n local-ops forget ;;
+        b2)    resticprofile -n b2-ops forget ;;
         *)     echo "Unknown target: {{target}}. Use: all, local, b2" && exit 1 ;;
     esac
 
@@ -48,21 +49,39 @@ check target="all":
     #!/usr/bin/env sh
     case "{{target}}" in
         all)   resticprofile -n check check ;;
-        local) resticprofile -n check-local check ;;
-        b2)    resticprofile -n check-b2 check ;;
-        full)  resticprofile -n check-local check --read-data ;;
+        local) resticprofile -n local-ops check ;;
+        b2)    resticprofile -n b2-ops check ;;
+        full)  resticprofile -n local-ops check --read-data ;;
         *)     echo "Unknown target: {{target}}. Use: all, local, b2, full" && exit 1 ;;
     esac
 
-# Manage launchd schedules: [on|off|reload|status]
+# Manage cron schedules: [up|down|reload|status]
 schedule action="status":
     #!/usr/bin/env sh
+    LOGROTATE_LINE="0 7 * * * /opt/homebrew/sbin/logrotate --state $HOME/.local/share/resticprofile/logrotate.state $HOME/.config/resticprofile/logrotate.conf # logrotate-resticprofile"
+    _cron_add_logrotate() {
+        (crontab -l 2>/dev/null | grep -v "logrotate-resticprofile"; echo "$LOGROTATE_LINE") | crontab -
+    }
+    _cron_remove_logrotate() {
+        (crontab -l 2>/dev/null | grep -v "logrotate-resticprofile") | crontab -
+    }
     case "{{action}}" in
-        on)     crontab -l 2>/dev/null | crontab - ; resticprofile schedule --all ;;
-        off)    resticprofile unschedule --all ;;
-        reload) resticprofile unschedule --all; crontab -l 2>/dev/null | crontab - ; resticprofile schedule --all && resticprofile status ;;
+        up)
+            _cron_add_logrotate
+            resticprofile schedule --all
+            ;;
+        down)
+            resticprofile unschedule --all
+            _cron_remove_logrotate
+            ;;
+        reload)
+            resticprofile unschedule --all
+            _cron_add_logrotate
+            resticprofile schedule --all
+            resticprofile status
+            ;;
         status) resticprofile status --all ;;
-        *)      echo "Unknown action: {{action}}. Use: on, off, reload, status" && exit 1 ;;
+        *)      echo "Unknown action: {{action}}. Use: up, down, reload, status" && exit 1 ;;
     esac
 
 # --- Restore ---
@@ -73,7 +92,7 @@ restore snapshot target include profile="dev":
 
 # Restore latest home from B2: [target]
 restore-from-b2 target="/tmp/home-restore":
-    resticprofile -n maint-b2 restore latest --tag home --target {{target}}
+    resticprofile -n b2-ops restore latest --tag home --target {{target}}
 
 # --- Diff ---
 
@@ -100,16 +119,24 @@ test-notify type="success":
         *)       echo "Unknown type: {{type}}. Use: success, fail, hc" && exit 1 ;;
     esac
 
+# Rotate logs now (runs logrotate manually)
+rotate-logs:
+    mkdir -p "$HOME/.local/share/resticprofile/logs"
+    logrotate --state "$HOME/.local/share/resticprofile/logrotate.state" \
+              "$HOME/.config/resticprofile/logrotate.conf" -v
+
 # --- Logs ---
 
-# Tail profile log: [dev|home|copy|local|b2]
+# Tail profile log: [dev|home|copy|local|local-check|b2|b2-check]
 log profile="dev":
     #!/usr/bin/env sh
     case "{{profile}}" in
-        dev)   tail -f "${TMPDIR:-/tmp}/resticprofile-dev.log" ;;
-        home)  tail -f "${TMPDIR:-/tmp}/resticprofile-home.log" ;;
-        copy)  tail -f "${TMPDIR:-/tmp}/resticprofile-copy-to-b2.log" ;;
-        local) tail -f "${TMPDIR:-/tmp}/resticprofile-maint-local.log" ;;
-        b2)    tail -f "${TMPDIR:-/tmp}/resticprofile-maint-b2.log" ;;
-        *)     echo "Unknown profile: {{profile}}. Use: dev, home, copy, local, b2" && exit 1 ;;
+        dev)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-dev.log" ;;
+        home)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-home.log" ;;
+        copy)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
+        local)       tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log" ;;
+        local-check) tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-check.log" ;;
+        b2)          tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log" ;;
+        b2-check)    tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log" ;;
+        *)     echo "Unknown profile: {{profile}}. Use: dev, home, copy, local, local-check, b2, b2-check" && exit 1 ;;
     esac

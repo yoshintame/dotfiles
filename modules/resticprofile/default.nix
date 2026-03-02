@@ -6,5 +6,6 @@
 }: {
   nixDotbot.links = {
     "~/.config/resticprofile/profiles.yaml" = "modules/resticprofile/config/profiles.yaml";
+    "~/.config/resticprofile/justfile" = "modules/resticprofile/config/justfile";
   };
 }

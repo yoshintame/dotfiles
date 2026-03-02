@@ -111,6 +111,28 @@
     "when": "editorFocus && findWidgetVisible && !isComposing"
   },
 
+  // Camel case navigation (built-in since VS Code v1.25, replaces maptz.camelcasenavigation)
+  {
+    "key": "alt+left",
+    "command": "cursorWordPartLeft",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+shift+left",
+    "command": "cursorWordPartLeftSelect",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+right",
+    "command": "cursorWordPartRight",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+shift+right",
+    "command": "cursorWordPartRightSelect",
+    "when": "editorTextFocus"
+  },
+
   // Rename symbol
   {
     "key": "cmd+r",

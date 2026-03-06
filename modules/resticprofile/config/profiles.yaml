@@ -132,6 +132,14 @@ profiles:
     repository: "b2:yoshintame:restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
+  quicksave:
+    inherit: local
+    backup:
+      source:
+        - "{{ .Env.RP_SAVE_DIR }}"
+      tag:
+        - quicksave
+
   dev:
     inherit: local
     backup:

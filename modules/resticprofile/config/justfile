@@ -84,6 +84,20 @@ schedule action="status":
         *)      echo "Unknown action: {{action}}. Use: up, down, reload, status" && exit 1 ;;
     esac
 
+# --- Quick save/load (full, no exclusions) ---
+
+# Save current dir (full backup, no exclusions): <dir>
+save dir:
+    RP_SAVE_DIR={{dir}} resticprofile -n quicksave backup
+
+# Load current dir from latest snapshot: <dir> [clean=true]
+load dir clean="true":
+    #!/usr/bin/env sh
+    if [ "{{clean}}" = "true" ]; then
+        find "{{dir}}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+    fi
+    resticprofile -n quicksave restore "latest:{{dir}}" --target "{{dir}}"
+
 # --- Restore ---
 
 # Restore file/dir: <snapshot> <target> <include> [dev|home]

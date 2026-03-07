@@ -1,0 +1,226 @@
+# yaml-language-server: $schema=https://mise.jdx.dev/schema/mise-task.json
+# Resticprofile backup management tasks
+# Usage: rp <command> [args]
+
+["rp:backup"]
+description = "Run backup"
+usage = '''
+arg "<profile>" help="Backup profile" default="all" {
+  choices "all" "dev" "home"
+}
+'''
+run = 'resticprofile -n ${usage_profile?} backup'
+
+["rp:push"]
+description = "Copy local repo to B2"
+run = "resticprofile -n local-to-b2 copy"
+
+["rp:backup-and-push"]
+description = "Full cycle: backup all + copy to B2"
+run = [
+  "resticprofile -n all backup",
+  "resticprofile -n local-to-b2 copy",
+]
+
+["rp:snapshots"]
+description = "List snapshots"
+usage = '''
+arg "<repo>" help="Repository" default="local" {
+  choices "local" "b2"
+}
+arg "[tag]" help="Filter by tag"
+'''
+run = '''
+if [ -n "${usage_tag}" ]; then
+    resticprofile -n ${usage_repo?} snapshots --tag ${usage_tag}
+else
+    resticprofile -n ${usage_repo?} snapshots
+fi
+'''
+
+["rp:stats"]
+description = "Repo stats"
+usage = '''
+arg "<profile>" help="Profile" default="dev" {
+  choices "dev" "home" "b2"
+}
+'''
+run = '''
+if [ "${usage_profile?}" = "b2" ]; then
+    resticprofile -n b2-ops stats
+else
+    resticprofile -n ${usage_profile?} stats
+fi
+'''
+
+["rp:maintenance"]
+description = "Forget + prune"
+usage = '''
+arg "<target>" help="Target" default="all" {
+  choices "all" "local" "b2"
+}
+'''
+run = '''
+case "${usage_target?}" in
+    all)   resticprofile -n maintenance forget ;;
+    local) resticprofile -n local-ops forget ;;
+    b2)    resticprofile -n b2-ops forget ;;
+esac
+'''
+
+["rp:check"]
+description = "Integrity check"
+usage = '''
+arg "<target>" help="Target" default="all" {
+  choices "all" "local" "b2" "full"
+}
+'''
+run = '''
+case "${usage_target?}" in
+    all)   resticprofile -n check check ;;
+    local) resticprofile -n local-ops check ;;
+    b2)    resticprofile -n b2-ops check ;;
+    full)  resticprofile -n local-ops check --read-data ;;
+esac
+'''
+
+["rp:schedule"]
+description = "Manage cron schedules"
+usage = '''
+arg "<action>" help="Schedule action" default="status" {
+  choices "up" "down" "reload" "status"
+}
+'''
+run = '''
+LOGROTATE_LINE="0 7 * * * /opt/homebrew/sbin/logrotate --state $HOME/.local/share/resticprofile/logrotate.state $HOME/.config/resticprofile/logrotate.conf # logrotate-resticprofile"
+_cron_add_logrotate() {
+    (crontab -l 2>/dev/null | grep -v "logrotate-resticprofile"; echo "$LOGROTATE_LINE") | crontab -
+}
+_cron_remove_logrotate() {
+    (crontab -l 2>/dev/null | grep -v "logrotate-resticprofile") | crontab -
+}
+case "${usage_action?}" in
+    up)
+        _cron_add_logrotate
+        resticprofile schedule --all
+        ;;
+    down)
+        resticprofile unschedule --all
+        _cron_remove_logrotate
+        ;;
+    reload)
+        resticprofile unschedule --all
+        _cron_add_logrotate
+        resticprofile schedule --all
+        resticprofile status
+        ;;
+    status) resticprofile status --all ;;
+esac
+'''
+
+# --- Quick save/load ---
+
+["rp:save"]
+description = "Quick-save current dir (full, no exclusions)"
+run = 'RP_SAVE_DIR="$(pwd)" resticprofile -n quicksave backup'
+
+["rp:load"]
+description = "Load current dir from latest snapshot"
+usage = '''
+flag "--no-clean" help="Don't delete existing files before restore"
+'''
+run = '''
+dir="$(pwd)"
+if [ "${usage_no_clean:-false}" = "false" ]; then
+    find "$dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+fi
+resticprofile -n quicksave restore "latest:$dir" --target "$dir"
+'''
+
+# --- Restore ---
+
+["rp:restore"]
+description = "Restore file/dir from snapshot"
+usage = '''
+arg "<snapshot>" help="Snapshot ID or 'latest'"
+arg "<target>" help="Target directory"
+arg "<include>" help="Path to include"
+arg "<profile>" help="Profile" default="dev" {
+  choices "dev" "home"
+}
+'''
+run = 'resticprofile -n ${usage_profile?} restore ${usage_snapshot?} --include ${usage_include?} --target ${usage_target?}'
+
+["rp:restore-from-b2"]
+description = "Restore latest home from B2"
+usage = 'arg "<target>" help="Target directory" default="/tmp/home-restore"'
+run = 'resticprofile -n b2-ops restore latest --tag home --target ${usage_target?}'
+
+# --- Diff ---
+
+["rp:diff"]
+description = "Diff latest two snapshots"
+usage = '''
+arg "<profile>" help="Profile" default="dev" {
+  choices "dev" "home"
+}
+'''
+run = 'resticprofile -n ${usage_profile?} diff latest~1 latest'
+
+["rp:diff-snapshots"]
+description = "Diff two specific snapshots"
+usage = '''
+arg "<snapshot1>" help="First snapshot ID"
+arg "<snapshot2>" help="Second snapshot ID"
+'''
+run = 'resticprofile -n dev diff ${usage_snapshot1?} ${usage_snapshot2?}'
+
+# --- Notifications ---
+
+["rp:test-notify"]
+description = "Test apprise notification"
+usage = '''
+arg "<type>" help="Notification type" default="success" {
+  choices "success" "fail" "hc"
+}
+'''
+run = '''
+apprise_config="$HOME/.config/resticprofile/apprise.yaml"
+case "${usage_type?}" in
+    success) apprise -c "$apprise_config" --tag backup-success \
+               -t "Test: Backup Success" -b "Manual test $(date)" -vv ;;
+    fail)    apprise -c "$apprise_config" --tag backup-fail \
+               -t "Test: Backup FAILED" -b "Manual failure test" -vv ;;
+    hc)      apprise -c "$apprise_config" --tag hc-dev-backup-success \
+               -t "ping" -b "test" -vv ;;
+esac
+'''
+
+["rp:rotate-logs"]
+description = "Rotate logs now"
+run = '''
+mkdir -p "$HOME/.local/share/resticprofile/logs"
+logrotate --state "$HOME/.local/share/resticprofile/logrotate.state" \
+          "$HOME/.config/resticprofile/logrotate.conf" -v
+'''
+
+# --- Logs ---
+
+["rp:log"]
+description = "Tail profile log"
+usage = '''
+arg "<profile>" help="Log profile" default="dev" {
+  choices "dev" "home" "copy" "local" "local-check" "b2" "b2-check"
+}
+'''
+run = '''
+case "${usage_profile?}" in
+    dev)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-dev.log" ;;
+    home)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-home.log" ;;
+    copy)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
+    local)       tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log" ;;
+    local-check) tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-check.log" ;;
+    b2)          tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log" ;;
+    b2-check)    tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log" ;;
+esac
+'''

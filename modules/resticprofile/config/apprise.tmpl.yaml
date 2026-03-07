@@ -1,0 +1,57 @@
+version: 1
+
+urls:
+  - tgram://${TELEGRAM_BOT_TOKEN}/${TELEGRAM_CHAT_ID}/:
+      tag:
+        - backup-success
+        - backup-fail
+        - backup-info
+
+  - mailto://${GMAIL_USER}:${GMAIL_APP_PASSWORD}@gmail.com:
+      tag:
+        - backup-fail
+
+  # dev-backup check (30-min period, 1h grace)
+  - forms://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-dev-backup-success
+
+  - forms://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}/fail?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-dev-backup-fail
+
+  # home-backup check (1-day period, 6h grace)
+  - forms://hc-ping.com/${HC_HOME_BACKUP_UUID}?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-home-backup-success
+
+  - forms://hc-ping.com/${HC_HOME_BACKUP_UUID}/fail?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-home-backup-fail
+
+  # local-to-b2 copy check (3h period, 3h grace)
+  - forms://hc-ping.com/${HC_COPY_TO_B2_UUID}?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-local-to-b2-success
+
+  - forms://hc-ping.com/${HC_COPY_TO_B2_UUID}/fail?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-local-to-b2-fail
+
+  # local-ops checks (weekly period, 1-day grace)
+  - forms://hc-ping.com/${HC_MAINT_LOCAL_UUID}?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-local-ops-success
+
+  - forms://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-local-ops-fail
+
+  # b2-ops checks (weekly period, 1-day grace)
+  - forms://hc-ping.com/${HC_MAINT_B2_SUCCESS_UUID}?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-b2-ops-success
+
+  - forms://hc-ping.com/${HC_MAINT_B2_FAIL_UUID}?method=GET&:version=&:title=&:message=&:type=:
+      tag:
+        - hc-b2-ops-fail

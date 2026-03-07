@@ -47,6 +47,7 @@ in {
         ../../modules/nvim
         ../../modules/mise
         ../../modules/resticprofile
+        ../../modules/claude
       ];
 
       home.stateVersion = "25.05";

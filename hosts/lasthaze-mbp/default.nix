@@ -46,11 +46,14 @@ in {
         ../../modules/btop
         ../../modules/nvim
         ../../modules/mise
+        ../../modules/resticprofile
       ];
 
       home.stateVersion = "25.05";
       home.username = username;
       home.homeDirectory = "/Users/${username}";
+
+      sopsTemplates.dotfilesDir = flakeRoot;
 
       nixDotbot = {
         enable = true;

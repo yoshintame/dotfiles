@@ -44,6 +44,7 @@
           };
           home-manager.sharedModules = [
             nix-dotbot.homeManagerModules.default
+            ./modules/sops-templates
           ];
         }
       ];
@@ -57,6 +58,7 @@
       };
       modules = [
         nix-dotbot.homeManagerModules.default
+        ./modules/sops-templates
         ./hosts/lasthaze-home
       ];
     };

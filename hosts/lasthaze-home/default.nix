@@ -24,6 +24,8 @@ in {
   home.username = username;
   home.homeDirectory = "/home/${username}";
 
+  sopsTemplates.dotfilesDir = flakeRoot;
+
   nixDotbot = {
     enable = true;
     dotfilesDir = flakeRoot;

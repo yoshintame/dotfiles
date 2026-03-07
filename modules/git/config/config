@@ -50,6 +50,9 @@
     renames           = copies  # detect copies as renames in diffs
     interHunkContext  = 10      # merge near hunks in diffs
 
+[diff "sopsdiffer"]
+	textconv = sops -d --config /dev/null
+
 [mergetool "vscode"]
     cmd         = cursor --wait $MERGED
 
@@ -285,3 +288,4 @@
     wa          = worktree add
     wr          = worktree remove
     wl          = worktree list
+

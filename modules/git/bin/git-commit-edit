@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# git-commit-edit: pre-fill a commit message and open the editor for review.
+# Usage: git commit-edit "commit message here"
+#
+# Resolves the user's real editor from git config core.editor,
+# bypassing any GIT_EDITOR overrides (e.g. Claude Code sandbox sets GIT_EDITOR=true).
+
+set -euo pipefail
+
+if [ $# -eq 0 ] || [ -z "$1" ]; then
+  echo "Usage: git commit-edit <message>" >&2
+  exit 1
+fi
+
+MESSAGE="$1"
+EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
+
+if [ -z "$EDITOR_CMD" ]; then
+  echo "ERROR: core.editor is not configured in git config." >&2
+  echo "Set it with: git config --global core.editor 'cursor --wait'" >&2
+  exit 1
+fi
+
+GIT_EDITOR="$EDITOR_CMD" exec git commit -e -m "$MESSAGE"

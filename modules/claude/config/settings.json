@@ -54,7 +54,24 @@
       "mcp__context7__query-docs",
       "mcp__plugin_atlassian_atlassian__searchJiraIssuesUsingJql",
       "mcp__plugin_atlassian_atlassian__getJiraIssue",
-      "Bash(MISE_*=* mise *)"
+      "Bash(MISE_*=* mise *)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:marketplace.visualstudio.com)",
+      "Read(//Users/yoshintame/.vscode/extensions/**)",
+      "Read(//Users/yoshintame/.cursor/extensions/**)",
+      "Read(//Users/yoshintame/.claude/**)",
+      "mcp__claude_ai_Atlassian__getJiraIssue",
+      "mcp__claude_ai_Atlassian__editJiraIssue",
+      "mcp__claude_ai_Atlassian__createJiraIssue",
+      "mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql",
+      "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+      "mcp__claude_ai_Atlassian__getVisibleJiraProjects",
+      "mcp__claude_ai_Atlassian__lookupJiraAccountId",
+      "Skill(git-commit)",
+      "Skill(git-commit:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

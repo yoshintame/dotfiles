@@ -32,6 +32,7 @@
   "editor.cursorStyle": "line-thin",
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
+  "cursor.composer.usageSummaryDisplay": "always",
 
   // Decorations
   "workbench.tree.indent": 20,
@@ -88,6 +89,7 @@
   "emmet.triggerExpansionOnTab": false,
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.perEditorGroup": true,
@@ -100,6 +102,8 @@
   "window.customTitleBarVisibility": "never",
   "window.density.editorTabHeight": "compact",
   "workbench.panel.opensMaximized": "always",
+  "panelAutoMinimize.hideOnNewEditorTabOpen": true,
+  "panelAutoMinimize.hideOnEditorFocus": false,
 
   // Format, lint and LSP
   "editor.formatOnPaste": true,
@@ -195,6 +199,12 @@
   "git.allowNoVerifyCommit": true,
   "git.confirmNoVerifyCommit": false,
   "git.enableSmartCommit": true,
+  "git.autofetch": true,
+  "gitlens.plusFeatures.enabled": false,
+  "gitlens.advanced.messages": {
+    "suppressGitDisabledWarning": true,
+    "suppressGitMissingWarning": true
+  },
 
   // Exclude
   "files.exclude": {
@@ -341,6 +351,8 @@
   "console-ninja.outputMode": "In View",
   "console-ninja.dateTimeDisplayMode": "None",
   "playwright.reuseBrowser": false,
+  "claudeCode.selectedModel": "opus",
+  "claudeCode.preferredLocation": "panel",
   "gitlens.gitCommands.skipConfirmations": [
     "fetch:command",
     "stash-push:command",
@@ -615,6 +627,15 @@
           "type": "command",
           "command": "git.cleanAll",
           "when": "!operationInProgress"
+        },
+        {
+          "key": "D",
+          "name": "Nuke workspace",
+          "type": "command",
+          "command": "runCommands",
+          "args": {
+            "commands": ["git.cleanAll", "git.cleanAllUntracked"]
+          }
         },
         {
           "key": "p",
@@ -1978,11 +1999,5 @@
         }
       }
     ]
-  },
-  "gitlens.plusFeatures.enabled": false,
-  "gitlens.advanced.messages": {
-    "suppressGitDisabledWarning": true,
-    "suppressGitMissingWarning": true
-  },
-  "workbench.panel.opensMaximized": "always"
+  }
 }

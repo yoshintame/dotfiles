@@ -223,6 +223,7 @@
     "command": "runCommands",
     "args": {
       "commands": [
+        "workbench.action.closePanel",
         "workbench.view.scm",
         "git.openChange",
         "workbench.action.moveSideBarLeft"
@@ -235,6 +236,7 @@
     "command": "runCommands",
     "args": {
       "commands": [
+        "workbench.action.closePanel",
         "workbench.view.scm",
         "git.openChange",
         "workbench.action.moveSideBarLeft",
@@ -249,6 +251,7 @@
     "command": "runCommands",
     "args": {
       "commands": [
+        "workbench.action.closePanel",
         "workbench.view.scm",
         "git-graph.view",
         "workbench.action.moveSideBarLeft"
@@ -261,6 +264,7 @@
     "command": "runCommands",
     "args": {
       "commands": [
+        "workbench.action.closePanel",
         "workbench.view.scm",
         "git-graph.view",
         "workbench.action.toggleAuxiliaryBar",
@@ -270,21 +274,30 @@
     "when": "workbench.scm.active && auxiliaryBarVisible"
   },
 
-  // Toggle maximized panel (while “Workbench › Panel: Opens Maximized” = “always”, not working https://forum.cursor.com/t/workbench-panel-opens-maximized/141064?u=yoshintame)
+  // Toggle maximized panel (while "Workbench › Panel: Opens Maximized" = "always", not working https://forum.cursor.com/t/workbench-panel-opens-maximized/141064?u=yoshintame)
+  // Panel is always either maximized or closed — no half-height state
   {
     "key": "cmd+j",
-    "command": "workbench.action.closePanel"
+    "command": "workbench.action.closePanel",
+    "when": "panelVisible"
   },
   {
     "key": "cmd+j",
+    "command": "panelAutoMinimize.openPanel",
+    "when": "!panelVisible"
+  },
+
+  // Close panel when opening file from explorer (prevents half-height panel state)
+  {
+    "key": "enter",
     "command": "runCommands",
     "args": {
       "commands": [
-        "workbench.action.toggleMaximizedPanel",
-        "workbench.action.focusPanel"
+        "list.select",
+        "workbench.action.closePanel"
       ]
     },
-    "when": "!terminalFocus"
+    "when": "filesExplorerFocus && !inputFocus && panelVisible"
   },
 
   // Open File explorer, if already opened - focus active file. If opening from git diff, then open diffing file in editor
@@ -294,6 +307,7 @@
     "when": "auxiliaryBarVisible",
     "args": {
       "commands": [
+        "workbench.action.closePanel",
         "workbench.view.explorer",
         "git.openFile",
         "workbench.action.moveSideBarLeft",
@@ -307,6 +321,7 @@
     "when": "!auxiliaryBarVisible",
     "args": {
       "commands": [
+        "workbench.action.closePanel",
         "workbench.view.explorer",
         "workbench.action.moveSideBarLeft",
         "git.openFile"

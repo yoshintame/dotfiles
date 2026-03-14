@@ -38,6 +38,7 @@ function _fish_get_smart_cmd
     end
 end
 
+# TODO: Breaks commands that waiting for input gh auth login, etc.)
 function _fish_smart_enter
     set -l default_cmd $argv[1]
     set -l git_cmd $argv[2]
@@ -89,6 +90,6 @@ set -l smart_right_git_cmd "yy"
 set -l smart_enter_cmd "ls"
 set -l smart_enter_git_cmd "git status -sb"
 
-bind \r "_fish_smart_enter '$smart_enter_cmd' '$smart_enter_git_cmd'"
+# bind \r "_fish_smart_enter '$smart_enter_cmd' '$smart_enter_git_cmd'"
 bind \e\[D "_fish_smart_arrow backward-char $smart_left_cmd $smart_left_git_cmd"
 bind \e\[C "_fish_smart_arrow forward-char $smart_right_cmd $smart_right_git_cmd"

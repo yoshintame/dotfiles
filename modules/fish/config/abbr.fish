@@ -24,12 +24,12 @@ abbr nct "bun create yoshintame/template-bun-ts"
 abbr ncc "bun create yoshintame/template-bun-cli"
 abbr ncr "bun create yoshintame/template-bun-react"
 abbr ni "bun install"
-abbr nig "bun install --global"
+abbr nig "pnpm add -g"
 abbr nd "bun remove"
 abbr nu "bun update"
 abbr nb "bun bundle"
 abbr nl 'bun pm ls'
-abbr nlg 'bun pm ls -g'
+abbr nlg 'pnpm list -g'
 abbr nt "bun test"
 abbr nr 'bun run'
 abbr nrd "bun run dev"

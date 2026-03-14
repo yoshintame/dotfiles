@@ -49,6 +49,4 @@ set -gx grc_plugin_ignore_execs ls
 set -gx aliases_path $__fish_config_dir/aliases
 set fish_function_path $fish_function_path[1] $aliases_path $fish_function_path[2..]
 
-# Bun
-set -gx PATH $HOME/.cache/.bun/install/global/node_modules/.bin $PATH
 

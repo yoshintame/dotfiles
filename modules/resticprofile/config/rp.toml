@@ -178,21 +178,29 @@ run = 'resticprofile -n dev diff ${usage_snapshot1?} ${usage_snapshot2?}'
 # --- Notifications ---
 
 ["rp:test-notify"]
-description = "Test apprise notification"
+description = "Test healthchecks.io ping"
 usage = '''
-arg "<type>" help="Notification type" default="success" {
-  choices "success" "fail" "hc"
+arg "<type>" help="Ping type" default="success" {
+  choices "success" "fail"
+}
+arg "[profile]" help="Profile to test" default="dev" {
+  choices "dev" "home" "local-to-b2" "local-ops" "b2-ops"
 }
 '''
 run = '''
-apprise_config="$HOME/.config/resticprofile/apprise.yaml"
+set -a
+source "$HOME/.config/resticprofile/hc.env"
+set +a
+case "${usage_profile?}" in
+    dev)         hc_uuid="$HC_DEVELOPMENT_BACKUP_UUID" ;;
+    home)        hc_uuid="$HC_HOME_BACKUP_UUID" ;;
+    local-to-b2) hc_uuid="$HC_COPY_TO_B2_UUID" ;;
+    local-ops)   hc_uuid="$HC_MAINT_LOCAL_UUID" ;;
+    b2-ops)      hc_uuid="$HC_MAINT_B2_UUID" ;;
+esac
 case "${usage_type?}" in
-    success) apprise -c "$apprise_config" --tag backup-success \
-               -t "Test: Backup Success" -b "Manual test $(date)" -vv ;;
-    fail)    apprise -c "$apprise_config" --tag backup-fail \
-               -t "Test: Backup FAILED" -b "Manual failure test" -vv ;;
-    hc)      apprise -c "$apprise_config" --tag hc-dev-backup-success \
-               -t "ping" -b "test" -vv ;;
+    success) curl -fsS -m 10 --retry 5 "https://hc-ping.com/$hc_uuid" && echo "OK: success ping sent" ;;
+    fail)    curl -fsS -m 10 --retry 5 "https://hc-ping.com/$hc_uuid/fail" && echo "OK: fail ping sent" ;;
 esac
 '''
 

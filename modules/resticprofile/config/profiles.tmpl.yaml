@@ -38,84 +38,6 @@ profiles:
       exclude-caches: true
       one-file-system: false
       no-error-on-warning: true
-      run-after:
-        # Telegram success notification
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-success
-          --tag "hc-{{ .Profile.Name }}-backup-success"
-          -t "🟢 Backup Success: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: backup\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
-          -vv
-      run-after-fail:
-        # Telegram + email failure notification + HC.io fail ping
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-fail
-          --tag "hc-{{ .Profile.Name }}-backup-fail"
-          -t "🔴 Backup FAILED: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: backup\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
-          -vv
-
-    copy:
-      run-after:
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-success
-          --tag "hc-{{ .Profile.Name }}-success"
-          -t "🟢 Copy Success: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: copy\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
-          -vv
-      run-after-fail:
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-fail
-          --tag "hc-{{ .Profile.Name }}-fail"
-          -t "🔴 Copy FAILED: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: copy\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
-          -vv
-
-    forget:
-      run-after:
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-success
-          --tag "hc-{{ .Profile.Name }}-success"
-          -t "🟢 Forget/Prune Success: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: forget\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
-          -vv
-      run-after-fail:
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-fail
-          --tag "hc-{{ .Profile.Name }}-fail"
-          -t "🔴 Forget/Prune FAILED: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: forget\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
-          -vv
-
-    check:
-      run-after:
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-success
-          -t "🟢 Check Success: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: check\nTime: $(date '+%Y-%m-%d %H:%M:%S')"
-          -vv
-      run-after-fail:
-        - >-
-          /opt/homebrew/bin/apprise -e
-          -c "{{ .Env.HOME }}/.config/resticprofile/apprise.yaml"
-          --tag backup-fail
-          -t "🔴 Check FAILED: {{ .Profile.Name }}"
-          -b "Host: $(hostname -s)\nProfile: {{ .Profile.Name }}\nOperation: check\nTime: $(date '+%Y-%m-%d %H:%M:%S')\nError: $ERROR_MESSAGE"
-          -vv
 
   # --- Local repository (hub for all backups) ---
   local:
@@ -151,6 +73,10 @@ profiles:
       schedule: "*:00,30"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}/fail"
 
   home:
     inherit: local
@@ -174,6 +100,10 @@ profiles:
       schedule: "2:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_HOME_BACKUP_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_HOME_BACKUP_UUID}/fail"
 
   local-to-b2:
     inherit: local
@@ -186,6 +116,10 @@ profiles:
       schedule: "0,3,6,9,12,15,18,21:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-b2.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_COPY_TO_B2_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_COPY_TO_B2_UUID}/fail"
 
   local-ops:
     inherit: local
@@ -201,10 +135,18 @@ profiles:
       schedule: "sun 4:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
     check:
       schedule: "*-*-01 6:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
 
   b2-ops:
     inherit: b2
@@ -220,8 +162,16 @@ profiles:
       schedule: "sun 5:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_B2_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_B2_UUID}/fail"
     check:
       read-data-subset: "5%"
       schedule: "*-*-01 7:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_B2_UUID}"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_B2_UUID}/fail"

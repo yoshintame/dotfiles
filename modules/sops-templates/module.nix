@@ -16,6 +16,7 @@
       template = value;
       secretsFile = null;
       permissions = "600";
+      variables = null;
       inherit dest;
     }
     else value // {inherit dest;};
@@ -54,9 +55,16 @@
   mkGroupScript = secretsFile: groupEntries:
     let
       renderCmds = lib.concatMapStringsSep "\n    " (e:
-        let dest = expandDest e.dest; in ''
+        let
+          dest = expandDest e.dest;
+          # When variables list is set, pass it to envsubst to only substitute those vars.
+          # Use '"'"' to embed single quotes inside the outer single-quoted sops exec-env block.
+          envsubstCmd = if e.variables == null
+            then "${envsubst}"
+            else "${envsubst} '\"'\"'${lib.concatMapStringsSep " " (v: "\${${v}}") e.variables}'\"'\"'";
+        in ''
         mkdir -p "$(dirname "${dest}")"
-        ${envsubst} < "${dotfilesDir}/${e.template}" > "${dest}"
+        ${envsubstCmd} < "${dotfilesDir}/${e.template}" > "${dest}"
         chmod ${e.permissions} "${dest}"'') groupEntries;
     in ''
       ${ageKeyEnv} \

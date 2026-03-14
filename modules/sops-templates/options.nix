@@ -44,6 +44,12 @@
               default = "600";
               description = "File permissions for the rendered output";
             };
+            variables = lib.mkOption {
+              type = lib.types.nullOr (lib.types.listOf lib.types.str);
+              default = null;
+              description = "List of variable names to substitute. When set, only these variables are replaced by envsubst, leaving all others (like $ERROR_MESSAGE) untouched. Null = substitute all variables.";
+              example = ["HC_DEVELOPMENT_BACKUP_UUID" "HC_HOME_BACKUP_UUID"];
+            };
           };
         }));
       default = {};

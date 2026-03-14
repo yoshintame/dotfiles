@@ -84,6 +84,7 @@ spoon.LeaderFlow:setup({
             { "c", "Color Picker", shortcut("cmd alt ctrl p") },
             { "r", "Roulette", shortcut("cmd alt ctrl o") },
             { "e", "Emojis", raycast("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols") },
+            { "k", "Kill Process", raycast("raycast://extensions/rolandleth/kill-process/index") },
         }},
 
         { "l", "[links]", {
@@ -156,8 +157,8 @@ spoon.LeaderFlow:setup({
             { "s", "Area", shortcut("cmd shift 2") },
             { "w", "Window", shortcut("cmd shift 3") },
             { "f", "Fullscreen", shortcut("cmd shift 1") },
-            { "c", "Text (OCR)", shortcut("cmd shift 4") },
-            { "r", "Record", shortcut("cmd shift 5") },
+            { "r", "Text (OCR)", shortcut("cmd shift 4") },
+            { "v", "Video", shortcut("cmd shift 5") },
             { "l", "Scroll", shortcut("cmd shift 6") },
         }},
 

@@ -7,3 +7,5 @@ fish_add_path --prepend --move /etc/profiles/per-user/$USER/bin
 fish_add_path --prepend --move ~/.local/bin
 fish_add_path --prepend --move ~/bin
 fish_add_path --prepend --move bin
+
+mise activate fish | source

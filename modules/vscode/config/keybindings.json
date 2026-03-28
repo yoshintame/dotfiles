@@ -261,13 +261,47 @@
     "when": "filesExplorerFocus"
   },
 
+  // =============================================
+  // VSCode-specific bindings
+  // =============================================
+
   // Open Claude Code sidebar
   {
     "key": "cmd+i",
     "command": "claude-vscode.focus"
   },
 
-  // Unbind defaults
+  // =============================================
+  // Cursor-specific bindings
+  // =============================================
+
+  // Open Cursor AI Chat on the left side (swap sidebars workaround)
+  {
+    "key": "cmd+l",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "aichat.newchataction",
+        "workbench.action.moveSideBarRight",
+        "workbench.action.closeSidebar"
+      ]
+    }
+  },
+
+  // Unbind Cursor defaults
+  {
+    "key": "cmd+l",
+    "command": "-aichat.newchataction"
+  },
+  {
+    "key": "cmd+i",
+    "command": "-composerMode.agent"
+  },
+
+  // =============================================
+  // Unbind defaults (shared)
+  // =============================================
+
   {
     "key": "cmd+g",
     "command": "-editor.action.nextMatchFindAction",

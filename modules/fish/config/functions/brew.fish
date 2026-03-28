@@ -19,7 +19,11 @@ function brew --wraps='command brew' --description 'Wrapper for the brew command
         switch $args[1]
             case 'install'
                 if test (count $args) -eq 1
-                    brew bundle install --cleanup --file=~/.config/packages/Brewfile $flags
+                    # Remove stale lock files from interrupted downloads so bundle can proceed
+                    find ~/Library/Caches/Homebrew/downloads -maxdepth 1 -name '*.incomplete' -delete 2>/dev/null
+                    # Serial downloads so subprocesses don't contend on the same bottle lock
+                    set -lx HOMEBREW_DOWNLOAD_CONCURRENCY 1
+                    command brew bundle install --cleanup --file=~/.config/packages/Brewfile $flags
                 else
                     command brew install $args[2..-1]
                     brew bundle dump --file=~/.config/packages/Brewfile --force

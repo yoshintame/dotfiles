@@ -21,12 +21,5 @@
       path = "modules/vscode/theme/**";
       glob = true;
     };
-
-    "~/.cursor/extensions/panel-auto-minimize" = {
-      path = "modules/vscode/extensions/panel-auto-minimize";
-    };
-    "~/.vscode/extensions/panel-auto-minimize" = {
-      path = "modules/vscode/extensions/panel-auto-minimize";
-    };
   };
 }

@@ -35,6 +35,11 @@
   content: "EXPLORER";
 }
 
+/* Activity Bar — center icons */
+.composite-bar-container {
+  justify-content: center !important;
+}
+
 /* Tab Bar size */
 .title.tabs.show-file-icons {
   height: 34px !important;

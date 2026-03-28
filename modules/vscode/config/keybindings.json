@@ -193,31 +193,13 @@
     "when": "isMacNative && openFolderWorkspaceSupport"
   },
 
-  // Layout shortcuts
+  // Search in files
   {
     "key": "cmd+shift+f",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.findInFiles",
-        "workbench.action.moveSideBarLeft"
-      ]
-    },
-    "when": "workbench.scm.active && !auxiliaryBarVisible"
-  },
-  {
-    "key": "cmd+shift+f",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.findInFiles",
-        "workbench.action.moveSideBarLeft",
-        "workbench.action.toggleAuxiliaryBar"
-      ]
-    },
-    "when": "workbench.scm.active && auxiliaryBarVisible"
+    "command": "workbench.action.findInFiles"
   },
 
+  // Git diff view
   {
     "key": "cmd+g",
     "command": "runCommands",
@@ -225,27 +207,12 @@
       "commands": [
         "workbench.action.closePanel",
         "workbench.view.scm",
-        "git.openChange",
-        "workbench.action.moveSideBarLeft"
+        "git.openChange"
       ]
-    },
-    "when": "workbench.scm.active && !auxiliaryBarVisible"
-  },
-  {
-    "key": "cmd+g",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.closePanel",
-        "workbench.view.scm",
-        "git.openChange",
-        "workbench.action.moveSideBarLeft",
-        "workbench.action.toggleAuxiliaryBar"
-      ]
-    },
-    "when": "workbench.scm.active && auxiliaryBarVisible"
+    }
   },
 
+  // Git graph
   {
     "key": "shift+cmd+g",
     "command": "runCommands",
@@ -253,77 +220,37 @@
       "commands": [
         "workbench.action.closePanel",
         "workbench.view.scm",
-        "git-graph.view",
-        "workbench.action.moveSideBarLeft"
+        "git-graph.view"
       ]
-    },
-    "when": "workbench.scm.active && !auxiliaryBarVisible"
-  },
-  {
-    "key": "shift+cmd+g",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "workbench.action.closePanel",
-        "workbench.view.scm",
-        "git-graph.view",
-        "workbench.action.toggleAuxiliaryBar",
-        "workbench.action.moveSideBarLeft"
-      ]
-    },
-    "when": "workbench.scm.active && auxiliaryBarVisible"
+    }
   },
 
-  // Toggle maximized panel (while "Workbench › Panel: Opens Maximized" = "always", not working https://forum.cursor.com/t/workbench-panel-opens-maximized/141064?u=yoshintame)
-  // Panel is always either maximized or closed — no half-height state
+  // Toggle maximized panel (close when visible, open maximized when hidden)
   {
     "key": "cmd+j",
-    "command": "workbench.action.closePanel",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.toggleMaximizedPanel",
+        "workbench.action.closePanel"
+      ]
+    },
     "when": "panelVisible"
   },
   {
     "key": "cmd+j",
-    "command": "panelAutoMinimize.openPanel",
+    "command": "workbench.action.toggleMaximizedPanel",
     "when": "!panelVisible"
-  },
-
-  // Close panel when opening file from explorer (prevents half-height panel state)
-  {
-    "key": "enter",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "list.select",
-        "workbench.action.closePanel"
-      ]
-    },
-    "when": "filesExplorerFocus && !inputFocus && panelVisible"
   },
 
   // Open File explorer, if already opened - focus active file. If opening from git diff, then open diffing file in editor
   {
     "key": "cmd+e",
     "command": "runCommands",
-    "when": "auxiliaryBarVisible",
     "args": {
       "commands": [
         "workbench.action.closePanel",
         "workbench.view.explorer",
-        "git.openFile",
-        "workbench.action.moveSideBarLeft",
-        "workbench.action.toggleAuxiliaryBar"
-      ]
-    }
-  },
-  {
-    "key": "cmd+e",
-    "command": "runCommands",
-    "when": "!auxiliaryBarVisible",
-    "args": {
-      "commands": [
-        "workbench.action.closePanel",
-        "workbench.view.explorer",
-        "workbench.action.moveSideBarLeft",
         "git.openFile"
       ]
     }
@@ -334,68 +261,10 @@
     "when": "filesExplorerFocus"
   },
 
-  // Open AI Chat on the left side
-  {
-    "key": "cmd+l",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "aichat.newchataction",
-        "workbench.action.moveSideBarRight",
-        "workbench.action.closeSidebar"
-      ]
-    }
-  },
-
-  // Open Claude Code sidebar on the left side
+  // Open Claude Code sidebar
   {
     "key": "cmd+i",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "claudeVSCodeSidebar.focus",
-        "workbench.action.moveSideBarLeft"
-      ]
-    },
-    "when": "!auxiliaryBarVisible"
-  },
-  {
-    "key": "cmd+i",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "claudeVSCodeSidebar.focus",
-        "workbench.action.moveSideBarLeft",
-        "workbench.action.toggleAuxiliaryBar"
-      ]
-    },
-    "when": "auxiliaryBarVisible"
-  },
-  // Open Claude Code sidebar + insert selection as @mention
-  {
-    "key": "cmd+i",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "claudeVSCodeSidebar.focus",
-        "workbench.action.moveSideBarLeft",
-        "claude-vscode.insertAtMention"
-      ]
-    },
-    "when": "!auxiliaryBarVisible && editorHasSelection"
-  },
-  {
-    "key": "cmd+i",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "claudeVSCodeSidebar.focus",
-        "workbench.action.moveSideBarLeft",
-        "workbench.action.toggleAuxiliaryBar",
-        "claude-vscode.insertAtMention"
-      ]
-    },
-    "when": "auxiliaryBarVisible && editorHasSelection"
+    "command": "claude-vscode.focus"
   },
 
   // Unbind defaults
@@ -403,13 +272,5 @@
     "key": "cmd+g",
     "command": "-editor.action.nextMatchFindAction",
     "when": "editorFocus"
-  },
-  {
-    "key": "cmd+l",
-    "command": "-aichat.newchataction"
-  },
-  {
-    "key": "cmd+i",
-    "command": "-composerMode.agent"
   }
 ]

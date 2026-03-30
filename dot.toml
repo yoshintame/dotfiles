@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://mise.jdx.dev/schema/mise-task.json
+# Dotfiles management tasks
+# Usage: dot <command> [args]
+
+["dot:edit"]
+description = "Open dotfiles in editor"
+dir = "{{env.DOTFILES}}"
+run = '${EDITOR:-code} .'
+
+["dot:rebuild"]
+description = "Rebuild nix-darwin configuration"
+dir = "{{env.DOTFILES}}"
+run = '''
+git add -A
+sudo darwin-rebuild switch --flake .#lasthaze-mbp
+'''
+
+["dot:bootstrap-age-key"]
+description = "Restore sops age key from 1Password (run once on new machine)"
+run = '''
+KEY_DIR="$HOME/.config/sops/age"
+KEY_FILE="$KEY_DIR/keys.txt"
+if [ -f "$KEY_FILE" ]; then
+    echo "Age key already exists at $KEY_FILE, skipping."
+else
+    mkdir -p "$KEY_DIR"
+    /opt/homebrew/bin/op read 'op://Private/sops-age-key/private key' > "$KEY_FILE"
+    chmod 600 "$KEY_FILE"
+    echo "Age key restored to $KEY_FILE"
+fi
+'''

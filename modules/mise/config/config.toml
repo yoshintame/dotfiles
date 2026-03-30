@@ -1,5 +1,5 @@
 [task_config]
-includes = ["tasks/rp.toml"]
+includes = ["tasks/rp.toml", "tasks/dot.toml"]
 
 [tools]
 bun = "latest"
@@ -13,3 +13,4 @@ uv = "latest"
 [settings]
 python.uv_venv_auto = true
 color_theme = "catppuccin"
+trusted_config_paths = ["~/Development/work"]

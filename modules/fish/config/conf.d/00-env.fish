@@ -6,8 +6,6 @@ set -qU XDG_CACHE_HOME; or set -Ux XDG_CACHE_HOME $HOME/.cache
 set -q __fish_cache_dir; or set -Ux __fish_cache_dir $XDG_CACHE_HOME/fish
 
 # Main
-set -gx EDITOR cursor
-set -gx VISUAL cursor
 set -gx PLAY iina
 
 # FZF

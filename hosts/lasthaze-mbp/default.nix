@@ -51,6 +51,13 @@ in {
         ../../modules/claude
       ];
 
+      programs.bash.enable = true;
+
+      home.sessionVariables = {
+        EDITOR = "code --wait";
+        VISUAL = "code --wait";
+      };
+
       home.stateVersion = "25.05";
       home.username = username;
       home.homeDirectory = "/Users/${username}";

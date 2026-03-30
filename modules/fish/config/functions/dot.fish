@@ -1,21 +1,18 @@
-function dot --argument-names cmd --description "Dotfiles managment wrapper"
-    switch "$cmd"
-        case "" -h --help
-            echo "Usage: dot <command>"
-            echo ""
-            echo "Commands:"
-            echo "  link   - Run dotbot with the specified configuration"
-            echo "  go     - Change directory to the dotfiles directory"
-            echo "  edit   - Open the dotfiles directory in the default editor"
-            echo "  help   - Display this help message"
-            return 0
-        case 'link'
-            dotbot -c $DOTFILES_CONFIG -d $DOTFILES
-        case 'go'
+function dot --description "Dotfiles management (mise wrapper)"
+    if test (count $argv) -eq 0; or contains -- $argv[1] --help -h
+        mise tasks ls 2>/dev/null | grep '^dot:'
+        echo ""
+        echo "Proxied from doc (nix-dotbot):"
+        echo "  link     Link dotfiles via dotbot"
+        echo "  config   Print dotbot config"
+        return
+    end
+    switch $argv[1]
+        case go
             cd $DOTFILES
-        case 'edit'
-            $EDITOR $DOTFILES
-        case \*
-            echo "dot: Unknown command: \"$cmd\"" >&2 && return 1
+        case link config
+            doc $argv
+        case '*'
+            mise run dot:$argv[1] -- $argv[2..]
     end
 end

@@ -14,7 +14,7 @@ spoon.AppLauncher:bindHotkeys({
     ["ChatGPT"]            = { { "alt", "shift"         }, "A" },
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
-    ["Cursor"]             = { { "alt"                  }, "D" },
+    ["Visual Studio Code"] = { { "alt"                  }, "D" },
     ["Jira"]               = { { "alt", "shift"         }, "D" },
 
     ["Figma"]              = { { "alt"                  }, "Z" },
@@ -29,6 +29,7 @@ spoon.AppLauncher:bindHotkeys({
 
 hs.loadSpoon("LeaderFlow")
 
+local proxy = require("generated.proxy-bindings")
 local shortcut = spoon.LeaderFlow.actions.shortcut
 local text = spoon.LeaderFlow.actions.text
 local currentDate = spoon.LeaderFlow.actions.currentDate
@@ -66,7 +67,7 @@ spoon.LeaderFlow:setup({
     spec = {
         { "t", "[text]", {
             { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
-            { "f", "Fix", shortcut("cmd alt ctrl shift 1") },
+            { "f", "Fix", shortcut(proxy.fix) },
         }},
 
         { "c", "Case", {
@@ -78,11 +79,11 @@ spoon.LeaderFlow:setup({
             { "o", "Constant", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Constant%20Case%22%7D") },
         }},
 
-        { "p", "Passwords", shortcut("cmd shift space") },
+        { "p", "Passwords", shortcut(proxy.passwords) },
 
         { "u", "[utils]", {
-            { "c", "Color Picker", shortcut("cmd alt ctrl p") },
-            { "r", "Roulette", shortcut("cmd alt ctrl o") },
+            { "c", "Color Picker", shortcut(proxy.color_picker) },
+            { "r", "Roulette", shortcut(proxy.roulette) },
             { "e", "Emojis", raycast("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols") },
             { "k", "Kill Process", raycast("raycast://extensions/rolandleth/kill-process/index") },
         }},
@@ -154,16 +155,16 @@ spoon.LeaderFlow:setup({
         }},
 
         { "s", "[screenshots]", {
-            { "s", "Area", shortcut("cmd shift 2") },
-            { "w", "Window", shortcut("cmd shift 3") },
-            { "f", "Fullscreen", shortcut("cmd shift 1") },
-            { "r", "Text (OCR)", shortcut("cmd shift 4") },
-            { "v", "Video", shortcut("cmd shift 5") },
-            { "l", "Scroll", shortcut("cmd shift 6") },
+            { "s", "Area", shortcut(proxy.screenshot_area) },
+            { "w", "Window", shortcut(proxy.screenshot_window) },
+            { "f", "Fullscreen", shortcut(proxy.screenshot_full) },
+            { "r", "Text (OCR)", shortcut(proxy.screenshot_ocr) },
+            { "v", "Video", shortcut(proxy.screenshot_video) },
+            { "l", "Scroll", shortcut(proxy.screenshot_scroll) },
         }},
 
         { "a", "[AI]", {
-            { "a", "Overlay", shortcut("alt space") },
+            { "a", "Overlay", shortcut(proxy.ai_overlay) },
             { "g", "ChatGPT", launch("ChatGPT") },
         }},
 

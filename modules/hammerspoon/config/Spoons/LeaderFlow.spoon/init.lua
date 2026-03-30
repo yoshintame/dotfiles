@@ -36,7 +36,8 @@ end
 
 function obj.actions.code(path)
   return obj.actions.cli(function()
-    return string.format("cursor %q", tostring(path))
+    local editor = hs.execute("/bin/sh -lc 'echo $VISUAL'"):match("^%S+") or "code"
+    return string.format("%s %q", editor, tostring(path))
   end)
 end
 

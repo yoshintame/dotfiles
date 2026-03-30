@@ -26,6 +26,7 @@ in {
       ...
     }: {
       imports = [
+        ./file-associations
         ../../modules/git
         ../../modules/fish
         ../../modules/gitui

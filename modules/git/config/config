@@ -10,7 +10,6 @@
     helper      = osxkeychain
 
 [core]
-    editor      = cursor --wait
     pager       = delta
     mergeoptions= --no-ff --no-commit
     quotepath   = false

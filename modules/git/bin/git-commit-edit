@@ -14,10 +14,10 @@ fi
 
 MESSAGE="$1"
 EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
+EDITOR_CMD="${EDITOR_CMD:-${VISUAL:-${EDITOR:-}}}"
 
 if [ -z "$EDITOR_CMD" ]; then
-  echo "ERROR: core.editor is not configured in git config." >&2
-  echo "Set it with: git config --global core.editor 'cursor --wait'" >&2
+  echo "ERROR: no editor found. Set core.editor, \$VISUAL, or \$EDITOR." >&2
   exit 1
 fi
 

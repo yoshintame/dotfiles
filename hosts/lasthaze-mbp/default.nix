@@ -49,6 +49,7 @@ in {
         ../../modules/mise
         ../../modules/resticprofile
         ../../modules/claude
+        ../../modules/iina
       ];
 
       programs.bash.enable = true;

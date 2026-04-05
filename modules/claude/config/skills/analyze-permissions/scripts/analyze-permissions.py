@@ -27,11 +27,10 @@ MARKER_PATH = CLAUDE_DIR / "permission-requests-processed.json"
 # --- Classification rules ---
 
 # Tools that are always safe — core Claude Code functionality
+# NOTE: Edit and Write are NOT here — they need path-based restrictions
 ALWAYS_SAFE_TOOLS = {
     "Glob",          # file listing by pattern (read-only)
     "Grep",          # content search (read-only)
-    "Edit",          # file editing — the whole point of Claude Code
-    "Write",         # file creation — same
     "TodoWrite",     # task management (internal)
     "NotebookEdit",  # notebook editing
 }
@@ -43,6 +42,7 @@ SAFE_BASH_COMMANDS = {
     "test", "[", "true", "false",
     "type", "command", "hash",
     "nix-shell", "nix-env", "nix",
+    "time", "timeout",
 }
 
 # Patterns that are genuinely dangerous — never auto-allow
@@ -61,6 +61,12 @@ DANGEROUS_PATTERNS = [
     r"mkfs\.",
     r"\bdd\s+if=",
     r">\s*/dev/sd",
+    r"^curl\s",              # exfiltration vector
+    r"&&\s*curl\s",          # curl in compound command
+    r";\s*curl\s",           # curl after semicolon
+    r"\|\s*curl\s",          # pipe to curl
+    r"^ssh\s",               # remote access
+    r"^xargs\s",             # arbitrary command execution
 ]
 
 
@@ -163,12 +169,40 @@ def is_covered_by(specific: str, broad: str) -> bool:
     return False
 
 
+# Tools where path-specific rules are intentional security restrictions.
+# Don't flag path-specific entries as redundant even if a bare rule exists.
+# Instead, flag the BARE rule as the problem.
+PATH_RESTRICTED_TOOLS = {"Edit", "Read"}
+
+
 def find_redundant(allow_list: list[str]) -> list[tuple[str, str]]:
     """Find entries covered by broader patterns in the same list."""
     redundant = []
     for entry in allow_list:
+        tool, arg = parse_rule(entry)
+
+        # If this is a path-specific Edit/Read rule, don't flag as redundant
+        # even if bare Edit/Read exists — the paths are intentional restrictions
+        if tool in PATH_RESTRICTED_TOOLS and arg is not None:
+            continue
+
+        # If this is a bare Edit/Read and path-specific rules exist,
+        # flag the bare rule as the problem
+        if tool in PATH_RESTRICTED_TOOLS and arg is None:
+            has_paths = any(
+                parse_rule(other)[0] == tool and parse_rule(other)[1] is not None
+                for other in allow_list
+            )
+            if has_paths:
+                redundant.append((entry, "SECURITY: bare rule overrides path restrictions — remove it"))
+                continue
+
         for other in allow_list:
             if is_covered_by(entry, other):
+                # Skip if both are path-restricted tools (handled above)
+                o_tool, _ = parse_rule(other)
+                if tool in PATH_RESTRICTED_TOOLS and o_tool in PATH_RESTRICTED_TOOLS:
+                    continue
                 redundant.append((entry, f"covered by: {other}"))
                 break
     return redundant
@@ -213,6 +247,7 @@ def find_hardcoded(allow_list: list[str]) -> list[tuple[str, str]]:
 NEVER_GENERALIZE = {
     "rm", "rmdir", "ssh", "sudo", "kill", "killall",
     "dd", "mkfs", "mount", "umount", "shutdown", "reboot",
+    "curl", "xargs", "tee", "cd",
 }
 
 
@@ -389,6 +424,25 @@ def report_log(allow_list: list[str]):
         return [], total
 
     print(f"\n  New entries: {len(new)}  (total: {total}, processed: {processed})")
+
+    # Print raw log of all new entries
+    print(f"\n  Raw log:")
+    for i, entry in enumerate(new):
+        ts = entry.get("ts", "?")[:19]
+        tool = entry.get("tool", "?")
+        inp = entry.get("input", {})
+        if tool == "Bash":
+            detail = inp.get("command", "")[:120]
+        elif tool == "WebFetch":
+            detail = inp.get("url", "")[:120]
+        elif tool in ("Edit", "Write", "Read"):
+            detail = inp.get("file_path", "")[:120]
+        elif tool.startswith("mcp__"):
+            detail = tool.split("__")[-1]
+            tool = "MCP"
+        else:
+            detail = str(inp)[:120]
+        print(f"    {ts}  {tool:10s}  {detail}")
 
     allow_set = set(allow_list)
     safe_rules: Counter = Counter()

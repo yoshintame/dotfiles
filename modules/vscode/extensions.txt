@@ -2,8 +2,8 @@
 aaron-bond.better-comments
 antfu.file-nesting
 anthropic.claude-code
-anysphere.remote-ssh
 arturock.gitstash
+ayushagg31.cli-timeline
 biomejs.biome
 birdgg.raysocode
 blair-c.tailwind-to-css-snippets
@@ -17,6 +17,7 @@ codezombiech.gitignore
 dautroc.flash-vscode-dautroc
 dautroc.yazi-vscode
 dbaeumer.vscode-eslint
+domdomegg.markdown-inline-preview-vscode
 donjayamanne.githistory
 dykamino.markdown-inline-md
 eamodio.gitlens
@@ -67,7 +68,6 @@ sumneko.lua
 tamasfe.even-better-toml
 tyriar.sort-lines
 uctakeoff.vscode-counter
-undefined_publisher.panel-auto-minimize
 unifiedjs.vscode-mdx
 vincaslt.highlight-matching-tag
 vitest.explorer
@@ -76,6 +76,8 @@ wallabyjs.console-ninja
 wallabyjs.quokka-vscode
 wallabyjs.wallaby-vscode
 wholroyd.jinja
+wraith13.file-path-bar
 wmaurer.change-case
 yoavbls.pretty-ts-errors
+yoshintame.panel-auto-hide
 yzhang.markdown-all-in-one

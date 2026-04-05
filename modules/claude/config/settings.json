@@ -75,7 +75,6 @@
       "Bash(shasum *)",
       "Bash(md5 *)",
       "Bash(touch *)",
-      "Bash(cd *)",
       "Bash(just --list *)",
       "Bash(just --summary *)",
       "Bash(sudo launchctl list)",
@@ -100,16 +99,6 @@
       "Bash(pnpm --version)",
       "Bash(npm view *)",
       "WebSearch",
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:marketplace.visualstudio.com)",
-      "WebFetch(domain:nix-community.github.io)",
-      "WebFetch(domain:mise.jdx.dev)",
-      "WebFetch(domain:mynixos.com)",
-      "WebFetch(domain:www.npmjs.com)",
-      "WebFetch(domain:www.prisma.io)",
-      "WebFetch(domain:tanstack.com)",
-      "WebFetch(domain:playwright.dev)",
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
       "mcp__claude_ai_Atlassian__getJiraIssue",
@@ -137,18 +126,15 @@
       "Bash(bun install:*)",
       "Bash(python3)",
       "Bash(docker compose:*)",
-      "Bash(python3 -c ':*)",
       "Bash(git rm:*)",
       "Bash(docker exec partner-merge-db psql -U postgres -d senate -c ':*)",
       "Bash(gh search:*)",
-      "Bash(zoxide --version)",
       "Bash(ln *)",
       "Bash(chmod *)",
       "Bash(zoxide *)",
       "Bash(pip3 *)",
       "Bash(home-manager *)",
       "Bash(python3 *)",
-      "Edit",
       "Edit(//Users/yoshintame/.dotfiles/**)",
       "Edit(//Users/yoshintame/Development/**)",
       "Edit(//Users/yoshintame/.config/**)",
@@ -156,7 +142,21 @@
       "Edit(//Users/yoshintame/.claude/**)",
       "Edit(//Users/yoshintame/.hammerspoon/**)",
       "Edit(/tmp/**)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(time ~/meetings-test/.venv/bin/python3 ~/meetings-test/yandex-test.py)",
+      "Bash('~/meetings-test/.venv/bin/python3' -c ':*)",
+      "Bash(git -C ~/Development/personal/stt-benchmark init)",
+      "Bash(git commit *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(time *)",
+      "Bash(cp *)",
+      "Bash(uv *)",
+      "Bash(ffmpeg *)",
+      "Bash(ffprobe *)",
+      "Bash(brew *)",
+      "Bash(bun *)",
+      "Bash(defaults *)"
     ],
     "deny": [
       "Bash(ssh *)"
@@ -178,7 +178,9 @@
       "/Users/yoshintame/.dotfiles/modules/shared",
       "/Users/yoshintame/Development/work/senate/senate@currency-board",
       "/Users/yoshintame/Development/work/senate/senate@currency-board/src/features/currency-board",
-      "/Users/yoshintame/.dotfiles/modules/claude/config"
+      "/Users/yoshintame/.dotfiles/modules/claude/config",
+      "/Users/yoshintame/meetings-test",
+      "/Users/yoshintame/.claude/commands"
     ]
   },
   "hooks": {
@@ -205,5 +207,5 @@
       }
     }
   },
-  "effortLevel": "high"
+  "effortLevel": "max"
 }

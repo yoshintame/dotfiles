@@ -10,3 +10,6 @@ result-*
 
 # Ignore automatically generated direnv output
 .direnv
+
+# Claude permission analyzer backups
+modules/claude/config/settings.backup-*.json

@@ -54,7 +54,7 @@
   // UX
   "debug.onTaskErrors": "debugAnyway",
   "diffEditor.ignoreTrimWhitespace": false,
-  "editor.accessibilitySupport": "on",
+  "editor.accessibilitySupport": "off",
   "editor.bracketPairColorization.enabled": false,
   "editor.bracketPairColorization.independentColorPoolPerBracketType": false,
   "editor.cursorSurroundingLines": 5,
@@ -310,6 +310,7 @@
   "update.showReleaseNotes": false,
 
   // OTHER EXTENSIONS
+  "markdown.extension.completion.enabled": false,
   "svg.preview.mode": "svg",
   "tailwind-fold.autoFold": false,
   "tailwind-fold.foldedText": "…",
@@ -1503,7 +1504,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "//": "Last update at 28/03/2026, 19:24:03",
+    "//": "Last update at 05/04/2026, 13:46:54",
     ".agent": ".agent, .claude, .cline, .codebuddy, .codex, .commandcode, .continue, .crush, .cursor, .factory, .gemini, .goose, .junie, .kilocode, .kiro, .kode, .mcpjam, .mux, .neovate, .opencode, .openhands, .pi, .pochi, .qoder, .qwen, .roo, .trae, .windsurf, .zencoder",
     ".clang-tidy": ".clang-format, .clangd, compile_commands.json",
     ".env": "*.env, .env.*, .envrc, env.d.ts",
@@ -2012,4 +2013,6 @@
     "https://biomejs.dev": true,
   },
   "claude-history.database.storeMessages": true,
+  "task.allowAutomaticTasks": "off",
+  "filePathBar.pathStyle": "relative",
 }

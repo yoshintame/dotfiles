@@ -182,9 +182,6 @@
       "Write(//Users/yoshintame/.hammerspoon/**)",
       "Write(/tmp/**)"
     ],
-    "deny": [
-      "Bash(ssh *)"
-    ],
     "additionalDirectories": [
       "/Users/yoshintame/Development/work/vtb",
       "/Users/yoshintame/Development/work/senate/senate@ai-skills/skills",
@@ -225,7 +222,23 @@
         "hooks": [
           {
             "type": "command",
+            "if": "Bash(curl*)",
             "command": "$HOME/.claude/hooks/curl-to-webfetch.sh"
+          },
+          {
+            "type": "command",
+            "if": "Bash(npm*)",
+            "command": "$HOME/.claude/hooks/tool-steering.sh"
+          },
+          {
+            "type": "command",
+            "if": "Bash(yarn*)",
+            "command": "$HOME/.claude/hooks/tool-steering.sh"
+          },
+          {
+            "type": "command",
+            "if": "Bash(pip*)",
+            "command": "$HOME/.claude/hooks/tool-steering.sh"
           }
         ]
       }

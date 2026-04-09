@@ -94,7 +94,6 @@
       "Bash(mise where *)",
       "Bash(mise list *)",
       "Bash(MISE_*=* mise ls *)",
-      "Bash(brew list *)",
       "Bash(gh pr view *)",
       "Bash(gh pr list *)",
       "Bash(gh pr checks *)",
@@ -104,7 +103,6 @@
       "Bash(gh run view *)",
       "Bash(gh run list *)",
       "Bash(gh api *)",
-      "Bash(bun --version)",
       "Bash(npm --version)",
       "Bash(pnpm --version)",
       "Bash(npm view *)",
@@ -123,21 +121,13 @@
       "Skill(git-commit:*)",
       "Bash(rm /Users/yoshintame/.hammerspoon/proxy-bindings.lua)",
       "Bash(mkdir -p /Users/yoshintame/.hammerspoon/generated)",
-      "Bash(bun i *)",
-      "Bash(bun run *)",
-      "Bash(bun add *)",
-      "Bash(bun -e *)",
       "Bash(git add *)",
       "Bash(npx *)",
       "Bash(node *)",
       "Bash(tsc *)",
       "Bash(bunx biome:*)",
-      "Bash(bun pm:*)",
-      "Bash(bun install:*)",
       "Bash(python3)",
-      "Bash(docker compose:*)",
       "Bash(git rm:*)",
-      "Bash(docker exec partner-merge-db psql -U postgres -d senate -c ':*)",
       "Bash(gh search:*)",
       "Bash(ln *)",
       "Bash(chmod *)",
@@ -165,7 +155,32 @@
       "Bash(ffprobe *)",
       "Bash(brew *)",
       "Bash(bun *)",
-      "Bash(defaults *)"
+      "Bash(defaults *)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Edit(/.claude/skills/docs-conventions/**)",
+      "mcp__claude_ai_Atlassian__atlassianUserInfo",
+      "Bash(git mv *)",
+      "Bash(git -C * mv *)",
+      "Bash(docker *)",
+      "Bash(open *)",
+      "Bash(/opt/homebrew/bin/hs *)",
+      "Bash(hs *)",
+      "Bash(biome *)",
+      "Bash(tsc *)",
+      "Bash(vite *)",
+      "Bash(wt *)",
+      "Bash(sleep *)",
+      "Bash(rmdir *)",
+      "Bash(lsof *)",
+      "Bash(plutil *)",
+      "Write(//Users/yoshintame/.dotfiles/**)",
+      "Write(//Users/yoshintame/Development/**)",
+      "Write(//Users/yoshintame/.config/**)",
+      "Write(//Users/yoshintame/Documents/**)",
+      "Write(//Users/yoshintame/.claude/**)",
+      "Write(//Users/yoshintame/.hammerspoon/**)",
+      "Write(/tmp/**)"
     ],
     "deny": [
       "Bash(ssh *)"
@@ -200,6 +215,17 @@
           {
             "type": "command",
             "command": "jq -c --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" '{ts: $ts, tool: .tool_name, input: .tool_input, session: .session_id}' >> \"$HOME/.claude/permission-requests.jsonl\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/curl-to-webfetch.sh"
           }
         ]
       }

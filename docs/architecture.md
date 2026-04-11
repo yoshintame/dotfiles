@@ -30,6 +30,8 @@
 ├── hosts/                 # Конфигурации конкретных машин
 │   ├── lasthaze-mbp/      # macOS ноутбук (aarch64-darwin)
 │   │   ├── default.nix    #   импорт модулей, nixDotbot, sopsTemplates, session vars
+│   │   ├── macos-defaults.nix  # macOS system defaults (system.defaults + activation scripts)
+│   │   ├── packages/      #   Brewfile, package.json, Appsfile.*
 │   │   └── file-associations/  # duti конфигурация (macOS file type associations)
 │   └── lasthaze-home/     # Linux сервер (x86_64-linux)
 │       └── default.nix    #   облегчённый набор модулей, тот же паттерн
@@ -59,13 +61,6 @@
 │   └── proxy-bindings/    # Bun CLI: генерация Lua/TS из proxy-bindings.yaml
 │
 ├── os/                    # OS-специфичные конфигурации
-│   ├── macos/
-│   │   ├── packages/
-│   │   │   ├── Brewfile       # Homebrew-пакеты (автоподдерживается brew wrapper'ом)
-│   │   │   └── package.json   # Глобальные pnpm-пакеты
-│   │   ├── config/
-│   │   │   └── defaults/      # macOS system defaults (yml, пока не интегрированы)
-│   │   └── scripts/           # Скрипты бутстрапа и синхронизации
 │   └── windows/               # Cloud-init конфигурация
 │
 ├── docs/                  # Документация
@@ -266,7 +261,7 @@ home.packages = [ pkgs.atuin ];
 
 ### Homebrew (Brewfile)
 
-Используется для **macOS GUI-приложений (casks) и инструментов, которые плохо работают через Nix на macOS**. Brewfile в `os/macos/packages/Brewfile` автоматически поддерживается кастомной `brew`-обёрткой для fish.
+Используется для **macOS GUI-приложений (casks) и инструментов, которые плохо работают через Nix на macOS**. Brewfile в `hosts/lasthaze-mbp/packages/Brewfile` автоматически поддерживается кастомной `brew`-обёрткой для fish.
 
 Обёртка (`modules/fish/config/functions/brew.fish`) перехватывает brew-команды:
 - `brew install <pkg>` → устанавливает, затем автоматически запускает `brew bundle dump` для обновления Brewfile
@@ -275,9 +270,9 @@ home.packages = [ pkgs.atuin ];
 
 Это даёт опыт, похожий на package.json: интерактивные команды install/remove автоматически обновляют декларативный файл, который отслеживается в git.
 
-### Глобальные npm/pnpm пакеты
+### Глобальные Node-пакеты (bun)
 
-Управляются через `os/macos/packages/package.json`, который симлинкуется в глобальное расположение pnpm. Та же философия, что и с Brewfile — файл декларативно отслеживает установленное, но пакеты управляются интерактивно.
+Управляются через `hosts/lasthaze-mbp/packages/package.json`, который симлинкуется в `~/.cache/.bun/install/global/package.json`. Та же философия, что и с Brewfile — файл декларативно отслеживает установленное, но пакеты управляются интерактивно через `bun install -g`.
 
 ### mise (менеджер версий инструментов)
 
@@ -289,9 +284,11 @@ home.packages = [ pkgs.atuin ];
 
 | Менеджер | Декларативный файл | Автообновление |
 |---|---|---|
-| Homebrew | `os/macos/packages/Brewfile` | brew wrapper в fish |
-| pnpm global | `os/macos/packages/package.json` | pnpm (нативно) |
+| Homebrew | `hosts/lasthaze-mbp/packages/Brewfile` | brew wrapper в fish |
+| bun global | `hosts/lasthaze-mbp/packages/package.json` | symlink → bun global |
 | Nix | `modules/*/default.nix` | ручное, для кроссплатформенных CLI |
+| Unmanaged apps | `hosts/lasthaze-mbp/packages/Appsfile.unmanaged` | `dump-packages` CLI |
+| Setapp | `hosts/lasthaze-mbp/packages/Appsfile.setapp` | `dump-packages` CLI |
 
 ## Управление dotfiles: `dot` CLI
 
@@ -301,6 +298,7 @@ Mise tasks в `dot.toml` + fish-обёртка `dot`:
 |---|---|
 | `dot rebuild` | `darwin-rebuild switch` (автоматически сначала генерирует proxy-bindings) |
 | `dot proxy-bindings` | Генерация Lua/TS из `proxy-bindings.yaml` |
+| `dot dump-packages` | Дамп unmanaged/Setapp приложений для бэкапа |
 | `dot bootstrap-age-key` | Восстановление SOPS age key из 1Password (one-time) |
 | `dot edit` | Открыть dotfiles в редакторе |
 
@@ -337,7 +335,7 @@ modules/proxy-bindings/proxy-bindings.yaml   ← единый источник
 - **Homebrew nix-darwin интеграция**: `homebrew.*` модуль для shell integration вместо ручного `01-brew.fish`. См. [homebrew-nix-integration.md](homebrew-nix-integration.md)
 - **mise home-manager интеграция**: `programs.mise` вместо ручного `conf.d/mise.fish`. См. [mise-nix-integration.md](mise-nix-integration.md)
 - **Изоляция шелл-конфигов**: fish aliases, abbreviations, PATH-записи и env-переменные, связанные с конкретным инструментом, должны определяться внутри модуля этого инструмента и активироваться только при его подключении. Сейчас большая часть шелл-конфигов живёт монолитно в модуле fish.
-- **macOS system defaults**: перенос macOS `defaults write` команд из скриптов в декларативную конфигурацию nix-darwin. YAML-файлы уже есть в `os/macos/config/defaults/`.
+- ~~**macOS system defaults**~~: ✅ перенесено в `hosts/lasthaze-mbp/macos-defaults.nix` — декларативная конфигурация через `system.defaults`, `CustomUserPreferences` и activation scripts.
 - **Перенос sops-templates**: `modules/sops-templates/` — инфраструктура, не модуль инструмента — нужно вынести за `modules/` (в `lib/` или корневой `nix/`).
 - **Конвенция templates/**: модули с секретами должны использовать поддиректорию `templates/` для `.tmpl.*` файлов.
 

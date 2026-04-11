@@ -5,7 +5,7 @@
 }: let
   username = "yoshintame";
 in {
-  imports = [];
+  imports = [./macos-defaults.nix];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
   system.stateVersion = 6;
@@ -63,6 +63,10 @@ in {
       home.stateVersion = "25.05";
       home.username = username;
       home.homeDirectory = "/Users/${username}";
+
+      targets.darwin.currentHostDefaults."com.apple.ImageCapture" = {
+        disableHotPlug = true;
+      };
 
       sopsTemplates.dotfilesDir = flakeRoot;
 

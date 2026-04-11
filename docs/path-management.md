@@ -1,98 +1,123 @@
 # PATH Management
 
-## Проблемы (текущее состояние)
+## Текущая архитектура
 
-PATH модифицируется в 6+ местах: `00-env.fish`, `01-brew.fish`, `pnpm.fish`, `mise.fish`, `zz-env.fish`, nix-darwin `set-environment`.
+PATH и env vars задаются в **двух** местах из-за ограничений nix-darwin:
 
-- `mise activate` вызывается дважды (mise.fish + zz-env.fish)
-- Nix paths дублируются (set-environment + zz-env.fish)
-- Zsh (Cursor агенты) — только Nix paths, нет brew/mise/pnpm/bun/~/.local/bin
-- pnpm/bun global CLI не работают
-- Конфигурация размазана, сложно понять итоговый PATH
+- `environment.variables` (nix-darwin) → bash-скрипт `set-environment` → sourced через `/etc/zshenv` → **zsh only**
+- `home.sessionVariables` (home-manager) → `hm-session-vars.fish` → sourced через `config.fish` → **fish only**
 
-## Целевая архитектура: 3 слоя
+Ни один механизм не покрывает оба shell, поэтому **env vars дублируются** в обоих местах.
 
-### Слой 1: nix-darwin (все shells)
+| Механизм | zsh interactive | zsh non-interactive | fish |
+|---|---|---|---|
+| `environment.variables` | ✅ | ✅ | ❌ |
+| `home.sessionVariables` | ✅ (`.zshrc`) | ❌ | ✅ |
 
-`environment.systemPath` → попадает в `set-environment` → sourced через `/etc/zshenv` (zsh) и nix-darwin fish module (fish).
+### Слой 1: nix-darwin `environment.variables`
 
-Один список — оба shell получают одинаковый PATH.
+`hosts/lasthaze-mbp/default.nix` — вне home-manager блока:
 
 ```nix
-environment.systemPath = [
-  "/opt/homebrew/bin"
-  "/opt/homebrew/sbin"
-  "/opt/homebrew/opt/ruby/bin"
-  "/opt/homebrew/opt/curl/bin"
-  "/opt/homebrew/opt/sqlite/bin"
-  "$HOME/.local/share/mise/shims"  # non-interactive shells, IDE, агенты
-  "$HOME/.local/share/pnpm"
-  "$HOME/.bun/bin"
-  "$HOME/.local/bin"
-  "$HOME/bin"
-  "$HOME/go/bin"
-];
-
 environment.variables = {
   HOMEBREW_PREFIX = "/opt/homebrew";
   HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
   HOMEBREW_REPOSITORY = "/opt/homebrew";
-  GOPATH = "$HOME/go";
-  PNPM_HOME = "$HOME/.local/share/pnpm";
+  HOMEBREW_NO_ANALYTICS = "1";
+  HOMEBREW_NO_ENV_HINTS = "1";
+  HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
+  GOPATH = "${homeDir}/go";
+  PNPM_HOME = "${homeDir}/.local/share/pnpm";
+  DOTFILES = "${homeDir}/.dotfiles";
   EDITOR = "cursor --wait";
   VISUAL = "cursor --wait";
 };
 ```
 
-`environment.variables` — то же: одно место, оба shell.
+Попадает в `/nix/store/...-set-environment` → `/etc/zshenv`.
+Покрывает zsh (включая non-interactive — Cursor агенты, скрипты).
 
-### Слой 2: launchd (GUI apps)
+### Слой 2: home-manager `home.sessionPath` + `home.sessionVariables`
+
+`hosts/lasthaze-mbp/default.nix` — внутри home-manager блока:
 
 ```nix
-launchd.user.envVariables = {
-  PATH = "...полный статический PATH с абсолютными путями...";
+home.sessionPath = [
+  "/opt/homebrew/bin"
+  "/opt/homebrew/sbin"
+  "/opt/homebrew/opt/ruby/bin"
+  "/opt/homebrew/opt/curl/bin"
+  "/opt/homebrew/opt/sqlite/bin"
+  "${homeDir}/.local/share/mise/shims"
+  "${homeDir}/.local/share/pnpm"
+  "${homeDir}/.bun/bin"
+  "${homeDir}/go/bin"
+  "${homeDir}/.local/bin"
+  "${homeDir}/bin"
+];
+
+home.sessionVariables = {
+  EDITOR = "cursor --wait";
+  VISUAL = "cursor --wait";
+  GOPATH = "${homeDir}/go";
+  PNPM_HOME = "${homeDir}/.local/share/pnpm";
+  DOTFILES = "${homeDir}/.dotfiles";
 };
 ```
 
-Единственный способ дать PATH GUI приложениям (Cursor, VS Code). Не поддерживает $HOME — только абсолютные пути. Требует logout/login.
+Генерирует `hm-session-vars.fish` (PATH + env vars) → sourced из `config.fish`.
+Покрывает fish. Также генерирует `.zshrc` (для interactive zsh).
 
-### Слой 3: fish interactive (минимум)
+### Слой 3: fish conf.d (минимум)
 
-Единственное что нельзя вынести в nix — `mise activate fish` (runtime hook, shell-specific).
+После рефакторинга в fish conf.d остаётся только то, что нельзя вынести в nix:
 
-```fish
-# conf.d/mise.fish
-if status is-interactive; and type -q mise
-    mise activate fish | source
-end
-```
+- `00-env.fish` — XDG vars, FZF, SSH_AUTH_SOCK, `node_modules/.bin` (per-project), GRC, aliases
+- `01-brew.fish` — fish completions path, manpath для keg-only apps
+- `keybinds.fish` — кастомные биндинги и smart-функции
+- `source.fish` — source кастомных функций и abbreviations
+- `tmux.fish` — auto-attach с исключениями для VSCode/Warp
+- `vscode.fish` — VSCode shell integration
 
-Всё остальное удаляется из fish conf.d.
+Удалено: `mise.fish`, `pnpm.fish`, `zz-env.fish`, `atuin.fish`, `promt.fish`, `zoxide.fish`, `fisher.fish`.
+
+### Fish плагины через nix
+
+Плагины управляются через `programs.fish.plugins` в `modules/fish/default.nix`. Fisher убран.
+
+Из nixpkgs: autopair, sponge, puffer, plugin-git, grc.
+Через fetchFromGitHub: plugin-thefuck, fish-plugin-sudo, fish-utils-core, fish-utils, fish-finders, catppuccin.
+
+### Shell интеграции через nix
+
+| Инструмент | Модуль | fish | zsh | bash |
+|---|---|---|---|---|
+| mise | `programs.mise` (home-manager) | ✅ | ✅ | ✅ |
+| atuin | `programs.atuin` (home-manager) | ✅ | ✅ | ✅ |
+| starship | `programs.starship` (home-manager) | ✅ | ✅ | ✅ |
+| zoxide | `programs.zoxide` (home-manager) | ✅ | ✅ | ✅ |
+| homebrew | `homebrew` (nix-darwin) | через sessionPath | через set-environment | — |
 
 ## mise: shims vs activate
 
-- **shims** (`~/.local/share/mise/shims` в systemPath) — работают везде: скрипты, IDE, non-interactive. Шим сам определяет версию при вызове.
-- **activate** — динамическое переключение при `cd`, поддержка `[env]` из `.mise.toml`. Только interactive.
+- **shims** (`~/.local/share/mise/shims` в sessionPath) — работают везде: скрипты, IDE, non-interactive. Шим сам определяет версию.
+- **activate** — динамическое переключение при `cd`, поддержка `[env]`. Только interactive. Через `programs.mise.enableFishIntegration`.
 - Совместимы: shims как fallback, activate перекрывает в interactive shell.
 
-## Сравнение подходов
+## Известные нюансы
 
-| Подход | Fish | Zsh | GUI | Декларативный |
-|---|---|---|---|---|
-| `environment.systemPath` | через nix fish module | да (/etc/zshenv) | нет | да |
-| `/etc/paths.d/` | нет | login only | нет | возможен |
-| `launchd.user.envVariables` | нет | нет | **да** | да |
-| `fish_add_path` в conf.d | **да** | нет | нет | да |
-| mise shims | да | да | да | да |
-| mise activate | да | да | нет | да |
+### `__HM_SESS_VARS_SOURCED` inheritance
 
-`/etc/paths.d/` не рекомендуется — `path_helper` переупорядочивает PATH, конфликтует с nix-darwin.
-`environment.d/` не существует на macOS (systemd-only).
+home-manager ставит guard `__HM_SESS_VARS_SOURCED` как `set -gx` (exported). Если терминальное приложение не перезапущено после rebuild, старые сессии передают эту переменную дочерним fish → `setup_hm_session_vars` скипается → PATH не устанавливается. Решение: полный перезапуск терминала (Cmd+Q) после `darwin-rebuild switch`.
 
-## Что удалить из fish при миграции
+### `/etc/paths.d/`
 
-- PATH/env из `00-env.fish` (→ nix environment.variables)
-- `01-brew.fish` целиком (→ homebrew module integration)
-- `pnpm.fish` (→ environment.systemPath + environment.variables)
-- `zz-env.fish` целиком (→ environment.systemPath)
-- Дублирование `mise activate` из zz-env.fish
+Не используется. `path_helper` переупорядочивает PATH, конфликтует с nix-darwin.
+
+### `environment.d/`
+
+Не существует на macOS (systemd-only).
+
+### launchd (GUI apps)
+
+`launchd.user.envVariables` — единственный способ дать PATH GUI приложениям. Не поддерживает $HOME — только абсолютные пути. Требует logout/login. Пока не настроен.

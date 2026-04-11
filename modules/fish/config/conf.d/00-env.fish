@@ -24,9 +24,6 @@ set -gx PATH node_modules/.bin $PATH
 # Path
 set -gx TRASH $HOME/.Trash
 
-# Fisher
-set -Ux fisher_path /Users/yoshintame/.config/fish/fisher_plugins
-
 # 1password
 set -e SSH_AUTH_SOCK
 set -Ux SSH_AUTH_SOCK ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock

@@ -32,7 +32,7 @@ in {
   homebrew = {
     enable = true;
     onActivation = {
-      cleanup = "none";
+      cleanup = "uninstall";
       autoUpdate = false;
       upgrade = false;
     };
@@ -83,6 +83,7 @@ in {
         ../../modules/atuin
         ../../modules/bat
         ../../modules/starship
+        ../../modules/zoxide
         ../../modules/btop
         ../../modules/nvim
         ../../modules/mise

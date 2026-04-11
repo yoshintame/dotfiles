@@ -21,10 +21,6 @@ set -gx FZF_DEFAULT_OPTS "\
 # NodeJS
 set -gx PATH node_modules/.bin $PATH
 
-# Go
-set -g GOPATH $HOME/go
-set -gx PATH $GOPATH/bin $PATH
-
 # Path
 set -gx TRASH $HOME/.Trash
 
@@ -34,9 +30,6 @@ set -Ux fisher_path /Users/yoshintame/.config/fish/fisher_plugins
 # 1password
 set -e SSH_AUTH_SOCK
 set -Ux SSH_AUTH_SOCK ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-
-# Dofiles
-set -gx DOTFILES $HOME/.dotfiles
 
 # GRC
 set -gx grc_plugin_ignore_execs ls

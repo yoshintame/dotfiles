@@ -4,6 +4,7 @@
   ...
 }: let
   username = "yoshintame";
+  homeDir = "/Users/${username}";
 in {
   imports = [./macos-defaults.nix];
 
@@ -25,7 +26,32 @@ in {
 
   users.users.${username} = {
     name = username;
-    home = "/Users/${username}";
+    home = homeDir;
+  };
+
+  homebrew = {
+    enable = true;
+    onActivation = {
+      cleanup = "none";
+      autoUpdate = false;
+      upgrade = false;
+    };
+    global.brewfile = false;
+    extraConfig = builtins.readFile ./packages/Brewfile;
+  };
+
+  environment.variables = {
+    HOMEBREW_PREFIX = "/opt/homebrew";
+    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+    HOMEBREW_REPOSITORY = "/opt/homebrew";
+    HOMEBREW_NO_ANALYTICS = "1";
+    HOMEBREW_NO_ENV_HINTS = "1";
+    HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
+    GOPATH = "${homeDir}/go";
+    PNPM_HOME = "${homeDir}/.local/share/pnpm";
+    DOTFILES = "${homeDir}/.dotfiles";
+    EDITOR = "code --wait";
+    VISUAL = "code --wait";
   };
 
   home-manager = {
@@ -67,15 +93,33 @@ in {
       ];
 
       programs.bash.enable = true;
+      programs.zsh.enable = true;
+
+      home.sessionPath = [
+        "/opt/homebrew/bin"
+        "/opt/homebrew/sbin"
+        "/opt/homebrew/opt/ruby/bin"
+        "/opt/homebrew/opt/curl/bin"
+        "/opt/homebrew/opt/sqlite/bin"
+        "${homeDir}/.local/share/mise/shims"
+        "${homeDir}/.local/share/pnpm"
+        "${homeDir}/.bun/bin"
+        "${homeDir}/go/bin"
+        "${homeDir}/.local/bin"
+        "${homeDir}/bin"
+      ];
 
       home.sessionVariables = {
         EDITOR = "code --wait";
         VISUAL = "code --wait";
+        GOPATH = "${homeDir}/go";
+        PNPM_HOME = "${homeDir}/.local/share/pnpm";
+        DOTFILES = "${homeDir}/.dotfiles";
       };
 
       home.stateVersion = "25.05";
       home.username = username;
-      home.homeDirectory = "/Users/${username}";
+      home.homeDirectory = homeDir;
 
       targets.darwin.currentHostDefaults."com.apple.ImageCapture" = {
         disableHotPlug = true;

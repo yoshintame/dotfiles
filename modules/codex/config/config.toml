@@ -1,0 +1,24 @@
+personality = "pragmatic"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+project_doc_fallback_filenames = ["CLAUDE.md"]
+
+[sandbox_workspace_write]
+network_access = false
+writable_roots = [
+  "/Users/yoshintame/.dotfiles",
+  "/Users/yoshintame/Development",
+  "/Users/yoshintame/.config",
+  "/Users/yoshintame/Documents",
+  "/Users/yoshintame/.claude",
+  "/Users/yoshintame/.hammerspoon",
+  "/tmp",
+]
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[projects."/Users/yoshintame/Documents/obsidian/yoshintame"]
+trust_level = "trusted"

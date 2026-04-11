@@ -57,6 +57,21 @@
       },
       "command": "git commit",
       "problemMatcher": []
+    },
+    {
+      "label": "Git: WIP Commit",
+      "type": "shell",
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "isBackground": true,
+      "command": "git add -A && git commit -m 'WIP'",
+      "problemMatcher": []
     }
   ]
 }

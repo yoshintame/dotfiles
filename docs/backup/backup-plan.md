@@ -1,4 +1,4 @@
-<!-- fullWidth: true tocVisible: false tableWrap: true -->
+`<!-- fullWidth: true tocVisible: false tableWrap: true -->
 # Backup: restic copy (Local → B2)
 
 Бэкап-система на базе **resticprofile** с использованием **restic copy**.
@@ -476,3 +476,4 @@ modules/fish/config/
 - [Сравнение стратегий бэкапа](strategies.md) — анализ подходов local+B2
 - [Mise CLI wrappers](../mise-cli-wrappers.md) — паттерн создания CLI-обёрток через mise
 - [Управление секретами](../secrets-management.md) — подходы к хранению секретов
+`

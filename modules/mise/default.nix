@@ -1,7 +1,11 @@
-{pkgs, pkgs-unstable ? pkgs, ...}: {
-  home.packages = [
-    pkgs-unstable.mise
-  ];
+{pkgs-unstable ? pkgs, pkgs, ...}: {
+  programs.mise = {
+    enable = true;
+    package = pkgs-unstable.mise;
+    enableFishIntegration = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+  };
 
   nixDotbot.links = {
     "~/.config/mise/config.toml" = "modules/mise/config/config.toml";

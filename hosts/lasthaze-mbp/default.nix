@@ -10,6 +10,19 @@ in {
   nix.settings.experimental-features = ["nix-command" "flakes"];
   system.stateVersion = 6;
 
+  security.pam.services.sudo_local.touchIdAuth = true;
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.geist-mono
+    nerd-fonts.fira-code
+    cascadia-code
+  ];
+
+  power.sleep = {
+    display = 3;
+    computer = 30;
+  };
+
   users.users.${username} = {
     name = username;
     home = "/Users/${username}";

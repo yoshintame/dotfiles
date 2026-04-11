@@ -1,6 +1,6 @@
 # Proxy Bindings
 
-Shared registry of keyboard shortcuts assigned in third-party apps (1Password, CleanShot, Raycast, etc.) that are triggered programmatically by Hammerspoon and Karabiner.
+Shared registry of keyboard shortcuts assigned in third-party apps that are triggered programmatically by Hammerspoon and Karabiner. All proxy shortcuts use the Hyper modifier (⌃⌥⇧⌘) so they can't be triggered accidentally.
 
 ## Problem
 
@@ -10,7 +10,7 @@ To trigger an app's action from LeaderFlow (Hammerspoon), you either use its mac
 
 ```
 modules/proxy-bindings/
-  proxy-bindings.yaml          ← single source of truth
+  proxy-bindings.yaml          ← single source of truth (YAML config)
 
 packages/proxy-bindings/
   src/
@@ -23,11 +23,11 @@ packages/proxy-bindings/
 
 modules/hammerspoon/config/
   generated/
-    proxy-bindings.lua         ← GENERATED
+    proxy-bindings.lua         ← GENERATED — require("generated.proxy-bindings")
 
 modules/karabiner/config/src/
   generated/
-    proxy-bindings.ts          ← GENERATED
+    proxy-bindings.ts          ← GENERATED — import { proxy } from './generated/proxy-bindings'
 ```
 
 ## Config format
@@ -39,16 +39,35 @@ outputs:
   typescript: ../karabiner/config/src/generated/proxy-bindings.ts
 
 bindings:
-  fix: cmd alt ctrl shift 1
-  passwords: cmd shift space
-  colorPicker: cmd alt ctrl p
-  screenshotArea: cmd shift 2
+  fix: cmd alt ctrl shift r
+  passwords: cmd alt ctrl shift p
+  colorPicker: cmd alt ctrl shift c
+  screenshotArea: cmd alt ctrl shift 1
   # ...
 ```
 
 - Keys are camelCase identifiers
 - Values are Hammerspoon keystroke strings (`mod1 mod2 key`)
+- All bindings use Hyper (⌃⌥⇧⌘) to avoid conflicts with regular shortcuts
 - Output paths are relative to the YAML file
+
+## Current bindings
+
+| ID | Shortcut | App | LeaderFlow |
+|---|---|---|---|
+| `fix` | ⌃⌥⇧⌘R | RewriteBar | a → a |
+| `passwords` | ⌃⌥⇧⌘P | 1Password | p |
+| `colorPicker` | ⌃⌥⇧⌘C | Sip | u → c |
+| `roulette` | ⌃⌥⇧⌘X | PixelSnap | u → r |
+| `rouletteClear` | ⌃⌥⇧⌘Z | PixelSnap | u → x |
+| `spotlight` | ⌃⌥⇧⌘F | Raycast | (Karabiner Hyper+F) |
+| `screenshotArea` | ⌃⌥⇧⌘1 | CleanShot X | s → s |
+| `screenshotFull` | ⌃⌥⇧⌘2 | CleanShot X | s → f |
+| `screenshotWindow` | ⌃⌥⇧⌘3 | CleanShot X | s → w |
+| `screenshotOcr` | ⌃⌥⇧⌘4 | CleanShot X | s → o |
+| `screenshotVideo` | ⌃⌥⇧⌘5 | CleanShot X | s → r |
+| `screenshotScroll` | ⌃⌥⇧⌘6 | CleanShot X | s → l |
+| `screenshotHistory` | ⌃⌥⇧⌘7 | CleanShot X | s → h |
 
 ## Generated outputs
 
@@ -56,8 +75,8 @@ bindings:
 
 ```lua
 local M = {}
-M.fix = "cmd alt ctrl shift 1"
-M.passwords = "cmd shift space"
+M.fix = "cmd alt ctrl shift r"
+M.passwords = "cmd alt ctrl shift p"
 return M
 ```
 
@@ -65,8 +84,8 @@ return M
 
 ```typescript
 export const proxy = {
-  fix: toKey('1' as ToKeyParam, '⌘⌥⌃⇧' as ModifierParam),
-  passwords: toKey('space' as ToKeyParam, '⌘⇧' as ModifierParam),
+  fix: toKey('r' as ToKeyParam, '⌘⌥⌃⇧' as ModifierParam),
+  passwords: toKey('p' as ToKeyParam, '⌘⌥⌃⇧' as ModifierParam),
 } as const
 ```
 
@@ -79,7 +98,9 @@ dot proxy-bindings              # auto-discovers proxy-bindings.yaml
 dot proxy-bindings -c path.yaml # explicit config
 ```
 
-Also runs automatically as Karabiner's `prebuild` step (`bun run build` triggers it).
+Generation runs automatically:
+- `dot rebuild` runs `dot:proxy-bindings` as a dependency before `darwin-rebuild`
+- `bun run build` in Karabiner runs it as a `prebuild` step
 
 ### In Hammerspoon
 
@@ -87,17 +108,30 @@ Also runs automatically as Karabiner's `prebuild` step (`bun run build` triggers
 local proxy = require("generated.proxy-bindings")
 shortcut(proxy.fix)
 shortcut(proxy.passwords)
+shortcut(proxy.screenshot_area)
 ```
 
 ### In Karabiner
 
 ```typescript
 import { proxy } from './generated/proxy-bindings'
-map('f').to(proxy.fix)
+map('f').to(proxy.spotlight)
 ```
+
+## Hyper Setup mode
+
+To configure proxy shortcuts in third-party apps, you need to send the real ⌃⌥⇧⌘ modifier. Hammerspoon provides a toggle mode where Tab acts as Hyper:
+
+1. **F18 → u → h** — toggle Hyper Setup mode
+2. In the app's "Record shortcut" dialog, hold **Tab + key**
+3. **F18 → u → h** — toggle off when done
 
 ## Adding a new binding
 
-1. Add entry to `modules/proxy-bindings/proxy-bindings.yaml`
-2. Run `dot proxy-bindings`
-3. Use the new key in Hammerspoon (`proxy.new_key`) or Karabiner (`proxy.newKey`)
+1. Enable Hyper Setup mode (**F18 → u → h**)
+2. Open the third-party app's shortcut settings
+3. In the "Record shortcut" dialog, hold **Tab + key** to assign ⌃⌥⇧⌘+key
+4. Disable Hyper Setup mode (**F18 → u → h**)
+5. Add the entry to `modules/proxy-bindings/proxy-bindings.yaml`
+6. Run `dot proxy-bindings`
+7. Use the new key in Hammerspoon (`proxy.new_key`) or Karabiner (`proxy.newKey`)

@@ -76,7 +76,6 @@
     bat
     fd
     ripgrep
-    fzf
     gtrash
   ];
 

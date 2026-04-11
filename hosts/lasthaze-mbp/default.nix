@@ -52,6 +52,13 @@ in {
     DOTFILES = "${homeDir}/.dotfiles";
     EDITOR = "code --wait";
     VISUAL = "code --wait";
+    XDG_CONFIG_HOME = "${homeDir}/.config";
+    XDG_DATA_HOME = "${homeDir}/.local/share";
+    XDG_STATE_HOME = "${homeDir}/.local/state";
+    XDG_CACHE_HOME = "${homeDir}/.cache";
+    TRASH = "${homeDir}/.Trash";
+    PLAY = "iina";
+    SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
   };
 
   home-manager = {
@@ -84,6 +91,7 @@ in {
         ../../modules/bat
         ../../modules/starship
         ../../modules/zoxide
+        ../../modules/fzf
         ../../modules/btop
         ../../modules/nvim
         ../../modules/mise
@@ -116,6 +124,13 @@ in {
         GOPATH = "${homeDir}/go";
         PNPM_HOME = "${homeDir}/.local/share/pnpm";
         DOTFILES = "${homeDir}/.dotfiles";
+        XDG_CONFIG_HOME = "${homeDir}/.config";
+        XDG_DATA_HOME = "${homeDir}/.local/share";
+        XDG_STATE_HOME = "${homeDir}/.local/state";
+        XDG_CACHE_HOME = "${homeDir}/.cache";
+        TRASH = "${homeDir}/.Trash";
+        PLAY = "iina";
+        SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
       };
 
       home.stateVersion = "25.05";

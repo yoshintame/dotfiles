@@ -27,6 +27,34 @@ spoon.AppLauncher:bindHotkeys({
     ["System Settings"]    = { { "alt"                  }, "," },
 })
 
+local hyperSetup = false
+local tabHeld = false
+local hyperTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.types.keyUp }, function(e)
+    local tabCode = hs.keycodes.map["tab"]
+    local eventType = e:getType()
+
+    if e:getKeyCode() == tabCode then
+        tabHeld = (eventType == hs.eventtap.event.types.keyDown)
+        return true
+    end
+
+    if tabHeld and eventType == hs.eventtap.event.types.keyDown then
+        e:setFlags({ cmd = true, alt = true, ctrl = true, shift = true })
+    end
+    return false
+end)
+
+local function toggleHyperSetup()
+    hyperSetup = not hyperSetup
+    if hyperSetup then
+        hyperTap:start()
+        hs.alert.show("Hyper Setup ON — Tab = ⌃⌥⇧⌘")
+    else
+        hyperTap:stop()
+        hs.alert.show("Hyper Setup OFF")
+    end
+end
+
 hs.loadSpoon("LeaderFlow")
 
 local proxy = require("generated.proxy-bindings")
@@ -67,7 +95,6 @@ spoon.LeaderFlow:setup({
     spec = {
         { "t", "[text]", {
             { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
-            { "f", "Fix", shortcut(proxy.fix) },
         }},
 
         { "c", "Case", {
@@ -84,8 +111,10 @@ spoon.LeaderFlow:setup({
         { "u", "[utils]", {
             { "c", "Color Picker", shortcut(proxy.color_picker) },
             { "r", "Roulette", shortcut(proxy.roulette) },
+            { "x", "Roulette Clear", shortcut(proxy.roulette_clear) },
             { "e", "Emojis", raycast("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols") },
             { "k", "Kill Process", raycast("raycast://extensions/rolandleth/kill-process/index") },
+            { "h", "Hyper Setup ⇄", toggleHyperSetup },
         }},
 
         { "l", "[links]", {
@@ -158,13 +187,14 @@ spoon.LeaderFlow:setup({
             { "s", "Area", shortcut(proxy.screenshot_area) },
             { "w", "Window", shortcut(proxy.screenshot_window) },
             { "f", "Fullscreen", shortcut(proxy.screenshot_full) },
-            { "r", "Text (OCR)", shortcut(proxy.screenshot_ocr) },
-            { "v", "Video", shortcut(proxy.screenshot_video) },
+            { "o", "Text (OCR)", shortcut(proxy.screenshot_ocr) },
+            { "r", "Video", shortcut(proxy.screenshot_video) },
             { "l", "Scroll", shortcut(proxy.screenshot_scroll) },
+            { "h", "History", shortcut(proxy.screenshot_history) },
         }},
 
         { "a", "[AI]", {
-            { "a", "Overlay", shortcut(proxy.ai_overlay) },
+            { "a", "Fix", shortcut(proxy.fix) },
             { "g", "ChatGPT", launch("ChatGPT") },
         }},
 

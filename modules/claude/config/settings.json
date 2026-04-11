@@ -119,6 +119,8 @@
       "mcp__claude_ai_Atlassian__getTransitionsForJiraIssue",
       "Skill(git-commit)",
       "Skill(git-commit:*)",
+      "Bash(~/.claude/skills/git-commit/scripts/gather-context.sh)",
+      "Bash(~/.claude/skills/git-commit/scripts/gather-context.sh *)",
       "Bash(rm /Users/yoshintame/.hammerspoon/proxy-bindings.lua)",
       "Bash(mkdir -p /Users/yoshintame/.hammerspoon/generated)",
       "Bash(git add *)",
@@ -180,7 +182,8 @@
       "Write(//Users/yoshintame/Documents/**)",
       "Write(//Users/yoshintame/.claude/**)",
       "Write(//Users/yoshintame/.hammerspoon/**)",
-      "Write(/tmp/**)"
+      "Write(/tmp/**)",
+      "Bash(git -C /Users/yoshintame/Development/work/senate/senate@e2e commit-edit ':*)"
     ],
     "additionalDirectories": [
       "/Users/yoshintame/Development/work/vtb",
@@ -222,22 +225,18 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(curl*)",
             "command": "$HOME/.claude/hooks/curl-to-webfetch.sh"
           },
           {
             "type": "command",
-            "if": "Bash(npm*)",
             "command": "$HOME/.claude/hooks/tool-steering.sh"
           },
           {
             "type": "command",
-            "if": "Bash(yarn*)",
             "command": "$HOME/.claude/hooks/tool-steering.sh"
           },
           {
             "type": "command",
-            "if": "Bash(pip*)",
             "command": "$HOME/.claude/hooks/tool-steering.sh"
           }
         ]
@@ -245,13 +244,20 @@
     ]
   },
   "enabledPlugins": {
-    "worktrunk@worktrunk": true
+    "worktrunk@worktrunk": false,
+    "warp@claude-code-warp": true
   },
   "extraKnownMarketplaces": {
     "worktrunk": {
       "source": {
         "source": "github",
         "repo": "max-sixty/worktrunk"
+      }
+    },
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
       }
     }
   },

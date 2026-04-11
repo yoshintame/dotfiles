@@ -1,4 +1,4 @@
--- GENERATED FILE — do not edit. Source: ../../proxy-bindings/proxy-bindings.yaml
+-- GENERATED FILE — do not edit. Source: proxy-bindings.yaml
 local M = {}
 
 M.fix = "cmd alt ctrl shift r"

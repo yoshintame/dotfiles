@@ -1,2 +1,0 @@
-brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick glow gtrash clipboard
-brew tap homebrew/cask-fonts && brew install --cask font-symbols-only-nerd-font

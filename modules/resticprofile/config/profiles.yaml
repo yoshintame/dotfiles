@@ -1,0 +1,177 @@
+# yaml-language-server: $schema=https://creativeprojects.github.io/resticprofile/jsonschema/config.json
+
+version: "2"
+
+global:
+  default-command: snapshots
+  scheduler: crond
+  restic-binary: /opt/homebrew/bin/restic
+
+groups:
+  all:
+    profiles:
+      - dev
+      - home
+  maintenance:
+    profiles:
+      - local-ops
+      - b2-ops
+  check:
+    profiles:
+      - local-ops
+      - b2-ops
+
+profiles:
+  default:
+    inherit: local
+
+  base:
+    initialize: true
+    password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
+    backup:
+      exclude:
+        - "**/node_modules"
+        - "**/.venv"
+        - "**/.DS_Store"
+        - "**/Backups/restic/**"
+        - "**/.config/resticprofile/*.key"
+      exclude-caches: true
+      one-file-system: false
+      no-error-on-warning: true
+
+  # --- Local repository (hub for all backups) ---
+  local:
+    inherit: base
+    repository: "local:{{ .Env.HOME }}/Backups/restic/main"
+    lock: "/tmp/resticprofile-local.lock"
+    run-before:
+      - "mkdir -p {{ .Env.HOME }}/Backups/restic"
+
+  # --- B2 repository (offsite copy); needs B2_ACCOUNT_ID, B2_ACCOUNT_KEY ---
+  b2:
+    inherit: base
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
+    repository: "b2:yoshintame:restic/main"
+    lock: "/tmp/resticprofile-b2.lock"
+
+  quicksave:
+    inherit: local
+    backup:
+      source:
+        - "{{ .Env.RP_SAVE_DIR }}"
+      tag:
+        - quicksave
+
+  dev:
+    inherit: local
+    backup:
+      source-base: "{{ .Env.HOME }}/Development"
+      source:
+        - "."
+      tag:
+        - "{{ .Profile.Name }}"
+      schedule: "*:00,30"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/b771448c-05dc-4f14-8513-87583331f61b"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/b771448c-05dc-4f14-8513-87583331f61b/fail"
+
+  home:
+    inherit: local
+    backup:
+      source-base: "{{ .Env.HOME }}"
+      source:
+        - ".ssh"
+        - ".config"
+        - ".dotfiles"
+        - "Documents"
+        - "Pictures"
+        - "remnote"
+        - "Backups"
+        - ".gnupg"
+        - ".zsh_history"
+        - ".bash_history"
+        - ".history.db"
+        - ".local/share/fish/fish_history"
+      tag:
+        - home
+      schedule: "2:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/84aa215e-8770-403a-abd7-9499e2b5a737"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/84aa215e-8770-403a-abd7-9499e2b5a737/fail"
+
+  local-to-b2:
+    inherit: local
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
+    copy:
+      initialize: true
+      initialize-copy-chunker-params: true
+      repository: "b2:yoshintame:restic/main"
+      password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
+      schedule: "0,3,6,9,12,15,18,21:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-b2.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/bf672dd5-948d-44d6-94e7-c8460617347d"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/bf672dd5-948d-44d6-94e7-c8460617347d/fail"
+
+  local-ops:
+    inherit: local
+    forget:
+      group-by: "host,tags"
+      keep-within: 1d
+      keep-daily: 14
+      keep-weekly: 8
+      keep-monthly: 6
+      prune: true
+      host: true
+      tag: true
+      schedule: "sun 4:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/891cebfb-710b-487e-aaec-ddcafe63348d"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/891cebfb-710b-487e-aaec-ddcafe63348d/fail"
+    check:
+      schedule: "*-*-01 6:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/891cebfb-710b-487e-aaec-ddcafe63348d"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/891cebfb-710b-487e-aaec-ddcafe63348d/fail"
+
+  b2-ops:
+    inherit: b2
+    forget:
+      group-by: "host,tags"
+      keep-daily: 30
+      keep-weekly: 12
+      keep-monthly: 12
+      keep-yearly: 3
+      prune: true
+      host: true
+      tag: true
+      schedule: "sun 5:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b/fail"
+    check:
+      read-data-subset: "5%"
+      schedule: "*-*-01 7:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b/fail"

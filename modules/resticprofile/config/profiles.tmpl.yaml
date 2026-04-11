@@ -83,7 +83,7 @@ profiles:
     backup:
       run-before:
         - "/opt/homebrew/bin/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
-        - "/opt/homebrew/bin/brew bundle dump --force --file={{ .Env.HOME }}/.dotfiles/os/macos/packages/Brewfile"
+        - "/opt/homebrew/bin/brew bundle dump --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
       source-base: "{{ .Env.HOME }}"
       source:
         - ".ssh"

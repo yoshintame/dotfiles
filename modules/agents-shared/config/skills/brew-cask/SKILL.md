@@ -64,7 +64,7 @@ For Electron apps without Sparkle:
 cat "/Applications/$APP_NAME.app/Contents/Resources/app-update.yml"
 ```
 
-If no stable versioned download URL can be found, tell the user this app can't be reliably cask'd and suggest tracking it in `os/macos/packages/apps-unmanaged.txt` instead.
+If no stable versioned download URL can be found, tell the user this app can't be reliably cask'd and suggest tracking it in `hosts/lasthaze-mbp/packages/apps-unmanaged.txt` instead.
 
 ## Step 3 — Download and compute SHA256
 
@@ -166,7 +166,7 @@ git -C /opt/homebrew/Library/Taps/yoshintame/homebrew-cask push
 Then dump Brewfile to capture the new entry:
 
 ```bash
-brew bundle dump --force --file="$HOME/.dotfiles/os/macos/packages/Brewfile"
+brew bundle dump --force --file="$HOME/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
 ```
 
 ## Step 7 — Verify livecheck

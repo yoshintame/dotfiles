@@ -1,0 +1,15 @@
+{
+  "name": "dump-packages",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "dump-packages": "src/cli.ts"
+  },
+  "scripts": {
+    "dump": "bun run src/cli.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

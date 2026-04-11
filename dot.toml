@@ -22,6 +22,10 @@ dir = "~/.dotfiles/modules/proxy-bindings"
 raw = true
 run = 'bun run ~/.dotfiles/packages/proxy-bindings/src/cli.ts generate "$@"'
 
+["dot:dump-packages"]
+description = "Dump unmanaged apps and Setapp list for backup"
+run = 'bun run "$HOME/.dotfiles/packages/dump-packages/src/cli.ts"'
+
 ["dot:bootstrap-age-key"]
 description = "Restore sops age key from 1Password (run once on new machine)"
 run = '''

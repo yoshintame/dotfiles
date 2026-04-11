@@ -16,6 +16,9 @@ bindings:
   roulette: cmd alt ctrl shift x
   rouletteClear: cmd alt ctrl shift z
 
+  # Raycast
+  spotlight: cmd alt ctrl shift f
+
   # Screenshots (CleanShot)
   screenshotArea: cmd alt ctrl shift 1
   screenshotFull: cmd alt ctrl shift 2

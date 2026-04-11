@@ -1,0 +1,18 @@
+{
+  "name": "proxy-bindings",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "proxy-bindings": "src/cli.ts"
+  },
+  "scripts": {
+    "generate": "bun run src/cli.ts generate"
+  },
+  "dependencies": {
+    "yaml": "^2.7.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

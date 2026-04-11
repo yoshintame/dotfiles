@@ -10,10 +10,17 @@ run = '${EDITOR:-code} .'
 ["dot:rebuild"]
 description = "Rebuild nix-darwin configuration"
 dir = "{{env.DOTFILES}}"
+depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
 sudo darwin-rebuild switch --flake .#lasthaze-mbp
 '''
+
+["dot:proxy-bindings"]
+description = "Generate proxy-binding files from YAML config"
+dir = "~/.dotfiles/modules/proxy-bindings"
+raw = true
+run = 'bun run ~/.dotfiles/packages/proxy-bindings/src/cli.ts generate "$@"'
 
 ["dot:bootstrap-age-key"]
 description = "Restore sops age key from 1Password (run once on new machine)"

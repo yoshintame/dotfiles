@@ -1,0 +1,26 @@
+outputs:
+  lua: ../hammerspoon/config/generated/proxy-bindings.lua
+  typescript: ../karabiner/config/src/generated/proxy-bindings.ts
+
+bindings:
+  # Text processing (RewriteBar)
+  fix: cmd alt ctrl shift r
+
+  # 1Password
+  passwords: cmd alt ctrl shift p
+
+  # Color picker (Sip)
+  colorPicker: cmd alt ctrl shift c
+
+  # Roulette (PixelSnap)
+  roulette: cmd alt ctrl shift x
+  rouletteClear: cmd alt ctrl shift z
+
+  # Screenshots (CleanShot)
+  screenshotArea: cmd alt ctrl shift 1
+  screenshotFull: cmd alt ctrl shift 2
+  screenshotWindow: cmd alt ctrl shift 3
+  screenshotOcr: cmd alt ctrl shift 4
+  screenshotVideo: cmd alt ctrl shift 5
+  screenshotScroll: cmd alt ctrl shift 6
+  screenshotHistory: cmd alt ctrl shift 7

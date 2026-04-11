@@ -27,7 +27,7 @@ if (values.help) {
     dump-packages [options]
 
   Options:
-    -o, --out-dir <path>      Output directory (default: <dotfiles>/os/macos/packages)
+    -o, --out-dir <path>      Output directory (default: <dotfiles>/hosts/lasthaze-mbp/packages)
     -b, --brewfile <path>     Path to Brewfile for MAS app detection
     -a, --apps-dir <path>     Applications directory (default: /Applications)
     -s, --setapp-dir <path>   Setapp directory (default: /Applications/Setapp)
@@ -49,7 +49,7 @@ if (values.help) {
 }
 
 const dotfilesRoot = join(import.meta.dir, "../../..");
-const outDir = values["out-dir"] ?? join(dotfilesRoot, "os/macos/packages");
+const outDir = values["out-dir"] ?? join(dotfilesRoot, "hosts/lasthaze-mbp/packages");
 const brewfile = values.brewfile ?? join(outDir, "Brewfile");
 const appsDir = values["apps-dir"] ?? "/Applications";
 const setappDir = values["setapp-dir"] ?? "/Applications/Setapp";

@@ -49,6 +49,7 @@ in {
         ../../modules/mise
         ../../modules/resticprofile
         ../../modules/claude
+        ../../modules/codex
         ../../modules/iina
       ];
 
@@ -81,8 +82,8 @@ in {
         clean = ["~/.dotfiles" "~/.config"];
 
         links = {
-          "~/.config/packages" = "os/macos/packages";
-          "~/.local/share/pnpm/global/5/package.json" = "os/macos/packages/package.json";
+          "~/.config/packages" = "hosts/lasthaze-mbp/packages";
+          "~/.cache/.bun/install/global/package.json" = "hosts/lasthaze-mbp/packages/package.json";
         };
       };
     };

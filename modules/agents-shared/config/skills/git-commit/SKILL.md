@@ -3,7 +3,7 @@ name: git-commit
 description: Generates Conventional Commits messages by analyzing staged changes and repo commit history. Use when the user says "commit", "git commit", or asks to commit changes.
 license: MIT
 metadata:
-  version: 5.0.0
+  version: 5.1.0
 ---
 
 # Git Commit
@@ -53,7 +53,14 @@ Then:
    Refs: PROJ-123
    ```
 
-6. Commit with the private index:
+6. Re-run `gather-context.sh --index <path>` right before committing.
+   This rebases the private index onto the current `HEAD` if a parallel
+   session committed in the meantime, so your commit doesn't silently
+   revert their changes for files you didn't touch. Look for a
+   `rebased: <old> -> <new>` line in the `PRIVATE INDEX` section — if
+   present, re-check the staged diff before committing.
+
+7. Commit with the private index:
 
    ```bash
    GIT_INDEX_FILE=<path> git commit-edit "<message>"

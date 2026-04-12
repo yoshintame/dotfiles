@@ -3,7 +3,7 @@ name: git-commit
 description: Generates Conventional Commits messages by analyzing staged changes and repo commit history. Use when the user says "commit", "git commit", or asks to commit changes.
 license: MIT
 metadata:
-  version: 5.1.0
+  version: 5.2.0
 ---
 
 # Git Commit
@@ -11,56 +11,31 @@ metadata:
 ## Rules
 
 - Commit message in English only
-- Subject line under 100 characters
+- Subject line under 100 characters, Conventional Commits format: `type(scope): subject`
+- Body uses bullets only — no prose paragraphs, no lead-in sentences
 - Do not push, only commit
 - Do not ask the user why, infer from the diff and conversation
 - Never add AI attribution lines
 
 ## Workflow
 
-Always run this first, before any other git command:
+1. Run gather-context (provisions a per-session private index that isolates staging from parallel Claude sessions and rebases onto current `HEAD`):
 
-```bash
-if [ -x "$HOME/.agents/skills/git-commit/scripts/gather-context.sh" ]; then
-  "$HOME/.agents/skills/git-commit/scripts/gather-context.sh"
-else
-  "$HOME/.claude/skills/git-commit/scripts/gather-context.sh"
-fi
-```
-
-The output includes a `PRIVATE INDEX (this session)` section with a path and
-ready-to-copy command examples. **Follow it literally**: prefix every git
-command in this commit flow with `GIT_INDEX_FILE=<that path>` inline. Bash tool
-calls don't share env between invocations, so the prefix must be on every call.
-Never run a bare `git add` or `git commit` — you'll collide with other Claude
-sessions in the same repo.
-
-Then:
-
-1. Stage only the files or hunks that belong to the current task.
-2. Stage them only into the private index.
-3. Keep commits atomic.
-4. Match the repo's existing style from recent commits and any commitlint /
-   contributing config surfaced by gather-context.
-5. Write the message in Conventional Commits format:
-
-   ```text
-   type(scope): subject under 100 chars
-
-   - bullet describing change
-   - another bullet
-
-   Refs: PROJ-123
+   ```bash
+   if [ -x "$HOME/.agents/skills/git-commit/scripts/gather-context.sh" ]; then
+     "$HOME/.agents/skills/git-commit/scripts/gather-context.sh"
+   else
+     "$HOME/.claude/skills/git-commit/scripts/gather-context.sh"
+   fi
    ```
 
-6. Re-run `gather-context.sh --index <path>` right before committing.
-   This rebases the private index onto the current `HEAD` if a parallel
-   session committed in the meantime, so your commit doesn't silently
-   revert their changes for files you didn't touch. Look for a
-   `rebased: <old> -> <new>` line in the `PRIVATE INDEX` section — if
-   present, re-check the staged diff before committing.
+2. Use the `GIT_INDEX_FILE=<path>` prefix from the `PRIVATE INDEX` section on **every** git command. Bash calls don't share env. Never run bare `git add` / `git commit`.
 
-7. Commit with the private index:
+3. Stage only files/hunks for the current task into the private index. Keep commits atomic. Match recent-commits style.
+
+4. Re-run gather-context with `--index <path>` right before committing. If output contains `rebased: <old> -> <new>`, re-check the staged diff — a parallel session committed and the index was refreshed.
+
+5. Commit:
 
    ```bash
    GIT_INDEX_FILE=<path> git commit-edit "<message>"

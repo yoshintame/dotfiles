@@ -29,6 +29,23 @@ in {
     home = homeDir;
   };
 
+  programs.fish.enable = true;
+
+  system.activationScripts.postActivation.text = ''
+    fishPath="/run/current-system/sw/bin/fish"
+
+    if ! grep -qxF "$fishPath" /etc/shells; then
+      echo "Adding $fishPath to /etc/shells" >&2
+      echo "$fishPath" >> /etc/shells
+    fi
+
+    currentShell=$(/usr/bin/dscl . -read /Users/${username} UserShell 2>/dev/null | awk '{print $2}')
+    if [ "$currentShell" != "$fishPath" ]; then
+      echo "Setting ${username}'s login shell to $fishPath" >&2
+      /usr/bin/dscl . -change /Users/${username} UserShell "$currentShell" "$fishPath"
+    fi
+  '';
+
   homebrew = {
     enable = true;
     onActivation = {

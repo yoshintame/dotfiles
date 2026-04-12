@@ -57,7 +57,7 @@ reveal = [
 	{ run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
 ]
 extract = [
-	{ run = "ya pub extract --list %s", desc = "Extract here" },
+	{ run = '~/.config/yazi/scripts/extract.sh "$@"', desc = "Extract with ouch (unique dir)" },
 ]
 download = [
 	{ run = "ya emit download --open %S", desc = "Download and open" },

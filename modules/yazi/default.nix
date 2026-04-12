@@ -7,7 +7,7 @@
     pkgs-unstable.yazi
 
     ffmpeg
-    p7zip
+    _7zz
     jq
     poppler
     fd
@@ -33,7 +33,6 @@
 
     # TODO:
     # clipboard
-    # sevenzip # instead of p7zip
   ];
 
   nixDotbot.links = {

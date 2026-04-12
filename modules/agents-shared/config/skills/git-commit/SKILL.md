@@ -3,7 +3,7 @@ name: git-commit
 description: Generates Conventional Commits messages by analyzing staged changes and repo commit history. Use when the user says "commit", "git commit", or asks to commit changes.
 license: MIT
 metadata:
-  version: 4.0.0
+  version: 5.0.0
 ---
 
 # Git Commit
@@ -28,11 +28,21 @@ else
 fi
 ```
 
-It returns branch, status, full staged diff, `--stat`, last 50 commits, base-branch divergence, pre-extracted Jira ticket, and any detected commit-convention configs. Use its output to drive everything below. If you still need more after that, run whatever git or Read commands you actually need.
+The output includes a `PRIVATE INDEX (this session)` section with a path and
+ready-to-copy command examples. **Follow it literally**: prefix every git
+command in this commit flow with `GIT_INDEX_FILE=<that path>` inline. Bash tool
+calls don't share env between invocations, so the prefix must be on every call.
+Never run a bare `git add` or `git commit` — you'll collide with other Claude
+sessions in the same repo.
 
-1. Stage only the files or hunks that belong to the current task. Keep commits atomic.
-2. Match the repo's existing style from recent commits and any commitlint or contributing config.
-3. Write the message in Conventional Commits format:
+Then:
+
+1. Stage only the files or hunks that belong to the current task.
+2. Stage them only into the private index.
+3. Keep commits atomic.
+4. Match the repo's existing style from recent commits and any commitlint /
+   contributing config surfaced by gather-context.
+5. Write the message in Conventional Commits format:
 
    ```text
    type(scope): subject under 100 chars
@@ -43,10 +53,10 @@ It returns branch, status, full staged diff, `--stat`, last 50 commits, base-bra
    Refs: PROJ-123
    ```
 
-4. Open the editor with the pre-filled message:
+6. Commit with the private index:
 
    ```bash
-   git commit-edit "<message>"
+   GIT_INDEX_FILE=<path> git commit-edit "<message>"
    ```
 
-Do not push after committing.
+Do not push.

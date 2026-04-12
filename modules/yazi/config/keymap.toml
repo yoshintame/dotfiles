@@ -101,7 +101,11 @@ keymap = [
 	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
 	{ on = "Z",             run = "plugin fzf",                  desc = "Jump to a directory or reveal a file using fzf" },
     { on = "z",             run = "plugin zoxide",               desc = "Jump to a directory using zoxide" },
-    { on = "C",             run = "plugin ouch --args=zip",      desc = "Compress with ouch" },
+    { on = [ "C", "z" ],    run = "plugin ouch zip",      desc = "Compress → zip" },
+    { on = [ "C", "7" ],    run = "plugin ouch 7z",       desc = "Compress → 7z" },
+    { on = [ "C", "t" ],    run = "plugin ouch tar.zst",  desc = "Compress → tar.zst" },
+    { on = [ "C", "g" ],    run = "plugin ouch tar.gz",   desc = "Compress → tar.gz" },
+    { on = [ "C", "x" ],    run = "plugin ouch tar.xz",   desc = "Compress → tar.xz" },
     { on = "N",             run = "plugin dropover",             desc = "Trigger dropover for selected or hovered files" },
     { on = [ "c", "m" ],    run = "plugin chmod",                desc = "Change file permissions" },
 

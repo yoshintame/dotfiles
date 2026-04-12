@@ -69,7 +69,6 @@ brew "nmap"
 brew "ollama", restart_service: :changed
 brew "openconnect"
 brew "ouch"
-brew "p7zip"
 brew "pipx"
 brew "pkgconf"
 brew "pnpm"

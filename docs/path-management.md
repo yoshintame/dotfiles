@@ -72,21 +72,29 @@ home.sessionVariables = {
 
 После рефакторинга в fish conf.d остаётся только то, что нельзя вынести в nix:
 
-- `00-env.fish` — XDG vars, FZF, SSH_AUTH_SOCK, `node_modules/.bin` (per-project), GRC, aliases
+- `00-env.fish` — `__fish_cache_dir`, `node_modules/.bin` (per-project), GRC plugin config
 - `01-brew.fish` — fish completions path, manpath для keg-only apps
 - `keybinds.fish` — кастомные биндинги и smart-функции
-- `source.fish` — source кастомных функций и abbreviations
 - `tmux.fish` — auto-attach с исключениями для VSCode/Warp
 - `vscode.fish` — VSCode shell integration
 
-Удалено: `mise.fish`, `pnpm.fish`, `zz-env.fish`, `atuin.fish`, `promt.fish`, `zoxide.fish`, `fisher.fish`.
+Удалено: `mise.fish`, `pnpm.fish`, `zz-env.fish`, `atuin.fish`, `promt.fish`, `zoxide.fish`, `fisher.fish`, `source.fish`, `abbr.fish`, `aliases/`.
 
-### Fish плагины через nix
+### Fish модуль через nix
 
-Плагины управляются через `programs.fish.plugins` в `modules/fish/default.nix`. Fisher убран.
+Структура `modules/fish/` разделена на несколько файлов:
+- `default.nix` — основной модуль, programs.fish.enable, functions, bash auto-exec для Linux
+- `abbrs.nix` — `programs.fish.shellAbbrs` (fish-only)
+- `aliases.nix` — `home.shellAliases` (shared: fish/zsh/bash)
+- `plugins.nix` — `programs.fish.plugins`
 
-Из nixpkgs: autopair, sponge, puffer, plugin-git, grc.
-Через fetchFromGitHub: plugin-thefuck, fish-plugin-sudo, fish-utils-core, fish-utils, fish-finders, catppuccin.
+Плагины: autopair, sponge, puffer, plugin-git, grc (из nixpkgs), plugin-thefuck, fish-plugin-sudo, fish-utils-core, fish-utils, fish-finders, catppuccin (через fetchFromGitHub).
+
+### Fish как login shell
+
+Подробности в [shell-setup.md](shell-setup.md). Кратко:
+- **macOS:** fish как login shell через `system.activationScripts` (dscl)
+- **Linux:** bash как login shell + auto-exec fish из `programs.bash.initExtra`
 
 ### Shell интеграции через nix
 
@@ -96,6 +104,7 @@ home.sessionVariables = {
 | atuin | `programs.atuin` (home-manager) | ✅ | ✅ | ✅ |
 | starship | `programs.starship` (home-manager) | ✅ | ✅ | ✅ |
 | zoxide | `programs.zoxide` (home-manager) | ✅ | ✅ | ✅ |
+| fzf | `programs.fzf` (home-manager) | ✅ | ✅ | ✅ |
 | homebrew | `homebrew` (nix-darwin) | через sessionPath | через set-environment | — |
 
 ## mise: shims vs activate

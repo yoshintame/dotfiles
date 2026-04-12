@@ -5,6 +5,20 @@
 }: let
   username = "yoshintame";
   homeDir = "/Users/${username}";
+  sharedEnv = {
+    EDITOR = "code --wait";
+    VISUAL = "code --wait";
+    GOPATH = "${homeDir}/go";
+    PNPM_HOME = "${homeDir}/.local/share/pnpm";
+    DOTFILES = "${homeDir}/.dotfiles";
+    XDG_CONFIG_HOME = "${homeDir}/.config";
+    XDG_DATA_HOME = "${homeDir}/.local/share";
+    XDG_STATE_HOME = "${homeDir}/.local/state";
+    XDG_CACHE_HOME = "${homeDir}/.cache";
+    TRASH = "${homeDir}/.Trash";
+    PLAY = "iina";
+    SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+  };
 in {
   imports = [./macos-defaults.nix];
 
@@ -57,28 +71,18 @@ in {
     extraConfig = builtins.readFile ./packages/Brewfile;
   };
 
-  environment.variables = {
-    HOMEBREW_PREFIX = "/opt/homebrew";
-    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
-    HOMEBREW_REPOSITORY = "/opt/homebrew";
-    HOMEBREW_NO_ANALYTICS = "1";
-    HOMEBREW_NO_ENV_HINTS = "1";
-    HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
-    HOMEBREW_BUNDLE_DUMP_NO_GO = "1";
-    HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
-    GOPATH = "${homeDir}/go";
-    PNPM_HOME = "${homeDir}/.local/share/pnpm";
-    DOTFILES = "${homeDir}/.dotfiles";
-    EDITOR = "code --wait";
-    VISUAL = "code --wait";
-    XDG_CONFIG_HOME = "${homeDir}/.config";
-    XDG_DATA_HOME = "${homeDir}/.local/share";
-    XDG_STATE_HOME = "${homeDir}/.local/state";
-    XDG_CACHE_HOME = "${homeDir}/.cache";
-    TRASH = "${homeDir}/.Trash";
-    PLAY = "iina";
-    SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-  };
+  environment.variables =
+    sharedEnv
+    // {
+      HOMEBREW_PREFIX = "/opt/homebrew";
+      HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+      HOMEBREW_REPOSITORY = "/opt/homebrew";
+      HOMEBREW_NO_ANALYTICS = "1";
+      HOMEBREW_NO_ENV_HINTS = "1";
+      HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
+      HOMEBREW_BUNDLE_DUMP_NO_GO = "1";
+      HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
+    };
 
   home-manager = {
     useGlobalPkgs = true;
@@ -137,20 +141,7 @@ in {
         "${homeDir}/bin"
       ];
 
-      home.sessionVariables = {
-        EDITOR = "code --wait";
-        VISUAL = "code --wait";
-        GOPATH = "${homeDir}/go";
-        PNPM_HOME = "${homeDir}/.local/share/pnpm";
-        DOTFILES = "${homeDir}/.dotfiles";
-        XDG_CONFIG_HOME = "${homeDir}/.config";
-        XDG_DATA_HOME = "${homeDir}/.local/share";
-        XDG_STATE_HOME = "${homeDir}/.local/state";
-        XDG_CACHE_HOME = "${homeDir}/.cache";
-        TRASH = "${homeDir}/.Trash";
-        PLAY = "iina";
-        SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-      };
+      home.sessionVariables = sharedEnv;
 
       home.stateVersion = "25.05";
       home.username = username;

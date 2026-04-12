@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-set -euo pipefail
 
 osascript -e 'id of app "Visual Studio Code"'
 brew install duti

@@ -82,7 +82,7 @@ profiles:
     inherit: local
     backup:
       run-before:
-        - "/opt/homebrew/bin/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
+        - "{{ .Env.HOME }}/.local/share/mise/shims/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
         - "/opt/homebrew/bin/brew bundle dump --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
       source-base: "{{ .Env.HOME }}"
       source:
@@ -100,7 +100,7 @@ profiles:
         - ".local/share/fish/fish_history"
       tag:
         - home
-      schedule: "2:00"
+      schedule: "0,6,12,18:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
       run-after:

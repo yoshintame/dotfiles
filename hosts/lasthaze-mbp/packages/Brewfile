@@ -23,6 +23,7 @@ tap "yoshintame/cask"
 brew "ack"
 brew "act"
 brew "age"
+brew "node"
 brew "aicommit2"
 brew "alejandra"
 brew "bash"
@@ -48,6 +49,8 @@ brew "git-extras"
 brew "git-filter-repo"
 brew "git-subrepo"
 brew "glow"
+brew "gnupg"
+brew "go"
 brew "grc"
 brew "gum"
 brew "imagemagick"
@@ -76,6 +79,7 @@ brew "poetry"
 brew "poppler"
 brew "postgresql@14"
 brew "postgresql@16"
+brew "python@3.12"
 brew "restic"
 brew "ripgrep"
 brew "sevenzip"
@@ -90,6 +94,7 @@ brew "thefuck"
 brew "tmux"
 brew "topgrade"
 brew "unzip"
+brew "uv"
 brew "watchexec"
 brew "wget"
 brew "worktrunk"
@@ -194,6 +199,7 @@ mas "Caramba Switcher", id: 1565826179
 mas "Dropover", id: 1355679052
 mas "ExcalidrawZ", id: 6636493997
 mas "Klack", id: 6446206067
+mas "Lang Switcher", id: 1597566195
 mas "LINE", id: 539883307
 mas "OK JSON", id: 1576121509
 mas "PDFgear", id: 6469021132

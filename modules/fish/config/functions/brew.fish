@@ -1,3 +1,12 @@
+function __brew_dump_sanitized --description "Dump Brewfile, then restore manually-managed gopls"
+    # HOMEBREW_BUNDLE_DUMP_NO_GO=1 (set in nix-darwin environment.variables)
+    # skips Go packages during dump because `brew bundle --go` mistakenly
+    # treats $GOPATH/bin binaries (go, gofmt) as invalid `go "cmd/go"` entries.
+    # After dump we re-append gopls, the only Go package we actually want.
+    command brew bundle dump --file=~/.config/packages/Brewfile --force
+    echo 'go "golang.org/x/tools/gopls"' >> ~/.config/packages/Brewfile
+end
+
 function brew --wraps='command brew' --description 'Wrapper for the brew command with additional functionality'
     set -l flags
     set -l args
@@ -26,13 +35,13 @@ function brew --wraps='command brew' --description 'Wrapper for the brew command
                     command brew bundle install --cleanup --file=~/.config/packages/Brewfile $flags
                 else
                     command brew install $args[2..-1]
-                    brew bundle dump --file=~/.config/packages/Brewfile --force
+                    __brew_dump_sanitized
                 end
             case 'remove'
                 command brew remove $args[2..-1]
-                brew bundle dump --file=~/.config/packages/Brewfile --force
+                __brew_dump_sanitized
             case 'dump'
-                brew bundle dump --file=~/.config/packages/Brewfile --force
+                __brew_dump_sanitized
             case 'list'
                 switch $flags
                     case '-o'

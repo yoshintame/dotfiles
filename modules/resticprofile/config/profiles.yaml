@@ -83,7 +83,7 @@ profiles:
     backup:
       run-before:
         - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 {{ .Env.HOME }}/.local/share/mise/shims/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
-        - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew bundle dump --no-go --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
+        - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew bundle dump --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
         - "/bin/sh -c 'echo go \"golang.org/x/tools/gopls\" >> {{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile'"
       source-base: "{{ .Env.HOME }}"
       source:

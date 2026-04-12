@@ -24,7 +24,8 @@ aliases add ma 'ouch compress'
 
 aliases add cp 'cp -R'
 
-aliases add rm 'gtrash put -rv'
+aliases add rm 'gtrash put'
+aliases add 'rm!' '/bin/rm'
 
 aliases add trs 'gtrash summary'
 aliases add trf 'gtrash find'

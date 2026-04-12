@@ -57,8 +57,36 @@ else
   PRIV_INDEX=$(mktemp "$SESSIONS_DIR/idx-XXXXXXXX")
 fi
 
+CURRENT_HEAD=$(git_cmd rev-parse HEAD)
+REBASED_FROM=""
+
 if [ ! -s "$PRIV_INDEX" ]; then
   GIT_INDEX_FILE="$PRIV_INDEX" git_cmd read-tree HEAD
+  printf '%s\n' "$CURRENT_HEAD" > "$PRIV_INDEX.base"
+else
+  PRIV_BASE=""
+  [ -f "$PRIV_INDEX.base" ] && PRIV_BASE=$(cat "$PRIV_INDEX.base")
+  if [ -n "$PRIV_BASE" ] && [ "$PRIV_BASE" != "$CURRENT_HEAD" ]; then
+    # HEAD moved (parallel session committed). Rebase the private index onto
+    # the new HEAD: remember which paths we already staged, reset the index to
+    # the new HEAD tree, then re-stage those paths from the worktree. Without
+    # this, our commit would silently revert the parallel session's changes
+    # for every untouched file.
+    STAGED_PATHS=$(git_priv diff --cached --name-only "$PRIV_BASE" 2>/dev/null || true)
+    GIT_INDEX_FILE="$PRIV_INDEX" git_cmd read-tree "$CURRENT_HEAD"
+    if [ -n "$STAGED_PATHS" ]; then
+      printf '%s\n' "$STAGED_PATHS" | while IFS= read -r path; do
+        [ -z "$path" ] && continue
+        if [ -e "$REPO/$path" ]; then
+          git_priv add -- "$path"
+        else
+          git_priv rm -- "$path" >/dev/null 2>&1 || true
+        fi
+      done
+    fi
+    printf '%s\n' "$CURRENT_HEAD" > "$PRIV_INDEX.base"
+    REBASED_FROM="$PRIV_BASE"
+  fi
 fi
 
 section() {
@@ -78,7 +106,11 @@ done
 
 section "PRIVATE INDEX"
 printf 'path: %s\n' "$PRIV_INDEX"
+printf 'base: %s\n' "$CURRENT_HEAD"
 printf 'usage: GIT_INDEX_FILE=%s git add -- <paths>\n' "$PRIV_INDEX"
+if [ -n "$REBASED_FROM" ]; then
+  printf 'rebased: %s -> %s (parallel session committed; untouched files refreshed from new HEAD)\n' "$REBASED_FROM" "$CURRENT_HEAD"
+fi
 
 SHARED_STAT=$(git_shared diff --cached --stat 2>/dev/null || true)
 if [ -n "$SHARED_STAT" ]; then

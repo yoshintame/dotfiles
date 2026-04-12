@@ -35,8 +35,6 @@ profiles:
         - "**/.DS_Store"
         - "**/Backups/restic/**"
         - "**/.config/resticprofile/*.key"
-        - "**/.Trash/**"
-        - "**/.local/share/Trash/**"
       exclude-caches: true
       one-file-system: false
       no-error-on-warning: true
@@ -84,8 +82,9 @@ profiles:
     inherit: local
     backup:
       run-before:
-        - "/opt/homebrew/bin/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
-        - "/opt/homebrew/bin/brew bundle dump --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
+        - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 {{ .Env.HOME }}/.local/share/mise/shims/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
+        - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew bundle dump --no-go --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
+        - "/bin/sh -c 'echo go \"golang.org/x/tools/gopls\" >> {{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile'"
       source-base: "{{ .Env.HOME }}"
       source:
         - ".ssh"
@@ -102,7 +101,7 @@ profiles:
         - ".local/share/fish/fish_history"
       tag:
         - home
-      schedule: "2:00"
+      schedule: "0,6,12,18:00"
       schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
       run-after:

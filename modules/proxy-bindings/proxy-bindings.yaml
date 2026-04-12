@@ -19,6 +19,9 @@ bindings:
   # Raycast
   spotlight: cmd alt ctrl shift f
 
+  # Leader (in-app whichkey/leader trigger, fired by Karabiner from bare ⏎)
+  leaderInApp: cmd alt ctrl shift l
+
   # Screenshots (CleanShot)
   screenshotArea: cmd alt ctrl shift 1
   screenshotFull: cmd alt ctrl shift 2

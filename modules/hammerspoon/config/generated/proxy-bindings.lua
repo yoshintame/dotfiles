@@ -1,4 +1,4 @@
--- GENERATED FILE — do not edit. Source: proxy-bindings.yaml
+-- GENERATED FILE — do not edit. Source: ../../proxy-bindings/proxy-bindings.yaml
 local M = {}
 
 M.fix = "cmd alt ctrl shift r"
@@ -7,6 +7,7 @@ M.color_picker = "cmd alt ctrl shift c"
 M.roulette = "cmd alt ctrl shift x"
 M.roulette_clear = "cmd alt ctrl shift z"
 M.spotlight = "cmd alt ctrl shift f"
+M.leader_in_app = "cmd alt ctrl shift l"
 M.screenshot_area = "cmd alt ctrl shift 1"
 M.screenshot_full = "cmd alt ctrl shift 2"
 M.screenshot_window = "cmd alt ctrl shift 3"

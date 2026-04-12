@@ -182,7 +182,7 @@
 
   // Which key
   {
-    "key": "ctrl+shift+alt+cmd+1",
+    "key": "ctrl+shift+alt+cmd+l",
     "command": "whichkey.show"
   },
 

@@ -6,7 +6,8 @@
     vim = "nvim";
     python = "python3";
     pip = "pip3";
-    rm = "gtrash put -rv";
+    rm = "gtrash put";
+    "rm!" = "/bin/rm";
     md = "mkdir -p";
     ml = "ln -s";
     o = "open";

@@ -1,4 +1,4 @@
-function pubkey --description 'Copy ssh public key to clipboard'
+function cpubkey --description 'Copy ssh public key to clipboard'
   if type -q op
     op item get $hostname --fields 'public key' | pbcopy; and echo '=> Public key copied to clipboard.'
   else if test -f ~/.ssh/id_rsa.pub

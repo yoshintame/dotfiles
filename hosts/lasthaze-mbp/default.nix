@@ -64,6 +64,8 @@ in {
     HOMEBREW_NO_ANALYTICS = "1";
     HOMEBREW_NO_ENV_HINTS = "1";
     HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
+    HOMEBREW_BUNDLE_DUMP_NO_GO = "1";
+    HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
     GOPATH = "${homeDir}/go";
     PNPM_HOME = "${homeDir}/.local/share/pnpm";
     DOTFILES = "${homeDir}/.dotfiles";

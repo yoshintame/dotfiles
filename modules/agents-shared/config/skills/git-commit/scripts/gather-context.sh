@@ -76,28 +76,26 @@ for candidate in main master trunk develop; do
   fi
 done
 
-section "PRIVATE INDEX (this session)"
+section "PRIVATE INDEX"
 printf 'path: %s\n' "$PRIV_INDEX"
-cat <<EOF
-Use this index for ALL git commands in this commit flow. Each Bash call is a
-fresh shell, so prefix every command inline:
+printf 'usage: GIT_INDEX_FILE=%s git add -- <paths>\n' "$PRIV_INDEX"
 
-  GIT_INDEX_FILE=$PRIV_INDEX git add -- path/to/file
-  GIT_INDEX_FILE=$PRIV_INDEX git diff --cached
-  GIT_INDEX_FILE=$PRIV_INDEX git commit-edit "type(scope): subject"
-
-Do NOT run plain "git add" or "git commit" — those touch the shared index and
-may collide with other Claude sessions running in this repo.
-EOF
-
-section "SHARED INDEX (other sessions / user)"
 SHARED_STAT=$(git_shared diff --cached --stat 2>/dev/null || true)
-if [ -z "$SHARED_STAT" ]; then
-  echo "(shared index is clean — matches HEAD)"
-else
-  echo "WARNING: the shared .git/index has staged changes that do NOT belong to this session."
-  echo "Treat these files as off-limits. Do not 'git add' or 'git restore --staged' them."
-  echo
+if [ -n "$SHARED_STAT" ]; then
+  SHARED_TREE=$(git_shared write-tree 2>/dev/null || true)
+  if [ -n "$SHARED_TREE" ]; then
+    for c in $(git_cmd rev-list -30 HEAD 2>/dev/null); do
+      if [ "$(git_cmd rev-parse "$c^{tree}" 2>/dev/null)" = "$SHARED_TREE" ]; then
+        git_shared read-tree HEAD
+        SHARED_STAT=""
+        break
+      fi
+    done
+  fi
+fi
+if [ -n "$SHARED_STAT" ]; then
+  section "SHARED INDEX WARNING"
+  echo "The shared .git/index has staged changes from another session. Off-limits — do NOT add, restore, or commit them."
   printf '%s\n' "$SHARED_STAT"
 fi
 
@@ -106,26 +104,18 @@ printf 'current: %s\n' "$BRANCH"
 [ -n "$JIRA" ] && printf 'jira:    %s\n' "$JIRA"
 [ -n "$BASE" ] && printf 'base:    %s\n' "$BASE"
 
-section "STATUS (working tree)"
+section "WORKING TREE (changed files)"
 git_cmd status --short
 
-section "STAGED DIFF — private index (--stat)"
-git_priv diff --cached --stat
-
-section "STAGED DIFF — private index (full)"
 PRIV_DIFF=$(git_priv diff --cached)
 if [ -z "$PRIV_DIFF" ]; then
-  echo "(nothing staged in private index yet — stage with: GIT_INDEX_FILE=$PRIV_INDEX git add -- <paths>)"
+  section "STAGED DIFF (private index)"
+  echo "(empty — stage with: GIT_INDEX_FILE=$PRIV_INDEX git add -- <paths>)"
 else
+  section "STAGED DIFF — private index (--stat)"
+  git_priv diff --cached --stat
+  section "STAGED DIFF — private index (full)"
   printf '%s\n' "$PRIV_DIFF"
-fi
-
-section "UNSTAGED DIFF (--stat)"
-UNSTAGED_STAT=$(git_cmd diff --stat)
-if [ -z "$UNSTAGED_STAT" ]; then
-  echo "(no unstaged changes)"
-else
-  printf '%s\n' "$UNSTAGED_STAT"
 fi
 
 if [ -n "$BASE" ] && [ "$BRANCH" != "$BASE" ]; then
@@ -137,8 +127,23 @@ if [ -n "$BASE" ] && [ "$BRANCH" != "$BASE" ]; then
   fi
 fi
 
-section "RECENT COMMITS (last 50, oneline)"
-git_cmd log --oneline -50
+section "RECENT COMMITS (up to 25 unique type(scope) prefixes)"
+git_cmd log --oneline -500 | awk '
+{
+  i = index($0, " ")
+  subj = substr($0, i+1)
+  if (match(subj, /^[a-zA-Z]+(\([^)]+\))?:/)) {
+    key = substr(subj, RSTART, RLENGTH)
+  } else {
+    key = subj
+  }
+  if (!(key in seen)) {
+    seen[key] = 1
+    print
+    n++
+    if (n >= 25) exit
+  }
+}'
 
 section "REPO COMMIT CONVENTIONS"
 FOUND_CONVENTIONS=0

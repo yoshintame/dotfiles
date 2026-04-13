@@ -200,7 +200,7 @@ main() {
 
   # If we were curl'd from the internet, bash is executing a tempfile.
   # Re-exec from the cloned repo so $0 / relative paths behave.
-  if [ -z "${BOOTSTRAP_REEXEC:-}" ] && [ "${BASH_SOURCE[0]}" != "${REPO_DIR}/bootstrap.sh" ]; then
+  if [ -z "${BOOTSTRAP_REEXEC:-}" ] && [ "${BASH_SOURCE[0]:-}" != "${REPO_DIR}/bootstrap.sh" ]; then
     log "Re-executing from ${REPO_DIR}/bootstrap.sh"
     BOOTSTRAP_REEXEC=1 exec bash "${REPO_DIR}/bootstrap.sh" "${HOST}"
   fi

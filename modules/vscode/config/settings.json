@@ -282,7 +282,7 @@
       "args": ["-l"],
     },
     "fish": {
-      "path": "fish",
+      "path": "/run/current-system/sw/bin/fish",
       "args": ["-l"],
     },
     "tmux": {
@@ -292,9 +292,6 @@
     "pwsh": {
       "path": "pwsh",
       "icon": "terminal-powershell",
-    },
-    "fish (2)": {
-      "path": "/opt/homebrew/bin/fish",
     },
   },
   "terminal.integrated.defaultProfile.osx": "fish",

@@ -95,7 +95,9 @@ run_system_switch() {
   log "Building system for host: ${host}"
   case "$(uname -s)" in
     Darwin)
-      nix --extra-experimental-features "nix-command flakes" \
+      sudo --preserve-env=NIX_CONFIG \
+        /nix/var/nix/profiles/default/bin/nix \
+        --extra-experimental-features "nix-command flakes" \
         run github:lnl7/nix-darwin/nix-darwin-25.05#darwin-rebuild -- \
         --impure switch --flake "${REPO_DIR}#${host}"
       ;;

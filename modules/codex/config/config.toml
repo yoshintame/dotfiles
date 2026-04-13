@@ -22,3 +22,9 @@ enabled = true
 
 [projects."/Users/yoshintame/Documents/obsidian/yoshintame"]
 trust_level = "trusted"
+
+[projects."/Users/yoshintame/.dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/yoshintame"]
+trust_level = "trusted"

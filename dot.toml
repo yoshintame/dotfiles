@@ -40,3 +40,47 @@ else
     echo "Age key restored to $KEY_FILE"
 fi
 '''
+
+["dot:bootstrap-ssh"]
+description = "Wire ~/.ssh/config to 1Password SSH Agent (run once on new machine)"
+run = '''
+set -euo pipefail
+
+AGENT_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+SSH_DIR="$HOME/.ssh"
+SSH_CONFIG="$SSH_DIR/config"
+MARKER="# managed-by: dot:bootstrap-ssh"
+
+if [ ! -S "$AGENT_SOCK" ]; then
+    echo "!! 1Password SSH Agent socket not found at:"
+    echo "   $AGENT_SOCK"
+    echo
+    echo "Open 1Password.app → Settings → Developer → enable 'Use the SSH agent',"
+    echo "then re-run: mise run dot:bootstrap-ssh"
+    exit 1
+fi
+
+mkdir -p "$SSH_DIR"
+chmod 700 "$SSH_DIR"
+
+if [ -f "$SSH_CONFIG" ] && grep -qF "$MARKER" "$SSH_CONFIG"; then
+    echo "~/.ssh/config already wired to 1Password SSH Agent, skipping."
+else
+    touch "$SSH_CONFIG"
+    chmod 600 "$SSH_CONFIG"
+    {
+        echo ""
+        echo "$MARKER"
+        echo "Host *"
+        echo "  IdentityAgent \"$AGENT_SOCK\""
+    } >> "$SSH_CONFIG"
+    echo "Appended 1Password SSH Agent IdentityAgent block to $SSH_CONFIG"
+fi
+
+echo
+echo "Keys visible via 1Password SSH Agent:"
+SSH_AUTH_SOCK="$AGENT_SOCK" ssh-add -l || {
+    echo "!! ssh-add -l failed. Make sure 1Password is unlocked and at least one SSH key item exists."
+    exit 1
+}
+'''

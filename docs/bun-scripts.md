@@ -14,7 +14,7 @@
 Скрипты лежат рядом с тем, что они обслуживают:
 
 ```
-os/macos/scripts/dump-packages.ts   # дамп приложений для бэкапа
+packages/dump-packages/              # CLI: дамп unmanaged/Setapp приложений
 packages/proxy-bindings/src/cli.ts   # кодген proxy-bindings
 ```
 
@@ -22,14 +22,14 @@ packages/proxy-bindings/src/cli.ts   # кодген proxy-bindings
 
 ```toml
 ["dot:dump-packages"]
-run = 'bun run "$HOME/.dotfiles/os/macos/scripts/dump-packages.ts"'
+run = 'bun run "$HOME/.dotfiles/packages/dump-packages/src/cli.ts"'
 ```
 
 Или напрямую из resticprofile hooks (с полным путём к бинарнику, т.к. cron не наследует PATH):
 
 ```yaml
 run-before:
-  - "/opt/homebrew/bin/bun run {{ .Env.HOME }}/.dotfiles/os/macos/scripts/dump-packages.ts"
+  - "/opt/homebrew/bin/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
 ```
 
 ## Типы в VS Code

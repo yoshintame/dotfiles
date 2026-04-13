@@ -104,7 +104,7 @@ Tailscale:  brew install tailscale → tailscale up (SSO в браузере) �
 
 ### Вердикт для текущего сетапа
 
-**Пока не нужно.** В [hosts/](../hosts) нет постоянного домашнего сервера с этой ролью (`lasthaze-home` — отдельный Linux хост, но он не позиционируется как always-on secret-сервер). Заводить целый self-host стек ради одного age-ключа, который восстанавливается раз в 2 года, — overengineering. 1Password остаётся primary вариантом.
+**Пока не нужно.** В [hosts/](../hosts) нет постоянного домашнего сервера с этой ролью (`lasthaze-server` — planned physical homelab, но он не позиционируется как always-on secret-сервер, его роль — homelab с restic-бэкапами и мониторингом). Заводить целый self-host стек ради одного age-ключа, который восстанавливается раз в 2 года, — overengineering. 1Password остаётся primary вариантом.
 
 ---
 

@@ -11,6 +11,7 @@
     GOPATH = "${homeDir}/go";
     PNPM_HOME = "${homeDir}/.local/share/pnpm";
     DOTFILES = "${homeDir}/.dotfiles";
+    OBSIDIAN_VAULT = "${homeDir}/Documents/obsidian/yoshintame";
     XDG_CONFIG_HOME = "${homeDir}/.config";
     XDG_DATA_HOME = "${homeDir}/.local/share";
     XDG_STATE_HOME = "${homeDir}/.local/state";
@@ -19,6 +20,26 @@
     PLAY = "iina";
     SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
   };
+  sharedPath = [
+    "/run/current-system/sw/bin"
+    "/etc/profiles/per-user/${username}/bin"
+    "${homeDir}/.nix-profile/bin"
+    "/nix/var/nix/profiles/default/bin"
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+    "${homeDir}/.local/share/mise/shims"
+    "${homeDir}/.local/share/pnpm"
+    "${homeDir}/.bun/bin"
+    "${homeDir}/go/bin"
+    "${homeDir}/.local/bin"
+    "${homeDir}/bin"
+    "/usr/local/bin"
+    "/usr/bin"
+    "/bin"
+    "/usr/sbin"
+    "/sbin"
+  ];
+
 in {
   imports = [./macos-defaults.nix];
 
@@ -84,6 +105,12 @@ in {
       HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
     };
 
+  launchd.user.envVariables =
+    sharedEnv
+    // {
+      PATH = builtins.concatStringsSep ":" sharedPath;
+    };
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -127,19 +154,7 @@ in {
       programs.bash.enable = true;
       programs.zsh.enable = true;
 
-      home.sessionPath = [
-        "/opt/homebrew/bin"
-        "/opt/homebrew/sbin"
-        "/opt/homebrew/opt/ruby/bin"
-        "/opt/homebrew/opt/curl/bin"
-        "/opt/homebrew/opt/sqlite/bin"
-        "${homeDir}/.local/share/mise/shims"
-        "${homeDir}/.local/share/pnpm"
-        "${homeDir}/.bun/bin"
-        "${homeDir}/go/bin"
-        "${homeDir}/.local/bin"
-        "${homeDir}/bin"
-      ];
+      home.sessionPath = sharedPath;
 
       home.sessionVariables = sharedEnv;
 

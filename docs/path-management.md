@@ -2,73 +2,96 @@
 
 ## Текущая архитектура
 
-PATH и env vars задаются в **двух** местах из-за ограничений nix-darwin:
+PATH и env vars задаются в **трёх** местах из-за того что разные контексты (zsh, fish, GUI apps) читают окружение разными способами:
 
-- `environment.variables` (nix-darwin) → bash-скрипт `set-environment` → sourced через `/etc/zshenv` → **zsh only**
-- `home.sessionVariables` (home-manager) → `hm-session-vars.fish` → sourced через `config.fish` → **fish only**
+| Механизм | zsh interactive | zsh non-interactive | fish | GUI apps (launchd) |
+|---|---|---|---|---|
+| `environment.variables` (nix-darwin) | ✅ | ✅ | ❌ | ❌ |
+| `home.sessionVariables` (home-manager) | ✅ (`.zshrc`) | ❌ | ✅ | ❌ |
+| `launchd.user.envVariables` (nix-darwin) | ❌ | ❌ | ❌ | ✅ |
 
-Ни один механизм не покрывает оба shell, поэтому **env vars дублируются** в обоих местах.
+Чтобы переменные были доступны **везде**, они дублируются во всех трёх слоях. Для избежания ручного дублирования в `hosts/lasthaze-mbp/default.nix` определены shared bindings в `let` блоке:
 
-| Механизм | zsh interactive | zsh non-interactive | fish |
-|---|---|---|---|
-| `environment.variables` | ✅ | ✅ | ❌ |
-| `home.sessionVariables` | ✅ (`.zshrc`) | ❌ | ✅ |
+```nix
+let
+  sharedEnv = {
+    EDITOR = "code --wait";
+    GOPATH = "${homeDir}/go";
+    PNPM_HOME = "${homeDir}/.local/share/pnpm";
+    DOTFILES = "${homeDir}/.dotfiles";
+    XDG_CONFIG_HOME = "${homeDir}/.config";
+    # ... etc
+  };
+  sharedPath = [
+    "/run/current-system/sw/bin"
+    "/etc/profiles/per-user/${username}/bin"
+    "${homeDir}/.nix-profile/bin"
+    "/nix/var/nix/profiles/default/bin"
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+    "${homeDir}/.local/share/mise/shims"
+    "${homeDir}/.local/share/pnpm"
+    "${homeDir}/.bun/bin"
+    "${homeDir}/go/bin"
+    "${homeDir}/.local/bin"
+    "${homeDir}/bin"
+    "/usr/local/bin"
+    "/usr/bin" "/bin" "/usr/sbin" "/sbin"
+  ];
+in { ... }
+```
 
 ### Слой 1: nix-darwin `environment.variables`
 
-`hosts/lasthaze-mbp/default.nix` — вне home-manager блока:
+Вне home-manager блока. Попадает в `/nix/store/...-set-environment` → `/etc/zshenv`.
+**Покрывает:** zsh (interactive и non-interactive, Cursor агенты, скрипты).
 
 ```nix
-environment.variables = {
+environment.variables = sharedEnv // {
   HOMEBREW_PREFIX = "/opt/homebrew";
-  HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
-  HOMEBREW_REPOSITORY = "/opt/homebrew";
   HOMEBREW_NO_ANALYTICS = "1";
-  HOMEBREW_NO_ENV_HINTS = "1";
   HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
-  GOPATH = "${homeDir}/go";
-  PNPM_HOME = "${homeDir}/.local/share/pnpm";
-  DOTFILES = "${homeDir}/.dotfiles";
-  EDITOR = "cursor --wait";
-  VISUAL = "cursor --wait";
+  HOMEBREW_BUNDLE_DUMP_NO_GO = "1";
+  HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
+  # ...
 };
 ```
-
-Попадает в `/nix/store/...-set-environment` → `/etc/zshenv`.
-Покрывает zsh (включая non-interactive — Cursor агенты, скрипты).
 
 ### Слой 2: home-manager `home.sessionPath` + `home.sessionVariables`
 
-`hosts/lasthaze-mbp/default.nix` — внутри home-manager блока:
+Внутри home-manager блока. Генерирует `hm-session-vars.fish` → sourced из `config.fish`. Также в `.zshrc`.
+**Покрывает:** fish (полностью), zsh (только interactive через `.zshrc`).
 
 ```nix
-home.sessionPath = [
-  "/opt/homebrew/bin"
-  "/opt/homebrew/sbin"
-  "/opt/homebrew/opt/ruby/bin"
-  "/opt/homebrew/opt/curl/bin"
-  "/opt/homebrew/opt/sqlite/bin"
-  "${homeDir}/.local/share/mise/shims"
-  "${homeDir}/.local/share/pnpm"
-  "${homeDir}/.bun/bin"
-  "${homeDir}/go/bin"
-  "${homeDir}/.local/bin"
-  "${homeDir}/bin"
-];
+home.sessionPath = sharedPath;
+home.sessionVariables = sharedEnv;
+```
 
-home.sessionVariables = {
-  EDITOR = "cursor --wait";
-  VISUAL = "cursor --wait";
-  GOPATH = "${homeDir}/go";
-  PNPM_HOME = "${homeDir}/.local/share/pnpm";
-  DOTFILES = "${homeDir}/.dotfiles";
+### Слой 3: nix-darwin `launchd.user.envVariables` — для GUI apps
+
+**Ключевой слой** для VSCode, Cursor, Warp и их extensions. macOS GUI приложения запускаются через **launchd**, который не читает shell configuration — только свой собственный environment. По умолчанию launchd PATH содержит лишь `/usr/bin:/bin:/usr/sbin:/sbin` — без brew, nix, mise.
+
+nix-darwin создаёт `~/Library/LaunchAgents/org.nixos.user-environment.plist` который при старте user session выполняет `launchctl setenv` для каждой переменной.
+
+```nix
+launchd.user.envVariables = sharedEnv // {
+  PATH = builtins.concatStringsSep ":" sharedPath;
 };
 ```
 
-Генерирует `hm-session-vars.fish` (PATH + env vars) → sourced из `config.fish`.
-Покрывает fish. Также генерирует `.zshrc` (для interactive zsh).
+**Почему это единственный правильный способ для GUI на macOS:**
+- `environment.systemPath` — только для login shells через `path_helper`, GUI apps игнорируют
+- `launchctl config user path` через `extraUserActivation` — сломан на macOS Sequoia
+- `/etc/paths.d/` — только для login shells
 
-### Слой 3: fish conf.d (минимум)
+**Что это даёт:**
+- VSCode/Cursor/Warp terminal находят `fish`, `code`, `git`, `op` и т.д.
+- Extensions (1Password CLI, Mise VSCode) видят свои бинарники
+- Claude Code Bash tool получает полный PATH
+
+**Ограничение:** launchd читает environment **только при старте user session**. После `darwin-rebuild switch` нужен **logout → login** чтобы GUI apps подхватили изменения. Альтернатива `launchctl reboot user/$UID` работает не всегда чисто.
+
+### Слой 4: fish conf.d (минимум)
 
 После рефакторинга в fish conf.d остаётся только то, что нельзя вынести в nix:
 
@@ -119,6 +142,10 @@ home.sessionVariables = {
 
 home-manager ставит guard `__HM_SESS_VARS_SOURCED` как `set -gx` (exported). Если терминальное приложение не перезапущено после rebuild, старые сессии передают эту переменную дочерним fish → `setup_hm_session_vars` скипается → PATH не устанавливается. Решение: полный перезапуск терминала (Cmd+Q) после `darwin-rebuild switch`.
 
+### Logout/login required for GUI apps
+
+launchd читает environment только при старте user session. После изменений в `launchd.user.envVariables` нужен **logout → login** (или `launchctl reboot user/$UID`), иначе уже запущенные GUI apps будут с старым PATH.
+
 ### `/etc/paths.d/`
 
 Не используется. `path_helper` переупорядочивает PATH, конфликтует с nix-darwin.
@@ -127,6 +154,6 @@ home-manager ставит guard `__HM_SESS_VARS_SOURCED` как `set -gx` (expor
 
 Не существует на macOS (systemd-only).
 
-### launchd (GUI apps)
+### `$HOME` expansion в launchd
 
-`launchd.user.envVariables` — единственный способ дать PATH GUI приложениям. Не поддерживает $HOME — только абсолютные пути. Требует logout/login. Пока не настроен.
+launchd **не поддерживает** переменные типа `$HOME`, `$USER`. Все пути в `sharedPath` раскрываются на этапе nix eval через `${homeDir}` (hardcoded `/Users/yoshintame`). Для single-user dotfiles это не проблема.

@@ -183,7 +183,17 @@
       "Write(//Users/yoshintame/.claude/**)",
       "Write(//Users/yoshintame/.hammerspoon/**)",
       "Write(/tmp/**)",
-      "Bash(git -C /Users/yoshintame/Development/work/senate/senate@e2e commit-edit ':*)"
+      "Bash(git -C /Users/yoshintame/Development/work/senate/senate@e2e commit-edit ':*)",
+      "Bash(git ls-remote:*)",
+      "Bash(nix-prefetch-url --unpack --type sha256 https://github.com/eth-p/fish-plugin-sudo/archive/e153fdea568cd370312f9c0809fac15fc7582bfd.tar.gz)",
+      "Bash(nix-prefetch-url --unpack --type sha256 https://github.com/halostatue/fish-utils-core/archive/v3.2.0.tar.gz)",
+      "Bash(nix-prefetch-url --unpack --type sha256 https://github.com/halostatue/fish-utils/archive/v4.0.2.tar.gz)",
+      "Bash(nix-prefetch-url --unpack --type sha256 https://github.com/gazorby/fish-finders/archive/d33e10ff4eb3832d7c449f9374ff131da04ea41c.tar.gz)",
+      "Bash(nix-prefetch-url --unpack --type sha256 https://github.com/catppuccin/fish/archive/5fc5ae9c2ec22eb376cb03ce76f0d262a38960f3.tar.gz)",
+      "Bash(ssh senate-dev:*)",
+      "Bash(git config:*)",
+      "Bash(git -C /Users/yoshintame/.dotfiles commit-edit ':*)",
+      "Bash(git -C /Users/yoshintame/.dotfiles status)"
     ],
     "additionalDirectories": [
       "/Users/yoshintame/Development/work/vtb",
@@ -260,6 +270,5 @@
         "repo": "warpdotdev/claude-code-warp"
       }
     }
-  },
-  "effortLevel": "max"
+  }
 }

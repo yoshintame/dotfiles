@@ -64,7 +64,7 @@ For Electron apps without Sparkle:
 cat "/Applications/$APP_NAME.app/Contents/Resources/app-update.yml"
 ```
 
-If no stable versioned download URL can be found, tell the user this app can't be reliably cask'd and suggest tracking it in `hosts/lasthaze-mbp/packages/apps-unmanaged.txt` instead.
+If no stable versioned download URL can be found, tell the user this app can't be reliably cask'd and suggest tracking it in `hosts/lasthaze-mbp/packages/Appsfile.unmanaged` instead.
 
 ## Step 3 — Download and compute SHA256
 

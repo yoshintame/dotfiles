@@ -90,6 +90,19 @@ source_nix_env() {
   export FLAKE_ROOT="${REPO_DIR}"
 }
 
+ensure_homebrew() {
+  [ "$(uname -s)" = "Darwin" ] || return 0
+  if command -v brew >/dev/null 2>&1 || [ -x /opt/homebrew/bin/brew ]; then
+    log "Homebrew already installed"
+  else
+    log "Installing Homebrew (non-interactive)"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+}
+
 backup_conflicting_etc_files() {
   [ "$(uname -s)" = "Darwin" ] || return 0
   local f
@@ -220,6 +233,7 @@ main() {
 
   ensure_nix_installed
   source_nix_env
+  ensure_homebrew
   backup_conflicting_etc_files
 
   # First switch: installs Nix packages + Brewfile (1password-cli, etc.).

@@ -90,6 +90,17 @@ source_nix_env() {
   export FLAKE_ROOT="${REPO_DIR}"
 }
 
+backup_conflicting_etc_files() {
+  [ "$(uname -s)" = "Darwin" ] || return 0
+  local f
+  for f in /etc/zshenv /etc/zshrc /etc/bashrc /etc/shells; do
+    if [ -f "$f" ] && [ ! -L "$f" ] && [ ! -f "${f}.before-nix-darwin" ]; then
+      log "Backing up $f → ${f}.before-nix-darwin (nix-darwin activation prep)"
+      sudo mv "$f" "${f}.before-nix-darwin"
+    fi
+  done
+}
+
 run_system_switch() {
   local host="$1"
   log "Building system for host: ${host}"
@@ -209,6 +220,7 @@ main() {
 
   ensure_nix_installed
   source_nix_env
+  backup_conflicting_etc_files
 
   # First switch: installs Nix packages + Brewfile (1password-cli, etc.).
   # The sops-templates module has a bootstrap guard: it skips rendering with

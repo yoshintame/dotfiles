@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Hacker News search via Algolia API (free, no auth).
+
+Endpoints:
+  /search              relevance-ranked
+  /search_by_date      chronological
+  /items/{id}          full story with comment tree
+
+Rate limit: 10k req/hour per IP.
+
+Usage:
+  search-hn.py search <query> [--tags story|show_hn|ask_hn|comment]
+                [--min-points N] [--limit N] [--by-date] [--json]
+  search-hn.py fetch <id> [--json]
+"""
+import argparse
+import html
+import json
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+
+API_BASE = "https://hn.algolia.com/api/v1"
+TIMEOUT = 15
+
+
+def _get(url):
+    req = urllib.request.Request(url)
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        return json.loads(r.read())
+
+
+def _unescape(s):
+    return html.unescape(s) if s else s
+
+
+def clean_hit(h):
+    """Strip highlight/noise fields. Inspired by AnkamAndy/hn-pulse."""
+    return {
+        "id": h.get("objectID"),
+        "title": _unescape(h.get("title") or h.get("story_title") or ""),
+        "url": h.get("url") or f"https://news.ycombinator.com/item?id={h.get('objectID')}",
+        "points": h.get("points", 0),
+        "num_comments": h.get("num_comments", 0),
+        "author": h.get("author"),
+        "created_at": h.get("created_at"),
+        "tags": h.get("_tags", []),
+        "story_text": _unescape((h.get("story_text") or "")[:300]) if h.get("story_text") else "",
+    }
+
+
+def search(query, tags="story", min_points=None, limit=20, by_date=False):
+    params = {
+        "query": query,
+        "tags": tags,
+        "hitsPerPage": str(limit),
+    }
+    if min_points is not None:
+        params["numericFilters"] = f"points>{min_points}"
+    endpoint = "/search_by_date" if by_date else "/search"
+    url = f"{API_BASE}{endpoint}?{urllib.parse.urlencode(params)}"
+    data = _get(url)
+    return [clean_hit(h) for h in data.get("hits", [])]
+
+
+def fetch(story_id):
+    url = f"{API_BASE}/items/{story_id}"
+    data = _get(url)
+    result = {
+        "id": data.get("id"),
+        "title": _unescape(data.get("title")),
+        "url": data.get("url"),
+        "points": data.get("points"),
+        "author": data.get("author"),
+        "created_at": data.get("created_at"),
+        "text": _unescape(data.get("text")),
+        "comments": [],
+    }
+
+    def walk(node, depth=0, max_depth=2, max_per_level=15):
+        out = []
+        if not node:
+            return out
+        text = node.get("text") or ""
+        if text and node.get("type") == "comment":
+            out.append({
+                "author": node.get("author"),
+                "points": node.get("points"),
+                "depth": depth,
+                "text": _unescape(text),
+            })
+        if depth < max_depth:
+            for child in (node.get("children") or [])[:max_per_level]:
+                out.extend(walk(child, depth + 1, max_depth, max_per_level))
+        return out
+
+    for child in (data.get("children") or [])[:15]:
+        result["comments"].extend(walk(child, depth=0))
+    return result
+
+
+def print_search_md(results):
+    if not results:
+        print("No results.")
+        return
+    for r in results:
+        hn_url = f"https://news.ycombinator.com/item?id={r['id']}"
+        print(f"[{r['points']:>4} pts | {r['num_comments']} cmts] {r['title']}")
+        print(f"  {hn_url}")
+        if r.get("url") and r["url"] != hn_url:
+            print(f"  -> {r['url']}")
+        if r.get("story_text"):
+            snippet = r["story_text"].replace("\n", " ")[:200]
+            print(f"  {snippet}")
+        print()
+
+
+def print_fetch_md(result):
+    print(f"# {result['title']}")
+    print(f"{result['points']} pts · by {result['author']}")
+    print(f"https://news.ycombinator.com/item?id={result['id']}")
+    if result.get("url"):
+        print(f"-> {result['url']}")
+    print()
+    if result.get("text"):
+        print(result["text"][:1000])
+        print()
+    print(f"## Comments ({len(result['comments'])})\n")
+    for c in result["comments"]:
+        indent = "  " * c["depth"]
+        points = c.get("points")
+        points_str = f"{points} pts" if points is not None else "-"
+        print(f"{indent}[{points_str}] {c['author']}:")
+        text = c["text"].replace("\n\n", "\n").strip()
+        for line in text.split("\n")[:10]:
+            print(f"{indent}  {line[:300]}")
+        print()
+
+
+def main():
+    p = argparse.ArgumentParser(description="Hacker News search and fetch (Algolia API).")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    sp = sub.add_parser("search", help="Search HN stories")
+    sp.add_argument("query")
+    sp.add_argument("--tags", default="story",
+                    help="story | show_hn | ask_hn | comment (comma-separated)")
+    sp.add_argument("--min-points", type=int, default=None)
+    sp.add_argument("--limit", type=int, default=20)
+    sp.add_argument("--by-date", action="store_true",
+                    help="Sort chronologically instead of by relevance")
+    sp.add_argument("--json", action="store_true")
+
+    fp = sub.add_parser("fetch", help="Fetch story with comment tree")
+    fp.add_argument("id")
+    fp.add_argument("--json", action="store_true")
+
+    args = p.parse_args()
+
+    try:
+        if args.cmd == "search":
+            results = search(args.query, tags=args.tags, min_points=args.min_points,
+                             limit=args.limit, by_date=args.by_date)
+            if args.json:
+                print(json.dumps(results, indent=2, ensure_ascii=False))
+            else:
+                print_search_md(results)
+        elif args.cmd == "fetch":
+            result = fetch(args.id)
+            if args.json:
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+            else:
+                print_fetch_md(result)
+    except urllib.error.HTTPError as e:
+        print(f"HTTP Error {e.code}: {e.reason}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

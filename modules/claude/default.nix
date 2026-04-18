@@ -26,5 +26,8 @@
       path = "modules/claude/config/skills/**";
       glob = true;
     };
+    "~/.local/bin/search-reddit" = "modules/agents-shared/config/bin/search-reddit";
+    "~/.local/bin/search-hn" = "modules/agents-shared/config/bin/search-hn";
+    "~/.local/bin/search-github" = "modules/agents-shared/config/bin/search-github";
   };
 }

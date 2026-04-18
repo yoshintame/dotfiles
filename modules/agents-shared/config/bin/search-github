@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+"""GitHub discovery via `gh` CLI.
+
+Requires `gh auth login`. Uses `gh` under the hood — single-call OR-syntax
+to avoid duplicating searches across similar keywords.
+
+Usage:
+  search-github.py search "<query>" [--stars ">N"] [--language LANG]
+                     [--pushed-after YYYY-MM-DD] [--limit N] [--json]
+  search-github.py health <owner/repo> [--json]
+  search-github.py trending <topic> [--limit N] [--json]
+  search-github.py awesome <topic> [--limit N] [--json]
+
+Examples:
+  # Single call instead of N duplicates:
+  search-github.py search "awesome scaffolding OR awesome generators OR awesome boilerplate" --stars ">100"
+
+  # Health with stars-per-day (better than absolute stars for trend):
+  search-github.py health unjs/giget
+
+  # Topic trending by stars/day:
+  search-github.py trending typescript --limit 20
+"""
+import argparse
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+
+
+def run_gh(args):
+    result = subprocess.run(["gh"] + args, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"gh error: {result.stderr.strip()}", file=sys.stderr)
+        sys.exit(1)
+    return result.stdout
+
+
+def _parse_iso(s):
+    return datetime.fromisoformat(s.replace("Z", "+00:00"))
+
+
+def search(query, stars=None, language=None, pushed_after=None, limit=50):
+    args = ["search", "repos", query,
+            "--limit", str(limit),
+            "--sort", "stars",
+            "--json", "fullName,description,stargazersCount,updatedAt,language,url"]
+    if stars:
+        args.extend(["--stars", stars])
+    if language:
+        args.extend(["--language", language])
+    if pushed_after:
+        args.extend(["--pushed", f">{pushed_after}"])
+    out = run_gh(args)
+    return json.loads(out) if out.strip() else []
+
+
+def health(repo):
+    data = json.loads(run_gh(["api", f"repos/{repo}"]))
+    now = datetime.now(timezone.utc)
+    created = _parse_iso(data["created_at"])
+    pushed = _parse_iso(data["pushed_at"])
+    age_days = max((now - created).days, 1)
+    stars = data.get("stargazers_count", 0)
+    return {
+        "full_name": data.get("full_name"),
+        "description": data.get("description"),
+        "stars": stars,
+        "forks": data.get("forks_count"),
+        "open_issues": data.get("open_issues_count"),
+        "license": (data.get("license") or {}).get("spdx_id") or "none",
+        "pushed_at": data.get("pushed_at"),
+        "created_at": data.get("created_at"),
+        "age_days": age_days,
+        "stars_per_day": round(stars / age_days, 3),
+        "days_since_push": (now - pushed).days,
+        "is_archived": data.get("archived", False),
+        "is_fork": data.get("fork", False),
+        "url": data.get("html_url"),
+    }
+
+
+def trending(topic, limit=20):
+    raw = run_gh(["search", "repos", f"topic:{topic}",
+                  "--limit", str(limit * 2),
+                  "--sort", "stars",
+                  "--json", "fullName,description,stargazersCount,createdAt,updatedAt"])
+    repos = json.loads(raw) if raw.strip() else []
+    now = datetime.now(timezone.utc)
+    for r in repos:
+        created = _parse_iso(r["createdAt"])
+        age = max((now - created).days, 1)
+        r["stars_per_day"] = round(r["stargazersCount"] / age, 3)
+    repos.sort(key=lambda r: r["stars_per_day"], reverse=True)
+    return repos[:limit]
+
+
+def awesome(topic, limit=20):
+    """Find awesome-* lists for a topic.
+
+    `gh search repos` tokenizes query by whitespace and AND-joins — so
+    `awesome typescript` matches both `awesome-typescript` and
+    `awesome typescript` naming conventions in a single call.
+    """
+    raw = run_gh(["search", "repos", f"awesome {topic}",
+                  "--limit", str(limit),
+                  "--sort", "stars",
+                  "--json", "fullName,description,stargazersCount,updatedAt,url"])
+    repos = json.loads(raw) if raw.strip() else []
+    now = datetime.now(timezone.utc)
+    for r in repos:
+        pushed = _parse_iso(r["updatedAt"])
+        r["days_since_push"] = (now - pushed).days
+        r["stale"] = r["days_since_push"] > 365
+    return repos
+
+
+def print_search_md(results):
+    if not results:
+        print("No results.")
+        return
+    for r in results:
+        print(f"[{r.get('stargazersCount', 0):>6}★] {r['fullName']}  {r.get('language') or ''}")
+        if r.get("description"):
+            print(f"  {r['description']}")
+        print(f"  updated: {r.get('updatedAt', '')[:10]}  {r.get('url', '')}")
+        print()
+
+
+def print_health_md(r):
+    print(f"# {r['full_name']}")
+    if r["description"]:
+        print(r["description"])
+    print()
+    print(f"★ {r['stars']} ({r['stars_per_day']}/day over {r['age_days']} days)")
+    print(f"License: {r['license']}")
+    print(f"Last push: {r['pushed_at'][:10]} ({r['days_since_push']} days ago)")
+    print(f"Open issues: {r['open_issues']}")
+    if r["is_archived"]:
+        print("⚠️  ARCHIVED")
+    if r["is_fork"]:
+        print("⚠️  Fork")
+    print(r["url"])
+
+
+def print_trending_md(results):
+    if not results:
+        print("No results.")
+        return
+    for r in results:
+        print(f"[{r['stars_per_day']:>6}★/day | {r['stargazersCount']:>6}★ total] {r['fullName']}")
+        if r.get("description"):
+            print(f"  {r['description']}")
+        print()
+
+
+def print_awesome_md(results):
+    if not results:
+        print("No awesome lists found.")
+        return
+    for r in results:
+        tag = " [STALE >1yr]" if r.get("stale") else ""
+        print(f"[{r.get('stargazersCount', 0):>6}★]{tag} {r['fullName']}")
+        if r.get("description"):
+            print(f"  {r['description']}")
+        print(f"  updated {r.get('updatedAt', '')[:10]}  {r.get('url', '')}")
+        print()
+
+
+def main():
+    p = argparse.ArgumentParser(description="GitHub discovery via gh CLI.")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    sp = sub.add_parser("search", help='Search repos (supports OR syntax)')
+    sp.add_argument("query", help='e.g. "awesome X OR awesome Y OR awesome Z"')
+    sp.add_argument("--stars", help='e.g. ">100"')
+    sp.add_argument("--language")
+    sp.add_argument("--pushed-after", help="YYYY-MM-DD")
+    sp.add_argument("--limit", type=int, default=50)
+    sp.add_argument("--json", action="store_true")
+
+    hp = sub.add_parser("health", help="Health check (stars/day, last push, license)")
+    hp.add_argument("repo", help="owner/repo")
+    hp.add_argument("--json", action="store_true")
+
+    tp = sub.add_parser("trending", help="Topic repos ranked by stars/day")
+    tp.add_argument("topic")
+    tp.add_argument("--limit", type=int, default=20)
+    tp.add_argument("--json", action="store_true")
+
+    ap = sub.add_parser("awesome", help="Find awesome-* lists for a topic (single call)")
+    ap.add_argument("topic")
+    ap.add_argument("--limit", type=int, default=20)
+    ap.add_argument("--json", action="store_true")
+
+    args = p.parse_args()
+
+    try:
+        if args.cmd == "search":
+            results = search(args.query, stars=args.stars, language=args.language,
+                             pushed_after=args.pushed_after, limit=args.limit)
+            if args.json:
+                print(json.dumps(results, indent=2, ensure_ascii=False))
+            else:
+                print_search_md(results)
+        elif args.cmd == "health":
+            result = health(args.repo)
+            if args.json:
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+            else:
+                print_health_md(result)
+        elif args.cmd == "trending":
+            results = trending(args.topic, args.limit)
+            if args.json:
+                print(json.dumps(results, indent=2, ensure_ascii=False))
+            else:
+                print_trending_md(results)
+        elif args.cmd == "awesome":
+            results = awesome(args.topic, args.limit)
+            if args.json:
+                print(json.dumps(results, indent=2, ensure_ascii=False))
+            else:
+                print_awesome_md(results)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

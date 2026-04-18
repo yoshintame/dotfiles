@@ -93,6 +93,8 @@ section() {
   printf '\n=== %s ===\n' "$1"
 }
 
+git_shared read-tree HEAD
+
 BRANCH=$(git_cmd branch --show-current 2>/dev/null || echo "(detached)")
 JIRA=$(printf '%s' "$BRANCH" | grep -oE '[A-Z][A-Z0-9]+-[0-9]+' | head -n1 || true)
 
@@ -112,24 +114,9 @@ if [ -n "$REBASED_FROM" ]; then
   printf 'rebased: %s -> %s (parallel session committed; untouched files refreshed from new HEAD)\n' "$REBASED_FROM" "$CURRENT_HEAD"
 fi
 
-SHARED_STAT=$(git_shared diff --cached --stat 2>/dev/null || true)
-if [ -n "$SHARED_STAT" ]; then
-  SHARED_TREE=$(git_shared write-tree 2>/dev/null || true)
-  if [ -n "$SHARED_TREE" ]; then
-    for c in $(git_cmd rev-list -30 HEAD 2>/dev/null); do
-      if [ "$(git_cmd rev-parse "$c^{tree}" 2>/dev/null)" = "$SHARED_TREE" ]; then
-        git_shared read-tree HEAD
-        SHARED_STAT=""
-        break
-      fi
-    done
-  fi
-fi
-if [ -n "$SHARED_STAT" ]; then
-  section "SHARED INDEX WARNING"
-  echo "The shared .git/index has staged changes from another session. Off-limits — do NOT add, restore, or commit them."
-  printf '%s\n' "$SHARED_STAT"
-fi
+section "SHARED INDEX"
+echo "reset: .git/index -> HEAD"
+echo "policy: shared staging is disposable; rebuild it manually if you really need it"
 
 section "BRANCH"
 printf 'current: %s\n' "$BRANCH"

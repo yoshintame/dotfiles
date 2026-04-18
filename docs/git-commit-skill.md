@@ -17,15 +17,22 @@ modules/agents-shared/config/skills/git-commit/
 ├── SKILL.md                            # инструкции для Claude (правила + workflow)
 └── scripts/
     └── gather-context.sh               # provisions private index + dumps repo state
+
+modules/git/bin/
+├── git-commit-context                  # stable PATH entrypoint (`git commit-context`)
+└── git-commit-edit                     # commit wrapper with editor + index cleanup
 ```
 
-Симлинки/хардлинки в системе:
+Runtime-слои:
 
 - `~/.claude/skills/git-commit/SKILL.md` → симлинк в dotfiles (через dotbot)
 - `~/.claude/skills/git-commit/scripts/gather-context.sh` → симлинк в dotfiles
 - `~/.agents/skills/git-commit/scripts/gather-context.sh` → хардлинк (общий inode) с dotfiles-копией
+- `~/.local/bin/git-commit-context` → стабильная entrypoint-команда в `PATH`
+- `~/.local/bin/git-commit-edit` → commit wrapper в `PATH`
+- `packages/git-commit-e2e/` → автоматические e2e-тесты на `bun test`
 
-То есть редактируется одна точка истины (`modules/agents-shared/...`), но скрипт доступен по обоим путям, потому что разные хосты Claude (CLI vs SDK-агенты) ищут его по разным префиксам.
+Точка истины всё ещё одна (`modules/agents-shared/...`), но `SKILL.md` больше не выбирает runtime path по провайдеру. Он вызывает стабильную команду `git commit-context`, а распределение по конкретным путям остаётся задачей dotfiles/runtime.
 
 ## Private index mechanism
 
@@ -44,15 +51,17 @@ git diff --cached               # показывает staged в private index
 git commit -m "..."             # коммитит дерево из private index
 ```
 
-`gather-context.sh` создаёт такой файл в `.git/claude-sessions/idx-XXXXXXXX` при первом запуске и переиспользует его во всех последующих вызовах через `--index PATH`.
+`git commit-context` вызывает канонический `gather-context.sh`, который создаёт такой файл в `.git/claude-sessions/idx-XXXXXXXX` при первом запуске и переиспользует его во всех последующих вызовах через `--index PATH`.
 
 ### Что хранится рядом
 
-Каждый private index сопровождается sidecar-файлом `<priv-index>.base`, в котором лежит SHA коммита HEAD на момент инициализации/последнего rebase. Это необходимо для второй защиты — rebase-логики (см. ниже).
+Каждый private index сопровождается sidecar-файлом `<priv-index>.base`, в котором лежит SHA коммита HEAD на момент инициализации/последнего rebase/последнего успешного private commit. Это необходимо для второй защиты — rebase-логики (см. ниже).
 
 ### Что НЕ защищено
 
 Private index изолирует **staging area**, но не worktree. Если две сессии редактируют один и тот же файл — победит последняя по времени `Edit/Write`. Это не задача git-commit skill, это уровень файловой системы.
+
+Отдельное архитектурное решение текущей версии: skill считает shared `.git/index` **расходным состоянием**. При запуске `git commit-context` shared index безусловно сбрасывается в `HEAD`, и после успешного private commit делается то же самое ещё раз. Если кому-то действительно нужен shared staging, его нужно собрать заново вручную.
 
 ## Rebase-on-HEAD-move (v5.1+)
 
@@ -97,10 +106,10 @@ Private index изолирует **staging area**, но не worktree. Если 
 
 Сжатый flow:
 
-1. Запустить `gather-context.sh` — создаст/переиспользует private index, выведет state репо.
+1. Запустить `git commit-context` — сбросит shared index в `HEAD`, создаст/переиспользует private index и выведет state репо.
 2. Стейджить только нужные пути с префиксом `GIT_INDEX_FILE=<path>` на КАЖДОЙ git-команде. Bash-вызовы Claude не разделяют env между собой, поэтому export не работает.
-3. Прямо перед commit — повторно запустить `gather-context.sh --index <path>`. Если HEAD двигался, скрипт сделает rebase и напечатает `rebased: ...`. Тогда Claude должен пере-проверить staged diff.
-4. `GIT_INDEX_FILE=<path> git commit-edit "<message>"` — `commit-edit` это пользовательский git alias, открывает редактор для финальной правки сообщения.
+3. Прямо перед commit — повторно запустить `git commit-context --index <path>`. Если HEAD двигался, скрипт сделает rebase и напечатает `rebased: ...`. Тогда Claude должен пере-проверить staged diff.
+4. `GIT_INDEX_FILE=<path> git commit-edit "<message>"` — `commit-edit` открывает редактор для финальной правки сообщения, обновляет `<path>.base` и после успешного private commit безусловно сбрасывает shared index в `HEAD`.
 
 ## Что выводит gather-context
 
@@ -109,7 +118,7 @@ Private index изолирует **staging area**, но не worktree. Если 
 | Секция | Что внутри |
 |---|---|
 | `PRIVATE INDEX` | Путь к private index, текущий HEAD SHA как `base`, копи-готовая команда `git add`, опционально `rebased: <old> -> <new>` |
-| `SHARED INDEX WARNING` | Если в `.git/index` есть staged что-то не от текущей сессии — список файлов с пометкой "off-limits" |
+| `SHARED INDEX` | Подтверждение, что `.git/index` принудительно сброшен в `HEAD` |
 | `BRANCH` | Текущая ветка, Jira-ключ из имени ветки (если есть), base-ветка |
 | `WORKING TREE (changed files)` | `git status --short` |
 | `STAGED DIFF (private index)` | Diff из private index — full diff если есть, иначе подсказка как стейджить |
@@ -117,22 +126,40 @@ Private index изолирует **staging area**, но не worktree. Если 
 | `RECENT COMMITS` | До 25 уникальных `type(scope):` префиксов — для подражания стилю репо |
 | `REPO COMMIT CONVENTIONS` | Найденные `.commitlintrc*`, `.gitmessage`, `CONTRIBUTING.md` |
 
-## Self-healing shared index
+## Shared index cleanup
 
-В `gather-context.sh` есть дополнительная логика: если `.git/index` содержит staged изменения, скрипт пытается понять, не являются ли они тривиальным "staged = HEAD" артефактом. Он сравнивает `git write-tree` (на shared index) с tree последних 30 коммитов через `git rev-parse <c>^{tree}`. Если совпадает с одним из них — выполняет `git read-tree HEAD`, чтобы очистить shared index. Это автоматический cleanup осиротевших артефактов от старых сессий.
+Shared `.git/index` теперь сбрасывается в `HEAD` в двух точках:
 
-Если совпадения не найдено — шлёт WARNING с пометкой "off-limits", и Claude обязан не трогать эти файлы (они принадлежат другой активной сессии).
+1. Сразу при `git commit-context`. Это убирает любые legacy/shared staged изменения ещё до начала commit-flow.
+2. После успешного `GIT_INDEX_FILE=<path> git commit-edit ...`. Wrapper записывает новый `HEAD` в `<path>.base`, а затем делает `git read-tree HEAD` на shared index.
+
+Это сознательно деструктивная политика. Если в shared index было что-то ценное, skill это выбросит. Предполагаемая модель использования — shared index почти никогда не источник истины, а если он всё же понадобился, его проще пересобрать вручную, чем постоянно носить safeties вокруг него.
+
+Это **не заменяет** rebase private index. Сброс shared index чинит только shared staging area; silent revert параллельных коммитов предотвращает именно rebase-on-HEAD-move.
 
 ## История изменений
 
 - **5.0.0** — введение `GIT_INDEX_FILE` per-session, базовая изоляция staging.
 - **5.1.0** — добавлен rebase private index на текущий HEAD при каждом повторном запуске gather-context. `<priv-index>.base` хранит SHA. Комментарий: появился из-за реального инцидента с откатом vscode shebang.
 - **5.2.0** — SKILL.md сжат, bullet-only body format вынесен в Rules чтобы не теряться при skim-чтении.
+- **5.3.0** — runtime entrypoint вынесен в `git commit-context`, `git commit-edit` теперь обновляет `<priv-index>.base` и сразу чистит shared index после safe private commit.
+- **5.4.0** — shared index признан disposable state: `git commit-context` и `git commit-edit` теперь безусловно сбрасывают `.git/index` в `HEAD`.
+
+## E2E tests
+
+Автотесты живут в `packages/git-commit-e2e/` и гоняются через `bun test`. Это выбранный раннер, а не Vitest, потому что здесь тестируется не Vite/TS graph, а shell-скрипты как внешние процессы с временными git-репозиториями.
+
+Запуск:
+
+```bash
+bun test /Users/yoshintame/.dotfiles/packages/git-commit-e2e
+```
 
 ## Граничные случаи и известные ограничения
 
 - **Hunk-staging.** Skill ничего не делает с `git add -p`. Если нужно закоммитить часть файла — Claude должен использовать `--patch` руками, через тот же `GIT_INDEX_FILE` префикс.
-- **Несколько коммитов в одной сессии.** Между двумя `git commit` Claude ОБЯЗАН повторно вызвать gather-context чтобы освежить `.base`. Иначе следующий rebase отработает от устаревшего значения.
+- **Несколько коммитов в одной сессии.** `git commit-edit` теперь сам обновляет `.base`, но перед каждым следующим коммитом всё равно нужно повторно вызвать `git commit-context`, чтобы поймать сдвиг `HEAD`, заново обнулить shared index и пересобрать контекст.
+- **Shared staging пропадает всегда.** Это больше не warning и не edge case, а intentional behavior.
 - **Удалённые файлы.** Rebase-логика обрабатывает и удаления — если staged путь больше не существует в worktree, ставит `git rm`.
 - **Reset/rebase базовой ветки.** Если HEAD был перемещён через `git reset --hard`/`git update-ref`, rebase-логика всё равно отработает — она просто сравнивает SHA, не различая откуда взялось расхождение. Это безопасно: re-staging из worktree всегда даёт корректное состояние.
 - **Параллельные коммиты в один и тот же файл.** Не обнаруживаются. Правильное поведение тут — не молчаливый rebase, а fail-fast с просьбой к человеку. Возможное улучшение: проверять `git diff --name-only $OLD $NEW ∩ $STAGED_PATHS` и абортить если непусто.

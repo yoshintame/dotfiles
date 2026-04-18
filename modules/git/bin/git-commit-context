@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+exec "$SCRIPT_DIR/../../agents-shared/config/skills/git-commit/scripts/gather-context.sh" "$@"

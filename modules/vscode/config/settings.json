@@ -348,7 +348,7 @@
   "console-ninja.dateTimeDisplayMode": "None",
   "playwright.reuseBrowser": false,
   "claudeCode.selectedModel": "default",
-  "claudeCode.preferredLocation": "panel",
+  "claudeCode.preferredLocation": "sidebar",
   "gitlens.gitCommands.skipConfirmations": [
     "fetch:command",
     "stash-push:command",

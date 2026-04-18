@@ -9,12 +9,16 @@ set -euo pipefail
 # Usage (local, repo already cloned):
 #   bash ~/.dotfiles/bootstrap.sh lasthaze-mbp
 #
+# Usage (unattended test, e.g. CI / tart VM):
+#   bash ~/.dotfiles/bootstrap.sh --test lasthaze-mbp
+#
 # Idempotent: safe to re-run. Each step checks state before acting.
 
 REPO_URL="${DOTFILES_REPO_URL:-https://github.com/yoshintame/dotfiles.git}"
 REPO_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
 
-HOST="${1:-}"
+TEST_MODE="${DOTFILES_TEST_MODE:-0}"
+HOST=""
 
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
@@ -23,14 +27,21 @@ err()  { printf '\033[1;31mERR\033[0m %s\n' "$*" >&2; }
 
 usage() {
   cat >&2 <<EOF
-Usage: bootstrap.sh <host>
+Usage: bootstrap.sh [--test] <host>
 
 Hosts defined in flake.nix:
   lasthaze-mbp       macOS (aarch64-darwin)
   lasthaze-server    Linux (x86_64-linux)
 
+Flags:
+  --test             Unattended mode for CI / VM smoke tests. Skips casks,
+                     mas apps, vscode extensions, and all interactive post-
+                     install steps (1Password, App Store, TCC prompts).
+                     Equivalent to DOTFILES_TEST_MODE=1 in the env.
+
 Example:
   bash bootstrap.sh lasthaze-mbp
+  bash bootstrap.sh --test lasthaze-mbp
 EOF
   exit 2
 }
@@ -119,7 +130,7 @@ run_system_switch() {
   log "Building system for host: ${host}"
   case "$(uname -s)" in
     Darwin)
-      sudo --preserve-env=NIX_CONFIG \
+      sudo --preserve-env=NIX_CONFIG,DOTFILES_TEST_MODE \
         /nix/var/nix/profiles/default/bin/nix \
         --extra-experimental-features "nix-command flakes" \
         run github:lnl7/nix-darwin/nix-darwin-25.05#darwin-rebuild -- \
@@ -219,6 +230,15 @@ open_permission_panels() {
 }
 
 main() {
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --test) TEST_MODE=1; shift;;
+      -h|--help) usage;;
+      *) HOST="$1"; shift; break;;
+    esac
+  done
+  export DOTFILES_TEST_MODE="${TEST_MODE}"
+
   require_host
 
   ensure_xcode_clt
@@ -241,6 +261,11 @@ main() {
   # a warning when ~/.config/sops/age/keys.txt is absent, so this first switch
   # succeeds cleanly on a fresh machine even before the age key is restored.
   run_system_switch "${HOST}"
+
+  if [ "${TEST_MODE}" = "1" ]; then
+    log "Test mode — skipping 1Password / age-key / second switch / post-install checklist"
+    return 0
+  fi
 
   bootstrap_age_key
   bootstrap_ssh

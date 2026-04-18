@@ -1,10 +1,21 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }: let
   username = "yoshintame";
   homeDir = "/Users/${username}";
+  testMode = (builtins.getEnv "DOTFILES_TEST_MODE") == "1";
+  rawBrewfile = builtins.readFile ./packages/Brewfile;
+  filteredBrewfile =
+    if testMode
+    then
+      lib.concatStringsSep "\n"
+      (builtins.filter
+        (line: !(lib.hasPrefix "cask " line) && !(lib.hasPrefix "mas " line))
+        (lib.splitString "\n" rawBrewfile))
+    else rawBrewfile;
   sharedEnv = {
     EDITOR = "code --wait";
     VISUAL = "code --wait";
@@ -81,7 +92,7 @@ in {
       upgrade = false;
     };
     global.brewfile = false;
-    extraConfig = builtins.readFile ./packages/Brewfile;
+    extraConfig = filteredBrewfile;
   };
 
   environment.variables =
@@ -113,35 +124,36 @@ in {
       flakeRoot,
       ...
     }: {
-      imports = [
-        ./file-associations
-        ../../modules/git
-        ../../modules/fish
-        ../../modules/gitui
-        ../../modules/kitty
-        ../../modules/lazygit
-        ../../modules/tmux
-        ../../modules/vscode
-        ../../modules/wezterm
-        ../../modules/warp
-        ../../modules/yazi
-        ../../modules/hammerspoon
-        ../../modules/ghostty
-        ../../modules/karabiner
-        ../../modules/aerospace
-        ../../modules/atuin
-        ../../modules/bat
-        ../../modules/starship
-        ../../modules/zoxide
-        ../../modules/fzf
-        ../../modules/btop
-        ../../modules/nvim
-        ../../modules/mise
-        ../../modules/resticprofile
-        ../../modules/claude
-        ../../modules/codex
-        ../../modules/iina
-      ];
+      imports =
+        [
+          ./file-associations
+          ../../modules/git
+          ../../modules/fish
+          ../../modules/gitui
+          ../../modules/kitty
+          ../../modules/lazygit
+          ../../modules/tmux
+          ../../modules/wezterm
+          ../../modules/warp
+          ../../modules/yazi
+          ../../modules/hammerspoon
+          ../../modules/ghostty
+          ../../modules/karabiner
+          ../../modules/aerospace
+          ../../modules/atuin
+          ../../modules/bat
+          ../../modules/starship
+          ../../modules/zoxide
+          ../../modules/fzf
+          ../../modules/btop
+          ../../modules/nvim
+          ../../modules/mise
+          ../../modules/resticprofile
+          ../../modules/claude
+          ../../modules/codex
+          ../../modules/iina
+        ]
+        ++ lib.optional (!testMode) ../../modules/vscode;
 
       programs.bash.enable = true;
       programs.zsh.enable = true;

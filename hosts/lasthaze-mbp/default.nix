@@ -35,7 +35,7 @@
 in {
   imports = [./macos-defaults.nix];
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.enable = false;
   system.stateVersion = 6;
 
   security.pam.services.sudo_local.touchIdAuth = true;

@@ -21,4 +21,17 @@ if [ -z "$EDITOR_CMD" ]; then
   exit 1
 fi
 
-GIT_EDITOR="$EDITOR_CMD" exec git commit -e -m "$MESSAGE"
+PRIVATE_INDEX="${GIT_INDEX_FILE:-}"
+
+GIT_EDITOR="$EDITOR_CMD" git commit -e -m "$MESSAGE"
+
+if [ -n "$PRIVATE_INDEX" ]; then
+  CURRENT_HEAD=$(git rev-parse HEAD)
+  if ! printf '%s\n' "$CURRENT_HEAD" > "$PRIVATE_INDEX.base"; then
+    echo "WARNING: failed to update $PRIVATE_INDEX.base" >&2
+  fi
+
+  if ! (unset GIT_INDEX_FILE; git read-tree HEAD); then
+    echo "WARNING: failed to reset shared index to HEAD" >&2
+  fi
+fi

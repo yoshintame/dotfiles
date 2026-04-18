@@ -1,0 +1,16 @@
+{
+  "name": "git-commit-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@total-typescript/tsconfig": "^1.0.4",
+    "@types/bun": "latest",
+    "typescript": "^5.9.3"
+  }
+}

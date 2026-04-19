@@ -19,6 +19,9 @@ bindings:
   # Raycast
   spotlight: cmd alt ctrl shift f
 
+  # Ice (menu bar manager)
+  iceMenuItemPicker: cmd alt ctrl shift m
+
   # Leader (in-app whichkey/leader trigger, fired by Karabiner from bare ⏎)
   leaderInApp: cmd alt ctrl shift l
 

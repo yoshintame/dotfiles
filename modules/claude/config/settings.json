@@ -193,7 +193,10 @@
       "Bash(ssh senate-dev:*)",
       "Bash(git config:*)",
       "Bash(git -C /Users/yoshintame/.dotfiles commit-edit ':*)",
-      "Bash(git -C /Users/yoshintame/.dotfiles status)"
+      "Bash(git -C /Users/yoshintame/.dotfiles status)",
+      "Bash(ssh -i /Users/yoshintame/.ssh/tart-test -o UserKnownHostsFile=/Users/yoshintame/.ssh/tart-known-hosts -o IdentitiesOnly=yes -o IdentityAgent=none yoshintame@192.168.64.3 'tail -n +1 -f ~/logs/bootstrap.log')",
+      "Bash(/usr/bin/grep --line-buffered -E \"==>|!!|ERR |^error|error:|failed|warning:|Building system|Brewfile|dot:|sops-templates|age key|Activating|requires|Homebrew|brew bundle|setting up\")",
+      "Read(//Users/yoshintame/.dotfiles-p2/**)"
     ],
     "additionalDirectories": [
       "/Users/yoshintame/Development/work/vtb",
@@ -214,7 +217,8 @@
       "/Users/yoshintame/Development/work/senate/senate@currency-board/src/features/currency-board",
       "/Users/yoshintame/.dotfiles/modules/claude/config",
       "/Users/yoshintame/meetings-test",
-      "/Users/yoshintame/.claude/commands"
+      "/Users/yoshintame/.claude/commands",
+      "/Users/yoshintame/.claude"
     ]
   },
   "hooks": {
@@ -248,6 +252,19 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/tool-steering.sh"
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/research-steering.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/research-steering.sh"
           }
         ]
       }
@@ -270,5 +287,6 @@
         "repo": "warpdotdev/claude-code-warp"
       }
     }
-  }
+  },
+  "effortLevel": "xhigh"
 }

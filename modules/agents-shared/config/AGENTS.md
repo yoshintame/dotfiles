@@ -30,6 +30,8 @@ When searching Reddit, Hacker News, or GitHub for tool/product discovery or comp
 
 All scripts accept `--json` and support `--help`. Use raw `curl`/`WebFetch` only for URLs that don't fit these patterns.
 
+A PreToolUse hook (`research-steering.sh`) enforces this — raw curl/WebFetch on `reddit.com`, `hn.algolia.com`, `news.ycombinator.com/item`, and GitHub search APIs is denied. Escape hatch for genuinely necessary one-offs: prefix the Bash command with `FORCE_RAW_RESEARCH=1`.
+
 Source: [docs/web-research-scripts.md](../../../docs/web-research-scripts.md).
 
 ## English practice

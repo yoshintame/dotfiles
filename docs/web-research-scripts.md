@@ -37,19 +37,22 @@ Runtime-слои:
 
 ```bash
 # Поиск в конкретном сабреддите
-search-reddit search "biome vs eslint" --sub typescript --sort top --time year --limit 20
+search-reddit search "biome vs eslint" --sub typescript --limit 20
 
 # Глобальный поиск
-search-reddit search "typescript scaffold tool" --sort top --time year
+search-reddit search "typescript scaffold tool"
 
 # Thread + top comments (аналог старого fetch-reddit.py)
 search-reddit fetch "https://www.reddit.com/r/typescript/comments/XXX/..."
 
 # JSON output для programmatic использования
 search-reddit search "foo" --json
+
+# "Best of" subreddit игнорируя query-relevance (для trend monitoring)
+search-reddit search "anything" --sub Bangkok --sort top --time year
 ```
 
-Дефолты: `--sort top`, `--time year`, `--limit 20`, User-Agent выставлен (без него Reddit отдаёт 429).
+Дефолты: `--sort relevance`, `--time all`, `--limit 20`, User-Agent выставлен (без него Reddit отдаёт 429). `sort=top + time=year` были бы неправильно — Reddit тогда возвращает top-посты сабреддита без учёта query; для find-best нужен `sort=relevance`.
 
 Endpoints: `https://www.reddit.com/search.json` и `https://www.reddit.com/r/<sub>/search.json` с `restrict_sr=on`, `raw_json=1`.
 
@@ -101,6 +104,17 @@ Key метрика — `stars_per_day` вместо абсолютных звё�
 
 В `AGENTS.md` есть глобальное правило: любые Reddit/HN/GitHub запросы через эти скрипты, `curl`/`WebFetch` только для URL которые не подходят. Скрипт [find-best skill](find-best-skill.md) написан целиком на них.
 
+Enforcement — PreToolUse hook `modules/agents-shared/config/hooks/research-steering.sh`, зарегистрирован в `modules/claude/config/settings.json` под матчерами `Bash` и `WebFetch`. Hook блокирует raw fetch на:
+
+- `reddit.com` / `old.reddit.com` / `m.reddit.com`
+- `hn.algolia.com`
+- `news.ycombinator.com/item`
+- `api.github.com/search` и `github.com/search`
+
+Denied-запрос получает `permissionDecisionReason` с точной командой замены (какой скрипт вызывать). Escape hatch для one-off: `FORCE_RAW_RESEARCH=1 curl ...` (работает только для Bash-матчера). WebFetch escape-hatch'а не имеет — в проверенных сценариях он не нужен, через Bash всегда можно получить тот же результат.
+
+Hook работает только для Claude (Codex hook-система другая). Для Codex правило из AGENTS.md работает soft-enforcement через compliance.
+
 ## Зависимости
 
 - **Python 3** (есть shebang `#!/usr/bin/env python3`, stdlib only — `urllib`, `json`, `argparse`, `html`, `subprocess`)
@@ -112,7 +126,7 @@ Key метрика — `stars_per_day` вместо абсолютных звё�
 
 | Скрипт | Дефолт | Почему |
 |---|---|---|
-| `search-reddit search` | `--sort top --time year --limit 20` | Для find-best use case нужен сигнал, а не свежесть; year покрывает зрелые обсуждения |
+| `search-reddit search` | `--sort relevance --time all --limit 20` | find-best ищет по query, не "top of sub"; evergreen-темы (vet clinics, product research) теряются при `time=year` |
 | `search-reddit fetch` | max 2 уровня вложенности комментов, 10/level | Top-level комментарии = 90% сигнала |
 | `search-hn search` | `--tags story` | Фильтрует комментарии и job posts |
 | `search-hn search --min-points` | нет default | Пользователь должен указать явно чтобы не захлебнуться |

@@ -5,9 +5,12 @@ Uses public JSON endpoints. Free, no API key needed.
 Rate limit: 60 req/min per IP (User-Agent required to avoid 429).
 
 Usage:
-  search-reddit.py search <query> [--sub SUB] [--sort top|relevance|new|hot|comments]
-                   [--time hour|day|week|month|year|all] [--limit N] [--json]
-  search-reddit.py fetch <url> [--json]
+  search-reddit search <query> [--sub SUB] [--sort relevance|top|new|comments|hot]
+                [--time hour|day|week|month|year|all] [--limit N] [--json]
+  search-reddit fetch <url> [--json]
+
+Defaults: --sort relevance, --time all. Use --sort top for "best of subreddit"
+regardless of query relevance, --time year for fresh/trending topics only.
 """
 import argparse
 import json
@@ -26,7 +29,7 @@ def _get(url):
         return json.loads(r.read())
 
 
-def search(query, sub=None, sort="top", time_range="year", limit=20):
+def search(query, sub=None, sort="relevance", time_range="all", limit=20):
     q = urllib.parse.quote_plus(query)
     if sub:
         sub = sub.lstrip("r/").strip()
@@ -143,9 +146,9 @@ def main():
     sp = sub.add_parser("search", help="Search Reddit posts")
     sp.add_argument("query")
     sp.add_argument("--sub", help="Restrict to subreddit (e.g. typescript, selfhosted)")
-    sp.add_argument("--sort", default="top",
-                    choices=["top", "relevance", "new", "comments", "hot"])
-    sp.add_argument("--time", dest="time_range", default="year",
+    sp.add_argument("--sort", default="relevance",
+                    choices=["relevance", "top", "new", "comments", "hot"])
+    sp.add_argument("--time", dest="time_range", default="all",
                     choices=["hour", "day", "week", "month", "year", "all"])
     sp.add_argument("--limit", type=int, default=20)
     sp.add_argument("--json", action="store_true")

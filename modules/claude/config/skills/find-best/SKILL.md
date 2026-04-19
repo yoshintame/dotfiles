@@ -39,8 +39,8 @@ Launch 2-3 subagents IN PARALLEL via Agent tool. Do not pass user profile/constr
 
 **Subagent B — Community sentiment (FRESHNESS, always run)**
 1. Reddit search (scripts return structured data, no WebSearch dance needed):
-   - `search-reddit search "<topic>" --sort top --time year --limit 20` (global)
-   - `search-reddit search "<topic>" --sub <relevant-sub> --sort top --time year` for 2-3 likely subreddits (selfhosted, typescript, programming, macapps, LocalLLaMA, etc.)
+   - `search-reddit search "<topic>" --limit 20` (global, defaults: sort=relevance time=all)
+   - `search-reddit search "<topic>" --sub <relevant-sub>` for 2-3 likely subreddits (selfhosted, typescript, programming, macapps, LocalLLaMA, etc.)
 2. For 3-5 most relevant threads (high score + high comments) → `search-reddit fetch <url>` to read top comments
 3. HN: `search-hn search "<topic>" --min-points 50 --limit 20`. For promising stories → `search-hn fetch <id>`.
 4. Extract:
@@ -75,7 +75,7 @@ Task per subagent:
 2. **Pricing** (if commercial): WebFetch pricing page TODAY
 3. **Recent changes**: changelog, blog, latest release notes
 4. **Negative signals**:
-   - `search-reddit search "<tool> switched from OR problems" --sort top --time year`
+   - `search-reddit search "<tool> switched from OR problems"`
    - `search-hn search "<tool>" --min-points 30` — look for critical threads
    - Check archive.org for pricing/license changes vs 1-2 years ago
 5. **MANDATORY**: find ≥1 red flag. If you cannot find ANY negative signal — that's itself a flag (overly polished marketing, brand new project, or you didn't search hard enough).
@@ -168,10 +168,10 @@ search-github search "<query>" --stars ">100"    # free-text search
 search-github health <owner/repo>                # stars/day, license, activity
 ```
 
-**Reddit:**
+**Reddit:** defaults are `--sort relevance --time all` (good for evergreen product/tool research). Override: `--sort top --time year` for "best of subreddit recently".
 ```bash
-search-reddit search "<query>" --sub <subreddit> --sort top --time year --limit 20
-search-reddit search "<query>" --sort top --time year                # global
+search-reddit search "<query>" --sub <subreddit> --limit 20
+search-reddit search "<query>"                                        # global
 search-reddit fetch <thread-url>                                      # post + top comments
 ```
 

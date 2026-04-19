@@ -108,6 +108,8 @@ spoon.LeaderFlow:setup({
 
         { "p", "Passwords", shortcut(proxy.passwords) },
 
+        { "m", "Menu Bar Picker", shortcut(proxy.ice_menu_item_picker) },
+
         { "u", "[utils]", {
             { "c", "Color Picker", shortcut(proxy.color_picker) },
             { "r", "Roulette", shortcut(proxy.roulette) },

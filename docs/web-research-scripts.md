@@ -54,6 +54,10 @@ search-reddit search "anything" --sub Bangkok --sort top --time year
 
 Дефолты: `--sort relevance`, `--time all`, `--limit 20`, User-Agent выставлен (без него Reddit отдаёт 429). `sort=top + time=year` были бы неправильно — Reddit тогда возвращает top-посты сабреддита без учёта query; для find-best нужен `sort=relevance`.
 
+**Strict AND (auto Lucene `+word`):** Reddit's public search.json трактует space-separated слова как OR-scoring (слова учитываются в ранжировании независимо, не все требуются). Это возвращает посты матчащие ЛЮБОЕ слово query с высоким score, а не ВСЕ слова. Скрипт автоматически префиксит каждое слово на `+` (Lucene required-term) для AND-семантики: `vet english Bangkok` → `+vet +english +Bangkok`. Если query уже содержит Lucene-операторы (`+`, `-`, `"`, `:`, `AND`, `OR`) — префикс не добавляется. Флаг `--loose` отключает авто-преобразование.
+
+**Ограничение:** даже с `+word` на global search 3+ слов Reddit's ranking favours длинные популярные посты с incidental mentions всех слов над короткими фокусными тредами. Это не API-параметр, это ранжирование платформы. **Practical rule:** для global search — max 2 слова. Для 3+ слов — обязательно `--sub X`.
+
 Endpoints: `https://www.reddit.com/search.json` и `https://www.reddit.com/r/<sub>/search.json` с `restrict_sr=on`, `raw_json=1`.
 
 ### search-hn
@@ -102,18 +106,16 @@ Key метрика — `stars_per_day` вместо абсолютных звё�
 
 ## Использование из агентов
 
-В `AGENTS.md` есть глобальное правило: любые Reddit/HN/GitHub запросы через эти скрипты, `curl`/`WebFetch` только для URL которые не подходят. Скрипт [find-best skill](find-best-skill.md) написан целиком на них.
+Скрипты — **supplementary tools**, не enforced. Рекомендованный primary workflow для research-задач живёт в [deep-research skill](deep-research-skill.md) и [find-best skill](find-best-skill.md):
 
-Enforcement — PreToolUse hook `modules/agents-shared/config/hooks/research-steering.sh`, зарегистрирован в `modules/claude/config/settings.json` под матчерами `Bash` и `WebFetch`. Hook блокирует raw fetch на:
+- **WebSearch** как основной источник (Google-ranked curated content)
+- **`search-reddit`** для local/community knowledge + "switched from" stories
+- **`search-hn`** для технической глубины и expert commentary
+- **`search-github awesome/trending/health`** для OSS discovery
 
-- `reddit.com` / `old.reddit.com` / `m.reddit.com`
-- `hn.algolia.com`
-- `news.ycombinator.com/item`
-- `api.github.com/search` и `github.com/search`
+Ни один агент не обязан использовать эти скрипты — но когда нужно программно извлечь структурированные данные с Reddit/HN или gh API, они дают чистый output без каскада неудачных `curl`/`WebFetch` вызовов.
 
-Denied-запрос получает `permissionDecisionReason` с точной командой замены (какой скрипт вызывать). Escape hatch для one-off: `FORCE_RAW_RESEARCH=1 curl ...` (работает только для Bash-матчера). WebFetch escape-hatch'а не имеет — в проверенных сценариях он не нужен, через Bash всегда можно получить тот же результат.
-
-Hook работает только для Claude (Codex hook-система другая). Для Codex правило из AGENTS.md работает soft-enforcement через compliance.
+Hook `modules/agents-shared/config/hooks/research-steering.sh` существует как файл, но **не подключён** в settings.json — enforcement отключён после того как на практике стало ясно, что WebSearch часто даёт лучший сигнал чем Reddit для product/tool research. Если захочется вернуть enforcement — добавить hook entry обратно под матчеры `Bash` и `WebFetch`.
 
 ## Зависимости
 

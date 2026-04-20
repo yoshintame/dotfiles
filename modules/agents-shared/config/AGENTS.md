@@ -15,25 +15,6 @@
 - Prefer `uv` over `pip` and `pip3` for Python. Use `uv pip install X`, or `uv pip install --python /path/to/venv/bin/python X` for venv installs.
 - Shared Bash policy hooks may block raw `npm`, `yarn`, or `pip` commands unless the escape hatch is used: `FORCE_NPM=1`, `FORCE_YARN=1`, `FORCE_PIP=1`.
 
-## Web research
-
-When searching Reddit, Hacker News, or GitHub for tool/product discovery or comparison, ALWAYS prefer these scripts (on `$PATH`) over raw `curl`/`WebFetch`/`WebSearch`. They return clean structured output and avoid dead-end query cascades.
-
-- `search-reddit search <query> [--sub X] [--sort top] [--time year] [--limit N]` — no-auth JSON search
-- `search-reddit fetch <url>` — thread with top comments
-- `search-hn search <query> [--min-points N] [--tags show_hn|ask_hn] [--limit N]` — Algolia API
-- `search-hn fetch <id>` — story with comment tree
-- `search-github awesome <topic>` — awesome-lists for a topic in one call
-- `search-github trending <topic>` — topic repos ranked by stars/day
-- `search-github search "<query>" [--stars ">N"]` — free-text repo search
-- `search-github health <owner/repo>` — stars/day, last push, license, archived status
-
-All scripts accept `--json` and support `--help`. Use raw `curl`/`WebFetch` only for URLs that don't fit these patterns.
-
-A PreToolUse hook (`research-steering.sh`) enforces this — raw curl/WebFetch on `reddit.com`, `hn.algolia.com`, `news.ycombinator.com/item`, and GitHub search APIs is denied. Escape hatch for genuinely necessary one-offs: prefix the Bash command with `FORCE_RAW_RESEARCH=1`.
-
-Source: [docs/web-research-scripts.md](../../../docs/web-research-scripts.md).
-
 ## English practice
 
 User is a Russian native practicing English. Always reply in Russian regardless of input language. If the prompt was in English, append at the very end:

@@ -196,7 +196,10 @@
       "Bash(git -C /Users/yoshintame/.dotfiles status)",
       "Bash(ssh -i /Users/yoshintame/.ssh/tart-test -o UserKnownHostsFile=/Users/yoshintame/.ssh/tart-known-hosts -o IdentitiesOnly=yes -o IdentityAgent=none yoshintame@192.168.64.3 'tail -n +1 -f ~/logs/bootstrap.log')",
       "Bash(/usr/bin/grep --line-buffered -E \"==>|!!|ERR |^error|error:|failed|warning:|Building system|Brewfile|dot:|sops-templates|age key|Activating|requires|Homebrew|brew bundle|setting up\")",
-      "Read(//Users/yoshintame/.dotfiles-p2/**)"
+      "Read(//Users/yoshintame/.dotfiles-p2/**)",
+      "Bash(git -C /Users/yoshintame/Development/work/vtb/repos/fact commit-context)",
+      "Bash(search-github search *)",
+      "Bash(search-reddit fetch *)"
     ],
     "additionalDirectories": [
       "/Users/yoshintame/Development/work/vtb",
@@ -252,19 +255,6 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/tool-steering.sh"
-          },
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/research-steering.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "WebFetch",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/research-steering.sh"
           }
         ]
       }
@@ -287,6 +277,5 @@
         "repo": "warpdotdev/claude-code-warp"
       }
     }
-  },
-  "effortLevel": "xhigh"
+  }
 }

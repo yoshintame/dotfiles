@@ -29,8 +29,29 @@ def _get(url):
         return json.loads(r.read())
 
 
-def search(query, sub=None, sort="relevance", time_range="all", limit=20):
-    q = urllib.parse.quote_plus(query)
+_LUCENE_CHARS = set('+-":()')
+
+
+def _strict_and(query):
+    """Reddit's search treats bare words as OR-ish scoring (not AND). Prefix
+    each bare token with `+` (Lucene required-term) to force AND semantics.
+
+    Leave the query alone if it already contains Lucene operators or boolean
+    keywords, so power users can pass raw Lucene syntax.
+    """
+    if any(ch in query for ch in _LUCENE_CHARS):
+        return query
+    tokens = query.split()
+    if len(tokens) <= 1:
+        return query
+    if any(t.upper() in ("AND", "OR", "NOT") for t in tokens):
+        return query
+    return " ".join(f"+{t}" for t in tokens)
+
+
+def search(query, sub=None, sort="relevance", time_range="all", limit=20, strict=True):
+    effective_q = _strict_and(query) if strict else query
+    q = urllib.parse.quote_plus(effective_q)
     if sub:
         sub = sub.lstrip("r/").strip()
         url = (
@@ -151,6 +172,8 @@ def main():
     sp.add_argument("--time", dest="time_range", default="all",
                     choices=["hour", "day", "week", "month", "year", "all"])
     sp.add_argument("--limit", type=int, default=20)
+    sp.add_argument("--loose", action="store_true",
+                    help="Skip auto '+word' AND-wrapping; pass raw query to Reddit")
     sp.add_argument("--json", action="store_true")
 
     fp = sub.add_parser("fetch", help="Fetch a specific thread with top comments")
@@ -162,7 +185,8 @@ def main():
     try:
         if args.cmd == "search":
             results = search(args.query, sub=args.sub, sort=args.sort,
-                             time_range=args.time_range, limit=args.limit)
+                             time_range=args.time_range, limit=args.limit,
+                             strict=not args.loose)
             if args.json:
                 print(json.dumps(results, indent=2, ensure_ascii=False))
             else:

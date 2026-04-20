@@ -10,15 +10,17 @@ Workflow for discovery + comparison + personalized recommendation. Optimized to 
 ## Source priority (trust hierarchy)
 
 ```
-Reddit/HN top comments (peer recs, with discussion)
-  > GitHub stars + recent activity trend
-    > Awesome-lists (if last commit < 1 year)
-      > Indie expert blogs (named author with reputation)
+WebSearch-surfaced curated content (indie blogs, "vs" articles, comparison guides)
+  > Awesome-lists on GitHub (if last commit < 1 year)
+    > GitHub stars + recent activity trend (per candidate)
+      > Reddit/HN top comments — use for community validation + "switched from" stories
         > alternativeto.net
           > G2/Capterra (often pay-to-rank, sceptical)
             > "Top X Best Y 2026" SEO listicles  ← skip
               > Vendor self-comparisons          ← skip
 ```
+
+Rationale: WebSearch finds named-author comparison articles (expatden, antfu blog, etc.) — those aggregate community knowledge AND apply editorial taste. Reddit is ranked lower than Anthropic prior guidance because its search ranks viral posts with incidental keyword matches above focused threads — use it for validation and sentiment, not primary discovery.
 
 ## Workflow
 
@@ -26,34 +28,37 @@ Reddit/HN top comments (peer recs, with discussion)
 
 Launch 2-3 subagents IN PARALLEL via Agent tool. Do not pass user profile/constraints to subagents — they should find ALL candidates without premature filtering.
 
-**Subagent A — Awesome-lists (PRIMARY, always run)**
-1. `search-github awesome <topic> --limit 10` — single call, finds both `awesome-X` and `awesome X` naming
-2. For each found list:
+**Subagent A — WebSearch + awesome-lists (PRIMARY, always run)**
+1. WebSearch queries first — Google finds curated expert content (comparison guides, review blogs, alternativeto.net) that Reddit/HN don't:
+   - `"best <topic> <year>"`, `"top <topic> tools"`, `"<topic> comparison"`, `"<topic> alternatives"`
+   - `"<topic> awesome github"` as meta-query
+2. `search-github awesome <topic> --limit 10` — single call, finds both `awesome-X` and `awesome X` naming
+3. For each found awesome-list:
    - Output flags `[STALE >1yr]` — still extract but note
    - WebFetch the README, extract ALL listed candidates with their categorization
-3. Also check runtime/package-manager native alternatives:
-   - `bun create`, `deno init`, `npm create`, `pnpm create`
-   - `create-<framework>` pattern (create-vite, create-next-app, etc.)
-   - These are often missing from awesome-lists but widely used
-4. Return JSON: `{candidates: [{name, github_url|website, category, source_list, brief_description, stars_if_shown}], stale_lists: [...]}`
+4. Also check runtime/package-manager native alternatives (often missing from awesome-lists):
+   - `bun create`, `deno init`, `npm create`, `pnpm create`, `create-<framework>` pattern
+5. Return JSON: `{candidates: [{name, github_url|website, category, source_list, brief_description, stars_if_shown}], stale_lists: [...]}`
 
-**Subagent B — Community sentiment (FRESHNESS, always run)**
-1. Reddit search (scripts return structured data, no WebSearch dance needed):
-   - `search-reddit search "<topic>" --limit 20` (global, defaults: sort=relevance time=all)
-   - `search-reddit search "<topic>" --sub <relevant-sub>` for 2-3 likely subreddits (selfhosted, typescript, programming, macapps, LocalLLaMA, etc.)
-2. For 3-5 most relevant threads (high score + high comments) → `search-reddit fetch <url>` to read top comments
-3. HN: `search-hn search "<topic>" --min-points 50 --limit 20`. For promising stories → `search-hn fetch <id>`.
-4. Extract:
-   - Tools mentioned in discussions (compare with awesome-lists to find gaps)
+**Subagent B — Community validation (SUPPLEMENTARY, always run)**
+Purpose: find candidates WebSearch/awesome-lists missed + add community voice. Not primary discovery — Reddit's ranking penalises focused threads in favour of viral posts with incidental matches, so use with care.
+
+1. `search-reddit search "<topic>" --sub <relevant-sub> --limit 20` for 2-3 likely subreddits (selfhosted, typescript, programming, macapps, LocalLLaMA, etc.). Scoped queries work better than global.
+2. If 2-word query suffices, you can also try `search-reddit search "<short-topic>"` globally. Avoid 3+ word global queries — Reddit's search ranks them poorly.
+3. For 3-5 most relevant threads (high score + high comments) → `search-reddit fetch <url>` to read top comments.
+4. HN: `search-hn search "<topic>" --min-points 50 --limit 20`. For promising stories → `search-hn fetch <id>`.
+5. Extract:
+   - Tools mentioned in discussions NOT in Subagent A's list (= community-discovered options)
    - "switched from X to Y" / "moved to" / "replaced with" stories
    - "don't use X because" warnings
-5. BUDGET: max ~12 script calls total. If pattern fails, stop — don't cascade into curl/duckduckgo fallbacks.
-6. Return: `{additional_candidates: [...], sentiment: {tool: brief_opinion}, switching_stories: [...], warnings: [...]}`
+6. BUDGET: max ~10 script calls total. If pattern fails, stop — don't cascade.
+7. Return: `{additional_candidates: [...], sentiment: {tool: brief_opinion}, switching_stories: [...], warnings: [...]}`
 
 **Subagent C — Commercial/SaaS (CONDITIONAL)**
 Launch only if topic involves SaaS/commercial tools (most awesome-lists are OSS-only).
-1. Check alternativeto.net, indie comparison blogs from named experts
-2. Return: `{commercial_candidates: [...]}`
+1. WebSearch for "<topic> pricing comparison", "<topic> vs", "alternatives to <leader>"
+2. Check alternativeto.net, indie comparison blogs from named experts
+3. Return: `{commercial_candidates: [...]}`
 
 ### Phase 2: Consolidate (lead, no subagents)
 
@@ -158,7 +163,7 @@ Based on: <list extracted constraints — budget, platform, preferences from CLA
 
 ## Search query patterns (cheat sheet for subagents)
 
-Always prefer the structured scripts over raw WebSearch/WebFetch/curl — they return clean data and avoid dead-end query cascades. `--help` on each for full options.
+Start with WebSearch for breadth (curated guides, named-author comparisons, "best X" articles). Use the scripts as supplementary layers — Reddit for community voice, GitHub for OSS-specific data. Prefer scripts over raw `curl`/`WebFetch` on Reddit/HN/GitHub endpoints to get clean structured output. `--help` on each for full options.
 
 **GitHub awesome-lists + trending:**
 ```bash
@@ -168,10 +173,10 @@ search-github search "<query>" --stars ">100"    # free-text search
 search-github health <owner/repo>                # stars/day, license, activity
 ```
 
-**Reddit:** defaults are `--sort relevance --time all` (good for evergreen product/tool research). Override: `--sort top --time year` for "best of subreddit recently".
+**Reddit:** defaults `--sort relevance --time all`. Multi-word queries auto-transform into Lucene `+word1 +word2` for strict AND. Prefer scoped `--sub X` — Reddit's global search ranks popular posts with incidental matches above focused threads. Keep global queries to 2 words.
 ```bash
-search-reddit search "<query>" --sub <subreddit> --limit 20
-search-reddit search "<query>"                                        # global
+search-reddit search "<query>" --sub <subreddit> --limit 20           # preferred
+search-reddit search "<short-query>"                                  # global (2 words max)
 search-reddit fetch <thread-url>                                      # post + top comments
 ```
 

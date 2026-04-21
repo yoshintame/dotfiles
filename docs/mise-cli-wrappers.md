@@ -1,41 +1,68 @@
 # Global CLI wrappers via mise tasks
 
-Pattern for creating global CLI commands backed by mise task runner with fish shell integration.
+Pattern for creating global CLI commands backed by mise task runner, exposed as **real binaries** in nix-profile so they work from any shell, from scripts, from GUI apps (VSCode/Cursor), and from Claude Code agents.
 
-## Background: justfile -> mise
+## Почему бинарник, а не fish-function
 
-Initially this pattern used justfiles: each utility was a justfile with recipes, a fish function wrapper (`just -f <path> $argv`), and a separate completions file. This worked but had limitations:
+Раньше обёртка была fish-функцией: `dot` / `rp` жили в `modules/fish/config/functions/*.fish`. Это работало только в fish. zsh, bash, Claude Code Bash tool (который запускает команды в zsh), cron, CI-скрипты — ни один из них не видел этих команд.
 
-|                      | justfile                             | mise tasks                            |
-| -------------------- | ------------------------------------ | ------------------------------------- |
-| Flags (`--no-clean`) | not supported                        | native via `usage` field              |
-| Choices / validation | manual `case` + error msg            | declarative `choices`                 |
-| Autocompletion       | manual fish completions file         | simpler completions via `mise tasks`  |
-| Global tasks         | `just -f <path>` hack                | `~/.config/mise/tasks/` native        |
-| Files per utility    | 3 (justfile + function + completion) | 3 (toml + function + completion)      |
-| Argument parsing     | positional only                      | positional, flags, defaults, env vars |
+Правило: **любая пользовательская команда, которую можно вызвать из скрипта или агента, должна быть настоящим executable в PATH**. fish-functions допустимы только для inherently-shell вещей (cd, eval в текущий shell, интерактивные виджеты).
 
-mise was already installed as a tool version manager, so no extra dependency.
+Подробнее: [path-management.md](path-management.md#executables-vs-shell-functions).
 
-## Structure
+## Эволюция паттерна
 
-Each utility = 3 files:
+1. **justfiles** — 3 файла на утилиту (justfile + fish function + completion), нет flags/choices.
+2. **mise tasks + fish function** — usage/choices есть, но обёртка fish-only.
+3. **mise tasks + `mkMiseCli` helper (текущий)** — TOML с тасками + одна строчка в nix = настоящий бинарник в PATH.
 
-```text
-modules/<module>/config/<name>.toml         # mise tasks (linked to ~/.config/mise/tasks/<name>.toml)
-modules/fish/config/functions/<name>.fish   # thin fish wrapper
-modules/fish/config/completions/<name>.fish # tab-completion
+## `mkMiseCli` helper
+
+Helper в [lib/mkMiseCli.nix](../lib/mkMiseCli.nix). Принимает имя, опциональные proxy-subcommands и specials, возвращает `pkgs.writeShellApplication` пакет.
+
+### Сигнатура
+
+```nix
+mkMiseCli {
+  name = "<name>";                   # команда и префикс тасков "<name>:*"
+  proxied = [                        # опционально: subcommands, делегирующие в другой бинарник
+    { sub = "link"; target = "doc"; help = "..."; }
+  ];
+  specials = [                       # опционально: raw-shell handlers
+    { sub = "go"; help = "..."; run = ''echo "..." >&2; exit 2''; }
+  ];
+  runtimeInputs = [ ... ];           # опционально: дополнительные пакеты в PATH рантайма
+}
 ```
 
-Global mise config includes task files:
+### Что генерирует
 
-```toml
-# ~/.config/mise/config.toml
-[task_config]
-includes = ["tasks/rp.toml", "tasks/other.toml"]
+Bash-скрипт с `set -euo pipefail`:
+
+```sh
+if [ $# -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  mise tasks ls | grep '^<name>:'
+  # + help для proxied/specials
+  exit 0
+fi
+case "$1" in
+  <proxied-cases>   # exec <target> "$@"
+  <special-cases>   # inline shell
+  *) sub="$1"; shift; exec mise run "<name>:$sub" -- "$@" ;;
+esac
 ```
 
-Each module's `default.nix` links its own toml:
+Попадает в `/etc/profiles/per-user/<user>/bin/<name>` через `home.packages`.
+
+## Как добавить новую утилиту
+
+### 1. Создать tasks TOML
+
+`modules/<module>/config/<name>.toml` — формат тот же, что раньше (`mise` usage spec с flags/choices). См. [официальные доки mise tasks](https://mise.jdx.dev/tasks/) и `dot.toml` / `rp.toml` как примеры.
+
+### 2. Слинковать TOML в `~/.config/mise/tasks/`
+
+В `modules/<module>/default.nix`:
 
 ```nix
 nixDotbot.links = {
@@ -43,49 +70,33 @@ nixDotbot.links = {
 };
 ```
 
-## How to add a new utility
-
-### 1. Create the tasks file
-
-`modules/<module>/config/<name>.toml`:
-
-Note: included task files use `["<name>:command"]` format (without `tasks.` prefix).
+### 3. Подключить в `modules/mise/config/config.toml`
 
 ```toml
-["<name>:command"]
-description = "Do something"
-usage = '''
-arg "<target>" help="Target" default="foo" {
-  choices "foo" "bar" "baz"
+[task_config]
+includes = ["tasks/<name>.toml"]
+```
+
+### 4. Сгенерировать бинарник через `mkMiseCli`
+
+В том же `modules/<module>/default.nix`:
+
+```nix
+{ pkgs-unstable ? pkgs, pkgs, ... }: let
+  mkMiseCli = import ../../lib/mkMiseCli.nix {
+    inherit pkgs;
+    mise = pkgs-unstable.mise;
+  };
+  cli = mkMiseCli { name = "<name>"; };
+in {
+  home.packages = [ cli ];
+  nixDotbot.links = { ... };
 }
-flag "--verbose" help="Enable verbose output"
-'''
-run = '''
-echo "Running on ${usage_target?}"
-if [ "${usage_verbose:-false}" = "true" ]; then
-    set -x
-fi
-# ... actual logic
-'''
 ```
 
-### 2. Create the fish function
+### 5. (Опционально) fish completion
 
-`modules/fish/config/functions/<name>.fish`:
-
-```fish
-function <name> --description "<description>"
-    if test (count $argv) -eq 0; or contains -- $argv[1] --help -h
-        mise tasks ls 2>/dev/null | grep '^<name>:'
-        return
-    end
-    mise run <name>:$argv[1] -- $argv[2..]
-end
-```
-
-### 3. Create fish completions
-
-`modules/fish/config/completions/<name>.fish`:
+Если хочется tab-completion в fish — положить `modules/fish/config/completions/<name>.fish`:
 
 ```fish
 complete -c <name> -f
@@ -93,88 +104,90 @@ complete -c <name> -n "test (count (commandline -opc)) -eq 1" \
     -a "(mise tasks ls 2>/dev/null | grep '^<name>:' | sed 's/^<name>://' | awk '{print \$1\"\t\"\$2\" \"\$3\" \"\$4\" \"\$5}')"
 ```
 
-### 4. Link in default.nix and include in mise config
+Файл подхватится через существующий dotbot-линк `~/.config/fish/` в `modules/fish/default.nix`.
 
-`modules/<module>/default.nix` — add link:
+### 6. Rebuild
+
+```sh
+dot rebuild
+```
+
+После `darwin-rebuild switch` бинарник в `/etc/profiles/.../bin/<name>`, виден отовсюду.
+
+## Примеры
+
+### `rp` — без спецкейсов
+
+`modules/resticprofile/default.nix`:
 
 ```nix
-"~/.config/mise/tasks/<name>.toml" = "modules/<module>/config/<name>.toml";
+home.packages = [ (mkMiseCli { name = "rp"; }) ];
 ```
 
-`modules/mise/config/config.toml` — add to includes:
+Всё. Таски из `rp.toml` (`rp:backup`, `rp:save`, `rp:load`, …) становятся доступны как `rp backup`, `rp save`, `rp load` из любого shell.
 
-```toml
-[task_config]
-includes = ["tasks/<name>.toml"]
+### `dot` — с proxy и shell-bound спецкейсом
+
+`modules/mise/default.nix`:
+
+```nix
+dotCli = mkMiseCli {
+  name = "dot";
+  proxied = [
+    { sub = "link";   target = "doc"; help = "Link dotfiles via dotbot"; }
+    { sub = "config"; target = "doc"; help = "Print dotbot config"; }
+  ];
+  specials = [{
+    sub = "go";
+    help = "cd $DOTFILES (shell-only, use fish function)";
+    run = ''echo "dot go: shell-bound, run:  cd \"$DOTFILES\"" >&2; exit 2'';
+  }];
+};
 ```
 
-### 5. Done
+`dot link` и `dot config` делегируют в `doc` (nix-dotbot). `dot <anything else>` → `mise run dot:<anything else>`. `dot go` — спецкейс (см. ниже).
 
-Rebuild dotfiles and reload fish (`exec fish`). `<name> <Tab>` will show available commands.
+## Inherently-shell команды: `dot go`
+
+`cd` не может работать из child-процесса. Для подобного UX в интерактивном shell-e заводим **тонкий fish-wrapper**, который перехватывает только этот подкоманд-кейс и в остальном делегирует в бинарник:
+
+```nix
+# modules/mise/default.nix
+programs.fish.functions.dot = {
+  description = "Dotfiles management (fish UX wrapper over `dot` binary)";
+  body = ''
+    if test (count $argv) -gt 0; and test "$argv[1]" = "go"
+        cd $DOTFILES
+        return
+    end
+    command dot $argv
+  '';
+};
+```
+
+В fish эта функция перекрывает бинарник. В zsh/bash — работает сам бинарник, `dot go` выводит хинт и exits. Агенты/скрипты всё равно не должны вызывать `dot go` — их интересует `dot rebuild`, `dot link` и т.п.
+
+## Альтернативы, которые рассматривали
+
+- **`mise generate task-stubs`** — нативный mise-механизм, генерирует шимы `bin/<name>:<task>` (по одному на каждую таску). Не подходит: ломает UX `<name> <subcmd>` → заменяет на `<name>:<subcmd>`, нет общей help-команды-диспетчера.
+- **Shell-скрипт без mise** — переписать всю логику инлайн через `writeShellApplication`. Регресс: теряем usage-парсинг (`choices`, `flag`, `default`, `env`) из mise.
+- **Оставить fish-function, переключить Claude Code Bash на fish** — fish не POSIX, CI/hooks/скрипты ломаются.
 
 ## Gotchas
 
-- **Included task file format**: use `["name:cmd"]` not `[tasks."name:cmd"]`
-- **Include paths**: relative to `config.toml` location (e.g. `tasks/rp.toml` resolves to `~/.config/mise/tasks/rp.toml`)
-- **TOML strings with quotes**: use `'''` multi-line literals to avoid escaping issues
+- **`--` разделитель**: `mise run <task> -- "$@"` — `--` нужен чтобы args прошли в таск, а не в mise. Helper делает это автоматически.
+- **Пустой `$@`**: `exec mise run "rp:save" -- ` с пустым args — валидно, mise не падает.
+- **writeShellApplication + shellcheck**: скрипт прогоняется через shellcheck при сборке. Helper уже безопасен (проверка `$#` перед доступом к `$1`). При добавлении `specials.run` следить за nounset.
+- **`doc` в PATH**: `doc` (nix-dotbot) установлен в nix-profile — виден в рантайме `writeShellApplication`, который prepend'ит runtimeInputs к существующему PATH, а не заменяет его.
+- **Included task file format**: в `.toml` — `["name:cmd"]`, не `[tasks."name:cmd"]`.
+- **TOML multiline strings**: `'''` для строк с кавычками, чтобы не экранировать.
 
-## Example: `rp` (resticprofile)
+## Миграция со старого паттерна
 
-```fish
-# functions/rp.fish
-function rp --description "resticprofile backup tasks (mise wrapper)"
-    if test (count $argv) -eq 0; or contains -- $argv[1] --help -h
-        mise tasks ls 2>/dev/null | grep '^rp:'
-        return
-    end
-    mise run rp:$argv[1] -- $argv[2..]
-end
-```
+Если есть утилита, сделанная по старой схеме (fish function + completion):
 
-```fish
-# completions/rp.fish
-complete -c rp -f
-complete -c rp -n "test (count (commandline -opc)) -eq 1" \
-    -a "(mise tasks ls 2>/dev/null | grep '^rp:' | sed 's/^rp://' | awk '{print \$1\"\t\"\$2\" \"\$3\" \"\$4\" \"\$5}')"
-```
-
-```toml
-# rp.toml (excerpt)
-["rp:backup"]
-description = "Run backup"
-usage = '''
-arg "<profile>" help="Backup profile" default="all" {
-  choices "all" "dev" "home"
-}
-'''
-run = 'resticprofile -n ${usage_profile?} backup'
-
-["rp:save"]
-description = "Quick-save current dir (full, no exclusions)"
-run = 'RP_SAVE_DIR="$(pwd)" resticprofile -n quicksave backup'
-
-["rp:load"]
-description = "Load current dir from latest snapshot"
-usage = '''
-flag "--no-clean" help="Don't delete existing files before restore"
-'''
-run = '''
-dir="$(pwd)"
-if [ "${usage_no_clean:-false}" = "false" ]; then
-    find "$dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-fi
-resticprofile -n quicksave restore "latest:$dir" --target "$dir"
-'''
-```
-
-Usage:
-
-```fish
-rp                    # list available commands
-rp backup             # backup all (default)
-rp backup dev         # backup dev only
-rp save               # full backup of current dir
-rp load               # restore current dir from latest snapshot
-rp load --no-clean    # restore without deleting new files
-rp snapshots local    # list local snapshots
-```
+1. Удалить `modules/fish/config/functions/<name>.fish`.
+2. Добавить `mkMiseCli { name = "<name>"; }` в `home.packages` соответствующего модуля.
+3. Completion (если был) — оставить как есть, он работает и для бинарника.
+4. Если была shell-bound логика (cd, eval) — перенести в `programs.fish.functions.<name>` как тонкий wrapper над бинарником.
+5. `dot rebuild` → logout/login (для launchd) → проверить: `which <name>` в **zsh** должен находить `/etc/profiles/per-user/.../bin/<name>`.

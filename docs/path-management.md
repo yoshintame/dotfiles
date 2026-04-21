@@ -130,6 +130,59 @@ launchd.user.envVariables = sharedEnv // {
 | fzf | `programs.fzf` (home-manager) | ✅ | ✅ | ✅ |
 | homebrew | `homebrew` (nix-darwin) | через sessionPath | через set-environment | — |
 
+## Executables vs shell functions
+
+PATH решает "где искать бинарники", но ещё один класс проблем — **user-level команды, реализованные как shell functions или aliases**. Они невидимы вне своего shell, даже когда PATH настроен правильно.
+
+### Пример проблемы
+
+Fish-функция `dot` в `modules/fish/config/functions/dot.fish` работала только в fish. zsh (в т.ч. non-interactive zsh, запускаемый Claude Code Bash tool) не видел её в принципе:
+
+```sh
+$ dot link
+zsh: command not found: dot
+```
+
+При этом PATH был корректный — настоящие бинарники (`doc`, `fish`, `code`, `git`, …) находились нормально. Проблема не в PATH, а в том что `dot` — не executable, а fish-function.
+
+### Правило
+
+**Любая пользовательская команда, которая должна вызываться из скрипта, агента, cron, CI или non-fish shell — обязана быть настоящим executable в PATH.**
+
+fish-functions и shell-aliases допустимы только для:
+- **inherently-shell фич** — `cd`, `eval` в текущий shell, source, изменение переменных текущего процесса.
+- **интерактивных виджетов** — fish keybinds, `commandline`-манипуляции.
+- **тонких UX-обёрток** поверх бинарника, перехватывающих одну-две subcommand'ы с shell-bound эффектом (см. `dot go` ниже).
+
+### Как сделать команду настоящим бинарником
+
+Через nix: `pkgs.writeShellApplication` → `home.packages`. Попадает в `/etc/profiles/per-user/<user>/bin/<name>`, видно **всеми** shell-ми, GUI apps (через launchd-слой), агентами.
+
+Для CLI на базе mise-тасков используется helper `mkMiseCli` — см. [mise-cli-wrappers.md](mise-cli-wrappers.md).
+
+### Гибрид: бинарник + fish-function для shell-bound subcommand'ы
+
+Пример — `dot go` (cd в `$DOTFILES`). `cd` нельзя сделать из child-процесса, но не хочется терять удобство. Решение: бинарник `dot` полноценно работает везде, для `dot go` заведена **тонкая fish-функция**, перехватывающая только этот кейс:
+
+```nix
+programs.fish.functions.dot = {
+  body = ''
+    if test (count $argv) -gt 0; and test "$argv[1]" = "go"
+        cd $DOTFILES
+        return
+    end
+    command dot $argv
+  '';
+};
+```
+
+В fish функция перекрывает бинарник. В zsh/bash работает бинарник, `dot go` печатает хинт и exits. Агенты/скрипты всё равно `dot go` не вызывают — им нужны `dot rebuild`, `dot link`, которые работают везде.
+
+### Что удалено по этому принципу
+
+- `modules/fish/config/functions/dot.fish` → `mkMiseCli { name = "dot"; ...; }` в `modules/mise/default.nix` + тонкая fish-функция только для `dot go`.
+- `modules/fish/config/functions/rp.fish` → `mkMiseCli { name = "rp"; }` в `modules/resticprofile/default.nix`.
+
 ## mise: shims vs activate
 
 - **shims** (`~/.local/share/mise/shims` в sessionPath) — работают везде: скрипты, IDE, non-interactive. Шим сам определяет версию.

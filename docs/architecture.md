@@ -59,8 +59,13 @@
 │                          # hammerspoon, iina, kitty, lazygit, mise, nvim, starship,
 │                          # tmux, warp, wezterm, zoxide
 │
-├── packages/              # Внутренние CLI-утилиты
-│   └── proxy-bindings/    # Bun CLI: генерация Lua/TS из proxy-bindings.yaml
+├── packages/              # Программы, запускаемые в рантайме (bun/go/etc.)
+│   ├── proxy-bindings/    #   Bun CLI: генерация Lua/TS из proxy-bindings.yaml
+│   ├── dump-packages/     #   Bun CLI: дамп unmanaged apps и Setapp в Appsfile.*
+│   └── git-commit-e2e/    #   e2e-тест git-commit workflow
+│
+├── lib/                   # Чистые nix-функции (eval-time helpers)
+│   └── mkMiseCli.nix      #   фабрика бинарников-обёрток над mise tasks
 │
 ├── os/                    # OS-специфичные конфигурации
 │   └── windows/               # Cloud-init конфигурация
@@ -292,9 +297,27 @@ home.packages = [ pkgs.atuin ];
 | Unmanaged apps | `hosts/lasthaze-mbp/packages/Appsfile.unmanaged` | `dump-packages` CLI |
 | Setapp | `hosts/lasthaze-mbp/packages/Appsfile.setapp` | `dump-packages` CLI |
 
+## `lib/` vs `packages/` vs `modules/`
+
+Три разных класса сущностей, часто путаемых, но концептуально разделённых:
+
+| | `lib/*.nix` | `packages/*` | `modules/*` |
+|---|---|---|---|
+| **Роль** | чистые nix-функции | программы рантайма | home-manager/nix-darwin модули |
+| **Когда исполняется** | eval-time (сборка) | runtime (запускается процессом) | eval-time + activation |
+| **Язык** | только nix | TS (bun), Go, любой | nix + конфиги |
+| **Результат** | derivation (пакет) | сделал работу → вышел | `home.packages` + линки + опции |
+| **Пример** | `mkMiseCli.nix` — фабрика бинарников | `proxy-bindings` — кодогенерация | `modules/atuin/` — установка + конфиг |
+
+Правило разграничения: если это **код, который запускается процессом** (имеет main, stdin/stdout, побочные эффекты) — идёт в `packages/`. Если это **чистая nix-функция**, возвращающая derivation или значение — `lib/`. Если это **блок конфигурации инструмента** (пакеты + симлинки + опции) — `modules/`.
+
+### `mkMiseCli` (lib/)
+
+Фабрика writeShellApplication-бинарников для CLI-обёрток поверх mise tasks. Заменила паттерн "fish function + mise task": теперь `dot`, `rp` — настоящие бинарники в PATH, видны из zsh/bash/агентов/GUI apps. Подробнее: [mise-cli-wrappers.md](mise-cli-wrappers.md).
+
 ## Управление dotfiles: `dot` CLI
 
-Mise tasks в `dot.toml` + fish-обёртка `dot`:
+Mise tasks в `dot.toml` + бинарник-диспетчер `dot` (см. [mise-cli-wrappers.md](mise-cli-wrappers.md)):
 
 | Команда | Действие |
 |---|---|
@@ -328,7 +351,7 @@ modules/proxy-bindings/proxy-bindings.yaml   ← единый источник
 - Две конфигурации хостов (macOS + Linux)
 - Brew-обёртка для гибридного управления пакетами
 - Proxy-bindings кодогенерация (YAML → Lua/TS)
-- mise CLI-обёртки (rp, dot)
+- mise CLI-обёртки (rp, dot) как настоящие бинарники через `lib/mkMiseCli.nix`
 - Resticprofile бэкап-система с мониторингом (healthchecks.io)
 - Документация: homebrew/mise/path интеграция, бэкап-план, секреты
 

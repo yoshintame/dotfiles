@@ -11,9 +11,9 @@ Claude Code skill для "найди лучший X для Y" workflow — disco
 - "лучший hosted Postgres для Next.js"
 - "scaffold-утилита для TS templates"
 
-Без skill Claude идёт в google-поиск "best X 2026", попадает в SEO-помойку, находит 4-6 кандидатов, отвечает без red flags. Skill форсит:
+Без skill Claude идёт в single WebSearch "best X 2026", попадает в первую SEO-помойку, находит 4-6 кандидатов, отвечает без red flags. Skill форсит:
 
-- **Широкий discovery** — awesome-lists + Reddit/HN в параллель через [web-research-scripts](web-research-scripts.md)
+- **Широкий discovery** — WebSearch (curated expert content) + awesome-lists в параллель, Reddit/HN как supplementary через [web-research-scripts](web-research-scripts.md)
 - **Long list** (обычно 15-35 кандидатов) + top 5-7 deep-dive
 - **Counter-review** — обязательный ≥1 red flag на top pick, анти-сикофантия
 - **Профиль юзера** из CLAUDE.md/memory применяется в Phase 4, не раньше
@@ -39,9 +39,9 @@ Skill не имеет `scripts/` — вся инфраструктура пои�
 
 ```
 Phase 1: Discovery (parallel × source)
-├── Subagent A — Awesome-lists + runtime-native (bun create, create-vite…)
-├── Subagent B — Reddit + HN (community sentiment, migration stories)
-└── Subagent C — Commercial/SaaS (conditional, alternativeto.net)
+├── Subagent A (PRIMARY)       — WebSearch curated guides + awesome-lists + runtime-native
+├── Subagent B (SUPPLEMENTARY) — Reddit --sub X + HN (validation, "switched from" stories)
+└── Subagent C (CONDITIONAL)   — Commercial/SaaS (alternativeto.net, pricing comparisons)
 
 Phase 2: Consolidate (lead, sequential)
 └── Merge → dedupe → rank by mention×source-diversity → long list 10-25
@@ -81,9 +81,15 @@ Skill триггерится на: `найди лучший`, `best X for`, `alt
 
 Пользователь явно просил "намного больше вариантов чем top-3". Дефолт 10-25 кандидатов в long list, из них 5-7 в deep-dive. Это даёт широкую картину рынка перед рекомендацией.
 
-### Awesome-lists как primary discovery
+### WebSearch + awesome-lists как primary discovery
 
-Awesome-lists это **куратор-driven** источник с PR-driven обновлениями. Для OSS это единственный компактный способ узнать всю экосистему. Для SaaS/commercial — hit-or-miss, поэтому Subagent C запускается conditionally.
+WebSearch (Google ranking) находит curated named-author contenthip — "best X 2026" guides от expat blogs, comparison articles от индустрийных экспертов, alternativeto.net. Signal density выше чем на Reddit потому что авторы уже сделали отбор. Awesome-lists — куратор-driven источник с PR-driven обновлениями, лучший компактный способ узнать OSS-экосистему. Для SaaS/commercial — awesome-lists hit-or-miss, поэтому Subagent C запускается conditionally.
+
+### Reddit как supplementary, не primary
+
+Ранее Reddit/HN были primary discovery. Эмпирически выявилось: Reddit's search ранжирует viral посты с incidental keyword matches выше focused threads. Даже с Lucene `+word` auto-AND (добавлено в search-reddit) 3+ слов global search дают шумные результаты. Scoped `--sub X` работает хорошо для local knowledge, но ограничен одним сабом.
+
+Практика: Reddit для (a) local/community validation конкретного candidate; (b) "switched from X to Y" stories; (c) обнаружения tools которые не попали в awesome-lists. Не для broad discovery.
 
 ### Native alternatives check
 
@@ -97,9 +103,9 @@ Awesome-lists это **куратор-driven** источник с PR-driven о�
 
 Если фильтровать по бюджету/платформе на Phase 1, отсекаются интересные опции которые могли быть адаптируемы. Discovery должен быть широким, применение ограничений — в самом конце.
 
-### Скрипты вместо WebSearch cascades
+### Scripts для Reddit/HN/GitHub, WebSearch для всего остального
 
-См. [web-research-scripts.md](web-research-scripts.md). Reddit/HN/GitHub запросы идут через `search-reddit`/`search-hn`/`search-github` с правильными endpoints и clean output, вместо кривого cascade `WebSearch "site:reddit.com ..."` → `curl duckduckgo.com` → eventually `old.reddit.com/search.json`.
+См. [web-research-scripts.md](web-research-scripts.md). Важная находка: Anthropic WebSearch **блокирует reddit.com** (на уровне user-agent), поэтому `site:reddit.com` через WebSearch не работает — только native API через `search-reddit`. Reddit/HN/GitHub запросы идут через `search-reddit`/`search-hn`/`search-github` с правильными endpoints и clean output. Для всех остальных типов запросов (comparison guides, expert blogs, curated lists) WebSearch используется напрямую — он у Anthropic хорошо работает везде кроме reddit.com.
 
 ## Ограничения
 
@@ -109,12 +115,12 @@ Awesome-lists это **куратор-driven** источник с PR-driven о�
 
 ## Будущие улучшения
 
-- **PreToolUse hook** для enforcement скриптов — сейчас Claude может (теоретически) проигнорировать правило из AGENTS.md и пойти в `curl`. Hook запретит raw-fetches на reddit.com/hn.algolia.com/api.github.com и подскажет использовать скрипты
+- **Re-enable PreToolUse hook** — файл `modules/agents-shared/config/hooks/research-steering.sh` уже написан и протестирован, но отключён в settings.json после того как стало ясно: WebSearch часто даёт лучший сигнал чем scripts для product/tool research. Если практика покажет что Claude игнорирует рекомендации из SKILL.md и делает raw curl на reddit/hn — re-enable одной строкой
 - **Dedupe utility** — если добавится shared `modules/agents-shared/config/lib/dedupe.py` с hybrid similarity, Phase 2 merge будет точнее схлопывать упоминания одного tool'а с разными именами
 - **Codex-версия** — если потребуется, отдельный `modules/codex/config/skills/find-best/SKILL.md` со своей оркестрацией через `codex exec`. Скрипты переиспользуются без изменений
 
 ## См. также
 
-- [web-research-scripts.md](web-research-scripts.md) — инфраструктура поиска
+- [deep-research-skill.md](deep-research-skill.md) — general research skill (без привязки к tool comparison). Когда запрос не про "который лучше" — используй его
+- [web-research-scripts.md](web-research-scripts.md) — инфраструктура поиска (scripts + Lucene AND поведение)
 - [modules/claude/config/skills/find-best/SKILL.md](../modules/claude/config/skills/find-best/SKILL.md) — сам skill
-- [modules/agents-shared/config/AGENTS.md](../modules/agents-shared/config/AGENTS.md) — глобальные правила (в т.ч. Web research)

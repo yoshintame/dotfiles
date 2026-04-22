@@ -73,6 +73,13 @@ See [docs/architecture.md](docs/architecture.md) for a deeper dive.
 - [docs/homebrew-nix-integration.md](docs/homebrew-nix-integration.md) — how Brewfile ties into nix-darwin
 - [docs/path-management.md](docs/path-management.md) — PATH organization (mise shims, nix, Homebrew)
 
+### Agent skills (Claude Code / Codex)
+
+- [docs/git-commit-skill.md](docs/git-commit-skill.md) — safe commits with per-session private index (Claude + Codex)
+- [docs/deep-research-skill.md](docs/deep-research-skill.md) — general research workflow with WebSearch-first + supplementary scripts
+- [docs/find-best-skill.md](docs/find-best-skill.md) — "find the best X" specialization with long list + mandatory red flags
+- [docs/web-research-scripts.md](docs/web-research-scripts.md) — `search-reddit`/`search-hn`/`search-github` CLI infrastructure on `$PATH`
+
 ## Common tasks
 
 ```bash

@@ -25,7 +25,7 @@ metadata:
    git commit-context
    ```
 
-   Output includes branch info, working-tree status, branch divergence, recent-commits style, and detected repo conventions. The context helper still emits `=== PRIVATE INDEX ===` and `=== SHARED INDEX ===` sections from the legacy v5 workflow — **ignore them**. Do not run `GIT_INDEX_FILE=...` commands and do not stage into a private index. Read only the BRANCH, WORKING TREE, BRANCH DIVERGENCE, RECENT COMMITS, and REPO COMMIT CONVENTIONS sections.
+   Output includes branch info, working-tree status, worktree diff vs `HEAD`, branch divergence, recent-commits style, and detected repo commit conventions.
 
 2. Commit using one of two atomic wrappers — both are race-safe under concurrent Claude sessions in the same worktree:
 

@@ -9,6 +9,8 @@ const packageDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(packageDir, "../..");
 const commitContext = join(repoRoot, "modules/git/bin/git-commit-context");
 const commitEdit = join(repoRoot, "modules/git/bin/git-commit-edit");
+const commitAtomic = join(repoRoot, "modules/git/bin/git-commit-atomic");
+const commitHunks = join(repoRoot, "modules/git/bin/git-commit-hunks");
 const tmpRoots: string[] = [];
 
 function run(
@@ -217,5 +219,207 @@ describe("git-commit skill e2e", () => {
     const base = readFileSync(`${privateIndex}.base`, "utf8");
 
     expect(base.trim()).toBe(head);
+  });
+});
+
+function runAtomic(repo: string, message: string, paths: string[]) {
+  return run(commitAtomic, [message, ...paths], {
+    env: {
+      GIT_DIR: join(repo, ".git"),
+      GIT_WORK_TREE: repo,
+    },
+    cwd: repo,
+  });
+}
+
+function runHunks(repo: string, message: string, patches: string[]) {
+  return run(commitHunks, [message, ...patches], {
+    env: {
+      GIT_DIR: join(repo, ".git"),
+      GIT_WORK_TREE: repo,
+    },
+    cwd: repo,
+  });
+}
+
+describe("git-commit-atomic e2e", () => {
+  test("commits new files atomically", () => {
+    const repo = makeRepo("atomic-new-files");
+    writeRepoFile(repo, "added.txt", "fresh content\n");
+
+    runAtomic(repo, "feat: add fresh file", ["added.txt"]);
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("feat: add fresh file");
+    expect(runGit(repo, ["show", "HEAD:added.txt"])).toBe("fresh content");
+    expect(statusEntries(repo)).toEqual([]);
+  });
+
+  test("commits modifications atomically", () => {
+    const repo = makeRepo("atomic-modifications");
+    writeRepoFile(repo, "tracked.txt", "updated\n");
+
+    runAtomic(repo, "fix: update tracked", ["tracked.txt"]);
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("fix: update tracked");
+    expect(runGit(repo, ["show", "HEAD:tracked.txt"])).toBe("updated");
+    expect(statusEntries(repo)).toEqual([]);
+  });
+
+  test("ignores unrelated staged entries in shared index", () => {
+    const repo = makeRepo("atomic-isolation");
+    writeRepoFile(repo, "noise.txt", "noise pre-staged in shared index\n");
+    runGit(repo, ["add", "--", "noise.txt"]);
+
+    writeRepoFile(repo, "feature.txt", "feature payload\n");
+    runAtomic(repo, "feat: feature only", ["feature.txt"]);
+
+    expect(runGit(repo, ["log", "-1", "--name-only", "--pretty="]).trim()).toBe("feature.txt");
+    expect(runGit(repo, ["ls-tree", "-r", "HEAD", "--name-only"]).split("\n").sort()).toEqual([
+      "feature.txt",
+      "tracked.txt",
+    ]);
+    expect(statusEntries(repo).sort()).toEqual(["A  noise.txt"]);
+  });
+
+  test("retries on index.lock collision", () => {
+    const repo = makeRepo("atomic-lock-retry");
+    writeRepoFile(repo, "locked.txt", "locked write\n");
+
+    const lockPath = join(repo, ".git", "index.lock");
+    writeFileSync(lockPath, "");
+
+    run("bash", ["-c", `(sleep 0.4 && rm -f "${lockPath}") &`]);
+
+    runAtomic(repo, "chore: write under lock", ["locked.txt"]);
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("chore: write under lock");
+    expect(runGit(repo, ["show", "HEAD:locked.txt"])).toBe("locked write");
+  });
+
+  test("parallel kitten/passport scenario lands both commits with correct attribution", async () => {
+    for (let iter = 0; iter < 10; iter++) {
+      const repo = makeRepo(`atomic-parallel-${iter}`);
+      writeRepoFile(repo, "kitten.txt", "kitten payload\n");
+      writeRepoFile(repo, "passport.txt", "passport payload\n");
+
+      const kittenP = new Promise<void>((resolveK, rejectK) => {
+        setTimeout(() => {
+          try {
+            runAtomic(repo, "docs(kitten): add kitten payload", ["kitten.txt"]);
+            resolveK();
+          } catch (e) {
+            rejectK(e);
+          }
+        }, 0);
+      });
+      const passportP = new Promise<void>((resolveP, rejectP) => {
+        setTimeout(() => {
+          try {
+            runAtomic(repo, "docs(passport): add passport payload", ["passport.txt"]);
+            resolveP();
+          } catch (e) {
+            rejectP(e);
+          }
+        }, 0);
+      });
+      await Promise.all([kittenP, passportP]);
+
+      const log = runGit(repo, ["log", "--pretty=%s"]).split("\n").sort();
+      expect(log).toEqual([
+        "chore: init",
+        "docs(kitten): add kitten payload",
+        "docs(passport): add passport payload",
+      ]);
+      expect(runGit(repo, ["show", "HEAD:kitten.txt"])).toBe("kitten payload");
+      expect(runGit(repo, ["show", "HEAD:passport.txt"])).toBe("passport payload");
+
+      for (const sha of runGit(repo, ["log", "--pretty=%H", "-2"]).split("\n")) {
+        const subj = runGit(repo, ["log", "-1", "--pretty=%s", sha]);
+        const files = runGit(repo, ["show", "--name-only", "--pretty=", sha]).split("\n").filter(Boolean);
+        if (subj.includes("kitten")) {
+          expect(files).toEqual(["kitten.txt"]);
+        } else if (subj.includes("passport")) {
+          expect(files).toEqual(["passport.txt"]);
+        }
+      }
+    }
+  });
+});
+
+describe("git-commit-hunks e2e", () => {
+  test("applies single patch from worktree-derived diff", () => {
+    const repo = makeRepo("hunks-single");
+    writeRepoFile(repo, "tracked.txt", "base\nadded line\n");
+    const patch = join(repo, "single.patch");
+    writeFileSync(patch, `${runGit(repo, ["diff", "tracked.txt"])}\n`);
+    writeRepoFile(repo, "tracked.txt", "base\nadded line\nstray edit\n");
+
+    runHunks(repo, "feat: apply tracked patch", [patch]);
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("feat: apply tracked patch");
+    expect(runGit(repo, ["show", "HEAD:tracked.txt"])).toBe("base\nadded line");
+  });
+
+  test("applies multiple patches in one commit", () => {
+    const repo = makeRepo("hunks-multi");
+    writeRepoFile(repo, "second.txt", "second base\n");
+    runGit(repo, ["add", "--", "second.txt"]);
+    runGit(repo, ["commit", "-m", "chore: add second"]);
+
+    writeRepoFile(repo, "tracked.txt", "base\nfirst\n");
+    const patchA = join(repo, "a.patch");
+    writeFileSync(patchA, `${runGit(repo, ["diff", "tracked.txt"])}\n`);
+    runGit(repo, ["checkout", "--", "tracked.txt"]);
+
+    writeRepoFile(repo, "second.txt", "second base\nappended\n");
+    const patchB = join(repo, "b.patch");
+    writeFileSync(patchB, `${runGit(repo, ["diff", "second.txt"])}\n`);
+    runGit(repo, ["checkout", "--", "second.txt"]);
+
+    runHunks(repo, "feat: combined patches", [patchA, patchB]);
+
+    expect(runGit(repo, ["show", "HEAD:tracked.txt"])).toBe("base\nfirst");
+    expect(runGit(repo, ["show", "HEAD:second.txt"])).toBe("second base\nappended");
+    const files = runGit(repo, ["show", "--name-only", "--pretty=", "HEAD"]).split("\n").filter(Boolean).sort();
+    expect(files).toEqual(["second.txt", "tracked.txt"]);
+  });
+
+  test("retries via CAS when HEAD moves between read-tree and update-ref", () => {
+    const repo = makeRepo("hunks-cas-retry");
+    writeRepoFile(repo, "tracked.txt", "base\npatched\n");
+    const patch = join(repo, "p.patch");
+    writeFileSync(patch, `${runGit(repo, ["diff", "tracked.txt"])}\n`);
+    runGit(repo, ["checkout", "--", "tracked.txt"]);
+
+    writeRepoFile(repo, "competitor.txt", "outside change\n");
+    runGit(repo, ["add", "--", "competitor.txt"]);
+    runGit(repo, ["commit", "-m", "chore: head bump from peer"]);
+
+    runHunks(repo, "feat: hunks under HEAD move", [patch]);
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("feat: hunks under HEAD move");
+    expect(runGit(repo, ["log", "-2", "--pretty=%s"]).split("\n")).toEqual([
+      "feat: hunks under HEAD move",
+      "chore: head bump from peer",
+    ]);
+    expect(runGit(repo, ["show", "HEAD:tracked.txt"])).toBe("base\npatched");
+    expect(runGit(repo, ["show", "HEAD:competitor.txt"])).toBe("outside change");
+  });
+
+  test("rejects malformed patch with clear error", () => {
+    const repo = makeRepo("hunks-bad-patch");
+    const patch = join(repo, "bad.patch");
+    writeFileSync(patch, "not a real diff\n");
+
+    let threw = false;
+    try {
+      runHunks(repo, "feat: nope", [patch]);
+    } catch (err) {
+      threw = true;
+      const stderr = (err as { stderr?: Buffer | string }).stderr?.toString() ?? "";
+      expect(stderr.length).toBeGreaterThan(0);
+    }
+    expect(threw).toBe(true);
+    expect(runGit(repo, ["log", "--oneline"]).split("\n")).toHaveLength(1);
   });
 });

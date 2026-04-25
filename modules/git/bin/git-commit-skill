@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# git-commit-skill: switch active git-commit skill version (v5 ↔ v6).
+# Usage:
+#   git-commit-skill           # print current version
+#   git-commit-skill v5        # switch active SKILL.md → SKILL.v5.md
+#   git-commit-skill v6        # switch active SKILL.md → SKILL.v6.md
+set -euo pipefail
+
+SKILL_DIR="$HOME/.dotfiles/modules/agents-shared/config/skills/git-commit"
+TARGET="$SKILL_DIR/SKILL.md"
+
+case "${1:-}" in
+    "")
+        if [ -L "$TARGET" ]; then
+            link=$(readlink "$TARGET")
+            echo "${link#SKILL.}" | sed 's/\.md$//'
+        else
+            echo "(SKILL.md is not a symlink — managed manually)" >&2
+            exit 1
+        fi
+        ;;
+    v5|v6)
+        candidate="SKILL.$1.md"
+        [ -f "$SKILL_DIR/$candidate" ] || { echo "missing $SKILL_DIR/$candidate" >&2; exit 1; }
+        ln -sfn "$candidate" "$TARGET"
+        echo "git-commit skill switched to $1"
+        ;;
+    *)
+        echo "Usage: git-commit-skill [v5|v6]" >&2
+        exit 2
+        ;;
+esac

@@ -122,7 +122,6 @@
       "Bash(git commit-context)",
       "Bash(git commit-context *)",
       "Bash(git-commit-atomic *)",
-      "Bash(git-commit-hunks *)",
       "Bash(git-commit-skill)",
       "Bash(git-commit-skill *)",
       "Bash(rm /Users/yoshintame/.hammerspoon/proxy-bindings.lua)",

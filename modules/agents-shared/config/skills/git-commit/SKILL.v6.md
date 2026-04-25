@@ -27,24 +27,24 @@ metadata:
 
    Output includes branch info, working-tree status, worktree diff vs `HEAD`, branch divergence, recent-commits style, and detected repo commit conventions.
 
-2. Commit using one of two atomic wrappers — both are race-safe under concurrent Claude sessions in the same worktree:
+2. Choose commit mode based on how the user invoked the skill:
 
-   File-level (default, ≥95% of cases):
+   - With argument `auto` (e.g. the user typed `/git-commit auto`): commit without editor preview by passing `--auto`.
+   - Otherwise (default): commit with the user's editor opened on the message for review.
 
-   ```bash
-   git-commit-atomic "<message>" path1 path2 path3
-   ```
-
-   Stages the listed paths and commits them via git's `--only` mode (`git commit -m msg -- paths`). Builds the tree from current `HEAD` plus the worktree contents of the listed paths, ignoring any unrelated entries another session may have left in the shared `.git/index`. Retries on `index.lock` collisions automatically.
-
-   Hunk-level (rare; only when the agent has pre-built patches):
+3. Run the wrapper:
 
    ```bash
-   git-commit-hunks "<message>" patch1.diff patch2.diff
+   git-commit-atomic [--auto] "<message>" [<file>...] [-- <patch>...]
    ```
 
-   Applies the patches into an ephemeral index and updates `HEAD` via atomic compare-and-swap (`commit-tree` + `update-ref HEAD <new> <expected>`). If a parallel session moves `HEAD` between snapshot and commit, the wrapper retries with the new snapshot.
+   - **Files** (positional, before `--`): staged whole from the worktree.
+   - **Patches** (positional, after `--`): applied to an ephemeral index via `git apply --cached`.
+   - The two halves combine into one commit, so you can mix them: `git-commit-atomic "msg" foo.md bar.md -- baz.diff`.
+   - `--auto`: skips the editor preview; required when the user invoked with `auto`.
 
-3. Do not run bare `git add` or `git commit`. Always use the wrappers above. Do not pass `GIT_INDEX_FILE=...`.
+   The wrapper builds the commit on top of current `HEAD` and advances `HEAD` via atomic compare-and-swap, so it is race-safe under concurrent Claude sessions sharing the worktree. If a parallel session moves `HEAD` between snapshot and update, the wrapper retries with the new `HEAD`.
+
+4. Do not run bare `git add`, `git commit`, or `git commit-edit`. Always use `git-commit-atomic`. Do not pass `GIT_INDEX_FILE=...`.
 
 Do not push.

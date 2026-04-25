@@ -7,7 +7,10 @@ import { fileURLToPath } from "node:url";
 
 const packageDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(packageDir, "../..");
-const commitContext = join(repoRoot, "modules/git/bin/git-commit-context");
+const commitContext = join(
+  repoRoot,
+  "modules/agents-shared/config/skills/git-commit/scripts/gather-context.v5.sh",
+);
 const commitEdit = join(repoRoot, "modules/git/bin/git-commit-edit");
 const commitAtomic = join(repoRoot, "modules/git/bin/git-commit-atomic");
 const commitHunks = join(repoRoot, "modules/git/bin/git-commit-hunks");

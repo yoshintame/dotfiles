@@ -1,29 +1,41 @@
 #!/usr/bin/env bash
 # git-commit-skill: switch active git-commit skill version (v5 ↔ v6).
+# Flips both SKILL.md → SKILL.<v>.md and scripts/gather-context.sh → gather-context.<v>.sh
+# in the dotfiles repo, atomically from the user's perspective.
+#
 # Usage:
-#   git-commit-skill           # print current version
-#   git-commit-skill v5        # switch active SKILL.md → SKILL.v5.md
-#   git-commit-skill v6        # switch active SKILL.md → SKILL.v6.md
+#   git-commit-skill           # print current version (v5 or v6)
+#   git-commit-skill v5        # switch to legacy private-index workflow
+#   git-commit-skill v6        # switch to atomic-wrappers workflow
 set -euo pipefail
 
 SKILL_DIR="$HOME/.dotfiles/modules/agents-shared/config/skills/git-commit"
-TARGET="$SKILL_DIR/SKILL.md"
+SCRIPTS_DIR="$SKILL_DIR/scripts"
+SKILL_LINK="$SKILL_DIR/SKILL.md"
+CTX_LINK="$SCRIPTS_DIR/gather-context.sh"
+
+current_version() {
+    if [ ! -L "$SKILL_LINK" ]; then
+        echo "(SKILL.md is not a symlink — managed manually)" >&2
+        return 1
+    fi
+    local link
+    link=$(readlink "$SKILL_LINK")
+    echo "${link#SKILL.}" | sed 's/\.md$//'
+}
 
 case "${1:-}" in
     "")
-        if [ -L "$TARGET" ]; then
-            link=$(readlink "$TARGET")
-            echo "${link#SKILL.}" | sed 's/\.md$//'
-        else
-            echo "(SKILL.md is not a symlink — managed manually)" >&2
-            exit 1
-        fi
+        current_version
         ;;
     v5|v6)
-        candidate="SKILL.$1.md"
-        [ -f "$SKILL_DIR/$candidate" ] || { echo "missing $SKILL_DIR/$candidate" >&2; exit 1; }
-        ln -sfn "$candidate" "$TARGET"
-        echo "git-commit skill switched to $1"
+        skill_target="SKILL.$1.md"
+        ctx_target="gather-context.$1.sh"
+        [ -f "$SKILL_DIR/$skill_target" ] || { echo "missing $SKILL_DIR/$skill_target" >&2; exit 1; }
+        [ -f "$SCRIPTS_DIR/$ctx_target" ] || { echo "missing $SCRIPTS_DIR/$ctx_target" >&2; exit 1; }
+        ln -sfn "$skill_target" "$SKILL_LINK"
+        ln -sfn "$ctx_target" "$CTX_LINK"
+        echo "git-commit skill switched to $1 (SKILL.md + gather-context.sh)"
         ;;
     *)
         echo "Usage: git-commit-skill [v5|v6]" >&2

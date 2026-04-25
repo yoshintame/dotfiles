@@ -1,22 +1,123 @@
 #!/usr/bin/env bash
-# git-commit-atomic: stage + commit specified paths atomically, race-safe.
-# Usage: git-commit-atomic <message> <path>...
+# git-commit-atomic: stage files and apply patches into one race-safe commit.
+#
+# Usage:
+#   git-commit-atomic [--auto] <message> [<file>...] [-- <patch>...]
+#
+# Files (positional before `--`) are staged whole from the worktree.
+# Patches (positional after `--`) are applied via `git apply --cached`.
+# Both halves are committed together as a single commit.
+#
+# Race-safety: the wrapper builds the commit on top of current HEAD in an
+# ephemeral GIT_INDEX_FILE under $GIT_DIR (no contention with shared
+# .git/index), then advances HEAD via atomic compare-and-swap (commit-tree
+# + update-ref HEAD <new> <expected>). On lost CAS the wrapper retries
+# with the new HEAD snapshot.
+#
+# Editor preview (default): the user's real editor (core.editor / $VISUAL /
+# $EDITOR) opens on the supplied message, bypassing GIT_EDITOR=true sandboxes
+# such as Claude Code's. Lines starting with '#' are stripped via
+# `git stripspace`. Empty post-edit message aborts.
+#
+# --auto: skip the editor preview and commit the message verbatim.
+
 set -uo pipefail
 
-[ $# -lt 2 ] && { echo "Usage: git-commit-atomic <message> <path>..." >&2; exit 2; }
-MSG="$1"; shift
-ERR=$(mktemp)
-trap "rm -f $ERR" EXIT
+AUTO=0
+if [ "${1:-}" = "--auto" ]; then
+    AUTO=1
+    shift
+fi
 
+usage() {
+    echo "Usage: git-commit-atomic [--auto] <message> [<file>...] [-- <patch>...]" >&2
+    exit 2
+}
+
+[ $# -lt 2 ] && usage
+MSG="$1"; shift
+
+FILES=()
+PATCHES=()
+seen_dashdash=0
+for arg in "$@"; do
+    if [ "$arg" = "--" ]; then
+        seen_dashdash=1
+        continue
+    fi
+    if [ "$seen_dashdash" = 1 ]; then
+        PATCHES+=("$arg")
+    else
+        FILES+=("$arg")
+    fi
+done
+
+if [ ${#FILES[@]} -eq 0 ] && [ ${#PATCHES[@]} -eq 0 ]; then
+    echo "git-commit-atomic: no files or patches specified" >&2
+    exit 2
+fi
+
+ERR=$(mktemp); EDIT_FILE=$(mktemp)
+trap 'rm -f "$ERR" "$EDIT_FILE"' EXIT
+
+if [ "$AUTO" -eq 0 ]; then
+    EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
+    EDITOR_CMD="${EDITOR_CMD:-${VISUAL:-${EDITOR:-}}}"
+    [ -z "$EDITOR_CMD" ] && EDITOR_CMD=true
+
+    {
+        printf '%s\n' "$MSG"
+        printf '\n# Please enter the commit message for your changes. Lines starting\n'
+        printf '# with "#" will be ignored, and an empty message aborts the commit.\n'
+    } > "$EDIT_FILE"
+
+    eval "$EDITOR_CMD \"\$EDIT_FILE\""
+
+    MSG=$(git stripspace --strip-comments < "$EDIT_FILE")
+    [ -z "$MSG" ] && { echo "Aborting commit due to empty commit message." >&2; exit 1; }
+fi
+
+GIT_DIR=$(git rev-parse --git-dir)
 i=0
 while [ $i -lt 50 ]; do
-    if git add -- "$@" 2>"$ERR" && git commit -m "$MSG" -- "$@" 2>"$ERR"; then
+    EXPECTED=$(git rev-parse HEAD)
+    TMP=$(mktemp "$GIT_DIR/idx-atomic.XXXXXXXX")
+    if ! GIT_INDEX_FILE="$TMP" git read-tree "$EXPECTED" 2>"$ERR"; then
+        cat "$ERR" >&2; rm -f "$TMP"; exit 1
+    fi
+
+    if [ ${#FILES[@]} -gt 0 ]; then
+        if ! GIT_INDEX_FILE="$TMP" git add -- "${FILES[@]}" 2>"$ERR"; then
+            cat "$ERR" >&2; rm -f "$TMP"; exit 1
+        fi
+    fi
+
+    for patch in "${PATCHES[@]}"; do
+        if ! GIT_INDEX_FILE="$TMP" git apply --cached "$patch" 2>"$ERR"; then
+            cat "$ERR" >&2; rm -f "$TMP"; exit 1
+        fi
+    done
+
+    TREE=$(GIT_INDEX_FILE="$TMP" git write-tree 2>"$ERR")
+    if [ -z "$TREE" ]; then
+        cat "$ERR" >&2; rm -f "$TMP"; exit 1
+    fi
+
+    NEW=$(echo "$MSG" | git commit-tree "$TREE" -p "$EXPECTED" 2>"$ERR")
+    if [ -z "$NEW" ]; then
+        cat "$ERR" >&2; rm -f "$TMP"; exit 1
+    fi
+
+    if git update-ref HEAD "$NEW" "$EXPECTED" 2>"$ERR"; then
+        rm -f "$TMP"
+        # Sync shared .git/index to the new HEAD so post-commit `git status`
+        # reflects reality. CAS bypass doesn't touch shared index by itself.
+        (unset GIT_INDEX_FILE; git read-tree HEAD 2>/dev/null) || true
         exit 0
     fi
-    if grep -qE "index\.lock|cannot lock ref" "$ERR"; then
-        sleep 0.05; i=$((i+1)); continue
-    fi
-    cat "$ERR" >&2; exit 1
+    rm -f "$TMP"
+    i=$((i+1))
+    sleep 0.05
 done
-echo "git-commit-atomic: lock retry exhausted after $i attempts" >&2
+echo "git-commit-atomic: CAS retry exhausted after $i attempts" >&2
 exit 1

@@ -258,6 +258,13 @@
           }
         ]
       }
+    ],
+    "WorktreeCreate": [
+      {
+        "type": "command",
+        "command": "$HOME/.claude/hooks/worktree-create.sh",
+        "timeout": 60
+      }
     ]
   },
   "enabledPlugins": {

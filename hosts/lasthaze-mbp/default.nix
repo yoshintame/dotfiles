@@ -149,6 +149,7 @@ in {
         ../../modules/claude
         ../../modules/codex
         ../../modules/iina
+        ../../modules/worktrunk
       ];
 
       programs.bash.enable = true;

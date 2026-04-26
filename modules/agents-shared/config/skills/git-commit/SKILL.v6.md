@@ -35,13 +35,26 @@ metadata:
 3. Run the wrapper:
 
    ```bash
-   git-commit-atomic [--auto] "<message>" [<file>...] [-- <patch>...]
+   git-commit-atomic [flags] "<message>" [<file>...] [-- <patch>...]
    ```
 
    - **Files** (positional, before `--`): staged whole from the worktree.
    - **Patches** (positional, after `--`): applied to an ephemeral index via `git apply --cached`.
    - The two halves combine into one commit, so you can mix them: `git-commit-atomic "msg" foo.md bar.md -- baz.diff`.
-   - `--auto`: skips the editor preview; required when the user invoked with `auto`.
+
+   Supported flags (must precede the message):
+
+   | Flag | Effect |
+   |---|---|
+   | `--auto` | Skip the editor preview, commit verbatim. Pass when the user invoked with `auto`. |
+   | `-s`, `--signoff` | Append `Signed-off-by` trailer from `user.name`/`user.email`. |
+   | `-S`, `--gpg-sign[=<keyid>]` | GPG-sign the commit (forwarded to `git commit-tree`). |
+   | `-n`, `--no-verify` | Accepted as a no-op — this wrapper uses git plumbing, hooks are never invoked. |
+   | `--author "Name <email>"` | Override commit author. |
+   | `--date <when>` | Override author date. |
+   | `--allow-empty-message` | Don't abort if the post-edit message is empty. |
+
+   Unknown flags are rejected: the plumbing flow does not honor most `git commit` flags (e.g. `-c`, `--fixup`, `--squash`), so silent pass-through would be misleading.
 
    The wrapper builds the commit on top of current `HEAD` and advances `HEAD` via atomic compare-and-swap, so it is race-safe under concurrent Claude sessions sharing the worktree. If a parallel session moves `HEAD` between snapshot and update, the wrapper retries with the new `HEAD`.
 

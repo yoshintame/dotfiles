@@ -2,7 +2,7 @@
 # git-commit-atomic: stage files and apply patches into one race-safe commit.
 #
 # Usage:
-#   git-commit-atomic [--auto] <message> [<file>...] [-- <patch>...]
+#   git-commit-atomic [flags] <message> [<file>...] [-- <patch>...]
 #
 # Files (positional before `--`) are staged whole from the worktree.
 # Patches (positional after `--`) are applied via `git apply --cached`.
@@ -17,24 +17,61 @@
 # Editor preview (default): the user's real editor (core.editor / $VISUAL /
 # $EDITOR) opens on the supplied message, bypassing GIT_EDITOR=true sandboxes
 # such as Claude Code's. Lines starting with '#' are stripped via
-# `git stripspace`. Empty post-edit message aborts.
+# `git stripspace`. Empty post-edit message aborts (unless
+# --allow-empty-message is passed).
 #
-# --auto: skip the editor preview and commit the message verbatim.
+# Supported flags (must precede the message):
+#   --auto                          skip the editor preview, commit verbatim
+#   -s, --signoff                   append Signed-off-by trailer
+#   -S, --gpg-sign[=<keyid>]        GPG-sign the commit (pass-through to commit-tree)
+#   -n, --no-verify                 accepted as a no-op (this wrapper uses git
+#                                   plumbing, so hooks are never invoked anyway)
+#   --author "Name <email>"
+#   --author=Name <email>           override commit author
+#   --date <when>
+#   --date=<when>                   override author date
+#   --allow-empty-message           do not abort on empty post-edit message
+#
+# Unknown flags are rejected with exit 2 — the plumbing flow does not honor
+# most `git commit` flags, so silent pass-through would be misleading.
 
 set -uo pipefail
 
-AUTO=0
-if [ "${1:-}" = "--auto" ]; then
-    AUTO=1
-    shift
-fi
-
 usage() {
-    echo "Usage: git-commit-atomic [--auto] <message> [<file>...] [-- <patch>...]" >&2
+    cat >&2 <<'USAGE'
+Usage: git-commit-atomic [flags] <message> [<file>...] [-- <patch>...]
+See: head git-commit-atomic for the supported flag list.
+USAGE
     exit 2
 }
 
-[ $# -lt 2 ] && usage
+AUTO=0
+SIGNOFF=0
+GPG_SIGN=()
+ALLOW_EMPTY_MSG=0
+AUTHOR=""
+DATE=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --auto) AUTO=1; shift ;;
+        -s|--signoff) SIGNOFF=1; shift ;;
+        -S) GPG_SIGN=(-S); shift ;;
+        -S*) GPG_SIGN=("$1"); shift ;;
+        --gpg-sign) GPG_SIGN=(-S); shift ;;
+        --gpg-sign=*) GPG_SIGN=("-S${1#--gpg-sign=}"); shift ;;
+        -n|--no-verify) shift ;;
+        --allow-empty-message) ALLOW_EMPTY_MSG=1; shift ;;
+        --author=*) AUTHOR="${1#--author=}"; shift ;;
+        --author) AUTHOR="${2:-}"; shift 2 ;;
+        --date=*) DATE="${1#--date=}"; shift ;;
+        --date) DATE="${2:-}"; shift 2 ;;
+        -*) echo "git-commit-atomic: unsupported flag: $1" >&2; exit 2 ;;
+        *) break ;;
+    esac
+done
+
+[ $# -lt 1 ] && usage
 MSG="$1"; shift
 
 FILES=()
@@ -57,6 +94,27 @@ if [ ${#FILES[@]} -eq 0 ] && [ ${#PATCHES[@]} -eq 0 ]; then
     exit 2
 fi
 
+if [ -n "$AUTHOR" ]; then
+    GIT_AUTHOR_NAME="${AUTHOR% <*}"
+    rest="${AUTHOR##*<}"
+    GIT_AUTHOR_EMAIL="${rest%>}"
+    if [ "$GIT_AUTHOR_NAME" = "$AUTHOR" ] || [ -z "$GIT_AUTHOR_EMAIL" ]; then
+        echo "git-commit-atomic: --author must be in 'Name <email>' format" >&2
+        exit 2
+    fi
+    export GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
+fi
+[ -n "$DATE" ] && export GIT_AUTHOR_DATE="$DATE"
+
+build_signoff_line() {
+    local name email
+    name=$(git config --get user.name 2>/dev/null || echo "")
+    email=$(git config --get user.email 2>/dev/null || echo "")
+    if [ -n "$name" ] && [ -n "$email" ]; then
+        printf 'Signed-off-by: %s <%s>' "$name" "$email"
+    fi
+}
+
 ERR=$(mktemp); EDIT_FILE=$(mktemp)
 trap 'rm -f "$ERR" "$EDIT_FILE"' EXIT
 
@@ -67,6 +125,10 @@ if [ "$AUTO" -eq 0 ]; then
 
     {
         printf '%s\n' "$MSG"
+        if [ "$SIGNOFF" -eq 1 ]; then
+            sig=$(build_signoff_line)
+            [ -n "$sig" ] && printf '\n%s\n' "$sig"
+        fi
         printf '\n# Please enter the commit message for your changes. Lines starting\n'
         printf '# with "#" will be ignored, and an empty message aborts the commit.\n'
     } > "$EDIT_FILE"
@@ -74,7 +136,13 @@ if [ "$AUTO" -eq 0 ]; then
     eval "$EDITOR_CMD \"\$EDIT_FILE\""
 
     MSG=$(git stripspace --strip-comments < "$EDIT_FILE")
-    [ -z "$MSG" ] && { echo "Aborting commit due to empty commit message." >&2; exit 1; }
+    if [ -z "$MSG" ] && [ "$ALLOW_EMPTY_MSG" -eq 0 ]; then
+        echo "Aborting commit due to empty commit message." >&2
+        exit 1
+    fi
+elif [ "$SIGNOFF" -eq 1 ]; then
+    sig=$(build_signoff_line)
+    [ -n "$sig" ] && MSG="$MSG"$'\n\n'"$sig"
 fi
 
 GIT_DIR=$(git rev-parse --git-dir)
@@ -92,7 +160,7 @@ while [ $i -lt 50 ]; do
         fi
     fi
 
-    for patch in "${PATCHES[@]}"; do
+    for patch in ${PATCHES[@]+"${PATCHES[@]}"}; do
         if ! GIT_INDEX_FILE="$TMP" git apply --cached "$patch" 2>"$ERR"; then
             cat "$ERR" >&2; rm -f "$TMP"; exit 1
         fi
@@ -103,7 +171,7 @@ while [ $i -lt 50 ]; do
         cat "$ERR" >&2; rm -f "$TMP"; exit 1
     fi
 
-    NEW=$(echo "$MSG" | git commit-tree "$TREE" -p "$EXPECTED" 2>"$ERR")
+    NEW=$(echo "$MSG" | git commit-tree ${GPG_SIGN[@]+"${GPG_SIGN[@]}"} "$TREE" -p "$EXPECTED" 2>"$ERR")
     if [ -z "$NEW" ]; then
         cat "$ERR" >&2; rm -f "$TMP"; exit 1
     fi

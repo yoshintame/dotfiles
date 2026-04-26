@@ -232,7 +232,11 @@ describe("git-commit skill e2e", () => {
   });
 });
 
-type AtomicOptions = { auto?: boolean; env?: Record<string, string> };
+type AtomicOptions = {
+  auto?: boolean;
+  env?: Record<string, string>;
+  extraArgs?: string[];
+};
 
 function runAtomic(
   repo: string,
@@ -243,6 +247,7 @@ function runAtomic(
 ) {
   const args: string[] = [];
   if (options.auto) args.push("--auto");
+  if (options.extraArgs) args.push(...options.extraArgs);
   args.push(message, ...files);
   if (patches.length > 0) args.push("--", ...patches);
   return run(commitAtomic, args, {
@@ -417,6 +422,80 @@ describe("git-commit-atomic e2e", () => {
     const msg = runGit(repo, ["log", "-1", "--pretty=%B"]).trim();
     expect(msg).toBe("feat: clean");
     expect(existsSync(sentinel)).toBe(false);
+  });
+
+  test("--signoff appends Signed-off-by trailer", () => {
+    const repo = makeRepo("atomic-signoff");
+    runGit(repo, ["config", "user.name", "Test User"]);
+    runGit(repo, ["config", "user.email", "test@example.com"]);
+
+    writeRepoFile(repo, "x.txt", "x\n");
+    runAtomic(repo, "feat: signed", ["x.txt"], [], { auto: true, extraArgs: ["-s"] });
+
+    const msg = runGit(repo, ["log", "-1", "--pretty=%B"]);
+    expect(msg).toContain("feat: signed");
+    expect(msg).toContain("Signed-off-by: Test User <test@example.com>");
+  });
+
+  test("--no-verify accepted as no-op (plumbing flow never invokes hooks)", () => {
+    const repo = makeRepo("atomic-no-verify");
+    const hook = join(repo, ".git", "hooks", "pre-commit");
+    writeFileSync(hook, "#!/bin/sh\necho 'hook should never fire' >&2\nexit 1\n");
+    chmodSync(hook, 0o755);
+
+    writeRepoFile(repo, "x.txt", "x\n");
+    runAtomic(repo, "chore: hook bypass", ["x.txt"], [], {
+      auto: true,
+      extraArgs: ["--no-verify"],
+    });
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("chore: hook bypass");
+  });
+
+  test("--author overrides commit author", () => {
+    const repo = makeRepo("atomic-author");
+    writeRepoFile(repo, "x.txt", "x\n");
+
+    runAtomic(repo, "feat: with author", ["x.txt"], [], {
+      auto: true,
+      extraArgs: ["--author", "Alice <alice@example.org>"],
+    });
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%an <%ae>"])).toBe("Alice <alice@example.org>");
+  });
+
+  test("--allow-empty-message lets the editor return an empty string", () => {
+    const repo = makeRepo("atomic-allow-empty");
+    const editor = writeFakeEditor(repo, ': > "$1"');
+    runGit(repo, ["config", "core.editor", editor]);
+
+    writeRepoFile(repo, "x.txt", "x\n");
+    runAtomic(repo, "feat: this gets erased", ["x.txt"], [], {
+      extraArgs: ["--allow-empty-message"],
+    });
+
+    const msg = runGit(repo, ["log", "-1", "--pretty=%B"]).replace(/\s/g, "");
+    expect(msg).toBe("");
+  });
+
+  test("rejects unsupported flags rather than silently passing them through", () => {
+    const repo = makeRepo("atomic-bad-flag");
+    writeRepoFile(repo, "x.txt", "x\n");
+
+    let threw = false;
+    try {
+      runAtomic(repo, "feat: nope", ["x.txt"], [], {
+        auto: true,
+        extraArgs: ["--this-flag-does-not-exist"],
+      });
+    } catch (err) {
+      threw = true;
+      const stderr = (err as { stderr?: Buffer | string }).stderr?.toString() ?? "";
+      expect(stderr).toContain("unsupported flag");
+      expect(stderr).toContain("--this-flag-does-not-exist");
+    }
+    expect(threw).toBe(true);
+    expect(runGit(repo, ["log", "--oneline"]).split("\n")).toHaveLength(1);
   });
 
   test("parallel kitten/passport scenario lands both commits with correct attribution", async () => {

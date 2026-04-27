@@ -42,21 +42,24 @@ metadata:
    - **Patches** (positional, after `--`): applied to an ephemeral index via `git apply --cached`.
    - The two halves combine into one commit, so you can mix them: `git-commit-atomic "msg" foo.md bar.md -- baz.diff`.
 
+   The wrapper has two execution paths:
+
+   - **Default (no `--auto`)** — delegates to `git commit -e`. The user's real editor opens for message review, repo `pre-commit` / `commit-msg` / `post-commit` hooks fire, lint and test gates run as configured. Race-safety: `.git/index.lock` (git-native), no CAS against `HEAD` movement. Suitable for the typical interactive single-session commit.
+   - **`--auto`** — builds the commit on top of `HEAD` in an ephemeral `GIT_INDEX_FILE` under `$GIT_DIR`, then advances `HEAD` via atomic compare-and-swap (`commit-tree` + `update-ref HEAD <new> <expected>`). On lost CAS the wrapper retries with the new `HEAD` snapshot. Race-safe under parallel Claude sessions sharing the worktree, but hooks are NOT executed (plumbing flow). Suitable when the user invoked the skill with `auto`, or when concurrent sessions are involved.
+
    Supported flags (must precede the message):
 
    | Flag | Effect |
    |---|---|
-   | `--auto` | Skip the editor preview, commit verbatim. Pass when the user invoked with `auto`. |
-   | `-s`, `--signoff` | Append `Signed-off-by` trailer from `user.name`/`user.email`. |
-   | `-S`, `--gpg-sign[=<keyid>]` | GPG-sign the commit (forwarded to `git commit-tree`). |
-   | `-n`, `--no-verify` | Accepted as a no-op — this wrapper uses git plumbing, hooks are never invoked. |
-   | `--author "Name <email>"` | Override commit author. |
-   | `--date <when>` | Override author date. |
-   | `--allow-empty-message` | Don't abort if the post-edit message is empty. |
+   | `--auto` | Take the CAS path; skip editor preview. Pass when the user invoked with `auto`. |
+   | `-s`, `--signoff` | Append `Signed-off-by` trailer (forwarded to `git commit -s` in editor mode; manually appended in `--auto`). |
+   | `-S`, `--gpg-sign[=<keyid>]` | GPG-sign the commit. |
+   | `-n`, `--no-verify` | In editor mode: forwarded to `git commit --no-verify` (skips hooks). In `--auto`: no-op (hooks aren't run anyway). |
+   | `--author "Name <email>"` | Override commit author via `GIT_AUTHOR_NAME`/`EMAIL`. |
+   | `--date <when>` | Override author date via `GIT_AUTHOR_DATE`. |
+   | `--allow-empty-message` | Don't abort on empty post-edit message. |
 
-   Unknown flags are rejected: the plumbing flow does not honor most `git commit` flags (e.g. `-c`, `--fixup`, `--squash`), so silent pass-through would be misleading.
-
-   The wrapper builds the commit on top of current `HEAD` and advances `HEAD` via atomic compare-and-swap, so it is race-safe under concurrent Claude sessions sharing the worktree. If a parallel session moves `HEAD` between snapshot and update, the wrapper retries with the new `HEAD`.
+   Unknown flags are rejected with exit 2: the plumbing path does not honor most `git commit` flags (e.g. `-c`, `--fixup`, `--squash`, `--reuse-message`), so silent pass-through would be misleading.
 
 4. Do not run bare `git add`, `git commit`, or `git commit-edit`. Always use `git-commit-atomic`. Do not pass `GIT_INDEX_FILE=...`.
 

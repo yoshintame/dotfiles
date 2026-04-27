@@ -1,39 +1,42 @@
 #!/usr/bin/env bash
-# git-commit-atomic: stage files and apply patches into one race-safe commit.
+# git-commit-atomic: stage files and apply patches into one commit, with two
+# execution modes:
+#
+#   default (no --auto)   delegate to `git commit -e` so the user's real
+#                         editor opens for message review (same approach as
+#                         the legacy git-commit-edit wrapper). git native
+#                         flow runs pre-commit / commit-msg / post-commit
+#                         hooks. Race-safety: .git/index.lock (git native);
+#                         no CAS against HEAD movement.
+#
+#   --auto                build the commit on top of HEAD in an ephemeral
+#                         GIT_INDEX_FILE under $GIT_DIR, then advance HEAD
+#                         via atomic compare-and-swap (commit-tree +
+#                         update-ref HEAD <new> <expected>). On lost CAS
+#                         retry with the new HEAD snapshot. Hooks are NOT
+#                         run (plumbing flow).
 #
 # Usage:
 #   git-commit-atomic [flags] <message> [<file>...] [-- <patch>...]
 #
 # Files (positional before `--`) are staged whole from the worktree.
 # Patches (positional after `--`) are applied via `git apply --cached`.
-# Both halves are committed together as a single commit.
 #
-# Race-safety: the wrapper builds the commit on top of current HEAD in an
-# ephemeral GIT_INDEX_FILE under $GIT_DIR (no contention with shared
-# .git/index), then advances HEAD via atomic compare-and-swap (commit-tree
-# + update-ref HEAD <new> <expected>). On lost CAS the wrapper retries
-# with the new HEAD snapshot.
-#
-# Editor preview (default): the user's real editor (core.editor / $VISUAL /
-# $EDITOR) opens on the supplied message, bypassing GIT_EDITOR=true sandboxes
-# such as Claude Code's. Lines starting with '#' are stripped via
-# `git stripspace`. Empty post-edit message aborts (unless
-# --allow-empty-message is passed).
+# Editor resolution (default mode): git config core.editor → $VISUAL →
+# $EDITOR. The script overrides GIT_EDITOR for the `git commit -e` invocation
+# so the Claude Code GIT_EDITOR=true sandbox is bypassed.
 #
 # Supported flags (must precede the message):
-#   --auto                          skip the editor preview, commit verbatim
+#   --auto                          take the CAS path; skip editor preview
 #   -s, --signoff                   append Signed-off-by trailer
-#   -S, --gpg-sign[=<keyid>]        GPG-sign the commit (pass-through to commit-tree)
-#   -n, --no-verify                 accepted as a no-op (this wrapper uses git
-#                                   plumbing, so hooks are never invoked anyway)
-#   --author "Name <email>"
-#   --author=Name <email>           override commit author
-#   --date <when>
-#   --date=<when>                   override author date
-#   --allow-empty-message           do not abort on empty post-edit message
+#   -S, --gpg-sign[=<keyid>]        GPG-sign the commit
+#   -n, --no-verify                 in --auto: no-op (no hooks anyway)
+#                                   in editor mode: forwarded to git commit
+#   --author "Name <email>"         override commit author (GIT_AUTHOR_*)
+#   --date <when>                   override author date (GIT_AUTHOR_DATE)
+#   --allow-empty-message           don't abort on empty post-edit message
 #
-# Unknown flags are rejected with exit 2 — the plumbing flow does not honor
-# most `git commit` flags, so silent pass-through would be misleading.
+# Unknown flags are rejected with exit 2.
 
 set -uo pipefail
 
@@ -49,6 +52,7 @@ AUTO=0
 SIGNOFF=0
 GPG_SIGN=()
 ALLOW_EMPTY_MSG=0
+NO_VERIFY=0
 AUTHOR=""
 DATE=""
 
@@ -60,7 +64,7 @@ while [ $# -gt 0 ]; do
         -S*) GPG_SIGN=("$1"); shift ;;
         --gpg-sign) GPG_SIGN=(-S); shift ;;
         --gpg-sign=*) GPG_SIGN=("-S${1#--gpg-sign=}"); shift ;;
-        -n|--no-verify) shift ;;
+        -n|--no-verify) NO_VERIFY=1; shift ;;
         --allow-empty-message) ALLOW_EMPTY_MSG=1; shift ;;
         --author=*) AUTHOR="${1#--author=}"; shift ;;
         --author) AUTHOR="${2:-}"; shift 2 ;;
@@ -106,43 +110,56 @@ if [ -n "$AUTHOR" ]; then
 fi
 [ -n "$DATE" ] && export GIT_AUTHOR_DATE="$DATE"
 
-build_signoff_line() {
-    local name email
+ERR=$(mktemp)
+trap 'rm -f "$ERR"' EXIT
+
+if [ "$AUTO" -eq 0 ]; then
+    # Editor mode: delegate to `git commit -e`. Mirrors the proven
+    # git-commit-edit pattern: real editor resolved from core.editor /
+    # $VISUAL / $EDITOR, then GIT_EDITOR overridden so git itself launches it
+    # (correct subprocess + TTY handling instead of our own eval).
+    EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
+    EDITOR_CMD="${EDITOR_CMD:-${VISUAL:-${EDITOR:-}}}"
+    if [ -z "$EDITOR_CMD" ]; then
+        echo "git-commit-atomic: no editor configured. Set core.editor / \$VISUAL / \$EDITOR, or pass --auto." >&2
+        exit 1
+    fi
+
+    # Reset shared index to HEAD so unrelated staged entries from other
+    # sessions / manual `git add`s don't leak into this commit. Mirrors
+    # v5 commit-edit's "shared staging is disposable" stance.
+    if ! (unset GIT_INDEX_FILE; git read-tree HEAD 2>"$ERR"); then
+        cat "$ERR" >&2; exit 1
+    fi
+
+    if [ ${#FILES[@]} -gt 0 ]; then
+        if ! git add -- "${FILES[@]}" 2>"$ERR"; then
+            cat "$ERR" >&2; exit 1
+        fi
+    fi
+    for patch in ${PATCHES[@]+"${PATCHES[@]}"}; do
+        if ! git apply --cached "$patch" 2>"$ERR"; then
+            cat "$ERR" >&2; exit 1
+        fi
+    done
+
+    extras=()
+    [ "$SIGNOFF" -eq 1 ] && extras+=(-s)
+    [ ${#GPG_SIGN[@]} -gt 0 ] && extras+=("${GPG_SIGN[@]}")
+    [ "$ALLOW_EMPTY_MSG" -eq 1 ] && extras+=(--allow-empty-message)
+    [ "$NO_VERIFY" -eq 1 ] && extras+=(--no-verify)
+
+    GIT_EDITOR="$EDITOR_CMD" git commit -e -m "$MSG" ${extras[@]+"${extras[@]}"}
+    exit $?
+fi
+
+# --auto: CAS path. No editor, no hooks, full HEAD-move race-safety.
+if [ "$SIGNOFF" -eq 1 ]; then
     name=$(git config --get user.name 2>/dev/null || echo "")
     email=$(git config --get user.email 2>/dev/null || echo "")
     if [ -n "$name" ] && [ -n "$email" ]; then
-        printf 'Signed-off-by: %s <%s>' "$name" "$email"
+        MSG="$MSG"$'\n\n'"Signed-off-by: $name <$email>"
     fi
-}
-
-ERR=$(mktemp); EDIT_FILE=$(mktemp)
-trap 'rm -f "$ERR" "$EDIT_FILE"' EXIT
-
-if [ "$AUTO" -eq 0 ]; then
-    EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
-    EDITOR_CMD="${EDITOR_CMD:-${VISUAL:-${EDITOR:-}}}"
-    [ -z "$EDITOR_CMD" ] && EDITOR_CMD=true
-
-    {
-        printf '%s\n' "$MSG"
-        if [ "$SIGNOFF" -eq 1 ]; then
-            sig=$(build_signoff_line)
-            [ -n "$sig" ] && printf '\n%s\n' "$sig"
-        fi
-        printf '\n# Please enter the commit message for your changes. Lines starting\n'
-        printf '# with "#" will be ignored, and an empty message aborts the commit.\n'
-    } > "$EDIT_FILE"
-
-    eval "$EDITOR_CMD \"\$EDIT_FILE\""
-
-    MSG=$(git stripspace --strip-comments < "$EDIT_FILE")
-    if [ -z "$MSG" ] && [ "$ALLOW_EMPTY_MSG" -eq 0 ]; then
-        echo "Aborting commit due to empty commit message." >&2
-        exit 1
-    fi
-elif [ "$SIGNOFF" -eq 1 ]; then
-    sig=$(build_signoff_line)
-    [ -n "$sig" ] && MSG="$MSG"$'\n\n'"$sig"
 fi
 
 GIT_DIR=$(git rev-parse --git-dir)

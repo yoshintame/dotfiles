@@ -27,6 +27,11 @@
 # so the Claude Code GIT_EDITOR=true sandbox is bypassed.
 #
 # Supported flags (must precede the message):
+#   -C <path>, --repo <path>        chdir into <path> before committing.
+#                                   Use this instead of `git -C <path>
+#                                   commit-atomic ...` to avoid the
+#                                   subcommand-token-merge regenerate failure
+#                                   mode (kitten/feat-base-ui-combobox class).
 #   --auto                          take the CAS path; skip editor preview
 #   -s, --signoff                   append Signed-off-by trailer
 #   -S, --gpg-sign[=<keyid>]        GPG-sign the commit
@@ -55,9 +60,13 @@ ALLOW_EMPTY_MSG=0
 NO_VERIFY=0
 AUTHOR=""
 DATE=""
+REPO=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
+        -C) REPO="${2:-}"; shift 2 ;;
+        --repo) REPO="${2:-}"; shift 2 ;;
+        --repo=*) REPO="${1#--repo=}"; shift ;;
         --auto) AUTO=1; shift ;;
         -s|--signoff) SIGNOFF=1; shift ;;
         -S) GPG_SIGN=(-S); shift ;;
@@ -74,6 +83,10 @@ while [ $# -gt 0 ]; do
         *) break ;;
     esac
 done
+
+if [ -n "$REPO" ]; then
+    cd "$REPO" || { echo "git-commit-atomic: cannot chdir to $REPO" >&2; exit 1; }
+fi
 
 [ $# -lt 1 ] && usage
 MSG="$1"; shift

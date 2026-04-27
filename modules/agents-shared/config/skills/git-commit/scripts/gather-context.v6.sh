@@ -1,13 +1,35 @@
 #!/usr/bin/env bash
 # gather-context.v6.sh — read-only context for the v6 git-commit skill.
-# Output: BRANCH, WORKING TREE, WORKTREE DIFF (vs HEAD), BRANCH DIVERGENCE,
+# Output: BRANCH, WORKING TREE, WORKTREE DIFF (--stat), BRANCH DIVERGENCE,
 # RECENT COMMITS, REPO COMMIT CONVENTIONS. No mutations to any index.
 #
-# Usage: gather-context.v6.sh [REPO]   (default REPO = $PWD)
+# Usage: gather-context.v6.sh [-C <repo>] [--full-diff] [REPO]
+#   -C <repo>, --repo <repo>   Path to repo (preferred form)
+#   --full-diff                Include full unified diff (default: --stat only)
+#   REPO (positional)          Backwards-compat fallback for repo path
+#
+# Default omits the full unified diff to keep the output bounded — large
+# refactors used to blow past Claude Code's bash output limit and fail the
+# whole call. The agent already has the diff context from its own edits;
+# request specific hunks explicitly via `git -C <repo> diff HEAD -- <path>`
+# when needed.
 
 set -uo pipefail
 
-REPO="${1:-$PWD}"
+REPO=""
+SHOW_FULL_DIFF=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -C)            REPO="${2:-}"; shift 2 ;;
+    --repo)        REPO="${2:-}"; shift 2 ;;
+    --repo=*)      REPO="${1#--repo=}"; shift ;;
+    --full-diff)   SHOW_FULL_DIFF=1; shift ;;
+    -*)            echo "gather-context: unsupported flag: $1" >&2; exit 2 ;;
+    *)             REPO="$1"; shift ;;
+  esac
+done
+REPO="${REPO:-$PWD}"
+
 git_cmd() { git -C "$REPO" "$@"; }
 
 if ! git_cmd rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -36,15 +58,17 @@ printf 'current: %s\n' "$BRANCH"
 section "WORKING TREE (changed files)"
 git_cmd status --short
 
-WT_DIFF=$(git_cmd diff HEAD)
-if [ -z "$WT_DIFF" ]; then
+WT_STAT=$(git_cmd diff HEAD --stat)
+if [ -z "$WT_STAT" ]; then
   section "WORKTREE DIFF"
   echo "(empty — worktree matches HEAD)"
 else
   section "WORKTREE DIFF (--stat)"
-  git_cmd diff HEAD --stat
-  section "WORKTREE DIFF (full)"
-  printf '%s\n' "$WT_DIFF"
+  printf '%s\n' "$WT_STAT"
+  if [ "$SHOW_FULL_DIFF" = 1 ]; then
+    section "WORKTREE DIFF (full)"
+    git_cmd diff HEAD
+  fi
 fi
 
 if [ -n "$BASE" ] && [ "$BRANCH" != "$BASE" ]; then

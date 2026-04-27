@@ -19,13 +19,15 @@ metadata:
 
 ## Workflow
 
+**Always invoke wrappers as standalone binaries (`git-commit-context`, `git-commit-atomic`), never via git subcommand form (`git commit-context`, `git -C <path> commit-atomic`).** The subcommand form is fragile to model regenerate — the subcommand token can merge into an adjacent path token and disappear silently. Use the `-C <repo>` flag of the wrapper instead.
+
 1. Run the read-only context helper:
 
    ```bash
-   git commit-context
+   git-commit-context -C <repo>
    ```
 
-   Output includes branch info, working-tree status, worktree diff vs `HEAD`, branch divergence, recent-commits style, and detected repo commit conventions.
+   `<repo>` — absolute path to the worktree. Default output: branch info, working-tree status, **worktree diff `--stat` only**, branch divergence, recent-commits style, detected repo commit conventions. Add `--full-diff` if a full unified diff is genuinely needed (rare — you usually have edit context already and can request specific hunks via `git -C <repo> diff HEAD -- <path>`).
 
 2. Choose commit mode based on how the user invoked the skill:
 
@@ -35,12 +37,13 @@ metadata:
 3. Run the wrapper:
 
    ```bash
-   git-commit-atomic [flags] "<message>" [<file>...] [-- <patch>...]
+   git-commit-atomic -C <repo> [flags] "<message>" [<file>...] [-- <patch>...]
    ```
 
    - **Files** (positional, before `--`): staged whole from the worktree.
    - **Patches** (positional, after `--`): applied to an ephemeral index via `git apply --cached`.
-   - The two halves combine into one commit, so you can mix them: `git-commit-atomic "msg" foo.md bar.md -- baz.diff`.
+   - The two halves combine into one commit, so you can mix them: `git-commit-atomic -C <repo> "msg" foo.md bar.md -- baz.diff`.
+   - File paths are relative to `<repo>` (the wrapper `chdir`s into it before running).
 
    The wrapper has two execution paths:
 
@@ -51,6 +54,7 @@ metadata:
 
    | Flag | Effect |
    |---|---|
+   | `-C <path>`, `--repo <path>` | `chdir` into `<path>` before committing. Always use this instead of `git -C <path> commit-atomic` to avoid subcommand-token-merge regenerate failures. |
    | `--auto` | Take the CAS path; skip editor preview. Pass when the user invoked with `auto`. |
    | `-s`, `--signoff` | Append `Signed-off-by` trailer (forwarded to `git commit -s` in editor mode; manually appended in `--auto`). |
    | `-S`, `--gpg-sign[=<keyid>]` | GPG-sign the commit. |
@@ -61,6 +65,6 @@ metadata:
 
    Unknown flags are rejected with exit 2: the plumbing path does not honor most `git commit` flags (e.g. `-c`, `--fixup`, `--squash`, `--reuse-message`), so silent pass-through would be misleading.
 
-4. Do not run bare `git add`, `git commit`, or `git commit-edit`. Always use `git-commit-atomic`. Do not pass `GIT_INDEX_FILE=...`.
+4. Do not run bare `git add`, `git commit`, or `git commit-edit`. Do not invoke via git subcommand form (`git commit-atomic`, `git -C <path> commit-atomic`) — always standalone `git-commit-atomic -C <path>`. Do not pass `GIT_INDEX_FILE=...`.
 
 Do not push.

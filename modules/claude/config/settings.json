@@ -120,8 +120,7 @@
       "Bash(git commit-context)",
       "Bash(git commit-context *)",
       "Bash(git-commit-atomic *)",
-      "Bash(git-commit-skill)",
-      "Bash(git-commit-skill *)",
+      "Bash(git-commit-hunks *)",
       "Bash(rm /Users/yoshintame/.hammerspoon/proxy-bindings.lua)",
       "Bash(mkdir -p /Users/yoshintame/.hammerspoon/generated)",
       "Bash(git add *)",
@@ -248,7 +247,17 @@
       "Bash(git verify-commit *)",
       "Bash(git -C * verify-commit *)",
       "Bash(git verify-tag *)",
-      "Bash(git -C * verify-tag *)"
+      "Bash(git -C * verify-tag *)",
+      "Bash(git -C * commit-context)",
+      "Bash(git -C * commit-atomic *)",
+      "Bash(git-commit-context *)",
+      "Bash(search-reddit *)",
+      "Bash(search-hn *)",
+      "Bash(search-github *)",
+      "Bash(/usr/bin/grep *)",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_screenshot"
     ],
     "additionalDirectories": [
       "/Users/yoshintame/Development/work/vtb",
@@ -270,7 +279,9 @@
       "/Users/yoshintame/.dotfiles/modules/claude/config",
       "/Users/yoshintame/meetings-test",
       "/Users/yoshintame/.claude/commands",
-      "/Users/yoshintame/.claude"
+      "/Users/yoshintame/.claude",
+      "/tmp",
+      "/private/tmp"
     ]
   },
   "hooks": {
@@ -281,6 +292,48 @@
           {
             "type": "command",
             "command": "jq -c --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" '{ts: $ts, tool: .tool_name, input: .tool_input, session: .session_id}' >> \"$HOME/.claude/permission-requests.jsonl\""
+          }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --completed"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --dismiss"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --tooldone"
           }
         ]
       }
@@ -310,9 +363,14 @@
     ],
     "WorktreeCreate": [
       {
-        "type": "command",
-        "command": "$HOME/.claude/hooks/worktree-create.sh",
-        "timeout": 60
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/worktree-create.sh",
+            "timeout": 60
+          }
+        ]
       }
     ]
   },
@@ -333,5 +391,6 @@
         "repo": "warpdotdev/claude-code-warp"
       }
     }
-  }
+  },
+  "theme": "dark-ansi"
 }

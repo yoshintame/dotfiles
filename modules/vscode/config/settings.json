@@ -452,11 +452,6 @@
           "type": "command",
           "command": "workbench.action.openGlobalKeybindingsFile",
         },
-        {
-          "key": "s",
-          "name": "Snippets",
-          "type": "command",
-        },
       ],
     },
     {
@@ -1500,7 +1495,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "//": "Last update at 24/04/2026, 16:42:43",
+    "//": "Last update at 04/05/2026, 12:16:02",
     ".agent": ".agent, .claude, .cline, .codebuddy, .codex, .commandcode, .continue, .crush, .cursor, .factory, .gemini, .goose, .junie, .kilocode, .kiro, .kode, .mcpjam, .mux, .neovate, .opencode, .openhands, .pi, .pochi, .qoder, .qwen, .roo, .trae, .windsurf, .zencoder",
     ".clang-tidy": ".clang-format, .clangd, compile_commands.json",
     ".env": "*.env, .env.*, .envrc, env.d.ts",
@@ -2018,5 +2013,5 @@
   "geminicodeassist.project": "principal-tesla-3nkgc",
   "geminicodeassist.displayInlineContextHint": false,
   "aiAgentSoundNotification.debug": true,
-  "aiAgentSoundNotification.initialDelay": "5s",
+  "aiAgentSoundNotification.initialDelay": "1s",
 }

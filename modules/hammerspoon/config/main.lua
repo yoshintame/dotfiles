@@ -174,6 +174,7 @@ spoon.LeaderFlow:setup({
 
         { "d", "[development]", {
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
+            { "d", "Zed Windows", raycast("raycast://extensions/raycast/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22dev.zed.Zed%22%7D") },
 
             { "o", "Open Project", {
                 { "c", "CRM", code("~/Development/work/senat-exchange/crm-frontend") },

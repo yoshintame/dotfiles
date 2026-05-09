@@ -174,16 +174,14 @@ spoon.LeaderFlow:setup({
 
         { "d", "[development]", {
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
-            { "d", "Zed Windows", raycast("raycast://extensions/raycast/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22dev.zed.Zed%22%7D") },
+            { "d", "VSCode Windows", raycast("raycast://extensions/raycast/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D") },
 
-            { "o", "Open Project", {
-                { "c", "CRM", code("~/Development/work/senat-exchange/crm-frontend") },
-                { "d", "dotfiles", code("~/.dotfiles") },
-                { "k", "karabiner", code("~/.dotfiles/modules/karabiner/config") },
-                { "h", "hammerspoon", code("~/.dotfiles/modules/hammerspoon/config") },
-                { "f", "fish", code("~/.dotfiles/modules/fish/config") },
-                { "v", "vscode", code("~/.dotfiles/modules/vscode/config") },
-            } },
+            { "c", "CRM", code("~/Development/work/senat-exchange/crm-frontend") },
+            { "f", "dotfiles", code("~/.dotfiles") },
+            { "k", "karabiner", code("~/.dotfiles/modules/karabiner/config") },
+            { "h", "hammerspoon", code("~/.dotfiles/modules/hammerspoon/config") },
+            { "v", "vscode", code("~/.dotfiles/modules/vscode/config") },
+            { "s", "obsidian/yoshintame", code("~/Documents/obsidian/yoshintame") },
         }},
 
         { "s", "[screenshots]", {

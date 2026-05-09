@@ -13,7 +13,7 @@
     then
       lib.concatStringsSep "\n"
       (builtins.filter
-        (line: !(lib.hasPrefix "cask " line) && !(lib.hasPrefix "mas " line))
+        (line: !(lib.hasPrefix "cask " line) && !(lib.hasPrefix "mas " line) && !(lib.hasPrefix "vscode " line))
         (lib.splitString "\n" rawBrewfile))
     else rawBrewfile;
   sharedEnv = {

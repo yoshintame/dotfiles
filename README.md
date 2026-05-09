@@ -23,7 +23,7 @@ This will:
 7. Re-run `darwin-rebuild switch` so sops-templates renders the secrets now that the key is present
 8. Print a post-install checklist and open System Settings panels for the TCC permissions that cannot be automated
 
-Then follow [docs/post-install-checklist.md](docs/post-install-checklist.md) for the ~5-minute manual cleanup (Accessibility, Input Monitoring, etc.).
+Then follow `projects/post-install-checklist.md` (vault) for the ~5-minute manual cleanup (Accessibility, Input Monitoring, etc.).
 
 ### Already-cloned repo
 
@@ -64,21 +64,23 @@ A deeper dive lives in the vault: `projects/dotfiles-architecture/dotfiles-archi
 
 ## Key docs
 
+User-facing documentation lives in the Obsidian vault (`~/Documents/obsidian/yoshintame/`). The repo only keeps code-artefacts (module READMEs, SKILL.md, AGENTS.md, configs).
+
 - `projects/dotfiles-target-architecture.md` (vault) — target architecture: 4 hosts, 3 wrappers, implementation roadmap with priorities
 - `projects/dotfiles-architecture/dotfiles-architecture.md` (vault) — current three-layer design and module patterns
-- [docs/secrets-management.md](docs/secrets-management.md) — why SOPS, tradeoffs vs alternatives
-- [docs/bootstrap-secret-strategies.md](docs/bootstrap-secret-strategies.md) — 1Password now, YubiKey later, Tailscale+selfhost as future option
-- [docs/post-install-checklist.md](docs/post-install-checklist.md) — TCC permissions and manual steps macOS requires
-- [docs/testing-bootstrap.md](docs/testing-bootstrap.md) — VM-based testing: Tart (macOS), Lima (Linux), NixOS build-vm, Parallels (Windows/WSL)
-- [docs/homebrew-nix-integration.md](docs/homebrew-nix-integration.md) — how Brewfile ties into nix-darwin
-- [docs/path-management.md](docs/path-management.md) — PATH organization (mise shims, nix, Homebrew)
+- `projects/dotfiles/secrets-management.md` (vault) — why SOPS, tradeoffs vs alternatives
+- `opinions/bootstrap-secret-strategies.md` (vault) — 1Password now, YubiKey later, Tailscale+selfhost as future option
+- `projects/post-install-checklist.md` (vault) — TCC permissions and manual steps macOS requires
+- `projects/testing-bootstrap.md` (vault) — VM-based testing: Tart (macOS), Lima (Linux), NixOS build-vm, Parallels (Windows/WSL)
+- `projects/dotfiles/homebrew-nix-integration.md` (vault) — how Brewfile ties into nix-darwin
+- `projects/dotfiles/path-management.md` (vault) — PATH organization (mise shims, nix, Homebrew)
 
 ### Agent skills (Claude Code / Codex)
 
-- [docs/git-commit-skill.md](docs/git-commit-skill.md) — safe commits with per-session private index (Claude + Codex)
-- [docs/deep-research-skill.md](docs/deep-research-skill.md) — general research workflow with WebSearch-first + supplementary scripts
-- [docs/find-best-skill.md](docs/find-best-skill.md) — "find the best X" specialization with long list + mandatory red flags
-- [docs/web-research-scripts.md](docs/web-research-scripts.md) — `search-reddit`/`search-hn`/`search-github` CLI infrastructure on `$PATH`
+- `projects/ai-agent-config/git-commit-skill.md` (vault) — safe commits with per-session private index (Claude + Codex)
+- `projects/ai-agent-config/deep-research-skill.md` (vault) — general research workflow with WebSearch-first + supplementary scripts
+- `projects/ai-agent-config/find-best-skill.md` (vault) — "find the best X" specialization with long list + mandatory red flags
+- `projects/ai-agent-config/web-research-scripts.md` (vault) — `search-reddit`/`search-hn`/`search-github` CLI infrastructure on `$PATH`
 
 ## Common tasks
 

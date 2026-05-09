@@ -283,22 +283,17 @@
     "command": "claude-vscode.focus"
   },
 
+  // Open Codex sidebar (mirrors Claude Code cmd+i — opens view + attaches editor selection)
+  // chatgpt.addToThread already calls the open/focus routine internally and queues
+  // the selection until the webview is ready, so no runCommands wrapper is needed.
+  {
+    "key": "cmd+l",
+    "command": "chatgpt.addToThread"
+  },
+
   // =============================================
   // Cursor-specific bindings
   // =============================================
-
-  // Open Cursor AI Chat on the left side (swap sidebars workaround)
-  {
-    "key": "cmd+l",
-    "command": "runCommands",
-    "args": {
-      "commands": [
-        "aichat.newchataction",
-        "workbench.action.moveSideBarRight",
-        "workbench.action.closeSidebar"
-      ]
-    }
-  },
 
   // Unbind Cursor defaults
   {

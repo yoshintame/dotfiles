@@ -9,7 +9,7 @@ set -euo pipefail
 # `yoshintame` matching hosts/lasthaze-mbp/default.nix#username,
 # passwordless sudo for --test mode, /opt/homebrew writable by that user).
 #
-# See docs/tart-base-image-choice.md for the design rationale.
+# See projects/dotfiles-architecture/tart-base-image-choice.md (vault) for the design rationale.
 #
 # Usage:
 #   tests/tart/preflight.sh <vm-name>

@@ -18,8 +18,10 @@ local function parseKeystroke(keystroke)
 end
 
 local function sh_open(target, background)
-  local flag = background and "-g " or ""
-  hs.execute(string.format("open %s%q", flag, target))
+  local args = {}
+  if background then table.insert(args, "-g") end
+  table.insert(args, target)
+  hs.task.new("/usr/bin/open", nil, args):start()
 end
 
 function obj.actions.cli(command, with_user_env)
@@ -29,16 +31,22 @@ function obj.actions.cli(command, with_user_env)
       cmd = cmd()
     end
     if cmd == nil then cmd = "" end
-    local exec = hs.execute
-    exec(tostring(cmd), with_user_env ~= false)
+    local flag = with_user_env ~= false and "-lc" or "-c"
+    hs.task.new("/bin/sh", nil, { flag, tostring(cmd) }):start()
   end
 end
 
+local resolvedEditorPath = (function()
+  local editor = hs.execute("/bin/sh -lc 'echo $VISUAL'"):match("^%S+") or "code"
+  local abs = hs.execute("/bin/sh -lc 'command -v " .. editor .. "'"):match("^%S+")
+  return abs or editor
+end)()
+
 function obj.actions.code(path)
-  return obj.actions.cli(function()
-    local editor = hs.execute("/bin/sh -lc 'echo $VISUAL'"):match("^%S+") or "code"
-    return string.format("%s %q", editor, tostring(path))
-  end)
+  return function()
+    local expanded = tostring(path):gsub("^~", os.getenv("HOME"))
+    hs.task.new(resolvedEditorPath, nil, { expanded }):start()
+  end
 end
 
 function obj.actions.openURL(url)

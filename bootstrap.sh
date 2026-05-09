@@ -112,6 +112,10 @@ ensure_homebrew() {
   if [ -x /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
+  if command -v brew >/dev/null 2>&1; then
+    log "Refreshing Homebrew metadata (brew update)"
+    brew update --quiet || warn "brew update failed; continuing with cached metadata"
+  fi
 }
 
 backup_conflicting_etc_files() {

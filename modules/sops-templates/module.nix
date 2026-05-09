@@ -77,26 +77,20 @@
     lib.mapAttrsToList mkGroupScript grouped
   );
 
-  # Bootstrap guard: skip rendering when no age key is available yet.
-  # Lets the first `darwin-rebuild switch` on a fresh machine succeed
-  # even before the SOPS age key has been restored from 1Password.
-  # After `mise run dot:bootstrap-age-key`, the next switch renders normally.
-  bootstrapGuard =
+  guardedActivation =
     if cfg.ageKeyCmd != null
-    then "" # ageKeyCmd is trusted — rendering will use it
+    then activationScript
     else ''
       if [ ! -f "$HOME/.config/sops/age/keys.txt" ]; then
         echo "sops-templates: no age key at ~/.config/sops/age/keys.txt — skipping rendering (bootstrap mode)." >&2
         echo "sops-templates: run 'mise run dot:bootstrap-age-key' then re-run switch to render secrets." >&2
-        return 0
+      else
+        ${activationScript}
       fi
     '';
 in
   lib.mkIf (cfg.enable && cfg.render != {}) {
     home.packages = [pkgs.sops pkgs.age];
 
-    home.activation.sopsTemplates = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      ${bootstrapGuard}
-      ${activationScript}
-    '';
+    home.activation.sopsTemplates = lib.hm.dag.entryAfter ["writeBoundary"] guardedActivation;
   }

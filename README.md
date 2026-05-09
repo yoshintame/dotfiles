@@ -41,7 +41,7 @@ mise run dot:rebuild
 
 ## Hosts
 
-Current and planned host configurations. See [docs/target-architecture.md](docs/target-architecture.md) for the full target state and roadmap.
+Current and planned host configurations. Full target state and roadmap live in the vault: `projects/dotfiles-target-architecture.md`.
 
 | Host              | OS                      | Wrapper                        | Role                                    | Status              |
 | ----------------- | ----------------------- | ------------------------------ | --------------------------------------- | ------------------- |
@@ -60,12 +60,12 @@ Three-layer hybrid approach:
 - **nix-dotbot layer** — live symlinks from [modules/](modules) into `~/.config` so edits apply both ways
 - **sops-templates layer** — templated configs rendered with decrypted secrets at activation time
 
-See [docs/architecture.md](docs/architecture.md) for a deeper dive.
+A deeper dive lives in the vault: `projects/dotfiles-architecture/dotfiles-architecture.md`.
 
 ## Key docs
 
-- [docs/target-architecture.md](docs/target-architecture.md) — target architecture: 4 hosts, 3 wrappers, implementation roadmap with priorities
-- [docs/architecture.md](docs/architecture.md) — current three-layer design and module patterns
+- `projects/dotfiles-target-architecture.md` (vault) — target architecture: 4 hosts, 3 wrappers, implementation roadmap with priorities
+- `projects/dotfiles-architecture/dotfiles-architecture.md` (vault) — current three-layer design and module patterns
 - [docs/secrets-management.md](docs/secrets-management.md) — why SOPS, tradeoffs vs alternatives
 - [docs/bootstrap-secret-strategies.md](docs/bootstrap-secret-strategies.md) — 1Password now, YubiKey later, Tailscale+selfhost as future option
 - [docs/post-install-checklist.md](docs/post-install-checklist.md) — TCC permissions and manual steps macOS requires

@@ -44,6 +44,25 @@ in {
   imports = [./macos-defaults.nix];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.trusted-users = ["@admin" username];
+
+  nix.linux-builder = {
+    enable = true;
+    ephemeral = true;
+    maxJobs = 4;
+    systems = ["aarch64-linux" "x86_64-linux"];
+    config = {
+      boot.binfmt.emulatedSystems = ["x86_64-linux"];
+      virtualisation = {
+        cores = 4;
+        darwin-builder = {
+          memorySize = 8 * 1024;
+          diskSize = 40 * 1024;
+        };
+      };
+    };
+  };
+
   system.stateVersion = 6;
 
   security.pam.services.sudo_local.touchIdAuth = true;

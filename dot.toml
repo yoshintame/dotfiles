@@ -41,6 +41,40 @@ else
 fi
 '''
 
+["dot:sops-bootstrap"]
+description = "Force-reload sops-nix LaunchAgent on darwin (workaround for Mic92/sops-nix#910 initial bootstrap I/O error)"
+run = '''
+set -euo pipefail
+
+if [ "$(uname -s)" != "Darwin" ]; then
+    echo "dot:sops-bootstrap is darwin-only — skipping on $(uname -s)"
+    exit 0
+fi
+
+PLIST="$HOME/Library/LaunchAgents/org.nix-community.home.sops-nix.plist"
+LABEL="org.nix-community.home.sops-nix"
+
+if [ ! -f "$PLIST" ]; then
+    echo "!! sops-nix plist not found at $PLIST"
+    echo "   Run a darwin-rebuild switch first so home-manager installs it via setupLaunchAgents."
+    exit 1
+fi
+
+# Bootout silently if loaded (returns 3 if not loaded — that is fine and expected on first install).
+launchctl bootout "gui/$UID/$LABEL" 2>/dev/null || true
+
+# Bootstrap with explicit plist path. First call after a fresh switch sometimes fails with
+# `Bootstrap failed: 5: Input/output error` due to sops-nix#910 — the bootout above clears
+# the half-loaded state so this call succeeds.
+launchctl bootstrap "gui/$UID" "$PLIST"
+
+# RunAtLoad fires automatically on bootstrap but kickstart is a defensive nudge in case
+# launchd debounced it (e.g. when plist hash matched a previously-loaded version).
+launchctl kickstart -k "gui/$UID/$LABEL"
+
+echo "sops-nix LaunchAgent reloaded; decrypted secrets should be available under ~/.config/sops-nix/secrets/."
+'''
+
 ["dot:bootstrap-ssh"]
 description = "Wire ~/.ssh/config to 1Password SSH Agent (run once on new machine)"
 run = '''

@@ -77,9 +77,18 @@
   };
 
   entries = map (e: processEntry (resolve e)) (lib.mapAttrsToList normalize cfg.render);
+
+  ageKeyPath = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+
+  # Eval-time bootstrap guard: on a fresh machine the age key is not yet on
+  # disk, and sops-nix activation would fail. Gate the whole sops-nix wiring
+  # so the first `darwin-rebuild switch` succeeds, then `bootstrap_age_key`
+  # restores the key from 1Password and the next switch re-evaluates this
+  # branch with the key present. Requires --impure (already used by bootstrap.sh).
+  hasAgeKey = builtins.pathExists ageKeyPath;
 in
-  lib.mkIf (cfg.enable && cfg.render != {}) {
-    sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+  lib.mkIf (cfg.enable && cfg.render != {} && hasAgeKey) {
+    sops.age.keyFile = ageKeyPath;
 
     sops.defaultSecretsMountPoint = "${config.home.homeDirectory}/.local/state/sops-nix/secrets.d";
 

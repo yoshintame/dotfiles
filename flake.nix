@@ -15,6 +15,11 @@
     };
 
     nix-dotbot.url = "github:yoshintame/nix-dotbot";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -25,6 +30,7 @@
     nix-darwin,
     home-manager,
     nix-dotbot,
+    sops-nix,
     ...
   } @ inputs: let
     flakeRootEnv = builtins.getEnv "FLAKE_ROOT";
@@ -44,6 +50,7 @@
           };
           home-manager.sharedModules = [
             nix-dotbot.homeManagerModules.default
+            sops-nix.homeManagerModules.sops
             ./modules/sops-templates
           ];
         }
@@ -58,6 +65,7 @@
       };
       modules = [
         nix-dotbot.homeManagerModules.default
+        sops-nix.homeManagerModules.sops
         ./modules/sops-templates
         ./hosts/lasthaze-home
       ];

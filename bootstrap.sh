@@ -147,6 +147,24 @@ bootstrap_ssh() {
   fi
 }
 
+bootstrap_sops_launch_agent() {
+  if [ "$(uname -s)" != "Darwin" ]; then
+    return 0
+  fi
+  if ! command -v mise >/dev/null 2>&1; then
+    warn "mise not found — skipping sops-nix LaunchAgent reload. Run: mise run dot:sops-bootstrap after rebuild."
+    return 0
+  fi
+  if [ ! -f "${HOME}/.config/sops/age/keys.txt" ]; then
+    log "Skipping sops-nix LaunchAgent reload — age key not present yet."
+    return 0
+  fi
+  log "Reloading sops-nix LaunchAgent (workaround for darwin bug Mic92/sops-nix#910)"
+  if ! (cd "${REPO_DIR}" && mise run dot:sops-bootstrap); then
+    warn "dot:sops-bootstrap failed — run manually after fixing: mise run dot:sops-bootstrap"
+  fi
+}
+
 print_post_install_checklist() {
   if [ "$(uname -s)" != "Darwin" ]; then
     return 0
@@ -174,7 +192,8 @@ These cannot be automated without MDM. See docs/post-install-checklist.md for de
 After finishing the checklist run:
   mise run dot:bootstrap-age-key   # if 1Password CLI was not ready during bootstrap
   mise run dot:bootstrap-ssh       # finalize 1Password SSH Agent wiring
-  mise run dot:rebuild             # second switch — applies sops-templates secrets
+  mise run dot:rebuild             # second switch — decrypts secrets via sops-nix
+  mise run dot:sops-bootstrap      # reload sops-nix LaunchAgent (one-time after first switch)
 
 EOF
 }
@@ -209,18 +228,21 @@ main() {
   source_nix_env
 
   # First switch: installs Nix packages + Brewfile (1password-cli, etc.).
-  # The sops-templates module has a bootstrap guard: it skips rendering with
-  # a warning when ~/.config/sops/age/keys.txt is absent, so this first switch
-  # succeeds cleanly on a fresh machine even before the age key is restored.
+  # The sops-templates wrapper around sops-nix declares its config inside a
+  # mkIf gated on the age-key file existing on disk, so this first switch on
+  # a fresh machine succeeds without secrets — sops-install-secrets is not
+  # wired up yet.
   run_system_switch "${HOST}"
 
   bootstrap_age_key
   bootstrap_ssh
 
-  # Second switch: now sops-templates can decrypt secrets into place.
+  # Second switch: re-evaluates the gate (age key now present), wires up
+  # sops-nix and decrypts secrets at activation.
   if [ -f "${HOME}/.config/sops/age/keys.txt" ]; then
-    log "Re-running switch to apply sops-templates with age key present"
+    log "Re-running switch to apply sops-nix with age key present"
     run_system_switch "${HOST}"
+    bootstrap_sops_launch_agent
   else
     warn "Age key still missing — skipping second switch. Run 'mise run dot:rebuild' after bootstrap-age-key succeeds."
   fi

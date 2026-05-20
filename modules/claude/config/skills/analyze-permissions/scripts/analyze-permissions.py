@@ -181,9 +181,18 @@ def find_redundant(allow_list: list[str]) -> list[tuple[str, str]]:
     for entry in allow_list:
         tool, arg = parse_rule(entry)
 
-        # If this is a path-specific Edit/Read rule, don't flag as redundant
-        # even if bare Edit/Read exists — the paths are intentional restrictions
+        # Path-specific Edit/Read rule: still redundant if a BROADER path rule
+        # of the same tool covers it (e.g. a deep worktree path under a
+        # `.../worktrees/**` rule). It is NOT redundant just because a bare
+        # rule exists — there the bare rule is the problem, flagged below.
         if tool in PATH_RESTRICTED_TOOLS and arg is not None:
+            for other in allow_list:
+                o_tool, o_arg = parse_rule(other)
+                if o_arg is None:
+                    continue  # bare rule — does not count as "covering"
+                if is_covered_by(entry, other):
+                    redundant.append((entry, f"covered by: {other}"))
+                    break
             continue
 
         # If this is a bare Edit/Read and path-specific rules exist,
@@ -195,17 +204,38 @@ def find_redundant(allow_list: list[str]) -> list[tuple[str, str]]:
             )
             if has_paths:
                 redundant.append((entry, "SECURITY: bare rule overrides path restrictions — remove it"))
-                continue
+            continue
 
         for other in allow_list:
             if is_covered_by(entry, other):
-                # Skip if both are path-restricted tools (handled above)
-                o_tool, _ = parse_rule(other)
-                if tool in PATH_RESTRICTED_TOOLS and o_tool in PATH_RESTRICTED_TOOLS:
-                    continue
                 redundant.append((entry, f"covered by: {other}"))
                 break
     return redundant
+
+
+def _strip_quoted(s: str) -> str:
+    """Remove single/double-quoted spans so shell operators inside quotes
+    (e.g. regex alternation `a|b`) aren't mistaken for command separators."""
+    out = []
+    quote = None
+    for c in s:
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in ("'", '"'):
+            quote = c
+        else:
+            out.append(c)
+    return "".join(out)
+
+
+def is_compound_command(arg: str) -> bool:
+    """True if arg chains multiple shell statements (`;`, `|`, `&&`, `||`).
+
+    Such an entry is a session-captured one-off: the whole pipeline must
+    match verbatim, so it is never reusable in a curated allow list.
+    """
+    return bool(re.search(r"[;|]|&&", _strip_quoted(arg)))
 
 
 def find_hardcoded(allow_list: list[str]) -> list[tuple[str, str]]:
@@ -217,9 +247,28 @@ def find_hardcoded(allow_list: list[str]) -> list[tuple[str, str]]:
             continue
 
         if tool == "Bash":
-            # Specific absolute paths (not glob patterns)
-            if "/Users/" in arg and "*" not in arg and len(arg) > 60:
+            # Compound pipelines: chained statements captured verbatim from a
+            # session — never match again, regardless of which paths they use.
+            # The `*` guard uses quote-stripped text so glob chars inside
+            # quoted args (e.g. find -path "*x*") aren't mistaken for a
+            # permission wildcard.
+            if "*" not in _strip_quoted(arg) and is_compound_command(arg):
+                hardcoded.append((entry, "one-off compound command"))
+                continue
+            # Specific absolute home paths — machine/project-specific, they
+            # do not belong in a curated cross-project list. A trailing
+            # permission wildcard does not make the baked-in path reusable.
+            if ("/Users/" in arg or "~/" in arg) and len(arg) > 60:
                 hardcoded.append((entry, "hardcoded absolute path"))
+                continue
+            # Pinned URL or network endpoint — a literal http(s) URL or IP
+            # address targets one specific resource and never recurs. The
+            # __TRACKED_VAR__ placeholder marks an intentionally templated URL.
+            if "__TRACKED_VAR__" not in arg and (
+                re.search(r"https?://", arg)
+                or re.search(r"\b\d{1,3}(?:\.\d{1,3}){3}\b", arg)
+            ):
+                hardcoded.append((entry, "pinned URL / network endpoint"))
                 continue
             # Specific test commands
             if re.search(r"vitest run .+\.test\.ts$", arg):
@@ -239,8 +288,36 @@ def find_hardcoded(allow_list: list[str]) -> list[tuple[str, str]]:
             if "Read(/**)" in allow_list and entry != "Read(/**)":
                 hardcoded.append((entry, "already covered by Read(/**)"))
                 continue
+            # Ephemeral macOS temp dirs — the random folder name is long gone
+            if "/var/folders/" in arg:
+                hardcoded.append((entry, "ephemeral temp-dir path"))
+                continue
 
     return hardcoded
+
+
+def find_stale_directories(dirs: list[str]) -> list[tuple[str, str]]:
+    """Find additionalDirectories entries that are dead or redundant.
+
+    An entry is stale when the directory no longer exists on disk, or when
+    it sits under another *existing* listed directory that already grants
+    access to the whole subtree. A dead parent is not treated as covering —
+    it will be removed itself, so its children must stand on their own.
+    """
+    stale = []
+    existing = {d for d in dirs if Path(d).is_dir()}
+    for d in dirs:
+        if d not in existing:
+            stale.append((d, "directory does not exist"))
+            continue
+        parent = next(
+            (p for p in dirs
+             if p != d and p in existing and d.startswith(p.rstrip("/") + "/")),
+            None,
+        )
+        if parent:
+            stale.append((d, f"nested under {parent}"))
+    return stale
 
 
 # Commands that should never be generalized to wildcard
@@ -486,8 +563,27 @@ def report_log(allow_list: list[str]):
     return entries, total
 
 
+def report_directories(settings: dict):
+    print_section("PHASE 3: additionalDirectories")
+
+    dirs = settings.get("permissions", {}).get("additionalDirectories", [])
+    if not dirs:
+        print("\n  No additionalDirectories configured.")
+        return []
+
+    stale = find_stale_directories(dirs)
+    if stale:
+        print(f"\n  Stale entries ({len(stale)} of {len(dirs)}):")
+        for d, reason in stale:
+            print(f"    ✗ {d}")
+            print(f"      → {reason}")
+    else:
+        print(f"\n  All {len(dirs)} directories exist and are non-redundant.")
+    return stale
+
+
 def report_local():
-    print_section("PHASE 3: Local settings (settings.local.json)")
+    print_section("PHASE 4: Local settings (settings.local.json)")
 
     data = load_json(SETTINGS_LOCAL_PATH)
     if not data:
@@ -511,6 +607,7 @@ def apply_changes(
     settings: dict,
     redundant: list[tuple[str, str]],
     hardcoded: list[tuple[str, str]],
+    stale_dirs: list[tuple[str, str]],
     log_entries: list[dict],
     total_count: int,
 ):
@@ -522,6 +619,12 @@ def apply_changes(
 
     removed = list(to_remove)
     added = []
+
+    # Prune stale additionalDirectories
+    dirs = settings.get("permissions", {}).get("additionalDirectories", [])
+    stale_set = {d for d, _ in stale_dirs}
+    new_dirs = [d for d in dirs if d not in stale_set]
+    removed_dirs = sorted(stale_set)
 
     # Add only safe generalizations from hardcoded
     existing = set(new_allow)
@@ -555,7 +658,12 @@ def apply_changes(
         for a in added:
             print(f"    + {a}")
 
-    if not removed and not added:
+    if removed_dirs:
+        print(f"\n  Removed directories ({len(removed_dirs)}):")
+        for d in removed_dirs:
+            print(f"    - {d}")
+
+    if not removed and not added and not removed_dirs:
         print("\n  No changes needed.")
         if total_count > 0:
             save_marker(total_count)
@@ -569,6 +677,8 @@ def apply_changes(
     print(f"\n  Backup: {backup_path}")
 
     settings["permissions"]["allow"] = new_allow
+    if removed_dirs:
+        settings["permissions"]["additionalDirectories"] = new_dirs
     save_json(SETTINGS_PATH, settings)
     print(f"  Updated: {SETTINGS_PATH}")
 
@@ -598,12 +708,13 @@ def main():
 
     redundant, hardcoded = report_cleanup(allow_list)
     log_entries, total_count = report_log(allow_list)
+    stale_dirs = report_directories(settings)
     report_local()
 
     if apply:
-        apply_changes(settings, redundant, hardcoded, log_entries, total_count)
+        apply_changes(settings, redundant, hardcoded, stale_dirs, log_entries, total_count)
     else:
-        changes = len(redundant) + len(hardcoded)
+        changes = len(redundant) + len(hardcoded) + len(stale_dirs)
         if changes > 0 or log_entries:
             print(f"\n{'─' * 60}")
             print(f"  Run with --apply to apply changes.")

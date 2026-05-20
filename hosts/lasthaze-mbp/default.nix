@@ -178,6 +178,7 @@ in {
         ../../modules/btop
         ../../modules/nvim
         ../../modules/mise
+        ../../modules/op
         ../../modules/resticprofile
         ../../modules/claude
         ../../modules/claude-code-patch

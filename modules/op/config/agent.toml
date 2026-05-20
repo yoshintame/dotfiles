@@ -1,0 +1,24 @@
+# 1Password SSH agent — key filter and offer order.
+# Keys are offered to servers top-to-bottom; this keeps the key a server
+# actually wants within its MaxAuthTries window.
+
+# 1 — primary key (current main, ed25519)
+[[ssh-keys]]
+item = "yoshintame-mbp"
+
+# 2 — git commit signing
+[[ssh-keys]]
+item = "GitHub"
+
+# 3 — previous main key (rsa, migrated away from)
+[[ssh-keys]]
+item = "lasthaze-mbp"
+
+# tail — rarely used
+# note: "GitHub | ADAM" item has no private_key — 1Password agent cannot
+# serve it, so it is omitted here (fix or remove the item in 1Password).
+[[ssh-keys]]
+item = "GitLab"
+
+[[ssh-keys]]
+item = "Yoshintame PC"

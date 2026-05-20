@@ -1,0 +1,16 @@
+# Git SSH signature verification — allowed signers.
+# Maps committer identity to the public keys it may have signed commits with.
+# Used by: git log --show-signature, git verify-commit.
+# Old keys are kept so historical commits stay verifiable locally.
+
+# yoshintame-mbp — current signing key (this Mac)
+m.ivanov0427@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev
+
+# GitHub — previous per-service signing key
+m.ivanov0427@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnp1BoBIvB8G2L3imQDVkuLFpIHDhz5+kywZfBvaONj
+
+# lasthaze-mbp — previous main key (rsa)
+m.ivanov0427@gmail.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCxHaQG1mQY85vXQXvZOJ7QtoMmNhJ9lxtIFSqf7JGQO/PisFFj6e03ut5CBjEYeEiriMQ5wKNYgzNAlV5WMPwKC0Z1anbpdGxJpLtwLNfmzTvBDB/x73lHj9uCfyPyI0Yf/mntFOuuDKRVw5arqL31Tk3Kqj4aEvwMlnpAME4pLPEE/OaS+fL3RGymp7ihK79WvP4eXziYQog17H0KtN/7vJuq/DdF4r7kpTUEDjA2iMJJMl95a7BwKCSYN8NkM07r8ES9TJH1qTpv63PctSFduLmEY6jR8vkSYpesudeI8SjT65hwerCZJqlPz4vYvckPRMxS6SA7H9y2sGUgpO8N8Q+QBRynr37R0QDvA/BGIcHJ7E0hIv/Xs3Q05Gb+pxp3sYcSK+f25FV8NRA27z1EIdbfqoLqTdcfDLosLgh6arYJf8FCFd+BTRHPiETgawVMOpqh76MbN82rdug1RGh7/gNFCYOIqW0yfiyV/SngM+mQ9TiFmsKpb5XbWgLQ1vUVHzMYduV/uRuwqq7j9AzfgmsD1uaw2jV0reVkfSzGSvzusA7W/56DfB1l+Kf33IvypICtrFxoYzn+iyNP7LX/4prW2P8nEjnmk8FEky7Xi57XZAGSnuEbw0sIsvleHg9AutLkUbgjA+cG+wBLWpepa+Ef+wWDPj+l4OGneuuJgw==
+
+# Yoshintame PC — signing key of the PC device
+m.ivanov0427@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3UID33NRkmZdaNzjvY3M/A7UPkba8PYDqK8P4+Sa4k

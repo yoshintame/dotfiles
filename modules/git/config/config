@@ -1,7 +1,7 @@
 [user]
     name        = Mikhail Ivanov
     email       = m.ivanov0427@gmail.com
-    signingkey  = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnp1BoBIvB8G2L3imQDVkuLFpIHDhz5+kywZfBvaONj
+    signingkey  = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev
 
 [github]
     user        = yoshintame
@@ -29,7 +29,8 @@
     gpgsign = true
 
 [gpg "ssh"]
-    program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+    program            = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+    allowedSignersFile = ~/.config/git/allowed_signers
 
 [advice] # disable advices
     addEmptyPathspec   = false

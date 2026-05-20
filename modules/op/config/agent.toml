@@ -2,21 +2,15 @@
 # Keys are offered to servers top-to-bottom; this keeps the key a server
 # actually wants within its MaxAuthTries window.
 
-# 1 — primary key (current main, ed25519)
+# 1 — primary key (current main, ed25519): auth + git commit signing
 [[ssh-keys]]
 item = "yoshintame-mbp"
 
-# 2 — git commit signing
-[[ssh-keys]]
-item = "GitHub"
-
-# 3 — previous main key (rsa, migrated away from)
+# 2 — previous main key (rsa); kept until server authorized_keys are audited
 [[ssh-keys]]
 item = "lasthaze-mbp"
 
 # tail — rarely used
-# note: "GitHub | ADAM" item has no private_key — 1Password agent cannot
-# serve it, so it is omitted here (fix or remove the item in 1Password).
 [[ssh-keys]]
 item = "GitLab"
 

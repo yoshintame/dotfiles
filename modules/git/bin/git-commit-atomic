@@ -123,7 +123,7 @@ if [ -n "$AUTHOR" ]; then
 fi
 [ -n "$DATE" ] && export GIT_AUTHOR_DATE="$DATE"
 
-ERR=$(mktemp)
+ERR=$(mktemp "${TMPDIR:-/tmp}/gca.XXXXXX")
 trap 'rm -f "$ERR"' EXIT
 
 if [ "$AUTO" -eq 0 ]; then

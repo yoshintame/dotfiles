@@ -304,12 +304,16 @@
       "mcp__ynab__ynab_list_budgets",
       "mcp__chrome-devtools__fill_form",
       "mcp__chrome-devtools__type_text",
-      "Bash(yt-dlp --skip-download --no-warnings --write-auto-subs --sub-langs \"en\" --sub-format vtt -o \"/tmp/yt-auto/%\\(id\\)s.%\\(ext\\)s\" \"https://www.youtube.com/watch?v=arj7oStGLkU\")"
+      "Bash(yt-dlp --skip-download --no-warnings --write-auto-subs --sub-langs \"en\" --sub-format vtt -o \"/tmp/yt-auto/%\\(id\\)s.%\\(ext\\)s\" \"https://www.youtube.com/watch?v=arj7oStGLkU\")",
+      "WebFetch(domain:www.reddit.com)",
+      "WebFetch(domain:old.reddit.com)",
+      "Bash(mkdir -p __TRACKED_VAR__/miko)",
+      "Bash(sips -s format jpeg ./IMG_0659.heic --out __TRACKED_VAR__/miko/IMG_0659.jpg)",
+      "WebFetch(domain:hn.algolia.com)"
     ],
     "deny": [
       "Read(//Users/yoshintame/Backups/**)",
-      "Read(//Users/yoshintame/.config/resticprofile/**)",
-      "Bash(rm -rf:*)"
+      "Read(//Users/yoshintame/.config/resticprofile/**)"
     ],
     "ask": [
       "Bash(ssh:*)",
@@ -400,7 +404,7 @@
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.claude/hooks/smart_approve.py\""
+            "command": "$HOME/.claude/hooks/smart-approve.sh"
           }
         ]
       }
@@ -441,6 +445,9 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": true,
     "network": {
+      "allowUnixSockets": [
+        "/Users/yoshintame/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+      ],
       "allowLocalBinding": true
     },
     "filesystem": {

@@ -3,7 +3,7 @@ name: git-commit
 description: Generates Conventional Commits messages by analyzing staged changes and repo commit history. Use when the user says "commit", "git commit", or asks to commit changes.
 license: MIT
 metadata:
-  version: 6.0.0
+  version: 6.1.0
 ---
 
 # Git Commit
@@ -31,8 +31,9 @@ metadata:
 
 2. Choose commit mode based on how the user invoked the skill:
 
-   - With argument `auto` (e.g. the user typed `/git-commit auto`): commit without editor preview by passing `--auto`.
-   - Otherwise (default): commit with the user's editor opened on the message for review.
+   - Argument `auto` (e.g. `/git-commit auto`): a normal commit without the editor message preview — pass `--auto -S`. The explicit `-S` is required because the `--auto` path builds via `git commit-tree`, which does not honor `commit.gpgsign`; without it the commit would be unsigned.
+   - Argument `auto-no-sign` (e.g. `/git-commit auto-no-sign`): same as `auto` but unsigned — pass `--auto` only (no `-S`). For agent flows where signing would stall on the 1Password biometric / agent socket; such commits are signed later, after human review.
+   - Otherwise (default): commit with the user's editor opened on the message for review (signed via `commit.gpgsign`).
 
 3. Run the wrapper:
 
@@ -48,7 +49,7 @@ metadata:
    The wrapper has two execution paths:
 
    - **Default (no `--auto`)** — delegates to `git commit -e`. The user's real editor opens for message review, repo `pre-commit` / `commit-msg` / `post-commit` hooks fire, lint and test gates run as configured. Race-safety: `.git/index.lock` (git-native), no CAS against `HEAD` movement. Suitable for the typical interactive single-session commit.
-   - **`--auto`** — builds the commit on top of `HEAD` in an ephemeral `GIT_INDEX_FILE` under `$GIT_DIR`, then advances `HEAD` via atomic compare-and-swap (`commit-tree` + `update-ref HEAD <new> <expected>`). On lost CAS the wrapper retries with the new `HEAD` snapshot. Race-safe under parallel Claude sessions sharing the worktree, but hooks are NOT executed (plumbing flow). Suitable when the user invoked the skill with `auto`, or when concurrent sessions are involved.
+   - **`--auto`** — builds the commit on top of `HEAD` in an ephemeral `GIT_INDEX_FILE` under `$GIT_DIR`, then advances `HEAD` via atomic compare-and-swap (`commit-tree` + `update-ref HEAD <new> <expected>`). On lost CAS the wrapper retries with the new `HEAD` snapshot. Race-safe under parallel Claude sessions sharing the worktree, but hooks are NOT executed (plumbing flow). Suitable when the user invoked the skill with `auto` / `auto-no-sign`, or when concurrent sessions are involved.
 
    Supported flags (must precede the message):
 

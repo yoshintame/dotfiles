@@ -26,11 +26,16 @@ usage() {
 Usage: bootstrap.sh <host>
 
 Hosts defined in flake.nix:
-  lasthaze-mbp       macOS (aarch64-darwin)
-  lasthaze-server    Linux (x86_64-linux)
+  lasthaze-mbp       macOS (aarch64-darwin), nix-darwin + home-manager
+  lasthaze-server    Linux (x86_64-linux), NixOS + home-manager
 
-Example:
-  bash bootstrap.sh lasthaze-mbp
+Examples:
+  bash bootstrap.sh lasthaze-mbp                     # macOS user-machine
+  bash bootstrap.sh lasthaze-server                  # NixOS server (after nixos-install)
+
+For lasthaze-server: install NixOS first (via nixos-anywhere or installer ISO),
+then run this script on the server. age-key is auto-derived from SSH host key
+on first boot via systemd oneshot (Tier 1b in bootstrap-secret-strategies vault note).
 EOF
   exit 2
 }
@@ -90,6 +95,13 @@ source_nix_env() {
   export FLAKE_ROOT="${REPO_DIR}"
 }
 
+is_nixos_host() {
+  case "$1" in
+    lasthaze-server) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 run_system_switch() {
   local host="$1"
   log "Building system for host: ${host}"
@@ -100,9 +112,18 @@ run_system_switch() {
         --impure switch --flake "${REPO_DIR}#${host}"
       ;;
     Linux)
-      nix --extra-experimental-features "nix-command flakes" \
-        run github:nix-community/home-manager/release-25.05 -- \
-        switch --impure --flake "${REPO_DIR}#${host}"
+      if is_nixos_host "${host}"; then
+        if [ ! -f /etc/NIXOS ]; then
+          err "Host '${host}' is a NixOS configuration but this machine is not running NixOS."
+          err "Install NixOS first via nixos-anywhere or installer ISO, then re-run bootstrap."
+          exit 1
+        fi
+        sudo nixos-rebuild switch --flake "${REPO_DIR}#${host}"
+      else
+        nix --extra-experimental-features "nix-command flakes" \
+          run github:nix-community/home-manager/release-25.05 -- \
+          switch --impure --flake "${REPO_DIR}#${host}"
+      fi
       ;;
     *)
       err "Unsupported OS: $(uname -s)"
@@ -115,6 +136,11 @@ bootstrap_age_key() {
   local key_file="${HOME}/.config/sops/age/keys.txt"
   if [ -f "${key_file}" ]; then
     log "SOPS age key already present at ${key_file}"
+    return 0
+  fi
+  if is_nixos_host "${HOST}"; then
+    log "NixOS host — age key derived from SSH host key by sops-age-key-bootstrap.service"
+    log "Will appear at ${key_file} after first boot. See bootstrap-secret-strategies vault note (Tier 1b)."
     return 0
   fi
   if ! command -v op >/dev/null 2>&1; then

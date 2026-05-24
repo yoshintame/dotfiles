@@ -33,8 +33,8 @@
     sops-nix,
     ...
   } @ inputs: let
-    flakeRootEnv = builtins.getEnv "FLAKE_ROOT";
-    flakeRoot = "/Users/yoshintame/.dotfiles";
+    flakeRootDarwin = "/Users/yoshintame/.dotfiles";
+    flakeRootLinux = "/home/yoshintame/.dotfiles";
   in {
     darwinConfigurations.lasthaze-mbp = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
@@ -45,7 +45,7 @@
           _module.args.inputs = inputs;
 
           home-manager.extraSpecialArgs = {
-            inherit flakeRoot;
+            flakeRoot = flakeRootDarwin;
             pkgs-unstable = nixpkgs-unstable.legacyPackages.aarch64-darwin;
           };
           home-manager.sharedModules = [
@@ -57,17 +57,29 @@
       ];
     };
 
-    homeConfigurations.lasthaze-server = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      extraSpecialArgs = {
-        inherit flakeRoot;
-        pkgs-unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
+    nixosConfigurations.lasthaze-server = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = {
+        inherit inputs;
+        flakeRoot = flakeRootLinux;
       };
       modules = [
-        nix-dotbot.homeManagerModules.default
-        sops-nix.homeManagerModules.sops
-        ./modules/sops-templates
-        ./hosts/lasthaze-home
+        home-manager.nixosModules.home-manager
+        ./hosts/lasthaze-server
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "bkp";
+          home-manager.extraSpecialArgs = {
+            flakeRoot = flakeRootLinux;
+            pkgs-unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
+          };
+          home-manager.sharedModules = [
+            nix-dotbot.homeManagerModules.default
+            sops-nix.homeManagerModules.sops
+            ./modules/sops-templates
+          ];
+        }
       ];
     };
   };

@@ -309,7 +309,9 @@
       "WebFetch(domain:old.reddit.com)",
       "Bash(mkdir -p __TRACKED_VAR__/miko)",
       "Bash(sips -s format jpeg ./IMG_0659.heic --out __TRACKED_VAR__/miko/IMG_0659.jpg)",
-      "WebFetch(domain:hn.algolia.com)"
+      "WebFetch(domain:hn.algolia.com)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:api.github.com)"
     ],
     "deny": [
       "Read(//Users/yoshintame/Backups/**)",

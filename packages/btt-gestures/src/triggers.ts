@@ -1,0 +1,81 @@
+export const TriggerClass = {
+  trackpad: "BTTTriggerTypeTouchpadAll",
+} as const;
+
+export const Trigger = {
+  "1f-tap": 207,
+  "1f-double-tap": 208,
+  "1f-force-click": 203,
+  "1f-tiptap-left": 113,
+  "1f-tiptap-right": 114,
+
+  "1f-corner-top-left": 122,
+  "1f-corner-top-right": 123,
+  "1f-corner-top-middle": 124,
+  "1f-corner-bottom-left": 125,
+  "1f-corner-bottom-right": 126,
+  "1f-corner-bottom-middle": 127,
+
+  "pinch-in": 115,
+  "pinch-out": 116,
+  "rotate-left": 117,
+  "rotate-right": 118,
+
+  "3f-pinch-in": 197,
+  "3f-pinch-out": 198,
+  "4f-pinch-in": 194,
+  "4f-pinch-out": 195,
+  "5f-pinch-in": 200,
+  "5f-pinch-out": 201,
+
+  "2f-tap": 173,
+  "2f-click": 174,
+  "2f-double-tap": 179,
+  "2f-force-click": 175,
+  "2f-swipe-left": 159,
+  "2f-swipe-right": 160,
+  "2f-swipe-up": 161,
+  "2f-swipe-down": 162,
+  "2f-tiptap-left": 132,
+  "2f-tiptap-right": 133,
+
+  "3f-tap": 104,
+  "3f-double-tap": 163,
+  "3f-click": 112,
+  "3f-force-click": 170,
+  "3f-swipe-left": 100,
+  "3f-swipe-right": 101,
+  "3f-swipe-up": 102,
+  "3f-swipe-down": 103,
+  "3f-tiptap-left": 136,
+  "3f-tiptap-right": 137,
+
+  "4f-tap": 110,
+  "4f-double-tap": 169,
+  "4f-click": 121,
+  "4f-force-click": 171,
+  "4f-swipe-left": 105,
+  "4f-swipe-right": 106,
+  "4f-swipe-up": 108,
+  "4f-swipe-down": 107,
+
+  "5f-tap": 111,
+  "5f-click": 141,
+  "5f-force-click": 172,
+  "5f-swipe-left": 128,
+  "5f-swipe-right": 129,
+  "5f-swipe-up": 131,
+  "5f-swipe-down": 130,
+  "5f-touch": 151,
+
+  "corner-click-top-left": 182,
+  "corner-click-top-right": 183,
+  "corner-click-bottom-left": 157,
+  "corner-click-bottom-right": 158,
+  "corner-force-click-top-left": 184,
+  "corner-force-click-top-right": 185,
+  "corner-force-click-bottom-left": 186,
+  "corner-force-click-bottom-right": 187,
+} as const;
+
+export type TriggerName = keyof typeof Trigger;

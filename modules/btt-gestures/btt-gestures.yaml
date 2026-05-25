@@ -1,0 +1,45 @@
+webserver:
+  url: http://127.0.0.1:57528
+
+preset: yoshintame
+
+gestures:
+  - id: clipboard.cut
+    trigger: 3f-pinch-in
+    action: { kind: keystroke, key: x, mods: [cmd] }
+
+  - id: clipboard.paste
+    trigger: 3f-pinch-out
+    action: { kind: keystroke, key: v, mods: [cmd] }
+
+  - id: clipboard.select-all
+    trigger: 3f-swipe-up
+    action: { kind: keystroke, key: a, mods: [cmd] }
+
+  - id: clipboard.open-pace
+    trigger: 3f-swipe-down
+    action: { kind: keystroke, key: v, mods: [cmd, shift] }
+
+  - id: nav.enter
+    trigger: 3f-swipe-right
+    action: { kind: keystroke, key: return }
+
+  - id: nav.quick-switch
+    trigger: 3f-swipe-left
+    action: { kind: keystroke, key: tab, mods: [cmd] }
+
+  - id: window.alttab-apps
+    trigger: 4f-swipe-up
+    action: { kind: keystroke, key: a, mods: [cmd, alt, ctrl, shift] }
+
+  - id: window.alttab-windows
+    trigger: 4f-swipe-down
+    action: { kind: keystroke, key: w, mods: [cmd, alt, ctrl, shift] }
+
+  - id: system.volume-down
+    trigger: 1f-tiptap-left
+    action: { kind: volume-down }
+
+  - id: system.volume-up
+    trigger: 1f-tiptap-right
+    action: { kind: volume-up }

@@ -33,3 +33,10 @@ bindings:
   screenshotVideo: cmd alt ctrl shift 5
   screenshotScroll: cmd alt ctrl shift 6
   screenshotHistory: cmd alt ctrl shift 7
+
+  # AltTab — fired by BTT trackpad gestures (modules/btt-gestures)
+  altTabApps: cmd alt ctrl shift a
+  altTabWindows: cmd alt ctrl shift w
+
+  # VoiceInk — Power Mode push-to-talk hotkey, fired by 4F click hold
+  voiceInkToggle: cmd alt ctrl shift v

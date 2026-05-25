@@ -22,6 +22,12 @@ dir = "~/.dotfiles/modules/proxy-bindings"
 raw = true
 run = 'bun run ~/.dotfiles/packages/proxy-bindings/src/cli.ts generate "$@"'
 
+["dot:btt-gestures"]
+description = "Sync trackpad gestures from YAML to BetterTouchTool via REST API"
+dir = "~/.dotfiles/modules/btt-gestures"
+raw = true
+run = 'bun run ~/.dotfiles/packages/btt-gestures/src/cli.ts "$@"'
+
 ["dot:dump-packages"]
 description = "Dump unmanaged apps and Setapp list for backup"
 run = 'bun run "$HOME/.dotfiles/packages/dump-packages/src/cli.ts"'

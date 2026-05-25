@@ -180,6 +180,7 @@ in {
         ../../modules/mise
         ../../modules/op
         ../../modules/resticprofile
+        ../../modules/btt-gestures
         ../../modules/claude
         ../../modules/claude-code-patch
         ../../modules/codex

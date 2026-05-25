@@ -311,7 +311,16 @@
       "Bash(sips -s format jpeg ./IMG_0659.heic --out __TRACKED_VAR__/miko/IMG_0659.jpg)",
       "WebFetch(domain:hn.algolia.com)",
       "WebFetch(domain:registry.npmjs.org)",
-      "WebFetch(domain:api.github.com)"
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:fonts.googleapis.com)",
+      "WebFetch(domain:fonts.gstatic.com)",
+      "Bash(/bin/rm -rf /Users/yoshintame/Development/work/senate/senate@docs/.next)",
+      "Bash(/usr/bin/time -p bun run build)",
+      "WebFetch(domain:github.com)",
+      "Bash(git -C /Users/yoshintame/Development/work/senate/senate@docs push)",
+      "Bash(kill 85023)",
+      "Bash(xargs kill)",
+      "Bash(tee /tmp/fumadocs-dev.log)"
     ],
     "deny": [
       "Read(//Users/yoshintame/Backups/**)",
@@ -450,7 +459,16 @@
       "allowUnixSockets": [
         "/Users/yoshintame/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
       ],
-      "allowLocalBinding": true
+      "allowLocalBinding": true,
+      "allowedDomains": [
+        "github.com",
+        "api.github.com",
+        "*.githubusercontent.com",
+        "codeload.github.com",
+        "registry.npmjs.org",
+        "*.npmjs.org",
+        "*.senateexchange.com"
+      ]
     },
     "filesystem": {
       "allowWrite": [
@@ -472,7 +490,13 @@
     "excludedCommands": [
       "docker *",
       "bun run storybook",
-      "bun run storybook *"
+      "bun run storybook *",
+      "ssh *",
+      "scp *",
+      "sftp *",
+      "rsync *",
+      "yt-dlp *",
+      "act *"
     ]
   },
   "autoMemoryEnabled": false,

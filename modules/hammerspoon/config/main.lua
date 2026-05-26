@@ -11,14 +11,14 @@ spoon.AppLauncher:bindHotkeys({
     ["Finder"]             = { { "alt", "shift"         }, "E", keyboardLayout = "ABC" },
 
     ["Arc"]                = { { "alt"                  }, "A" },
-    ["ChatGPT"]            = { { "alt", "shift"         }, "A" },
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Visual Studio Code"] = { { "alt"                  }, "D" },
     ["Jira"]               = { { "alt", "shift"         }, "D" },
 
-    ["Figma"]              = { { "alt"                  }, "Z" },
-    ["Insomnia"]           = { { "alt"                  }, "X" },
+    ["TickTick"]           = { { "alt"                  }, "T" },
+    ["Claude"]             = { { "alt"                  }, "Z" },
+    ["yaak"]               = { { "alt"                  }, "X" },
     ["Discord"]            = { { "alt"                  }, "C" },
     ["Activity Monitor"]   = { { { "alt"                }, "V" },
                                { { "alt"                }, "escape" },

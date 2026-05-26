@@ -19,6 +19,9 @@ bindings:
   # Raycast
   spotlight: cmd alt ctrl shift f
 
+  # Claude Desktop
+  claudeSpotlight: cmd alt ctrl shift s
+
   # Ice (menu bar manager)
   iceMenuItemPicker: cmd alt ctrl shift m
 

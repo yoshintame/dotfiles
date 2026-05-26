@@ -197,6 +197,7 @@ spoon.LeaderFlow:setup({
         { "a", "[AI]", {
             { "a", "Fix", shortcut(proxy.fix) },
             { "g", "ChatGPT", launch("ChatGPT") },
+            { "s", "Claude Spotlight", shortcut(proxy.claude_spotlight) },
         }},
 
         { "h", "[hammerspoon]", {

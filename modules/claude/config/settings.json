@@ -474,6 +474,7 @@
       "allowWrite": [
         "~/Development",
         "~/Documents/obsidian/yoshintame",
+        "~/.local/share/Trash",
         "/tmp",
         "/private/tmp"
       ],

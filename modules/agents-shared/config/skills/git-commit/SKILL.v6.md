@@ -3,7 +3,7 @@ name: git-commit
 description: Generates Conventional Commits messages by analyzing staged changes and repo commit history. Use when the user says "commit", "git commit", or asks to commit changes.
 license: MIT
 metadata:
-  version: 6.1.0
+  version: 6.2.0
 ---
 
 # Git Commit
@@ -29,11 +29,12 @@ metadata:
 
    `<repo>` — absolute path to the worktree. Default output: branch info, working-tree status, **worktree diff `--stat` only**, branch divergence, recent-commits style, detected repo commit conventions. Add `--full-diff` if a full unified diff is genuinely needed (rare — you usually have edit context already and can request specific hunks via `git -C <repo> diff HEAD -- <path>`).
 
-2. Choose commit mode based on how the user invoked the skill:
+2. Choose commit mode:
 
-   - Argument `auto` (e.g. `/git-commit auto`): a normal commit without the editor message preview — pass `--auto -S`. The explicit `-S` is required because the `--auto` path builds via `git commit-tree`, which does not honor `commit.gpgsign`; without it the commit would be unsigned.
-   - Argument `auto-no-sign` (e.g. `/git-commit auto-no-sign`): same as `auto` but unsigned — pass `--auto` only (no `-S`). For agent flows where signing would stall on the 1Password biometric / agent socket; such commits are signed later, after human review.
-   - Otherwise (default): commit with the user's editor opened on the message for review (signed via `commit.gpgsign`).
+   - **Autonomous commit — default when you are committing as part of carrying out a task** (the user did NOT explicitly invoke `/git-commit` for interactive review): pass `--auto` **without** `-S` (unsigned, no editor preview). A locked 1Password agent must never block an autonomous commit, and signing is deferred to human review — the human signs the reviewed range later with `git rebase <base> --exec 'git commit --amend --no-edit -S'`.
+   - Argument `auto` (`/git-commit auto`): a normal commit without the editor preview — pass `--auto -S`. The explicit `-S` is required because the `--auto` path builds via `git commit-tree`, which does not honor `commit.gpgsign`; without it the commit would be unsigned.
+   - Argument `auto-no-sign` (`/git-commit auto-no-sign`): `--auto` without `-S` — explicit unsigned, no editor preview (same as the autonomous default).
+   - No argument (`/git-commit`): the user wants interactive review — open the editor on the message (signed via `commit.gpgsign`).
 
 3. Run the wrapper:
 

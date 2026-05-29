@@ -117,6 +117,40 @@ const create = (data: CreateUserInput) => Effect.gen(function* () { /* ... */ })
 stream.pipe(Stream.mapEffect((msg) => Effect.fn('handler')(function* () { /* ... */ })))
 ```
 
+The `effect:` / `scoped:` body itself stays a plain `Effect.gen` — it's the layer constructor, run once at layer build. `Effect.fn` belongs on the methods it returns.
+
+## Inline the returned shape; indirect only when it buys something
+
+Define a returned method directly inside `return { ... }` when it's used only as the public method. The `const name = ...; return { name }` indirection earns its keep only when the method needs an `Effect.fn` span (above) or is also called internally — by another method or by the build body (the boot loop). Closure-private helpers stay as `function` declarations inside the `Effect.gen`; pure helpers move below the service (see the ts-react-style "Module layout" rule).
+
+```ts
+// DO
+effect: Effect.gen(function* () {
+  const store = yield* NoteStore
+  const index = new Map<string, Entry[]>()
+
+  function ingest(h: Header): void { /* used by the boot loop AND refresh */ }
+
+  for (const h of store.headers()) ingest(h)
+
+  return {
+    byTarget: (path) => index.get(path) ?? [],
+    refresh: (paths) => {
+      for (const p of paths) ingest(/* ... */)
+    },
+  }
+})
+```
+
+```ts
+// DON'T — needless const indirection for methods used only in the shape
+const byTarget = (path: string) => index.get(path) ?? []
+const refresh = (paths: readonly string[]) => { /* ... */ }
+return { byTarget, refresh }
+```
+
+A method that needs a traced span stays `const m = Effect.fn('Svc.m')(…)` above and is referenced in the shape — that indirection is the point.
+
 ## `Layer.provide` vs `Layer.provideMerge` vs `Layer.mergeAll`
 
 | Combinator | Effect on output | Use for |

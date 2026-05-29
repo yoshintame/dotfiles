@@ -41,3 +41,18 @@ omitted), space indentation.
 Biome `organizeImports` groups and orders imports automatically (built-ins →
 external packages → shared-layer alias → other aliases → relative → URL, with
 blank lines between groups). Don't hand-order imports against it.
+
+Separate logical blocks inside a function body with a single blank line (guard
+clauses, the main loop, the final return / aggregation). Biome keeps single
+blank lines (and collapses runs of 2+ to one), so they survive formatting.
+Don't write dense wall-of-statements bodies.
+
+## Module layout
+
+- The file's primary export comes first — the class / service / React component
+  the file is named for. Module-private helpers it uses go **below** it, as
+  `function` declarations. Function declarations hoist, so use-before-definition
+  is fine; read top-down: the headline, then the supporting detail.
+- Only pure helpers (no closure capture) lift to module level below the export.
+  A helper that needs the surrounding closure (a shared `Map` / `Ref`, captured
+  config) stays inside that scope — see the Effect skill for service bodies.

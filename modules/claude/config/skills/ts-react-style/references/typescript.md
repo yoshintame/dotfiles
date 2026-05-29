@@ -39,6 +39,15 @@
 - Explicit accessibility modifier on every member.
 - Constructor parameter properties for DI: `constructor(private readonly page: Page) {}`.
 
+## Naming
+
+- Name a `Map` / lookup `<values>By<key>` so the key is obvious from the name:
+  `backlinksByTarget` (keyed by target path), `usersById`. Not a bare `index` /
+  `map` / `cache`.
+- When the same concept exists in a raw and a resolved form, give each a
+  distinct name — `linkTarget` (raw `[[...]]` string) vs `targetPath` (resolved
+  vault path). Don't reuse one word for both states.
+
 ## Modules
 
 - Relative imports inside a module; absolute alias imports across modules, only

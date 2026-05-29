@@ -475,6 +475,7 @@
         "~/Development",
         "~/Documents/obsidian/yoshintame",
         "~/.local/share/Trash",
+        "~/.bun",
         "/tmp",
         "/private/tmp"
       ],
@@ -503,6 +504,9 @@
   "autoMemoryEnabled": false,
   "theme": "dark-ansi",
   "agentPushNotifEnabled": true,
+  "env": {
+    "BUN_TMPDIR": "/tmp"
+  },
   "mcpServers": {
     "console-ninja": {
       "command": "npx",

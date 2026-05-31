@@ -1,13 +1,15 @@
+<!-- fullWidth: false tocVisible: false tableWrap: true -->
 # Global Rules
 
-## Bash
+## *Bash*
 
-- NEVER use `cd` in Bash commands. Always use absolute paths or tool-specific flags such as `git -C /path`.
-- NEVER chain commands with `cd /path &&` or `cd /path;`.
+- *NEVER use `cd` in Bash commands. Always use absolute paths or tool-specific flags such as `git -C /path`.*
+- *NEVER chain commands with `cd /path &&` or `cd /path;`.*
+- *The Bash tool runs `fish`, not `bash`. Use fish syntax — in particular `set -x NAME value` for environment variables, NOT `export NAME=value`.*
 
 ## Code
 
-- NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.
+- *NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.*
 
 ## Package managers
 

@@ -467,7 +467,9 @@
         "codeload.github.com",
         "registry.npmjs.org",
         "*.npmjs.org",
-        "*.senateexchange.com"
+        "*.senateexchange.com",
+        "www.reddit.com",
+        "oauth.reddit.com"
       ]
     },
     "filesystem": {
@@ -476,6 +478,7 @@
         "~/Documents/obsidian/yoshintame",
         "~/.local/share/Trash",
         "~/.bun",
+        "~/.cache/search-reddit",
         "/tmp",
         "/private/tmp"
       ],

@@ -35,7 +35,9 @@ Default first action: **WebSearch**. Only call scripts if the topic explicitly b
 
 ## Available scripts (on $PATH)
 
-All scripts support `--help` and `--json`. See [docs/web-research-scripts.md](../../../../docs/web-research-scripts.md) for full details.
+All scripts support `--help` and `--json`. Full reference: the **Web Research Scripts** note in the Obsidian vault (`projects/ai-agent-config/web-research-scripts.md`).
+
+`search-reddit` needs no API key, app, or credentials: it impersonates the official Reddit Android client for an anonymous OAuth token (full scores + comment trees), falling back to anonymous `.json` then RSS if Reddit blocks the token path.
 
 ### `search-reddit`
 

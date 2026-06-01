@@ -174,7 +174,7 @@ spoon.LeaderFlow:setup({
 
         { "d", "[development]", {
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
-            { "d", "VSCode Windows", raycast("raycast://extensions/raycast/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D") },
+            { "d", "VSCode Windows", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D") },
 
             { "c", "CRM", code("~/Development/work/senat-exchange/crm-frontend") },
             { "f", "dotfiles", code("~/.dotfiles") },

@@ -5,11 +5,20 @@
 
 - *NEVER use `cd` in Bash commands. Always use absolute paths or tool-specific flags such as `git -C /path`.*
 - *NEVER chain commands with `cd /path &&` or `cd /path;`.*
-- *The Bash tool runs `fish`, not `bash`. Use fish syntax — in particular `set -x NAME value` for environment variables, NOT `export NAME=value`.*
+- *The Bash tool runs a POSIX shell (zsh), not fish. Use POSIX syntax for every command you execute via the tool, e.g. `export NAME=value`.*
+- *The user's own interactive terminal is fish. ONLY when writing a command for the user to copy and run there, use fish syntax, e.g. `set -x NAME value` instead of `export NAME=value`. Default everywhere else is POSIX.*
 
 ## Code
 
 - *NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.*
+
+## File references
+
+- *When linking to a file in a response, always use markdown link syntax with the file's **absolute path** as the target, without the `file://` scheme: `[name](/Users/.../file.ts)`. VSCode Claude Code extension renders bare absolute paths as clickable links; `file://` URIs and relative paths to files outside the open workspace do not open.*
+
+## Agent configs & skills
+
+All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-dotbot symlinks from `~/.dotfiles`. Edit the **original in the repo**, never the `~/.claude/` copy. For the full path map and linking mechanics — what is live immediately vs. needs `mise run dot:rebuild` — see `~/.dotfiles/CLAUDE.md`.
 
 ## Package managers
 

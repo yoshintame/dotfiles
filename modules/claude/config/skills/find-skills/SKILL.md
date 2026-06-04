@@ -27,12 +27,13 @@ Pull in this order; stop early once a higher tier answers the query.
 - `helloianneo/awesome-claude-code-skills` — Chinese, 4-tier grades, hard inclusion bar.
 - `VoltAgent/awesome-agent-skills` — cross-tool; trust only org-attributed entries, not the "1000+" claim.
 - `PatrickJS/awesome-cursorrules` — de-facto `.cursorrules`/`.mdc` corpus (rules layer, for CLAUDE.md / AGENTS.md work).
+- `skills.sh` — Vercel-run directory with a real API and a multi-scanner security gate; pull the `curated` first-party tier, not the install-ranked firehose.
 
-**Never authoritative (slop / SEO / star-farmed)** — skip or flag: `ComposioHQ/awesome-claude-skills`, `karanb192/awesome-claude-skills`, `agentskill.work`, `agent-skills.cc`, `claudeskills.info`.
+**Never authoritative (slop / SEO / star-farmed)** — skip or flag: `ComposioHQ/awesome-claude-skills`, `karanb192/awesome-claude-skills`, `agentskill.work`, `agent-skills.cc`, `claudeskills.info`, `explainx.ai/skills`.
 
 ## Fetch
 
-There is no REST/JSON API anywhere in this ecosystem — everything is GitHub raw + git trees.
+Almost everything is GitHub raw + git trees — the one real API is skills.sh (below).
 
 Run the enumerator (deterministic; reads SKILL.md frontmatter across repos):
 
@@ -48,6 +49,13 @@ It prints `repo | path | name | description` for every `*/SKILL.md`. Manual equi
 
 `raw.githubusercontent.com` fetches are free; only `api.github.com` counts against the 60 req/hr anonymous limit, so the one trees call per repo is the budget. Set `GITHUB_TOKEN` to raise it.
 
+skills.sh API — `https://skills.sh/api/v1/`, header `Authorization: Bearer sk_live_...` (key from skills-api@vercel.com), 600/min:
+- curated tier (the trusted slice): `GET /skills/curated` — Vercel's first-party set
+- search: `GET /skills/search?q=<query>` — fuzzy + semantic
+- one skill + its file tree: `GET /skills/{source}/{skill}`
+
+Key-free fallback: self-host `mastra-ai/skills-api`, which re-derives the same data from GitHub.
+
 ## Rank
 
 Order candidates by, in priority:
@@ -60,7 +68,3 @@ Star count is not a ranking signal here — it is gamed across this ecosystem.
 ## Broaden with deep-research
 
 When the source list does not cover the query (niche domain, a skill type none of the trusted repos carry), invoke `/deep-research` to discover beyond the list, then apply the same Rank heuristics to whatever it surfaces. Treat anything outside the list as unvetted until it passes provenance + maintenance.
-
-## Before recommending install
-
-No registry scans skills for malware — a 2026 supply-chain attack shipped 400+ malicious skills with payloads in plain text. For any skill you recommend installing: read its `SKILL.md` and every file under its `scripts/`, and pin the install to a commit SHA, not `main`.

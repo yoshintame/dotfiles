@@ -190,6 +190,17 @@ in {
 
       programs.bash.enable = true;
       programs.zsh.enable = true;
+      programs.zsh.envExtra = ''
+        autoload -Uz add-zsh-hook
+        _vtb_tz() {
+          case "$PWD" in
+            "$HOME"/Development/work/vtb/*) export TZ=Europe/Moscow ;;
+            *) unset TZ ;;
+          esac
+        }
+        add-zsh-hook chpwd _vtb_tz
+        _vtb_tz
+      '';
 
       home.sessionPath = sharedPath;
 

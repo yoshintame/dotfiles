@@ -1,6 +1,6 @@
 ---
 name: deep-research
-description: Conduct deep research on arbitrary topics (products, places, concepts, people, incidents). Uses WebSearch as primary source for curated expert content and supplements with Reddit, Hacker News, and GitHub scripts for community voice, technical depth, and OSS discovery. Trigger on "research", "investigate", "find info about", "compile references on", "understand X", "background on Y", "deep dive into".
+description: Conduct deep research on arbitrary topics (products, places, concepts, people, incidents). Uses WebSearch as primary source for curated expert content and supplements with Reddit, Hacker News, and GitHub scripts for community voice, technical depth, and OSS discovery. Always persists the final report as a deep-research note in the Obsidian vault. Trigger on "research", "investigate", "find info about", "compile references on", "understand X", "background on Y", "deep dive into".
 ---
 
 # Deep Research
@@ -122,9 +122,22 @@ If WebSearch already covered the topic fully, skip scripts. Parallelism: when mu
 - If a claim has only one source, flag it
 - Apply user profile/constraints (Phase 1 extracted them) only at this final step
 
+### Phase 5: Persist to the vault (default, do this automatically)
+
+Every research run ends by saving the report as a `deep-research` note in the Obsidian vault — don't ask first, just write it. Skip only for a throwaway one-line lookup the user clearly won't revisit.
+
+**Use the `obsidian-vault` skill for all vault conventions** — placement, naming, frontmatter schema (read its `_types/deep-research.type`), and the rule that inter-note links live only in frontmatter. Don't restate those rules here. Deep-research specifics on top of that:
+
+- It's a `type: deep-research` note, `status: current`, `date` = today (from the `# currentDate` system context).
+- Slug: append `-<year>` when the topic is recency-sensitive (e.g. `vps-asia-thailand-2026`).
+- Body = the Phase 4 synthesis; a "## Источники" list of external source URLs is expected.
+- Add 1–3 real `linked:` backlinks to existing notes; if an obvious area hub fits, list the note there too.
+
+After writing, **also present the report in chat** with the clickable saved path.
+
 ## Output
 
-Structure depends on the question. Common patterns:
+The report is a single artifact delivered twice: saved to the vault (Phase 5) **and** shown in chat. Structure depends on the question. Common patterns:
 
 **For factual/background research:**
 ```markdown

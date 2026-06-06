@@ -22,12 +22,12 @@
     ncc = "bun create yoshintame/template-bun-cli";
     ncr = "bun create yoshintame/template-bun-react";
     ni = "bun install";
-    nig = "pnpm add -g";
+    nig = "bun install --global";
     nd = "bun remove";
     nu = "bun update";
-    nb = "bun bundle";
+    nb = "bun build";
     nl = "bun pm ls";
-    nlg = "pnpm list -g";
+    nlg = "bun pm ls -g";
     nt = "bun test";
     nr = "bun run";
     nrd = "bun run dev";
@@ -74,6 +74,14 @@
     de = "dot edit";
     dg = "dot go";
     dl = "dot link";
+    dco = "dot config";
+    dr = "dot rebuild";
+    dpb = "dot proxy-bindings";
+    dbg = "dot btt-gestures";
+    ddp = "dot dump-packages";
+    dbak = "dot bootstrap-age-key";
+    dbs = "dot bootstrap-ssh";
+    dsb = "dot sops-bootstrap";
 
     # docker
     dk = "docker";

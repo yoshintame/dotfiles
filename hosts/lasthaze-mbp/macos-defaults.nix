@@ -382,6 +382,7 @@ in
         AppleLanguages = ["en-RU" "ru-RU"];
         AppleLocale = "en_RU";
         QLPanelAnimationDuration = 0;
+        TSMLanguageIndicatorEnabled = false;
         WebKitDeveloperExtras = true;
       };
     };
@@ -407,6 +408,8 @@ in
 
     defaults write /Library/Preferences/com.apple.TimeMachine AutoBackup -bool false
     defaults write /Library/Preferences/com.apple.TimeMachine MobileBackups -bool false
+
+    defaults write /Library/Preferences/FeatureFlags/Domain/UIKit.plist redesigned_text_cursor -dict-add Enabled -bool false
 
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';

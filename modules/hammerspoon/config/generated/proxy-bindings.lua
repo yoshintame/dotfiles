@@ -20,5 +20,10 @@ M.screenshot_history = "cmd alt ctrl shift 7"
 M.alt_tab_apps = "cmd alt ctrl shift a"
 M.alt_tab_windows = "cmd alt ctrl shift w"
 M.voice_ink_toggle = "cmd alt ctrl shift v"
+M.paste_history1 = "cmd alt ctrl shift f13"
+M.paste_history2 = "cmd alt ctrl shift f14"
+M.paste_history3 = "cmd alt ctrl shift f15"
+M.paste_history4 = "cmd alt ctrl shift f16"
+M.paste_history5 = "cmd alt ctrl shift f17"
 
 return M

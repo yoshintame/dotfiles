@@ -43,3 +43,11 @@ bindings:
 
   # VoiceInk — Power Mode push-to-talk hotkey, fired by 4F click hold
   voiceInkToggle: cmd alt ctrl shift v
+
+  # Clipboard history direct-paste — caught by Hammerspoon clipboard-history ring,
+  # fired by Karabiner Hyper+Cmd+1..5 (paste Nth-from-last item)
+  pasteHistory1: cmd alt ctrl shift f13
+  pasteHistory2: cmd alt ctrl shift f14
+  pasteHistory3: cmd alt ctrl shift f15
+  pasteHistory4: cmd alt ctrl shift f16
+  pasteHistory5: cmd alt ctrl shift f17

@@ -7,7 +7,6 @@ spoon.AppLauncher:bindHotkeys({
     ["yazi"]               = { { "alt"                  }, "R", isWarp = true, keyboardLayout = "ABC" },
     ["btop"]               = { { "alt"                  }, "B", isWarp = true, keyboardLayout = "ABC" },
     ["Kitty"]              = { { "alt", "shift"         }, "W", keyboardLayout = "ABC" },
-    ["Tana"]               = { { "alt"                  }, "E" },
     ["Finder"]             = { { "alt", "shift"         }, "E", keyboardLayout = "ABC" },
 
     ["Arc"]                = { { "alt"                  }, "A" },
@@ -66,6 +65,16 @@ local raycast = spoon.LeaderFlow.actions.raycast
 local code = spoon.LeaderFlow.actions.code
 local launch = spoon.LeaderFlow.actions.launch
 local reload = spoon.LeaderFlow.actions.reload
+
+hs.hotkey.bind({ "alt" }, "E", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D"))
+
+require("clipboard-history").start({
+    proxy.paste_history1,
+    proxy.paste_history2,
+    proxy.paste_history3,
+    proxy.paste_history4,
+    proxy.paste_history5,
+})
 
 spoon.LeaderFlow:setup({
     leader = { mods = {}, key = "F18" },

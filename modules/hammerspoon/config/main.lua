@@ -121,6 +121,7 @@ spoon.LeaderFlow:setup({
 
         { "l", "[links]", {
             { "g", "github.com/yoshintame", url("https://github.com/yoshintame") },
+            { "s", "senate-exchange repos", url("https://github.com/orgs/senate-exchange/repositories") },
             { "y", "youtube.com", url("https://youtube.com") },
             { "m", "google.com/maps", url("https://www.google.com/maps") },
             { "l", "[localhost]", {

@@ -1,4 +1,8 @@
 {
+  "env": {
+    "BUN_TMPDIR": "/tmp",
+    "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache"
+  },
   "permissions": {
     "allow": [
       "Grep",
@@ -502,14 +506,15 @@
       "rsync *",
       "yt-dlp *",
       "act *"
-    ]
+    ],
+    "env": {
+      "BUN_TMPDIR": "/tmp",
+      "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache"
+    }
   },
   "autoMemoryEnabled": false,
   "theme": "dark-ansi",
   "agentPushNotifEnabled": true,
-  "env": {
-    "BUN_TMPDIR": "/tmp"
-  },
   "mcpServers": {
     "console-ninja": {
       "command": "npx",

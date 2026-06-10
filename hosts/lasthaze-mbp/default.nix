@@ -184,6 +184,7 @@ in {
         ../../modules/claude
         ../../modules/claude-code-patch
         ../../modules/codex
+        ../../modules/serena
         ../../modules/iina
         ../../modules/worktrunk
       ];

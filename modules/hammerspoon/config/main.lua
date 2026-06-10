@@ -66,6 +66,23 @@ local code = spoon.LeaderFlow.actions.code
 local launch = spoon.LeaderFlow.actions.launch
 local reload = spoon.LeaderFlow.actions.reload
 
+local function hardCloseFront()
+    local app = hs.application.frontmostApplication()
+    if app then app:kill9() end
+end
+
+local function hardReopenFront()
+    local app = hs.application.frontmostApplication()
+    if not app then return end
+    local bundleID = app:bundleID()
+    app:kill9()
+    if bundleID then
+        hs.timer.doAfter(0.8, function()
+            hs.application.launchOrFocusByBundleID(bundleID)
+        end)
+    end
+end
+
 hs.hotkey.bind({ "alt" }, "E", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D"))
 
 require("clipboard-history").start({
@@ -208,6 +225,12 @@ spoon.LeaderFlow:setup({
             { "a", "Fix", shortcut(proxy.fix) },
             { "g", "ChatGPT", launch("ChatGPT") },
             { "s", "Claude Spotlight", shortcut(proxy.claude_spotlight) },
+        }},
+
+        { "q", "[quit app]", {
+            { "q", "Hard Close (kill)", hardCloseFront },
+            { "d", "Force Quit dialog", shortcut("cmd alt escape") },
+            { "r", "Hard Reopen", hardReopenFront },
         }},
 
         { "h", "[hammerspoon]", {

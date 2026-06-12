@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -eu
 
+_self="$(readlink -f "$0" 2>/dev/null || realpath "$0" 2>/dev/null || printf '%s' "$0")"
+_lib="$(dirname "$_self")/lib/cc-link.sh"
+# shellcheck source=/dev/null
+[ -f "$_lib" ] && . "$_lib"
+
 input="$(cat)"
 
 if [ "${WT_HOOK_LOG:-0}" = "1" ]; then
@@ -46,6 +51,10 @@ fi
 if [ -n "$session_id" ]; then
   git -C "$worktree_path" config extensions.worktreeConfig true >/dev/null 2>&1 || true
   git -C "$worktree_path" config --worktree claude.sessionId "$session_id" >/dev/null 2>&1 || true
+
+  if command -v cc_link_session >/dev/null 2>&1; then
+    cc_link_session "$session_id" "$cwd" "$worktree_path" || true
+  fi
 fi
 
 printf '%s\n' "$worktree_path"

@@ -435,6 +435,18 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/session-start.sh",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
@@ -505,7 +517,8 @@
       "sftp *",
       "rsync *",
       "yt-dlp *",
-      "act *"
+      "act *",
+      "bun *link-and-open.ts"
     ],
     "env": {
       "BUN_TMPDIR": "/tmp",

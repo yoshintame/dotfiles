@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }: let
   username = "yoshintame";
@@ -20,6 +21,7 @@
     PLAY = "iina";
     SSH_AUTH_SOCK = "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
   };
+  brewFull = builtins.getEnv "DOT_BREW_FULL" == "1";
   sharedPath = [
     "/run/current-system/sw/bin"
     "/etc/profiles/per-user/${username}/bin"
@@ -39,6 +41,11 @@
     "/usr/sbin"
     "/sbin"
   ];
+  fullEnv =
+    sharedEnv
+    // {
+      PATH = builtins.concatStringsSep ":" sharedPath;
+    };
 
 in {
   imports = [./macos-defaults.nix];
@@ -101,11 +108,12 @@ in {
   '';
 
   homebrew = {
-    enable = true;
+    enable = brewFull;
     onActivation = {
       cleanup = "uninstall";
       autoUpdate = false;
       upgrade = false;
+      extraFlags = ["--force-cleanup"];
     };
     global.brewfile = false;
     extraConfig = builtins.readFile ./packages/Brewfile;
@@ -124,11 +132,24 @@ in {
       HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
     };
 
-  launchd.user.envVariables =
-    sharedEnv
-    // {
-      PATH = builtins.concatStringsSep ":" sharedPath;
+  launchd.user.envVariables = fullEnv;
+
+  launchd.user.agents.session-env = {
+    serviceConfig = {
+      Label = "com.yoshintame.session-env";
+      ProgramArguments = [
+        "/bin/sh"
+        "-c"
+        (builtins.concatStringsSep " ; " (
+          lib.mapAttrsToList
+          (name: value: "launchctl setenv ${name} ${lib.escapeShellArg value}")
+          fullEnv
+        ))
+      ];
+      RunAtLoad = true;
+      StandardErrorPath = "/tmp/session-env.err";
     };
+  };
 
   launchd.user.agents.claude-code-patch = {
     serviceConfig = {
@@ -180,6 +201,7 @@ in {
         ../../modules/mise
         ../../modules/op
         ../../modules/resticprofile
+        ../../modules/rclone
         ../../modules/btt-gestures
         ../../modules/claude
         ../../modules/claude-code-patch

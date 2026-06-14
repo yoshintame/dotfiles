@@ -21,8 +21,8 @@ def query_api(criteria, page_size=1):
                     ],
                     "pageNumber": 1,
                     "pageSize": page_size,
-                    "sortBy": 4,
-                    "sortOrder": 1,
+                    "sortBy": 0,
+                    "sortOrder": 0,
                 }
             ],
             "assetTypes": [],
@@ -66,7 +66,7 @@ if all(is_extension_id(arg) for arg in args):
             print(fmt_ext(exts[0]))
 else:
     query = " ".join(args)
-    exts = query_api([{"filterType": 10, "value": query}], page_size=15)
+    exts = query_api([{"filterType": 10, "value": query}], page_size=20)
     if not exts:
         print("No results found.")
     else:

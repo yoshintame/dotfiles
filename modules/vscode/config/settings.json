@@ -738,6 +738,12 @@
           "when": "!operationInProgress",
         },
         {
+          "key": "k",
+          "name": "Compare references (review)",
+          "type": "command",
+          "command": "gitlens.compareWith",
+        },
+        {
           "key": "c",
           "name": "Commit",
           "type": "command",

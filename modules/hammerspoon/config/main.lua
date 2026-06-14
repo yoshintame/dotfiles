@@ -150,6 +150,8 @@ spoon.LeaderFlow:setup({
             { "s", "senate-exchange repos", url("https://github.com/orgs/senate-exchange/repositories") },
             { "y", "youtube.com", url("https://youtube.com") },
             { "m", "google.com/maps", url("https://www.google.com/maps") },
+            { "d", "Senate daily", url("REDACTED_ZOOM_SENATE_DAILY") },
+            { "w", "Senate weekly", url("REDACTED_ZOOM_SENATE_WEEKLY") },
             { "l", "[localhost]", {
                     { "c", "CRM", url("http://localhost:4003") },
                     { "t", "TG-Mini", url("http://localhost:8004") },

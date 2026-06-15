@@ -747,25 +747,6 @@
           "command": "git.pullRebase",
         },
         {
-          "key": "h",
-          "name": "+History",
-          "type": "bindings",
-          "bindings": [
-            {
-              "key": "l",
-              "name": "Line",
-              "type": "command",
-              "command": "gitlens.showLineHistoryView",
-            },
-            {
-              "key": "f",
-              "name": "File",
-              "type": "command",
-              "command": "gitlens.showFileHistoryView",
-            },
-          ],
-        },
-        {
           "key": "b",
           "name": "+Branch",
           "type": "bindings",
@@ -862,7 +843,13 @@
               "key": "h",
               "name": "File history",
               "type": "command",
-              "command": "gitlens.showQuickFileHistory",
+              "command": "gitlens.showFileHistoryView",
+            },
+            {
+              "key": "l",
+              "name": "Line history",
+              "type": "command",
+              "command": "gitlens.showLineHistoryView",
             },
             {
               "key": "b",

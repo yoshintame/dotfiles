@@ -83,6 +83,15 @@ local function hardReopenFront()
     end
 end
 
+local meetingNotes = require("meeting-notes").setup({ autoOpenAfterMeeting = true })
+
+local function joinMeeting(zoomUrl, mtype)
+    return function()
+        meetingNotes.expectMeeting(mtype)
+        hs.task.new("/usr/bin/open", nil, { zoomUrl }):start()
+    end
+end
+
 hs.hotkey.bind({ "alt" }, "E", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D"))
 
 require("clipboard-history").start({
@@ -92,6 +101,27 @@ require("clipboard-history").start({
     proxy.paste_history4,
     proxy.paste_history5,
 })
+
+hs.loadSpoon("Zoom")
+local meetingDndActive = false
+local function setMeetingDnd(active)
+    if active == meetingDndActive then return end
+    meetingDndActive = active
+    hs.task.new("/usr/bin/shortcuts", nil, { "run", active and "DND On" or "DND Off" }):start()
+    hs.alert.show(active and "🔕 Zoom meeting → DND on" or "🔔 Meeting ended → DND off")
+end
+local inMeeting = false
+spoon.Zoom:setStatusCallback(function()
+    local now = spoon.Zoom:inMeeting()
+    setMeetingDnd(now)
+    if now and not inMeeting then
+        meetingNotes.onMeetingStart()
+    elseif inMeeting and not now then
+        meetingNotes.onMeetingEnd()
+    end
+    inMeeting = now
+end)
+spoon.Zoom:start()
 
 spoon.LeaderFlow:setup({
     leader = { mods = {}, key = "F18" },
@@ -150,13 +180,18 @@ spoon.LeaderFlow:setup({
             { "s", "senate-exchange repos", url("https://github.com/orgs/senate-exchange/repositories") },
             { "y", "youtube.com", url("https://youtube.com") },
             { "m", "google.com/maps", url("https://www.google.com/maps") },
-            { "d", "Senate daily", url("REDACTED_ZOOM_SENATE_DAILY") },
-            { "w", "Senate weekly", url("REDACTED_ZOOM_SENATE_WEEKLY") },
+            { "d", "Senate daily", joinMeeting("REDACTED_ZOOM_SENATE_DAILY", "daily") },
+            { "w", "Senate weekly", joinMeeting("REDACTED_ZOOM_SENATE_WEEKLY", "weekly") },
             { "l", "[localhost]", {
                     { "c", "CRM", url("http://localhost:4003") },
                     { "t", "TG-Mini", url("http://localhost:8004") },
                     { "4", "404", url("http://localhost:4040") },
                 }},
+        }},
+
+        { "v", "[meeting]", {
+            { "o", "Open current note", function() meetingNotes.openCurrent() end },
+            { "r", "Mark re-listen", function() meetingNotes.markRelisten() end },
         }},
 
         { "r", "[ru snippets]", {

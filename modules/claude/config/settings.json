@@ -525,6 +525,7 @@
       "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache"
     }
   },
+  "cleanupPeriodDays": 36500,
   "autoMemoryEnabled": false,
   "theme": "dark-ansi",
   "agentPushNotifEnabled": true,

@@ -22,6 +22,10 @@
       path = "modules/agents-shared/config/skills/brew-cask/**";
       glob = true;
     };
+    "~/.claude/skills/actualize-spec/" = {
+      path = "modules/agents-shared/config/skills/actualize-spec/**";
+      glob = true;
+    };
     "~/.claude/skills/" = {
       path = "modules/claude/config/skills/**";
       glob = true;

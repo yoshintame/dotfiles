@@ -1,23 +1,33 @@
 ---
-name: handoff
-description: Generate a handoff / init-prompt file for the next session from the current session's context.
+name: handoff-create
+description: Create a handoff / init-prompt file for the next session from the current session's context.
 ---
 
 ## Input
 
 One argument: a short description of what the next session does. If none is given, ask — never guess.
 
-## Save it, don't print it
+## Run the script — it owns the file
 
 Derive a short ascii kebab-slug from the description, then:
 
 ```
-bun ~/.claude/skills/handoff/scripts/handoff-path.ts <slug>
+bun ~/.claude/skills/handoff-create/scripts/handoff-create.ts <slug>
 ```
 
-It creates `~/.claude/handoffs/<cwd>/<slug>.md` and prints the absolute path. Write the handoff there. Then reply with one inline clickable link to that path and nothing else — no copy of the content in chat.
+The script writes `~/.claude/handoffs/<cwd>/<slug>.md` with the frontmatter (`status: open`, `created_by`, `created_at`) and a `<!-- handoff body -->` placeholder. Stdout is two lines:
 
-The file is an editable artifact: the user opens it, selects parts, and asks for fixes. Apply those with Edit on the file; do not regenerate the whole thing.
+- line 1: absolute path to the new file
+- line 2: the pickup command for the next session, with path already substituted
+
+Read the file, then `Edit` to replace `<!-- handoff body -->` with the body content. Do NOT use `Write` and do NOT touch the frontmatter — the script owns it.
+
+Reply (no body in chat):
+
+1. inline clickable link to line 1's path
+2. line 2 wrapped in a triple-backtick code block — so the chat UI renders a copy button on it
+
+The file is an editable artifact: the user opens it, selects parts, asks for fixes — apply those with `Edit` on the file, do not regenerate.
 
 ## What goes in the file
 

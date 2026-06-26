@@ -78,11 +78,13 @@ Bad:  Summarize a PDF — pull title, sections, key quotes, and a TL;DR. Use whe
 Good: Summarize a PDF.
 ```
 
-To enforce slash-only, set `disable-model-invocation: true` in the frontmatter:
-the model never sees the skill's `name`/`description` (dropped from the system
-prompt) and can't auto-invoke it — it loads only when you type `/skill`. Set it on
-any skill that should never auto-fire. A skill that is meant to trigger off its
-description omits it and earns its keep with a precise one.
+Avoid `disable-model-invocation: true` on a /-invokable skill. Docs frame it as
+just blocking auto-invocation, but in practice the flag also hides the skill from
+the listing the model uses to resolve slash commands — typing `/skill` then
+injects the text but the model can't link it to the skill and improvises an
+ad-hoc version (the `/` UI dropdown still shows it, masking the breakage). The
+bare-description rule above already prevents trigger-style behavior; the flag
+adds slash breakage on top with no upside for a normal slash-invoked skill.
 
 Invocation already happened by the time the body runs, so the body never
 re-explains what the skill is or when to use it — open with the first instruction,
@@ -90,7 +92,7 @@ not a preamble.
 
 ## 6. Layout
 
-- Frontmatter holds `name`, `description`, and optionally `disable-model-invocation` (§5).
+- Frontmatter holds only `name` and `description`.
 - SKILL.md stays under 500 lines. Push depth into `references/` one level deep and
   link to it; don't inline it.
 - Folders: `scripts/` for code, `references/` for deep docs, `assets/` for templates.

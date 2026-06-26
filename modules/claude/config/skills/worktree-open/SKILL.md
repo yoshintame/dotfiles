@@ -1,7 +1,6 @@
 ---
 name: worktree-open
 description: Link the current worktree session into main and open it in VSCode.
-disable-model-invocation: true
 ---
 
 # /worktree-open

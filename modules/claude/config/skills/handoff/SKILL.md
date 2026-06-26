@@ -1,7 +1,6 @@
 ---
 name: handoff
 description: Generate a handoff / init-prompt file for the next session from the current session's context.
-disable-model-invocation: true
 ---
 
 ## Input

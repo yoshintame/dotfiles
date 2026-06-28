@@ -5,85 +5,93 @@ description: Поиск по истории сессий Claude Code (мои р�
 
 # /find-session
 
-Запрос на естественном языке → поиск по `~/.claude/projects/**/*.jsonl`. Дефолтный агент тут грепает сырой JSONL и тонет: схема неоднородная (`message.content` — то строка, то массив разнотипных блоков), а `kind='user'` забит инъекциями харнесса. Ниже — поправки к этому дефолту.
+Запрос на естественном языке → поиск по `~/.claude/projects/**/*.jsonl`. Два дефолтных провала агента: (1) грепает сырой JSONL и тонет — схема неоднородная (`message.content` то строка, то массив разнотипных блоков), `kind='user'` забит инъекциями харнесса; (2) делает ILIKE-AND по словам юзера — а юзер путает и конфлейтит слова, обязательность каждого слова выкидывает правильную сессию. Оба чинит BM25 — он и есть дефолтный первый ход.
 
-## Основной путь — скрипт
+## Первый ход — BM25 ранжированный шортлист
+
+```bash
+bun ~/.claude/skills/find-session/scripts/search.ts --bm25 --sessions "<слова юзера как есть, RU+EN>"
+```
+
+Передавай слова юзера дословно плюс очевидные RU/EN-синонимы. BM25 **дизъюнктивен**: отсутствующий терм стоит 0, совпавшие суммируются. Неверное слово юзера сессию не исключает — в отличие от ILIKE-AND, где каждое слово обязательно и один неверный терм выкидывает ответ. И он ранжирует по релевантности, тогда как `--sessions` ILIKE-пути сортирует по дате, где попадание неотличимо от шума.
+
+Колонки: `score` = пиковая релевантность (лучшее сообщение сессии, нейтрально к длине), `total`/`hits` = плотность. Ранжирование по `score`.
+
+BM25 — **шорт-листер, не арбитр**. Гибридный воркфлоу:
+
+1. `--bm25 --sessions "…"` → top 5–10 кандидатов.
+2. Внутри добей **дискриминирующим якорём** (ниже) — не доверяй существительным юзера.
+3. Кросс-чек кандидата: `git -C <project> status`, mtime файлов, даты сессии.
+
+Флаги BM25:
+
+- `--full` — индекс по `msg` (tool_use/tool_result/thinking), не только мои реплики. Точные формулировки — имена тестов, пути, лог-вывод — живут там. Индекс больше, строится дольше.
+- `--rebuild` — пересобрать снапшот+индекс с нуля (full rescan, ~15с). Снимок не авто-обновляется: переиспользуется между вызовами (ради серии тяжёлых запросов). В stderr печатается `newest=<дата>` — край снимка. Ищешь сессию свежее `newest` → добавь `--rebuild`.
+- `--limit=N`, `--resume` (готовая колонка `claude --resume`), `--sql` (печать SQL, дебаг).
+
+## Дискриминирующие якоря
+
+Концепт-слова юзера ненадёжны — переякоривайся на конкретный токен:
+
+- **Числовой признак — самый устойчивый к перефразу.** Ищи `число + компаратор + существительное` regex'ом, не полагаясь на существительное юзера: `(<=?|не больше|≤)\s*200`.
+- **Числовые ложные друзья** (`tail -200`, порты, лимиты) — склеивай число со смысловым словом, не голое число.
+- **Имя теста / путь / лог-строка** — точные; ищи через `--full` (они в tool-блоках, не в `me`).
+- **Кросс-чек с рабочим деревом** — git status / свежий mtime подтверждают кандидата дёшево.
+
+Якорь гонишь либо вторым BM25 (`--full "200 client chats"`), либо raw-SQL regex по сессии-кандидату (ниже).
+
+## Доразведка — синоним-скрипт (ILIKE)
+
+Когда нужен точный язык, опечатка или узкий матч мимо стеммера индекса:
 
 ```bash
 bun ~/.claude/skills/find-session/scripts/search.ts "<синоним>" ["<синоним>" …] [флаги]
 ```
 
-Разделение труда: **агент даёт синонимы**, скрипт детерминированно токенизирует и **стеммит их через DuckDB Snowball** (`stem()`), собирает SQL и бьёт по корпусу. Никаких npm-зависимостей.
+Агент даёт синонимы, скрипт стеммит их Snowball'ом (`stem()`) и объединяет по OR. RU+EN. Частые опечатки — отдельными синонимами: `stem()` чинит окончания, не корень (`промт`≠`промпт`). **Каждый синоним — упорядоченная склейка `%a%b%` своих слов, и она конъюнктивна** — все слова синонима обязательны (та самая ILIKE-AND-ловушка; держи синонимы короткими).
 
-Твоя работа как агента — сгенерировать набор синонимов под концепт запроса:
-
-- **RU + EN**, потому что юзер пишет на обоих, иногда в одном сообщении.
-- **Включай частые опечатки** отдельными синонимами. `stem()` чинит только окончания (`сессии`→`сесс`), но не корень: `промт` и `промпт` — разные стемы, не матчатся друг с другом.
-- Каждый синоним матчится как **упорядоченная склейка** стемов его слов: `инит промт` → `%инит%промт%`. Синонимы объединяются по OR. Хочешь другой порядок слов — дай его отдельным синонимом.
-
-Флаги:
-
-| Флаг | Эффект |
-|---|---|
-| `--kind=K` | `user`(деф.)`\|assistant\|tool_use\|tool_result\|thinking`. Не-`user` → поиск по полной view `msg`. |
-| `--tool=NAME` | фильтр по имени тулзы (ставит `kind=tool_use`). Поиск по действиям агента. |
-| `--sessions` | сгруппировать по сессии: число попаданий + окно дат. |
-| `--resume` | то же + готовая колонка `claude --resume <id>`. |
-| `--distinct` | схлопнуть дубли (одно сообщение часто логируется 2–4× через sidechain'ы/`<ide_selection>`): dedup по нормализованному тексту. |
-| `--limit=N` | дефолт 40. |
-| `--no-stem` | литеральные подстроки без Snowball (точный язык/опечатка). |
-| `--sql` | напечатать сгенерированный SQL и выйти (дебаг). |
-
-Скрипт печатает в stderr строку `terms: …` — что реально искалось после стемминга. Отдавай юзеру сводку + при необходимости `--resume`-команды. Если упёрся в `--limit`, скажи это.
+Флаги: `--kind=user|assistant|tool_use|tool_result|thinking`, `--tool=NAME`, `--sessions`, `--resume`, `--distinct` (схлопнуть дубли sidechain/`<ide_selection>`), `--limit=N` (деф 40), `--no-stem`, `--sql`. `terms:` в stderr показывает, что реально искалось после стемминга.
 
 ## Escape hatch — сырой SQL
 
-Сложные запросы (пересечения, агрегаты, мысли агента) — напрямую через view. OOM-прагмы уже внутри `cc.sql`, **не вырезай их**:
+Пересечения, агрегаты, regex-якоря по шортлисту. OOM-прагмы в `cc.sql` — не вырезай:
 
 ```bash
 duckdb -init ~/.claude/skills/find-session/assets/cc.sql -c "<SQL>"
 ```
 
-- `me(project, session_id, ts, text)` — только мои реальные реплики (инъекции вычищены).
+- `me(project, session_id, ts, text)` — мои реплики (инъекции вычищены).
 - `msg(project, session_id, ts, kind, tool, text)` — всё; `kind` ∈ `user|assistant|tool_use|tool_result|thinking|image`.
-- `stem(s,'russian'|'english')` доступна после `LOAD fts;` в начале запроса.
-- **Зарезервированные слова**: `day`, `first`, `last` — нельзя как алиасы без кавычек (бери `dt`, `first_seen`, `last_seen`).
+- `stem(s,'russian'|'english')` доступна после `LOAD fts;`.
+- Зарезервированы: `day`, `first`, `last` — не алиасить без кавычек (бери `dt`, `first_seen`, `last_seen`).
 
 ```sql
 LOAD fts;
--- два концепта в одной сессии (пересечение), id готов для resume
-SELECT project, session_id FROM me WHERE text ILIKE '%'||stem('postgrest','english')||'%'
-INTERSECT
-SELECT project, session_id FROM me WHERE text ILIKE '%rls%';
-
--- разбивка по типам / по тулзам
-SELECT kind, count(*) FROM msg GROUP BY 1 ORDER BY 2 DESC;
-SELECT tool, count(*) FROM msg WHERE kind='tool_use' GROUP BY 1 ORDER BY 2 DESC;
+-- числовой якорь по сессии-кандидату из BM25-шортлиста
+SELECT ts, left(text, 200) FROM msg
+WHERE session_id = '…' AND regexp_matches(text, '(не больше|<=?|≤)\s*200');
+-- два концепта в одной сессии (пересечение)
+SELECT project, session_id FROM me WHERE text ILIKE '%' || stem('postgrest','english') || '%'
+INTERSECT SELECT project, session_id FROM me WHERE text ILIKE '%rls%';
+-- какая сессия создавала/правила конкретный файл (Write/Edit/MultiEdit).
+-- msg.text для tool_use = input тула, file_path извлекается как json-поле.
+-- writes>0 → сессия создавала файл (Write); n всего edit'ов по сессии.
+WITH e AS (
+  SELECT project, session_id, ts, tool,
+         json_extract_string(text, '$.file_path') AS fp
+  FROM msg WHERE kind='tool_use' AND tool IN ('Write','Edit','MultiEdit')
+)
+SELECT regexp_replace(fp,'^.*/','') AS file, session_id, project,
+       min(ts) AS first_seen, count(*) AS n,
+       sum(CASE WHEN tool='Write' THEN 1 ELSE 0 END) AS writes
+FROM e WHERE fp ILIKE '%<filename>%'
+GROUP BY file, session_id, project ORDER BY first_seen;
 ```
 
-## Опциональный слой — FTS-индекс (BM25)
+Если файл создан **не** Write-тулом (например, `mv`/`cp` из `/tmp` через Bash) — `file_path`-фильтр выше не найдёт. Тогда искать по `tool='Bash'` и тексту команды: `SELECT … FROM msg WHERE kind='tool_use' AND tool='Bash' AND text ILIKE '%<filename>%' ORDER BY ts LIMIT 20`. View `msg` парсит JSONL **на лету** (см. cc.sql), `--rebuild` для этих запросов не нужен.
 
-Живая view всегда свежая, но пересканирует весь корпус (секунды, спилл на диск). Для серии **тяжёлых ранжированных** запросов по неизменному срезу — материализуй снапшот в персистентную БД и построй FTS-индекс (~разово). Минусы: **один стеммер на индекс** (для двуязычного корпуса компромисс), снапшот стареет, ребилд по мере роста сессий.
+## Под капотом
 
-Сборка — **два отдельных вызова** (скан корпуса и построение индекса в одном процессе упираются в память; разрыв освобождает парсер-буферы между фазами):
+`--bm25` автоматизирует ручную сборку: материализует снапшот `me`/`msg` в `~/.claude/cc.duckdb` и строит FTS-индекс (id через sequence — `row_number() OVER ()` вешает скан; скан и индекс — раздельными процессами, иначе OOM на парсер-буферах).
 
-```bash
-# 1) материализовать снапшот (тяжёлый скан, ~15с)
-duckdb -init ~/.claude/skills/find-session/assets/cc.sql ~/.claude/cc.duckdb -c \
-  "CREATE OR REPLACE TABLE me_cache AS SELECT project, session_id, ts, text FROM me;"
-
-# 2) id через sequence (НЕ row_number() OVER () — глобальное окно вешает скан) + индекс
-duckdb ~/.claude/cc.duckdb -c "
-  ALTER TABLE me_cache ADD COLUMN id BIGINT;
-  CREATE OR REPLACE SEQUENCE seq_id;
-  UPDATE me_cache SET id = nextval('seq_id');
-  LOAD fts;
-  PRAGMA create_fts_index('me_cache','id','text', stemmer='russian', overwrite=1);"
-
-# BM25-запрос (стеммер индекса жмёт и сам запрос)
-duckdb ~/.claude/cc.duckdb -c "
-  LOAD fts;
-  SELECT project, ts::date AS dt, left(regexp_replace(text,'\s+',' ','g'),120) AS snippet
-  FROM (SELECT *, fts_main_me_cache.match_bm25(id, 'инит промт сессия') AS score FROM me_cache) s
-  WHERE score IS NOT NULL ORDER BY score DESC LIMIT 20;"
-```
+**Ограничение — индекс одностеммерный, корпус двуязычный (RU+EN).** Выбран один индекс `stemmer='russian'`: EN-токены проходят Snowball-russian почти нетронутыми, а запрос стеммится тем же стеммером → EN матчится консистентно. Цена: EN-морфология не конфлейтится (`chat`≠`chats`, `deliver`≠`delivered`) — добавляй EN-варианты доп. словами в запрос.

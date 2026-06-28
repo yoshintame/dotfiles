@@ -1,54 +1,67 @@
 ---
 name: actualize-spec
-description: Bring a current-state spec up to date from completed work without rotting it.
+description: Актуализирует current-state спеку из выполненной работы, не превращая её в хронику изменений.
 ---
 
-Catch a current-state spec up to what was actually built, then freeze the work. Source of truth is the implementation, not the task's plan — `implemented ≠ done`, the spec is caught up *from* the result.
+Когда правишь current-state док — особенно когда догоняешь спеку до выполненной работы — держи эти правила. Источник истины — реализация, а не план: `implemented ≠ done`, спека догоняется *из результата*.
 
-## Pick the target
+## Роли документов
 
-- Notes carry `type:` frontmatter → **vault**. Read [references/vault.md](references/vault.md). Invoke the vault's own `obsidian-vault` skill first.
-- Docs typed by folder, no `type:` (`business/`, `technical/`, `tasks/`, `analysis/`…) → **dev-repo**. Read [references/dev-repo.md](references/dev-repo.md). If the repo ships its own docs skill (e.g. `.claude/skills/docs-conventions`), read it and defer to its format, routing and link rules — this skill only adds the actualization discipline on top.
+Каждый док усилия несёт **одну** роль. Роли абстрактны — поверхность (frontmatter `type:`, папка, что-то ещё) у конкретного репо своя; роль дока определяй из конвенций репо и из поставленной задачи. Если у репо есть свой type/docs-скил — он и есть источник маппинга.
 
-## Procedure, per completed unit of work
+- **spec** — настоящее, «что ЕСТЬ» (поведение, контракт). Единственная роль, что переписывается начисто и **без временной шкалы**. Часто разрезается на две линзы (это разрез, не обязательная раскладка; обе половины — current-state, обе под Гард 1):
+  - **business-спека** — что система делает в предметной области; источник истины, код выводится из неё.
+  - **tech-спека** — важное или неочевидное о текущих выбранных инструментах, либах, технической архитектуре; выводится из кода, высокоуровнево.
+- **log** — прошлое, терсная хроника, дополняется.
+- **decision-log** — почему: подлинные развороты и отвергнутые альтернативы с причиной.
+- **analysis** — груминг / origin-story.
+- **task** — план; по завершении замораживается как архив.
 
-1. Read the work and its **real result** (diff, what shipped) — not just the task's plan.
-2. Rewrite the matching spec section to the new current-state, **in place**, as a clean snapshot. Never "было → стало".
-3. Route everything that is *not* current-state by role (table below) — don't let it land in the spec.
-4. Record one terse chronicle line linking to the work (vault `log` / dev status-marker).
-5. Freeze the work artifact (vault `status: done` / dev `git mv` to `archive/`). Keep it whole as the detailed archive — who/what/when, commits, acceptance — don't delete it and don't flatten it into the chronicle.
-6. Run the FM1 linter on the edited files; scrub every hit.
+Распознать роль — обязательный первый шаг: иначе Гард 1 либо пропустит историю в спеке, либо снесёт законную хронику в логе. Гарды ниже срабатывают при правке любого **spec**-дока.
 
-## Guard 1 — no history in the spec
+## Процедура: слить выполненную работу
 
-The spec is "what IS", with no timeline. Reversal language is a bug: `раньше`, `прежн…`, `было ошибкой`, `пересмотрено`, `убрано`, reversal-`теперь`, `было X стало Y`. The delta and the reason for it do not go inside the spec — route them (table). After editing:
+1. Прочитай работу и её **реальный результат** (дифф, что зашипилось) — не только план.
+2. Перепиши соответствующий раздел **spec** в новый current-state, **на месте**, как чистый снимок. Никогда «было → стало».
+3. Разнеси всё, что *не* current-state, по ролям (таблица) — не дай осесть в спеке.
+4. Запиши одну терсную строку-хронику в **log** со ссылкой на работу.
+5. Заморозь артефакт работы (пометь завершённым / перенеси в архив — по конвенции репо). Сохрани целиком: who/what/when, коммиты, acceptance. Не удаляй и не расплющивай в хронику.
+6. Прогони FM1-линтер по правленым spec-докам; вычисти каждое срабатывание.
+
+## Гард 1 — нет истории в спеке
+
+spec — это «что ЕСТЬ», без временной шкалы. Разворотный язык — баг: `раньше`, `прежн…`, `было ошибкой`, `пересмотрено`, `убрано`, разворотное `теперь`, `было X стало Y`. Дельта и причина её — не внутри спеки, разносятся (таблица). После правки прогони по spec-докам:
 
 ```
-bun <skill-dir>/scripts/history-lint.ts <edited file or dir>
+bun <skill-dir>/scripts/history-lint.ts <правленый файл или папка>
 ```
 
-It flags reversal markers in current-state docs only (skips `analysis`/`log`/`tasks`/`archive`, skips fenced code). Markers are deterministic — trust it; scrub every hit in a current-state doc.
+Ловит разворотные маркеры; автоматически пропускает ноты с history-ролью (`type:` analysis/log/task/idea и типичные history-папки) и fenced-код. Маркеры детерминированы — доверяй; вычищай каждое срабатывание.
 
-## Guard 2 — proportion and altitude
+## Гард 2 — пропорция и альтитуда
 
-The spec describes the **whole system**; this change touched a small part. You systematically overrate whatever fills your chat context. So the edit scale is fixed regardless of how much was discussed: a behavior rule in **1–3 sentences** replacing the stale text, written at the **same altitude** as the surrounding doc. Match its level of detail — no UI labels or step-by-step if the doc is high-level. A new section only when a new *concept* appeared, never for a new implementation. Leave unaffected sections untouched.
+**Пропорция.** Масштаб правки соразмеряй со значимостью изменения **для всей системы**, а не с тем, сколько места оно заняло в чате. Это разные величины: весь чат крутился вокруг одного изменения, и для тебя оно — почти всё, что существует; в доке всей системы его реальный вес может быть и строкой, и крупным разделом — изменения бывают всякие. Перекос модели систематический и в одну сторону: ты раздуваешь то, чем заполнен контекст, — поэтому чаще ошибка в том, что мелкое изменение разбухает до полдока. Но не зажимай и обратное: по-настоящему крупное изменение заслуживает крупной правки, не вгоняй его в пару предложений. Взвешивай по системе, не по чату.
 
-## Guard 3 — one artifact, one role
+**Альтитуда.** Правка вливается на **той же высоте и детализации**, что окружающий док, какого бы размера ни была: без UI-подписей и пошаговости, если док высокоуровневый. Новый раздел — только под новое *понятие*, не под новую реализацию. Не задетые разделы не трогай.
 
-Don't pile mixed content into the spec. Decompose the result by role and route each part:
+## Гард 3 — один артефакт, одна роль
 
-| Content | Role | Vault | Dev-repo |
-|---|---|---|---|
-| What IS now (behavior / contract) | spec | rewrite spec in place | update canon, 1–3 sentences |
-| Genuine reversal / rejected alt + reason | decision-log | `DECISIONS` | leave in `analysis`, link from the status-marker |
-| Origin story (the whole path) | genesis-analysis | `analysis`, genesis + `superseded` | `analysis` |
-| Plan / steps | task | `task` | `tasks/` |
-| Chronicle (what, when) | log | `LOG` / `log` note | status-marker |
-| Solved open-Q / stale snapshot | — | delete (git keeps it) | delete / archive |
-| The finished work itself | frozen archive | task → `status: done` | `git mv` → `archive/` + banner |
+Не сваливай разнородное в спеку. Декомпозируй результат по ролям:
 
-A decision-log entry earns its place only when it carries context **beyond the final spec** — a real reversal or a rejected alternative with its reason. If it just states the final design, that is spec; put it in the spec.
+| Содержимое | Роль |
+|---|---|
+| Что ЕСТЬ сейчас (поведение / контракт) | переписать в **spec** на месте |
+| Подлинный разворот / отвергнутая альтернатива + причина | **decision-log** |
+| Origin-story (весь путь) | **analysis** (genesis, superseded) |
+| План / шаги | **task** |
+| Хроника (что, когда) | **log** |
+| Решённый open-Q / устаревший снимок | удалить (история в git) |
+| Сама завершённая работа | заморозить (не удалять, не расплющивать) |
 
-## Notes
+Запись в decision-log оправдана только когда несёт контекст **за рамками финальной спеки** — подлинный разворот или отвергнутую альтернативу с причиной. Если она лишь констатирует финальный дизайн — это спека, её место в спеке.
 
-- A standalone always-on FM1 hook is a separate skill-candidate; here the linter runs on demand inside step 6.
+## Гард 4 — переписывай начисто, не латай
+
+Дефолт агента — точечная правка: внести минимальную дельту в текст. Несколько таких правок подряд, особенно разными сессиями, превращают файл в рваное полотно: структура и читаемость уходят, копятся повторы и нестыковки. Как только видишь, что файл до этого дошёл, — **обязательно** бросай латание: прочитай его целиком, переосмысли, перепиши начисто как один связный current-state-снимок. Не бойся полного переписывания, если изменение или состояние файла того требуют — это переоформление уже имеющегося материала, не добавление объёма (Гард 2 по содержанию держится). Это и есть исключение из «не задетые разделы не трогай»: когда деградировала форма файла, берёшь весь.
+
+Если файл накопил слишком многое — несколько разъезжающихся концернов, признак **>500 строк** — разбей его на отдельные файлы по ролям/темам, а не переписывай в один разбухший.

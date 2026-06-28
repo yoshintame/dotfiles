@@ -73,7 +73,7 @@ function scan(text: string) {
 
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  console.error("usage: history-lint.ts <file|dir> [...]  — flags reversal/history markers in current-state docs");
+  console.error("использование: history-lint.ts <файл|папка> [...]  — ловит разворотные/исторические маркеры в current-state доках");
   process.exit(2);
 }
 
@@ -89,7 +89,7 @@ for (const root of args) {
     if (hits.length === 0) continue;
     const high = hits.filter((h) => h.tier === "HIGH").length;
     highTotal += high;
-    console.log(`\n${file}${kind === "unknown" ? "  (type unverified — confirm it is current-state)" : ""}`);
+    console.log(`\n${file}${kind === "unknown" ? "  (тип не подтверждён — убедись, что это current-state)" : ""}`);
     for (const h of hits) {
       const trimmed = h.text.length > 120 ? h.text.slice(0, 117) + "…" : h.text;
       console.log(`  L${h.line} [${h.tier}] «${h.name}»  ${trimmed}`);
@@ -97,5 +97,5 @@ for (const root of args) {
   }
 }
 
-console.log(`\n— ${scanned} current-state file(s) scanned (${unknown} unverified), ${skipped} history-allowed skipped, ${highTotal} HIGH marker(s).`);
+console.log(`\n— просканировано current-state файлов: ${scanned} (не подтверждено: ${unknown}), пропущено history-allowed: ${skipped}, HIGH-маркеров: ${highTotal}.`);
 process.exit(highTotal > 0 ? 1 : 0);

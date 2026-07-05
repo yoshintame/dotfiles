@@ -2,14 +2,17 @@
 -- large corpus a full scan/aggregate exhausts RAM unless DuckDB drops input
 -- ordering, caps parser parallelism, and is allowed to spill to disk. All three
 -- are required — dropping any one OOMs on a GROUP BY over the whole corpus.
+-- The JSON reader's own buffers do NOT spill: a single CTAS over the full glob
+-- can OOM regardless of memory_limit. Snapshot builds therefore go through the
+-- *_src(files) macros in bounded batches (see search.ts build()).
 SET preserve_insertion_order = false;
 SET threads = 3;
 SET temp_directory = '/tmp/duckdb-cc-spill';
 
-CREATE OR REPLACE VIEW msg AS
+CREATE OR REPLACE MACRO msg_src(pat) AS TABLE
 WITH raw AS (
   SELECT json, regexp_extract(filename, '/projects/([^/]+)/', 1) AS project
-  FROM read_json_objects('/Users/yoshintame/.claude/projects/**/*.jsonl',
+  FROM read_json_objects(pat,
                          format='newline_delimited', ignore_errors=true, filename=true)
   WHERE json->>'$.type' IN ('user','assistant')
 ),
@@ -39,13 +42,16 @@ SELECT project, session_id, ts,
     ELSE block::VARCHAR END AS text
 FROM blocks;
 
+CREATE OR REPLACE VIEW msg AS
+SELECT * FROM msg_src('/Users/yoshintame/.claude/projects/**/*.jsonl');
+
 -- Only my real typed messages: kind='user' minus harness injections
 -- (slash-command expansions, skill preambles, task notifications, reminders,
 -- interrupts, tool-result caveats). IDE-selection rows are kept because the
 -- user's typed text follows the <ide_selection> block on the same line.
-CREATE OR REPLACE VIEW me AS
+CREATE OR REPLACE MACRO me_src(pat) AS TABLE
 SELECT project, session_id, ts, text
-FROM msg
+FROM msg_src(pat)
 WHERE kind = 'user'
   AND text NOT LIKE '<command-%'
   AND text NOT LIKE '<local-command-%'
@@ -56,3 +62,6 @@ WHERE kind = 'user'
   AND text NOT LIKE '[Request interrupted%'
   AND text NOT LIKE 'API Error%'
   AND text NOT LIKE 'Tool ran without output%';
+
+CREATE OR REPLACE VIEW me AS
+SELECT * FROM me_src('/Users/yoshintame/.claude/projects/**/*.jsonl');

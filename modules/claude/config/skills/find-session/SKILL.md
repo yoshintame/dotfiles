@@ -26,7 +26,7 @@ BM25 — **шорт-листер, не арбитр**. Гибридный вор
 Флаги BM25:
 
 - `--full` — индекс по `msg` (tool_use/tool_result/thinking), не только мои реплики. Точные формулировки — имена тестов, пути, лог-вывод — живут там. Индекс больше, строится дольше.
-- `--rebuild` — пересобрать снапшот+индекс с нуля (full rescan, ~15с). Снимок не авто-обновляется: переиспользуется между вызовами (ради серии тяжёлых запросов). В stderr печатается `newest=<дата>` — край снимка. Ищешь сессию свежее `newest` → добавь `--rebuild`.
+- `--rebuild` — пересобрать снапшот+индекс с нуля (чанкованный rescan корпуса, ~1–2 мин на 2 GB). Снимок не авто-обновляется: переиспользуется между вызовами (ради серии тяжёлых запросов). В stderr печатается `newest=<дата>` — край снимка. Ищешь сессию свежее `newest` → добавь `--rebuild`.
 - `--limit=N`, `--resume` (готовая колонка `claude --resume`), `--sql` (печать SQL, дебаг).
 
 ## Дискриминирующие якоря
@@ -62,6 +62,7 @@ duckdb -init ~/.claude/skills/find-session/assets/cc.sql -c "<SQL>"
 
 - `me(project, session_id, ts, text)` — мои реплики (инъекции вычищены).
 - `msg(project, session_id, ts, kind, tool, text)` — всё; `kind` ∈ `user|assistant|tool_use|tool_result|thinking|image`.
+- `me_src(files)` / `msg_src(files)` — те же схемы по явному списку файлов. Для точечных запросов по уже известной сессии/проекту дай список `.jsonl` вместо полного глоба — на порядки быстрее и не упирается в память: `SELECT … FROM msg_src(['/Users/…/projects/<proj>/<sid>.jsonl']) WHERE …`.
 - `stem(s,'russian'|'english')` доступна после `LOAD fts;`.
 - Зарезервированы: `day`, `first`, `last` — не алиасить без кавычек (бери `dt`, `first_seen`, `last_seen`).
 
@@ -90,8 +91,19 @@ GROUP BY file, session_id, project ORDER BY first_seen;
 
 Если файл создан **не** Write-тулом (например, `mv`/`cp` из `/tmp` через Bash) — `file_path`-фильтр выше не найдёт. Тогда искать по `tool='Bash'` и тексту команды: `SELECT … FROM msg WHERE kind='tool_use' AND tool='Bash' AND text ILIKE '%<filename>%' ORDER BY ts LIMIT 20`. View `msg` парсит JSONL **на лету** (см. cc.sql), `--rebuild` для этих запросов не нужен.
 
+## Снапшот как последний источник
+
+BM25-кандидат может не открыться: живой `.jsonl` удалён (ретеншен `cleanupPeriodDays`, ручная чистка), а снапшот его пережил — `claude --resume <id>` упадёт, но текст реплик остался в `~/.claude/cc.duckdb`:
+
+```bash
+duckdb ~/.claude/cc.duckdb -readonly -c \
+  "SELECT ts, left(text,300) FROM me_cache WHERE session_id='<id>' ORDER BY ts;"
+```
+
+`me_cache`/`msg_cache` — только `(project, session_id, ts, text, id)`: без `kind`/`tool`, у `msg_cache` tool-блоки лежат сырым текстом. Проверка «жив ли файл»: `ls ~/.claude/projects/<project>/<id>.jsonl`. Дальше кандидат восстанавливается из бэкапов (см. problem-заметку `claude-code-retention-purges-sessions` в vault: цепочка restic-снапшотов с шагом меньше периода ротации).
+
 ## Под капотом
 
-`--bm25` автоматизирует ручную сборку: материализует снапшот `me`/`msg` в `~/.claude/cc.duckdb` и строит FTS-индекс (id через sequence — `row_number() OVER ()` вешает скан; скан и индекс — раздельными процессами, иначе OOM на парсер-буферах).
+`--bm25` автоматизирует ручную сборку: материализует снапшот `me`/`msg` в `~/.claude/cc.duckdb` и строит FTS-индекс (id через sequence — `row_number() OVER ()` вешает скан; скан и индекс — раздельными процессами). Буферы JSON-ридера DuckDB не спиллятся на диск: один CTAS по полному глобу OOM'ится на большом корпусе при любом `memory_limit`. Поэтому сборка чанкованная — файлы корпуса батчами ≤128 MB через table-макросы `me_src(files)`/`msg_src(files)` из cc.sql (view `me`/`msg` — те же макросы с полным глобом).
 
 **Ограничение — индекс одностеммерный, корпус двуязычный (RU+EN).** Выбран один индекс `stemmer='russian'`: EN-токены проходят Snowball-russian почти нетронутыми, а запрос стеммится тем же стеммером → EN матчится консистентно. Цена: EN-морфология не конфлейтится (`chat`≠`chats`, `deliver`≠`delivered`) — добавляй EN-варианты доп. словами в запрос.

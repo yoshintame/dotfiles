@@ -444,6 +444,11 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/session-start.sh",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/session-active.sh",
+            "timeout": 15
           }
         ]
       }

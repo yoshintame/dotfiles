@@ -34,6 +34,14 @@
       path = "modules/agents-shared/config/skills/reconcile/**";
       glob = true;
     };
+    "~/.claude/skills/done/" = {
+      path = "modules/agents-shared/config/skills/done/**";
+      glob = true;
+    };
+    "~/.claude/skills/paused/" = {
+      path = "modules/agents-shared/config/skills/paused/**";
+      glob = true;
+    };
     "~/.claude/skills/" = {
       path = "modules/claude/config/skills/**";
       glob = true;

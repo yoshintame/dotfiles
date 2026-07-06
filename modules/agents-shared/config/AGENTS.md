@@ -11,6 +11,7 @@
 ## Code
 
 - *NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.*
+- *NEVER touch existing comments written by others peoples: do not delete, rewrite, translate, or "improve" them, even when refactoring the code around them. Move a comment only when the code it belongs to moves.*
 
 ## File references
 

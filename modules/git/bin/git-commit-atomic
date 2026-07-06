@@ -91,6 +91,23 @@ fi
 [ $# -lt 1 ] && usage
 MSG="$1"; shift
 
+# Repo-declared message format (git config commit.msgFormat). Deterministic
+# guard: agents pick the format from convention docs, this rejects mistakes.
+# Preset "plain-single-line": one line "type: subject", no scope parens,
+# no body, <=100 chars.
+MSG_FORMAT=$(git config --get commit.msgFormat 2>/dev/null || echo "")
+if [ "$MSG_FORMAT" = "plain-single-line" ]; then
+    fmt_fail() {
+        echo "git-commit-atomic: rejected by commit.msgFormat=plain-single-line — this repo requires a single-line message 'type: subject' (lowercase type, no scope parentheses, no body, <=100 chars). Got:" >&2
+        printf '%s\n' "$MSG" >&2
+        exit 2
+    }
+    case "$MSG" in *$'\n'*) fmt_fail ;; esac
+    printf '%s' "$MSG" | grep -Eq '^[a-z]+: .+' || fmt_fail
+    case "${MSG%%:*}" in *"("*) fmt_fail ;; esac
+    [ "${#MSG}" -le 100 ] || fmt_fail
+fi
+
 FILES=()
 PATCHES=()
 seen_dashdash=0

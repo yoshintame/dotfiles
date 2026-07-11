@@ -392,6 +392,16 @@
             "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --dismiss"
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/session-name-nudge.sh",
+            "timeout": 15
+          }
+        ]
       }
     ],
     "PostToolUse": [

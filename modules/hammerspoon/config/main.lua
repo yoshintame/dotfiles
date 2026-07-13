@@ -60,6 +60,7 @@ local proxy = require("generated.proxy-bindings")
 local shortcut = spoon.LeaderFlow.actions.shortcut
 local text = spoon.LeaderFlow.actions.text
 local currentDate = spoon.LeaderFlow.actions.currentDate
+local date = spoon.LeaderFlow.actions.date
 local url = spoon.LeaderFlow.actions.openURL
 local raycast = spoon.LeaderFlow.actions.raycast
 local code = spoon.LeaderFlow.actions.code
@@ -93,6 +94,37 @@ local function joinMeeting(zoomUrl, mtype)
 end
 
 hs.hotkey.bind({ "alt" }, "E", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D"))
+
+local floatMaximizePrevFrames = {}
+local function toggleFloatMaximize()
+    local win = hs.window.focusedWindow()
+    if not win then return end
+    local screenFrame = win:screen():frame()
+    local frame = win:frame()
+    local isMaximized = frame.x <= screenFrame.x + 8
+        and frame.y <= screenFrame.y + 8
+        and frame.w >= screenFrame.w - 16
+        and frame.h >= screenFrame.h - 16
+    if isMaximized then
+        local prev = floatMaximizePrevFrames[win:id()]
+        if prev then
+            win:setFrame(prev)
+        else
+            local w = 420
+            local h = math.min(860, screenFrame.h - 60)
+            win:setFrame({
+                x = screenFrame.x + (screenFrame.w - w) / 2,
+                y = screenFrame.y + (screenFrame.h - h) / 2,
+                w = w,
+                h = h,
+            })
+        end
+    else
+        floatMaximizePrevFrames[win:id()] = frame
+        win:setFrame(screenFrame)
+    end
+end
+hs.hotkey.bind({ "alt" }, "F", toggleFloatMaximize)
 
 require("clipboard-history").start({
     proxy.paste_history1,
@@ -213,7 +245,21 @@ spoon.LeaderFlow:setup({
             { "s", "Intr. Passport", text("770867661") },
             { "b", "Birthday", text("24.08.2001") },
             { "a", "Address", text("Apt 1115, 1333 The Line Wongsawang") },
-            { "t", "Current Date", currentDate() },
+
+            { "d", "[dates]", {
+                { "d", "ISO date",       date("%Y-%m-%d") },
+                { "s", "ISO datetime",   date("%Y-%m-%dT%H:%M:%S") },
+                { "i", "ISO dt (space)", date("%Y-%m-%d %H:%M:%S") },
+                { "f", "Filename-safe",  date("%Y-%m-%d_%H-%M-%S") },
+                { "r", "RU dotted",      date("%d.%m.%Y") },
+                { "u", "US slash",       date("%m/%d/%Y") },
+                { "l", "Long",           text(function() return (os.date("%e %B %Y"):gsub("^%s+", "")) end) },
+                { "w", "ISO week",       date("%G-W%V") },
+                { "t", "Time",           date("%H:%M") },
+                { "T", "Time w/ sec",    date("%H:%M:%S") },
+                { "n", "Unix timestamp", text(function() return tostring(os.time()) end) },
+                { "h", "Short human",    currentDate() },
+            }},
 
             { "k", "[keys]", {
                 { "shift", "⇧", text("⇧") },

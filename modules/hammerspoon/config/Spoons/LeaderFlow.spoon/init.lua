@@ -82,6 +82,12 @@ function obj.actions.currentDate()
   end)
 end
 
+function obj.actions.date(fmt)
+  return obj.actions.text(function()
+    return os.date(fmt)
+  end)
+end
+
 function obj.actions.launch(app)
   return function() hs.application.launchOrFocus(app) end
 end

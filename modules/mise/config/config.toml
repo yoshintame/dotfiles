@@ -1,5 +1,8 @@
 [task_config]
-includes = ["tasks/rp.toml", "tasks/dot.toml"]
+includes = [
+  "/Users/yoshintame/.config/mise/tasks/rp.toml",
+  "/Users/yoshintame/.config/mise/tasks/dot.toml",
+]
 
 [tools]
 bun = "latest"
@@ -8,6 +11,7 @@ node = "lts"
 npm = "latest"
 pnpm = "latest"
 python = "latest"
+rust = "latest"
 uv = "latest"
 
 [settings]

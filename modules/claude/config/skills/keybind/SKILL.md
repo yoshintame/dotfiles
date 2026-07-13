@@ -15,8 +15,10 @@ Workflow для добавления/изменения клавиатурных
 
 | Документ | Когда читать |
 |---|---|
-| `~/Documents/obsidian/yoshintame/projects/keybinds-architecture.md` | **Всегда.** Две оси (scope × direct/leader), hyper, action vs binding, чеклист «принципы при добавлении нового бинда». |
-| `~/Documents/obsidian/yoshintame/projects/keybinds-system.md` | Системные бинды (Karabiner / Hammerspoon). |
+| `~/Documents/obsidian/yoshintame/projects/keybinds-architecture/keybinds-architecture.md` | **Всегда.** Две оси (scope × direct/leader), hyper, action vs binding, чеклист «принципы при добавлении нового бинда». |
+| `~/Documents/obsidian/yoshintame/projects/keybinds-system/keybinds-system.md` | Системные бинды — абстрактная модель (что забиндено, какие слои). Таблиц самих биндов тут нет. |
+| `~/Documents/obsidian/yoshintame/projects/hammerspoon-keybindings.md` | **Hammerspoon: App Launcher + leader `F18`.** Здесь живут таблицы биндов leader-дерева — правится при любой правке `main.lua`. |
+| `~/Documents/obsidian/yoshintame/projects/karabiner-hyperlayers.md` | Karabiner: hyper-слои и sublayers. Таблицы hyper-биндов. |
 | `~/Documents/obsidian/yoshintame/projects/keybinds-vscode/keybinds-vscode.md` | VSCode/Cursor хаб. |
 | `~/Documents/obsidian/yoshintame/projects/keybinds-vscode/direct-shortcuts.md` | VSCode direct (cmd+...). |
 | `~/Documents/obsidian/yoshintame/projects/keybinds-vscode/whichkey-layer.md` | VSCode leader (which-key). |

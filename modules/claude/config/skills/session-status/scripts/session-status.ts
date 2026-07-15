@@ -334,7 +334,7 @@ async function report(sessionIdArg: string | null): Promise<string | null> {
   if (tracked.length === 0) {
     out += line("(none)")
   } else {
-    const changedLines: string[] = []
+    const staleRows: Array<{ relpath: string; hash: string; iso: string; sid: string | null }> = []
     const identicalLines: string[] = []
     for (const f of tracked) {
       const commits = await gitLogCommitsForPath(f.repo!, f.relpath!)
@@ -344,11 +344,16 @@ async function report(sessionIdArg: string | null): Promise<string | null> {
       } else {
         const top = stale[0]
         const later = await findLaterTouches(f.abs, parsed.sessionId, f.lastTouch)
-        const sid = later.length > 0 ? later[0][0].slice(0, 8) : "unknown"
-        const date = top.iso.slice(0, 10)
-        changedLines.push(`- ${f.relpath}: CHANGED-LATER by ${top.hash} (${sid}, ${date}) — re-read needed`)
+        const sid = later.length > 0 ? later[0][0].slice(0, 8) : null
+        staleRows.push({ relpath: f.relpath!, hash: top.hash, iso: top.iso, sid })
       }
     }
+    const sidByHash = new Map<string, string>()
+    for (const r of staleRows) if (r.sid) sidByHash.set(r.hash, r.sid)
+    const changedLines = staleRows.map((r) => {
+      const sid = r.sid ?? sidByHash.get(r.hash) ?? "unknown"
+      return `- ${r.relpath}: CHANGED-LATER by ${r.hash} (${sid}, ${r.iso.slice(0, 10)}) — re-read needed`
+    })
     for (const l of [...changedLines, ...identicalLines]) out += line(l)
   }
   out += line()

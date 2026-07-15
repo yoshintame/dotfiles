@@ -42,6 +42,10 @@
       path = "modules/agents-shared/config/skills/paused/**";
       glob = true;
     };
+    "~/.claude/skills/senate-vault/" = {
+      path = "modules/agents-shared/config/skills/senate-vault/**";
+      glob = true;
+    };
     "~/.claude/skills/" = {
       path = "modules/claude/config/skills/**";
       glob = true;

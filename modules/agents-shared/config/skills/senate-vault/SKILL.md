@@ -5,11 +5,11 @@ description: Конвенции senate-vault — рабочего хранили
 
 # /senate-vault
 
-Рабочее хранилище senate: плоские типизированные markdown-документы, инстанс модели effort-management. Дефолтный агент модель ломает: кладёт файлы в папки наугад, дописывает «## Связанные» в тело, пишет доки-солянки. Ниже — только поправки к этому дефолту.
+Рабочее хранилище senate: плоские типизированные markdown-документы. Дефолтный агент модель ломает: кладёт файлы в папки наугад, дописывает «## Связанные» в тело, пишет доки-солянки. Ниже — только поправки к этому дефолту.
 
 ## Корень
 
-`~/Development/work/senate/senate@docs/vault` — vault живёт как `vault/` в репозитории documentation (in-repo период; после миграции старого корпуса выносится в свой репо). Это **вне `content/docs/`** (fumadocs его не собирает) и **не путать с самим `content/docs/`** (fumadocs-сайт, старый корпус): всё новое пишется в `vault/`; старый корпус правится по его `docs-conventions` до атомарного переноса.
+Хранилище — папка `vault/` в репозитории documentation (in-repo период; после миграции старого корпуса выносится в свой репозиторий). Это **вне `content/docs/`** (fumadocs его не собирает) и **не путать с самим `content/docs/`** (fumadocs-сайт, старый корпус): всё новое пишется в `vault/`; старый корпус правится по его `docs-conventions` до атомарного переноса.
 
 ## Тип
 
@@ -54,7 +54,7 @@ Process-артефакты (прежде всего `task`) несут `timeline
 ## Навигация
 
 ```sh
-V=~/Development/work/senate/senate@docs/vault
+V="$(git rev-parse --show-toplevel)/vault"
 ls "$V/_types/"                          # индекс типов
 find "$V" -name "*<keyword>*.md"          # по имени файла
 rg -l "<keyword>" "$V" -g "*.md"          # по содержимому
@@ -72,4 +72,4 @@ rg -l "feature:.*<domain>" "$V" -g "*.md" # артефакты домена
 
 - Содержимое — на русском; английский только в технических идентификаторах и цитатах. Без emoji.
 - Коммиты: work-контекст senate, conventional commits, `-S`, атомарно и позиционно (`git-commit-atomic -C <repo> --auto -S "<msg>" <файлы>`).
-- Канон модели — спеки самого vault: контракт (типы, оси, lifecycle, гигиена) — `business-spec` [[vault-model]], физический surface — `implementation-spec` [[vault-surface]], репозиторий как сущность — [[senate-vault]] в `projects/`. Спайн модели (общий для инстансов) — `$OBSIDIAN_VAULT/projects/effort-management/` в личном vault. Читать при необходимости, не по умолчанию.
+- Канон модели — спеки самого vault: контракт (типы, оси, lifecycle, гигиена) — `business-spec` [[vault-model]], физический surface — `implementation-spec` [[vault-surface]], репозиторий как сущность — [[senate-vault]] в `projects/`. Читать при необходимости, не по умолчанию.

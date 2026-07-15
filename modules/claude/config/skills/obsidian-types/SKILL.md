@@ -15,37 +15,29 @@ Vault валидируется и мутируется библиотекой `o
 
 ## Каналы: чтение vs запись
 
-- **Чтение**: `openVault()` → синхронные `findFirst` / `findMany` / `count` с mingo-селектором `{ where }`; body заметки — `await note.text()`. Отдельной `eval`-команды нет (target) — одноразовый read-скрипт оформляй тоже как migration и гоняй через `obsidian-types run` без `--apply`: dry-run ничего не пишет.
+- **Чтение**: `openVault()` → синхронные `findFirst` / `findMany` / `count` с mingo-селектором `{ where }`; body заметки — `await note.text()`. Отдельной `eval`-команды нет (target) — одноразовый read-скрипт оформляй тоже как migration (`console.log` результата внутри `run`) и гоняй через `obsidian-types run` без `--apply`: dry-run ничего не пишет.
 - **Запись**: только `defineMigration` + `obsidian-types run <script>`. Не запускать мутирующий скрипт голым `bun` — runner делает codegen, typecheck скрипта, git-clean check и держит dry-run по умолчанию.
 
-## Migration-скрипт — текущая форма
+## Migration-скрипт
 
 ```ts
-import { openVault } from 'obsidian-types'
-import { defineMigration } from 'obsidian-types/migrations'
+import { defineMigration } from 'obsidian-types'
 
 export default defineMigration({
   name: 'rename status -> state on projects',
-  up: async () => {
-    const vault = await openVault()
-    try {
-      const result = vault.update(
-        { where: { type: 'project' } },
-        { $rename: { 'data.status': 'data.state' } },
-      )
-      console.log({ matched: result.matched, modified: result.modified })
-      await vault.apply({ confirm: true })
-    } finally {
-      vault.close()
-    }
+  run: (vault) => {
+    vault.update(
+      { where: { type: 'project' } },
+      { $rename: { 'data.status': 'data.state' } },
+    )
   },
 })
 ```
 
-- `await vault.apply({ confirm: true })` в теле обязателен. Под `run` env-гейт его перекрывает: без `--apply` это dry-run, с `--apply` — запись. Вне `run` `confirm` и есть гейт.
-- Порядок всегда: `obsidian-types run migrations/x.ts` → прочитать вывод → тот же вызов с `--apply`.
-- Логирование — один `console.log({ matched, modified })` из результата мутации. Не печатать по заметке в цикле. (Target P4: runner будет печатать план/счётчики сам — тогда и этот лог убрать.)
-- Target-фичи, которых нет сегодня: `run: (vault) => …` с open/apply/close в runner'е (P2), `match:`-селектор с типизацией драфта (P3), `eval`-команда (P5). Не изобретать их в скриптах.
+- Runner сам открывает vault, вызывает `run(vault)`, применяет, печатает план/warnings/счётчики и закрывает в `finally`. В теле `run` НЕ вызывать `openVault()`, `vault.apply()`, `vault.close()` и не печатать план вручную.
+- Гейт записи: CLI `--apply` форсит запись, `--dry-run` форсит dry-run, иначе решает поле `apply?: boolean` миграции (default false).
+- Порядок всегда: `obsidian-types run migrations/x.ts` → прочитать план → тот же вызов с `--apply`.
+- Target-фичи, которых нет: `match:`-селектор с типизацией драфта (P3), `eval`-команда (P5). Не изобретать их в скриптах.
 
 ## Типизация
 
@@ -53,9 +45,9 @@ export default defineMigration({
 - Чистый vault: typed-путь — `openTypedVault()` из `_types/.generated/vault.ts` (codegen), per-type overloads `findMany('project')`.
 - Грязный vault (remediation/fix-скрипты): `openTypedVault` непригоден — он открывает со `validate: 'strict'` и бросает на любой ошибке. Канон — `openVault()` и mingo-пути `'data.<field>'` без кастов.
 
-## Автофикс (CLI)
+## Автофикс
 
-- Цикл: `bunx obsidian-types validate` → `fix --dry-run` → `fix`.
+- CLI-цикл: `bunx obsidian-types validate` → `fix --dry-run` → `fix`. Из библиотеки то же самое — `vault.fix(selector?, { semantic?, moveFiles?, renameFiles? })` / `note.fix()`: правки буферизуются как обычные мутации до `apply`.
 - `fix` без флагов применяет только детерминированные фиксы (порядок полей, однозначная кардинальность). Семантические — `title-format-mismatch`, `field-value-not-in-enum`, `missing-required-field` — только под `--semantic`: они перезаписывают человеческие значения, dry-run обязателен.
 - Convergence при `--semantic`: отсутствующее required-поле вставляется пустым стабом → следующий `validate` даёт `required-field-no-default` → заполнить значение (или `default:` в `.type`); повторный прогон сходится. Это ожидаемое поведение, не баг.
 - Перемещения файлов — за отдельными флагами `--move-files` / `--rename-files` (или `fixer.renameFiles` в конфиге).

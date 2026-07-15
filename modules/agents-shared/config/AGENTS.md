@@ -1,4 +1,3 @@
-<!-- fullWidth: false tocVisible: false tableWrap: true -->
 # Global Rules
 
 ## *Bash*

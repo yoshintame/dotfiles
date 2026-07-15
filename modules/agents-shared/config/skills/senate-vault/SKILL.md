@@ -1,15 +1,15 @@
 ---
 name: senate-vault
-description: Конвенции senate-vault — рабочего хранилища памяти о продуктах senate (репо senate@vault). Type-driven модель, размещение и именование, связи только во frontmatter, две оси feature × project. Использовать при любом создании, редактировании или навигации по документам senate-vault, и как conventions-скил шага 1 /extract в senate-контексте.
+description: Конвенции senate-vault — рабочего хранилища памяти о продуктах senate (vault/ в репозитории documentation, до выноса в свой репо). Type-driven модель, размещение и именование, связи только во frontmatter, две оси feature × project. Использовать при любом создании, редактировании или навигации по документам senate-vault, и как conventions-скил шага 1 /extract в senate-контексте.
 ---
 
 # /senate-vault
 
-Рабочее хранилище senate: плоские типизированные markdown-документы, инстанс модели effort-management (спайн — в личном vault). Дефолтный агент модель ломает: кладёт файлы в папки наугад, дописывает «## Связанные» в тело, пишет доки-солянки. Ниже — только поправки к этому дефолту.
+Рабочее хранилище senate: плоские типизированные markdown-документы, инстанс модели effort-management. Дефолтный агент модель ломает: кладёт файлы в папки наугад, дописывает «## Связанные» в тело, пишет доки-солянки. Ниже — только поправки к этому дефолту.
 
 ## Корень
 
-`~/Development/work/senate/senate@vault` — standalone-репо (после подключения submodule читается и как `senate@docs/vault/`, но рабочая точка — сам репо). **Не путать со старым `senate@docs`** (fumadocs-сайт, `content/docs/`): всё новое пишется сюда; старый корпус правится по его `docs-conventions` до атомарного переноса.
+`~/Development/work/senate/senate@docs/vault` — vault живёт как `vault/` в репозитории documentation (in-repo период; после миграции старого корпуса выносится в свой репо). Это **вне `content/docs/`** (fumadocs его не собирает) и **не путать с самим `content/docs/`** (fumadocs-сайт, старый корпус): всё новое пишется в `vault/`; старый корпус правится по его `docs-conventions` до атомарного переноса.
 
 ## Тип
 
@@ -54,7 +54,7 @@ Process-артефакты (прежде всего `task`) несут `timeline
 ## Навигация
 
 ```sh
-V=~/Development/work/senate/senate@vault
+V=~/Development/work/senate/senate@docs/vault
 ls "$V/_types/"                          # индекс типов
 find "$V" -name "*<keyword>*.md"          # по имени файла
 rg -l "<keyword>" "$V" -g "*.md"          # по содержимому
@@ -66,10 +66,10 @@ rg -l "feature:.*<domain>" "$V" -g "*.md" # артефакты домена
 
 ## Валидатор
 
-`bunx obsidian-types` из корня репо (dep в `package.json`, GitHub Packages — нужен `GITHUB_TOKEN`). Enforcement — warning; при недоступности валидатора сверяй frontmatter со схемой глазами.
+`bunx obsidian-types` из корня vault (dep в `package.json`, GitHub Packages — нужен `GITHUB_TOKEN`). Enforcement — warning; при недоступности валидатора сверяй frontmatter со схемой глазами.
 
 ## Прочее
 
 - Содержимое — на русском; английский только в технических идентификаторах и цитатах. Без emoji.
 - Коммиты: work-контекст senate, conventional commits, `-S`, атомарно и позиционно (`git-commit-atomic -C <repo> --auto -S "<msg>" <файлы>`).
-- Инстанс-модель (репо-DAG, vocabulary, сущности) — `$OBSIDIAN_VAULT/projects/senate-vault/senate-vault.md`; физический surface — `storage-surface.md` рядом; спайн модели — `$OBSIDIAN_VAULT/projects/effort-management/`. Читать при необходимости, не по умолчанию.
+- Канон модели — спеки самого vault: контракт (типы, оси, lifecycle, гигиена) — `business-spec` [[vault-model]], физический surface — `implementation-spec` [[vault-surface]], репозиторий как сущность — [[senate-vault]] в `projects/`. Спайн модели (общий для инстансов) — `$OBSIDIAN_VAULT/projects/effort-management/` в личном vault. Читать при необходимости, не по умолчанию.

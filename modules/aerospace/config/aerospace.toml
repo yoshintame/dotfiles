@@ -17,6 +17,15 @@ bottom = 0
 top = 0
 right = 0
 
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
+if.window-title-regex-substring = 'Telegram'
+run = 'layout tiling'
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
+run = 'layout floating'
+
 [mode.main.binding]
 alt-shift-semicolon = 'mode service'
 

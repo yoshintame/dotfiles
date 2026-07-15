@@ -14,4 +14,7 @@ result-*
 # Claude permission analyzer backups
 modules/claude/config/settings.backup-*.json
 
+# VSCode workspace state (was polluted by markdown-inline-preview extension)
+/.vscode/
+
 node_modules

@@ -275,10 +275,12 @@
 
   // Toggle md tab between text editor and default editor (InLineMd WYSIWYG).
   // Claude Code opens file links via showTextDocument, which always uses the
-  // text editor and bypasses workbench.editorAssociations — this flips back.
+  // text editor and bypasses workbench.editorAssociations — since bridge 0.6.0
+  // such tabs are autoflipped to WYSIWYG; this bridge-aware toggle marks the
+  // uri as "user wants text" so the autoflip doesn't fight a manual switch.
   {
     "key": "cmd+m",
-    "command": "workbench.action.toggleEditorType",
+    "command": "inlinemdBridge.toggleEditorType",
     "when": "resourceExtname =~ /\\.mdx?$/"
   },
 

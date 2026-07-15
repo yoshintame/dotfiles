@@ -15,8 +15,9 @@ bun ~/.claude/skills/state-reconstruction/scripts/region-sessions.ts <substr> [s
 
 Скрипт сам склеивает снапшот `~/.claude/cc.duckdb` со свежими JSONL новее его края (живой парсинг батчами ≤128 MB), `--rebuild` не нужен. Секции:
 
-- `Sessions` — кто трогал регион из любого проекта: edits/writes/reads/bash по сессии. Свою текущую сессию игнорируй.
+- `Sessions` — кто трогал регион из любого проекта: edits/writes/reads/bash по сессии. Сессии с файловыми касаниями идут первыми; bash-only хвост — в основном шум (упоминание региона в commit-message, find), триажь по sample. Свою текущую сессию игнорируй.
 - `Files` — файл → последний редактор-сессия → счётчики. Это ключ к стыку с `git status`.
+- `Handoffs` — handoff-файлы региона отдельно от контента, со статусом из frontmatter (`open` = невзятая работа, `consumed` — кем-то подхвачена, `no-frontmatter` — старый формат, статус смотри руками).
 - `Bash touches` — файлы, созданные `mv`/`cp`/heredoc мимо Write/Edit, видны только здесь; триаж по sample command.
 
 ## 2. Git-WIP
@@ -31,6 +32,14 @@ git -C <repo> log -1 --format='%h %cI %s'
 
 `git-commit-context` даёт ветку, working tree, diff `--stat`, дивергенцию, недавние коммиты. stash и дата последнего коммита в нём отсутствуют — потому две добавочные команды.
 
+Когда регион — подпапка большого репо (vault-проект), `git-commit-context` выдаст весь чужой dirty tree. Вместо него — region-scoped:
+
+```bash
+git -C <repo> status --porcelain -- <paths>
+git -C <repo> log -1 --format='%h %cI %s' -- <paths>
+git -C <repo> diff HEAD --stat -- <paths>
+```
+
 ## 3. Шортлист → session-status
 
 Подозреваемые: сессии с `last` позже последнего коммита региона; последние редакторы файлов, грязных в `git status`; топ по edits. 3–8 сессий, не все — каждый прогон сканирует корпус на staleness:
@@ -40,6 +49,12 @@ bun ~/.claude/skills/session-status/scripts/session-status.ts <uuid> [uuid…]
 ```
 
 Полные UUID; отчёты разделяются `---`. Дальше — шаги скила `/session-status` (re-read только `re-read needed`).
+
+Read-only сессия (reads ≫ 0, edits = 0, `last` позже коммита) для session-status невидима — все секции пустые, а её вывод остался в чате. Не отбрасывай: вытащи финальный ответ ассистента из JSONL — план или развилку, не легшие в артефакты:
+
+```bash
+jq -rs 'map(select(.type=="assistant" and (.message.content | type=="array"))) | last.message.content | map(select(.type=="text") | .text) | join("\n")' ~/.claude/projects/<project>/<uuid>.jsonl
+```
 
 ## 4. Стык — что не легло
 
@@ -64,7 +79,7 @@ bun ~/.claude/skills/session-status/scripts/session-status.ts <uuid> [uuid…]
 ### Спячка
 - последний коммит <дата hash> vs последняя активность сессий <дата>
 ### Факты только в сессиях
-- <из «Полезного» session-status: команды, цифры, развилки>
+- <команды, цифры, развилки — из финальных ответов ассистента (jq-рецепт выше) и session-status>
 ```
 
 «Дозакрыть» — обязательная секция, ради неё прогон и делается: пользователь заходит по этим командам сам и доводит сессии до конца. Пустую прочую секцию пропусти. Этот вывод — вход шага 1 `/reconcile`.

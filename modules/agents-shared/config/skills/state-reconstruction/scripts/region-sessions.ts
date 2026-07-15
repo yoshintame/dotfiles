@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { existsSync, statSync } from "node:fs"
+import { existsSync, readFileSync, statSync } from "node:fs"
 import { homedir } from "node:os"
 import { join } from "node:path"
 
@@ -7,6 +7,7 @@ const HOME = homedir()
 const DB = join(HOME, ".claude", "cc.duckdb")
 const CC_SQL = join(HOME, ".claude", "skills", "find-session", "assets", "cc.sql")
 const PROJECTS = join(HOME, ".claude", "projects")
+const HANDOFFS = join(HOME, ".claude", "handoffs")
 const BATCH_BYTES = 128 * 1024 * 1024
 
 type Raw = { session_id: string; project: string; ts: string; fp: string | null; tool: string | null; cmd: string | null }
@@ -150,6 +151,7 @@ const rows = [...snap.filter((r) => !deltaSessions.has(r.session_id)), ...delta.
 
 const sessions = new Map<string, SessionAgg>()
 const filesAgg = new Map<string, FileAgg>()
+const handoffsAgg = new Map<string, FileAgg>()
 const bashAgg = new Map<string, BashAgg>()
 
 for (const r of rows) {
@@ -179,14 +181,15 @@ for (const r of rows) {
   sessions.set(r.session_id, s)
 
   if ((b === "write" || b === "edit") && r.fp) {
-    const f = filesAgg.get(r.fp) ?? { last: r.ts, lastSession: r.session_id, edits: 0, sessions: new Set() }
+    const agg = r.fp.startsWith(HANDOFFS + "/") ? handoffsAgg : filesAgg
+    const f = agg.get(r.fp) ?? { last: r.ts, lastSession: r.session_id, edits: 0, sessions: new Set() }
     if (r.ts >= f.last) {
       f.last = r.ts
       f.lastSession = r.session_id
     }
     f.edits++
     f.sessions.add(r.session_id)
-    filesAgg.set(r.fp, f)
+    agg.set(r.fp, f)
   }
 
   if (b === "bash" && r.cmd) {
@@ -204,10 +207,15 @@ let out = ""
 out += `# Region sessions: ${substrings.join(", ")}\n`
 out += `snapshot newest: ${newest} | delta: ${delta.fileCount} files (${Math.round(delta.bytes / 1024 / 1024)} MB) parsed live\n\n`
 
-out += "## Sessions\n"
+out += "## Sessions (file-touch first, bash-only mentions after)\n"
 const sessionRows = [...sessions.entries()]
   .filter(([, s]) => s.edits > 0 || s.reads > 0 || s.bash > 0)
-  .sort((a, b) => b[1].last.localeCompare(a[1].last))
+  .sort((a, b) => {
+    const at = a[1].edits + a[1].reads > 0 ? 1 : 0
+    const bt = b[1].edits + b[1].reads > 0 ? 1 : 0
+    if (at !== bt) return bt - at
+    return b[1].last.localeCompare(a[1].last)
+  })
 if (sessionRows.length === 0) {
   out += "(none)\n"
 } else {
@@ -232,6 +240,26 @@ if (fileRows.length === 0) {
     out += `| ${fp} | ${short(f.last)} | ${f.lastSession.slice(0, 8)} | ${f.edits} | ${f.sessions.size} |\n`
   }
   if (fileRows.length > fileLimit) out += `… and ${fileRows.length - fileLimit} more (raise --limit)\n`
+}
+out += "\n"
+
+function handoffStatus(fp: string): string {
+  if (!existsSync(fp)) return "gone"
+  const head = readFileSync(fp, "utf8").slice(0, 600)
+  if (!head.startsWith("---")) return "no-frontmatter"
+  return head.match(/^status:\s*(\S+)/m)?.[1] ?? "no-status-field"
+}
+
+out += "## Handoffs (region meta-artifacts, not region content)\n"
+const handoffRows = [...handoffsAgg.entries()].sort((a, b) => b[1].last.localeCompare(a[1].last))
+if (handoffRows.length === 0) {
+  out += "(none)\n"
+} else {
+  out += "| handoff | status | last edit | by session |\n"
+  out += "|---|---|---|---|\n"
+  for (const [fp, f] of handoffRows) {
+    out += `| ${fp} | ${handoffStatus(fp)} | ${short(f.last)} | ${f.lastSession.slice(0, 8)} |\n`
+  }
 }
 out += "\n"
 

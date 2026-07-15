@@ -18,12 +18,14 @@ set -uo pipefail
 
 REPO=""
 SHOW_FULL_DIFF=0
+PATHS=()
 while [ $# -gt 0 ]; do
   case "$1" in
     -C)            REPO="${2:-}"; shift 2 ;;
     --repo)        REPO="${2:-}"; shift 2 ;;
     --repo=*)      REPO="${1#--repo=}"; shift ;;
     --full-diff)   SHOW_FULL_DIFF=1; shift ;;
+    --)            shift; PATHS=("$@"); break ;;
     -*)            echo "gather-context: unsupported flag: $1" >&2; exit 2 ;;
     *)             REPO="$1"; shift ;;
   esac
@@ -31,6 +33,13 @@ done
 REPO="${REPO:-$PWD}"
 
 git_cmd() { git -C "$REPO" "$@"; }
+scoped() {
+  if [ ${#PATHS[@]} -gt 0 ]; then
+    "$@" -- "${PATHS[@]}"
+  else
+    "$@"
+  fi
+}
 
 if ! git_cmd rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   echo "ERROR: $REPO is not a git work tree" >&2
@@ -56,9 +65,9 @@ printf 'current: %s\n' "$BRANCH"
 [ -n "$BASE" ] && printf 'base:    %s\n' "$BASE"
 
 section "WORKING TREE (changed files)"
-git_cmd status --short
+scoped git_cmd status --short
 
-WT_STAT=$(git_cmd diff HEAD --stat)
+WT_STAT=$(scoped git_cmd diff HEAD --stat)
 if [ -z "$WT_STAT" ]; then
   section "WORKTREE DIFF"
   echo "(empty — worktree matches HEAD)"
@@ -67,8 +76,13 @@ else
   printf '%s\n' "$WT_STAT"
   if [ "$SHOW_FULL_DIFF" = 1 ]; then
     section "WORKTREE DIFF (full)"
-    git_cmd diff HEAD
+    scoped git_cmd diff HEAD
   fi
+fi
+
+if [ ${#PATHS[@]} -gt 0 ]; then
+  section "LAST COMMIT TOUCHING PATHS"
+  scoped git_cmd log -1 --format='%h %cI %s' || true
 fi
 
 if [ -n "$BASE" ] && [ "$BRANCH" != "$BASE" ]; then
@@ -81,7 +95,7 @@ if [ -n "$BASE" ] && [ "$BRANCH" != "$BASE" ]; then
 fi
 
 section "RECENT COMMITS (up to 25 unique type(scope) prefixes)"
-git_cmd log --oneline -500 | awk '
+scoped git_cmd log --oneline -500 | awk '
 {
   i = index($0, " ")
   subj = substr($0, i+1)

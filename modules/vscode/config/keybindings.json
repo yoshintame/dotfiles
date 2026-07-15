@@ -284,6 +284,23 @@
     "when": "resourceExtname =~ /\\.mdx?$/"
   },
 
+  // Git diff for md tabs — rendered Rich Markdown Diff instead of text diff.
+  // Goes through the bridge trampoline: rich-markdown-diff's own tab resolver
+  // doesn't recognize the InLineMd custom tab (and git.openChange reads
+  // activeTextEditor, which is undefined in any custom editor).
+  {
+    "key": "cmd+g",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.action.closePanel",
+        "workbench.view.scm",
+        "inlinemdBridge.showRenderedGitDiff"
+      ]
+    },
+    "when": "resourceExtname =~ /\\.mdx?$/"
+  },
+
   // =============================================
   // VSCode-specific bindings
   // =============================================

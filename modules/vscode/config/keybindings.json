@@ -273,6 +273,15 @@
     "when": "filesExplorerFocus"
   },
 
+  // Toggle md tab between text editor and default editor (InLineMd WYSIWYG).
+  // Claude Code opens file links via showTextDocument, which always uses the
+  // text editor and bypasses workbench.editorAssociations — this flips back.
+  {
+    "key": "cmd+m",
+    "command": "workbench.action.toggleEditorType",
+    "when": "resourceExtname =~ /\\.mdx?$/"
+  },
+
   // =============================================
   // VSCode-specific bindings
   // =============================================

@@ -284,10 +284,11 @@
     "when": "resourceExtname =~ /\\.mdx?$/"
   },
 
-  // Git diff for md tabs — rendered Rich Markdown Diff instead of text diff.
-  // Goes through the bridge trampoline: rich-markdown-diff's own tab resolver
-  // doesn't recognize the InLineMd custom tab (and git.openChange reads
-  // activeTextEditor, which is undefined in any custom editor).
+  // Git diff for md tabs — rendered diff instead of text diff. Goes through
+  // the bridge trampoline because diff extensions resolve the target from
+  // activeTextEditor, which is undefined in the InLineMd custom tab. The
+  // actual diff tool is set by inlinemdBridge.renderedDiffCommand (default:
+  // markdownDiffVisualiser.showChanges).
   {
     "key": "cmd+g",
     "command": "runCommands",

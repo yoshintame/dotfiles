@@ -69,7 +69,7 @@ rg -l "feature:.*<domain>" "$V" -g "*.md" # артефакты домена
 
 ## Валидатор
 
-`bunx obsidian-types` из корня vault (dep в `package.json`, GitHub Packages — нужен `GITHUB_TOKEN`). Enforcement — warning; при недоступности валидатора сверяй frontmatter со схемой глазами.
+`bunx vault-types` из корня vault (dep в `package.json`, GitHub Packages — нужен `GITHUB_TOKEN`). Enforcement — warning; при недоступности валидатора сверяй frontmatter со схемой глазами.
 
 ## Прочее
 

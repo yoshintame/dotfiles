@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ref1="${1:?usage: open-compare.sh <ref1> <ref2>}"
-ref2="${2:?usage: open-compare.sh <ref1> <ref2>}"
+do_open=0
+if [ "${1:-}" = "--open" ]; then
+  do_open=1
+  shift
+fi
+
+ref1="${1:?usage: compare-link.sh [--open] <ref1> <ref2>}"
+ref2="${2:?usage: compare-link.sh [--open] <ref1> <ref2>}"
 
 repo_root="$(git rev-parse --show-toplevel)"
 sha1="$(git -C "$repo_root" rev-parse --verify "${ref1}^{commit}")"
@@ -23,5 +29,10 @@ if [ -n "$remote_url" ]; then
   link="${link}?url=${enc}"
 fi
 
-printf '%s\n' "$link"
-open "$link"
+redirect="https://vscode.dev/redirect?url=$(printf '%s' "$link" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=""))')"
+
+printf 'deep: %s\nredirect: %s\n' "$link" "$redirect"
+
+if [ "$do_open" = 1 ]; then
+  open "$link"
+fi

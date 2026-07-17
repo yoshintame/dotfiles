@@ -2,15 +2,19 @@
 set -euo pipefail
 
 do_open=0
-if [ "${1:-}" = "--open" ]; then
-  do_open=1
-  shift
-fi
+repo_dir="."
+while :; do
+  case "${1:-}" in
+    --open) do_open=1; shift ;;
+    -C) repo_dir="${2:?usage: compare-link.sh [--open] [-C <repo>] <ref1> <ref2>}"; shift 2 ;;
+    *) break ;;
+  esac
+done
 
-ref1="${1:?usage: compare-link.sh [--open] <ref1> <ref2>}"
-ref2="${2:?usage: compare-link.sh [--open] <ref1> <ref2>}"
+ref1="${1:?usage: compare-link.sh [--open] [-C <repo>] <ref1> <ref2>}"
+ref2="${2:?usage: compare-link.sh [--open] [-C <repo>] <ref1> <ref2>}"
 
-repo_root="$(git rev-parse --show-toplevel)"
+repo_root="$(git -C "$repo_dir" rev-parse --show-toplevel)"
 sha1="$(git -C "$repo_root" rev-parse --verify "${ref1}^{commit}")"
 sha2="$(git -C "$repo_root" rev-parse --verify "${ref2}^{commit}")"
 repo_id="$(git -C "$repo_root" rev-list --max-parents=0 HEAD | tail -n1)"

@@ -23,8 +23,10 @@ description: Give a clickable link that opens a GitLens "Search & Compare" view 
 ## Запуск
 
 ```bash
-bash ~/.claude/skills/git-ref/scripts/compare-link.sh <ref1> <ref2>
+bash ~/.claude/skills/git-ref/scripts/compare-link.sh -C <repo> <ref1> <ref2>
 ```
+
+`-C <repo>` передавай всегда — cwd между вызовами Bash дрейфует, а молча собранная ссылка по чужому репо выглядит валидной.
 
 Скрипт резолвит refs в полные SHA (чтобы в пути deep link не было слешей из имён веток) и печатает две строки:
 
@@ -43,5 +45,5 @@ bash ~/.claude/skills/git-ref/scripts/compare-link.sh <ref1> <ref2>
 
 ## Заметки
 
-- Запускать из каталога внутри нужного git-репо. Репо должно быть **открыто в окне редактора** — GitLens матчит его по SHA root-коммита среди открытых; `?url=<origin>` в ссылке — fallback-матч по remote (у репо без origin его нет).
+- Репо должно быть **открыто в окне редактора** — GitLens матчит его по SHA root-коммита среди открытых; `?url=<origin>` в ссылке — fallback-матч по remote (у репо без origin его нет).
 - Ручная альтернатива без агента: which-key `enter g k` (Compare References) — интерактивный пикер двух refs.

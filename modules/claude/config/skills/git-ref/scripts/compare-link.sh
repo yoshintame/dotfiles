@@ -25,15 +25,17 @@ case "${VSCODE_GIT_ASKPASS_NODE:-}${TERM_PROGRAM:-}" in
   *[Ww]indsurf*) scheme="windsurf" ;;
 esac
 
-link="${scheme}://eamodio.gitlens/link/r/${repo_id}/compare/${sha1}...${sha2}"
+enc() { printf '%s' "$1" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=""))'; }
 
+query="path=$(enc "$repo_root")"
 remote_url="$(git -C "$repo_root" remote get-url origin 2>/dev/null || true)"
 if [ -n "$remote_url" ]; then
-  enc="$(printf '%s' "$remote_url" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=""))')"
-  link="${link}?url=${enc}"
+  query="url=$(enc "$remote_url")&${query}"
 fi
 
-redirect="https://vscode.dev/redirect?url=$(printf '%s' "$link" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=""))')"
+link="${scheme}://eamodio.gitlens/link/r/${repo_id}/compare/${sha1}...${sha2}?${query}"
+
+redirect="https://vscode.dev/redirect?url=$(enc "$link")"
 
 printf 'deep: %s\nredirect: %s\n' "$link" "$redirect"
 

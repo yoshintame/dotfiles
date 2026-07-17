@@ -30,7 +30,7 @@ bash ~/.claude/skills/git-ref/scripts/compare-link.sh -C <repo> <ref1> <ref2>
 
 Скрипт резолвит refs в полные SHA (чтобы в пути deep link не было слешей из имён веток) и печатает две строки:
 
-- `deep:` — `<scheme>://eamodio.gitlens/link/r/<repoId>/compare/<sha1>...<sha2>` (схема редактора определяется из окружения);
+- `deep:` — `<scheme>://eamodio.gitlens/link/r/<repoId>/compare/<sha1>...<sha2>?path=<repo>[&url=<origin>]` (схема редактора определяется из окружения);
 - `redirect:` — `https://vscode.dev/redirect?url=<encoded deep>` — единственная форма, кликабельная в чате (рендерер режет не-http(s) схемы).
 
 ## Ответ
@@ -45,5 +45,5 @@ bash ~/.claude/skills/git-ref/scripts/compare-link.sh -C <repo> <ref1> <ref2>
 
 ## Заметки
 
-- Репо должно быть **открыто в окне редактора** — GitLens матчит его по SHA root-коммита среди открытых; `?url=<origin>` в ссылке — fallback-матч по remote (у репо без origin его нет).
+- Ссылка обязана нести `?url=` и/или `?path=` — без обоих GitLens её вообще не парсит (`parseDeepLinkUri` возвращает undefined, молчаливый отказ). Скрипт всегда добавляет `path=<repo_root>`: по нему GitLens не только матчит открытые репо, но и сам подключает репо (`getOrAddRepository`), даже если оно не открыто в окне, принявшем URI.
 - Ручная альтернатива без агента: which-key `enter g k` (Compare References) — интерактивный пикер двух refs.

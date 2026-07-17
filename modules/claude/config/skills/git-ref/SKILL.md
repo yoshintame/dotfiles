@@ -30,7 +30,7 @@ bash ~/.claude/skills/git-ref/scripts/compare-link.sh -C <repo> <ref1> <ref2>
 
 Скрипт резолвит refs в полные SHA (чтобы в пути deep link не было слешей из имён веток) и печатает две строки:
 
-- `deep:` — `<scheme>://eamodio.gitlens/link/r/<repoId>/compare/<sha1>...<sha2>?path=<repo>[&url=<origin>]` (схема редактора определяется из окружения);
+- `deep:` — `<scheme>://eamodio.gitlens/link/r/<repoId>/compare/<sha1>...<sha2>?url=<origin|пусто>&path=<repo>` (схема редактора определяется из окружения);
 - `redirect:` — `https://vscode.dev/redirect?url=<encoded deep>` — единственная форма, кликабельная в чате (рендерер режет не-http(s) схемы).
 
 ## Ответ
@@ -46,4 +46,5 @@ bash ~/.claude/skills/git-ref/scripts/compare-link.sh -C <repo> <ref1> <ref2>
 ## Заметки
 
 - Ссылка обязана нести `?url=` и/или `?path=` — без обоих GitLens её вообще не парсит (`parseDeepLinkUri` возвращает undefined, молчаливый отказ). Скрипт всегда добавляет `path=<repo_root>`: по нему GitLens не только матчит открытые репо, но и сам подключает репо (`getOrAddRepository`), даже если оно не открыто в окне, принявшем URI.
+- `url=` стоит в query **первым и всегда** (пустым, если origin нет) — намеренно: `vscode.dev/redirect` дописывает свой `url=<весь deep link>` в query целевого URI, а `URLSearchParams.get('url')` в GitLens берёт первое вхождение. Без заслона GitLens принимает весь линк за remote и падает в промпт «Unable to find remote → Add Remote». Пустая строка falsy во всех проверках (`RemoteMatchUnneeded`) — remote-флоу пропускается.
 - Ручная альтернатива без агента: which-key `enter g k` (Compare References) — интерактивный пикер двух refs.

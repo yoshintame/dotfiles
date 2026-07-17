@@ -27,11 +27,8 @@ esac
 
 enc() { printf '%s' "$1" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=""))'; }
 
-query="path=$(enc "$repo_root")"
 remote_url="$(git -C "$repo_root" remote get-url origin 2>/dev/null || true)"
-if [ -n "$remote_url" ]; then
-  query="url=$(enc "$remote_url")&${query}"
-fi
+query="url=$(enc "$remote_url")&path=$(enc "$repo_root")"
 
 link="${scheme}://eamodio.gitlens/link/r/${repo_id}/compare/${sha1}...${sha2}?${query}"
 

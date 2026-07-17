@@ -13,13 +13,27 @@ if [ -z "$transcript" ] || [ ! -f "$transcript" ]; then
   fi
 fi
 
+last_title=""
 if [ -n "$transcript" ] && [ -f "$transcript" ]; then
   last_title="$(jq -Rr 'fromjson? | select(.type == "custom-title") | .customTitle // empty' "$transcript" 2>/dev/null | tail -n 1 || true)"
-  [ -z "$last_title" ] || exit 0
 fi
 
-cat <<'EOF'
+if [ -z "$last_title" ]; then
+  cat <<'EOF'
 <session-naming>У сессии ещё нет имени. Прежде чем отвечать по существу, выведи из этого промпта название и пометь сессию активной: вызови скил rename-session со статусом active (эквивалент /rename-session active). Один вызов, дальше работай как обычно.</session-naming>
 EOF
+  exit 0
+fi
+
+case "$last_title" in
+  "🟡 "* | "🟢 "*) ;;
+  *) exit 0 ;;
+esac
+
+rename_script="$HOME/.claude/skills/rename-session/scripts/append-custom-title.ts"
+[ -f "$rename_script" ] || exit 0
+command -v bun >/dev/null 2>&1 || exit 0
+
+CLAUDE_CODE_SESSION_ID="$session_id" bun "$rename_script" --status active "${last_title#* }" >/dev/null 2>&1 || true
 
 exit 0

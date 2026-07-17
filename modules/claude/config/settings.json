@@ -398,7 +398,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/session-name-nudge.sh",
+            "command": "$HOME/.claude/hooks/session-title.sh",
             "timeout": 15
           }
         ]
@@ -454,11 +454,6 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/session-start.sh",
             "timeout": 30
-          },
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/session-active.sh",
-            "timeout": 15
           }
         ]
       }

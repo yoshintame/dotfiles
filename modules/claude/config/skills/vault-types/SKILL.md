@@ -13,10 +13,50 @@ Vault валидируется и мутируется библиотекой `v
 2. CLI-справка: `NO_COLOR=1 bunx vault-types --help`, у подкоманд свой `--help`.
 3. Интроспекция схем — чтение файлов `_types/<type>.type` / `_fields/<field>.field` напрямую. Библиотеку открывать только за resolved/runtime данными (инстансы, граф ссылок, счётчики) — не писать скрипт, чтобы «распечатать схему».
 
-## Каналы: чтение vs запись
+## Каналы: eval vs migration-файл
 
-- **Чтение**: `openVault()` → синхронные `findFirst` / `findMany` / `count` с mingo-селектором `{ where }`; body заметки — `await note.text()`. Отдельной `eval`-команды нет (target) — одноразовый read-скрипт оформляй тоже как migration (`console.log` результата внутри `run`) и гоняй через `vault-types run` без `--apply`: dry-run ничего не пишет.
-- **Запись**: только `defineMigration` + `vault-types run <script>`. Не запускать мутирующий скрипт голым `bun` — runner делает codegen, typecheck скрипта, git-clean check и держит dry-run по умолчанию.
+Граница — по весу операции, как в SQL: `psql -c "SELECT …"` никто не оформляет миграцией, а schema change — обязательно файл.
+
+- **`eval`** — эфемерные one-liner'ы: read-запросы и тривиальные одношаговые мутации, где dry-run-план — достаточное ревью. `bunx vault-types eval '(vault) => …'` (`async` поддерживается); семантика записи как у `run`: dry-run по умолчанию, `--apply` пишет. Возврат функции печатается JSON'ом в stdout, план/warnings/итог — в stderr, так что stdout безопасно пайпить в `jq`. Заметки сериализуются проекцией `{ path, basename, type, data }` без body; body — флагом `--body` либо `await note.text()` в самом выражении.
+- **Migration-файл + `vault-types run <script>`** — всё, что стоит сохранить, повторить или поревьюить: многошаговые мутации, схемные правки. Runner дополнительно делает codegen, typecheck скрипта и git-clean check.
+- Запись в любом канале — никогда голым `bun script.ts`: мимо dry-run-гейта и планов runner'а.
+
+```bash
+# read: счётчик
+bunx vault-types eval '(vault) => vault.count({ where: { type: "book", "data.status": "reading" } })'
+
+# read: граф
+bunx vault-types eval '(vault) => vault.findFirst({ where: { path: "areas/dotfiles.md" } })?.backlinks().map(b => b.note.path)'
+
+# тривиальная мутация: сначала dry-run с планом, потом тот же вызов с --apply
+bunx vault-types eval '(vault) => vault.update({ where: { "data.status": "current" } }, { $set: { "data.status": "active" } })'
+```
+
+Чтение из собственного скрипта/миграции: `openVault()` → синхронные `findFirst` / `findMany` / `count` с mingo-селектором `{ where }`; body заметки — `await note.text()`.
+
+## Перемещение / переименование файла
+
+Никогда не `mv` и не ручной поиск+фикс `[[wikilinks]]` по vault'у. Move и rename — это мутация `$set: { path }`: библиотека сама находит входящие frontmatter-ссылки и детерминированно переписывает их в том же apply (строки `edit <сосед>.md (~поле)` в плане; embed/heading/alias сохраняются).
+
+```bash
+# переместить: сначала dry-run — план покажет move + каскад, потом тот же вызов с --apply
+bunx vault-types eval '(vault) => vault.update({ where: { path: "books/dune.md" } }, { $set: { path: "reading/dune.md" } })'
+
+# переименовать (basename меняется → перепишутся входящие [[dune]] → [[dune-notes]])
+bunx vault-types eval '(vault) => vault.update({ where: { path: "books/dune.md" } }, { $set: { path: "books/dune-notes.md" } })'
+
+# пачка по селектору
+bunx vault-types eval '(vault) => vault.findMany({ where: { "data.status": "archived" } }).map(n => n.update({ $set: { path: "archive/" + n.basename + ".md" } }))'
+
+# папка-инстанс целиком (main + sub-файлы + co-located typed-инстансы): префикс-rewrite по $regex
+# replaceAll покрывает и папку, и basename main-файла; parent-ссылки детей и внешние [[old-proj]] перепишет каскад
+bunx vault-types eval '(vault) => vault.findMany({ where: { path: { $regex: "^projects/old-proj/" } } }).map(n => n.update({ $set: { path: n.path.replaceAll("old-proj", "new-proj") } }))'
+```
+
+- Ссылки в body **не** переписываются — придут как `warning:`; разруливать руками (в этом vault'е связи по конвенции только во frontmatter, так что это редкость).
+- Модель видит только `.md` — ассеты (картинки, PDF) в папке-инстансе двигать отдельно (`mv` + проверить `![[embeds]]`).
+- Занятый target не роняет пачку — заметка скипается с warning (режим `onPathCollision` в конфиге).
+- Если файл просто лежит не в папке своего типа — это не ручной move, а `vault.fix({ where: … }, { moveFiles: true })` / CLI `fix --move-files`.
 
 ## Migration-скрипт
 
@@ -37,7 +77,7 @@ export default defineMigration({
 - Runner сам открывает vault, вызывает `run(vault)`, применяет, печатает план/warnings/счётчики и закрывает в `finally`. В теле `run` НЕ вызывать `openVault()`, `vault.apply()`, `vault.close()` и не печатать план вручную.
 - Гейт записи: CLI `--apply` форсит запись, `--dry-run` форсит dry-run, иначе решает поле `apply?: boolean` миграции (default false).
 - Порядок всегда: `vault-types run migrations/x.ts` → прочитать план → тот же вызов с `--apply`.
-- Target-фичи, которых нет: `match:`-селектор с типизацией драфта (P3), `eval`-команда (P5). Не изобретать их в скриптах.
+- Target-фичи, которых нет: `match:`-селектор с типизацией драфта (P3). Не изобретать его в скриптах.
 
 ## Типизация
 
@@ -53,6 +93,3 @@ export default defineMigration({
 - Перемещения файлов — за отдельными флагами `--move-files` / `--rename-files` (или `fixer.renameFiles` в конфиге).
 - Тумблеры `fixer.*` и секция `serialization` (минимальные диффы) — в `.vault-types.config.ts`; сигнатуры в `node_modules/vault-types/src/public/config.ts`.
 
-## Версия
-
-Написано против 0.2.0. Если в `package.json` vault'а закреплена 0.1.1: `--semantic`-гейта нет (там `fix` сразу переписывает семантику — не запускать без `--dry-run` и точечного списка файлов), serialization-fidelity нет (диффы шумные — коммитить vault перед прогоном).

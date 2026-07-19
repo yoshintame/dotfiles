@@ -26,12 +26,16 @@
       path = "modules/agents-shared/config/skills/extract/**";
       glob = true;
     };
-    "~/.claude/skills/actualize-spec/" = {
-      path = "modules/agents-shared/config/skills/actualize-spec/**";
+    "~/.claude/skills/actualize/" = {
+      path = "modules/agents-shared/config/skills/actualize/**";
       glob = true;
     };
-    "~/.claude/skills/reconcile/" = {
-      path = "modules/agents-shared/config/skills/reconcile/**";
+    "~/.claude/skills/audit/" = {
+      path = "modules/agents-shared/config/skills/audit/**";
+      glob = true;
+    };
+    "~/.claude/skills/rewrite/" = {
+      path = "modules/agents-shared/config/skills/rewrite/**";
       glob = true;
     };
     "~/.claude/skills/done/" = {

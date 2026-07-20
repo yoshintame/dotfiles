@@ -17,7 +17,7 @@ description: Конвенции senate-vault — рабочего хранили
 
 `ls _types/` — индекс всех типов. Не читай `.type` пачкой; открывай `_types/<type>.type` **только** перед созданием или правкой инстанса этого типа — чтобы frontmatter совпал со схемой (обязательные поля, допустимые `values`).
 
-Ядро (границы типов и lifecycle — в `description` схем): state — `business-spec` / `implementation-spec`; process — `idea` / `open-question` / `analysis` / `task`; события — `decision` / `incident`; `knowledge`; сущности — `project` (репозиторий) / `host` / `person`.
+Ядро (границы типов и lifecycle — в `description` схем): state — `business-spec` / `implementation-spec` / `test-registry`; process — `idea` / `open-question` / `analysis` / `task`; события — `decision` / `incident`; `knowledge`; сущности — `project` (репозиторий) / `host` / `person`.
 
 Главная ловушка — писать по инерции текущей задачи и путать, где чему место: сущность (`project` / `person`) = durable-идентичность (не участие в задаче), событие (`decision` / `incident`) = разворот/сбой в прошлом (не изначальный дизайн-выбор), состояние (spec) = что есть сейчас. Границы близких типов и анти-паттерны «НЕ так» — в `description` их схем; читай перед созданием.
 
@@ -30,7 +30,7 @@ description: Конвенции senate-vault — рабочего хранили
 
 ## Размещение и именование
 
-- **Со-локация** (decision `effort-artifacts-colocated-in-project`): effort-артефакт, у которого `parent:` — ровно один проект, лежит в папке инстанса этого проекта `projects/<slug>/` по типовым подпапкам: `spec/` (обе спеки), `tasks/`, `analysis/`, `ideas/`, `open-questions/`, `decisions/`, `incidents/`. Location-warning валидатора на со-локованных инстансах ожидаем.
+- **Со-локация** (decision `effort-artifacts-colocated-in-project`): effort-артефакт, у которого `parent:` — ровно один проект, лежит в папке инстанса этого проекта `projects/<slug>/` по типовым подпапкам: `spec/` (обе спеки), `tests/`, `tasks/`, `analysis/`, `ideas/`, `open-questions/`, `decisions/`, `incidents/`. Location-warning валидатора на со-локованных инстансах ожидаем.
 - Глобальная папка из `location.folder` типа — для сквозных инстансов (несколько project-parent) и инстансов без project-родителя. Проект без артефактов — плоский файл `projects/<slug>.md`; папка инстанса заводится с первым артефактом.
 - Внутри типовой подпапки — максимум один уровень тематических подпапок (`spec/<theme>/…`), глубже не вкладывать.
 - Инстанс — либо файл `<folder>/<slug>.md`, либо папка `<folder>/<slug>/<slug>.md` + sub-файлы, только когда перерос один файл (сабтаски-зоны, target-доки genesis-analysis).

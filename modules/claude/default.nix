@@ -30,10 +30,6 @@
       path = "modules/agents-shared/config/skills/actualize/**";
       glob = true;
     };
-    "~/.claude/skills/audit/" = {
-      path = "modules/agents-shared/config/skills/audit/**";
-      glob = true;
-    };
     "~/.claude/skills/rewrite/" = {
       path = "modules/agents-shared/config/skills/rewrite/**";
       glob = true;

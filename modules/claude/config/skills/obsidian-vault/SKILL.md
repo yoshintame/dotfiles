@@ -16,10 +16,23 @@ description: Конвенции этого Obsidian vault — type-driven мод
 ## Размещение и именование
 
 - Дефолт: инстанс `type: X` лежит в папке из `location.folder` этого типа. Один тип — одна папка — один base.
-- **Со-локация effort-артефактов** (перекрывает дефолт): артефакт (`task` / `analysis` / `idea` / `open-question` / `decision` / `business-spec` / `implementation-spec` / …) с **ровно одним** проектом в `parent:` кладётся в папку инстанса этого проекта — `projects/<proj>/{tasks,analysis,ideas,decisions,spec,…}/<slug>.md`. Глобальная типовая папка — только для мульти-parent и без project-родителя. Со-локованный инстанс — полноценный typed-инстанс (несёт `type:`), НЕ sub-файл; `location-mismatch` warning валидатора на нём ожидаем. Решение: `projects/obsidian-vault-structure/decisions/effort-artifacts-colocated-in-project.md`.
+- **Со-локация effort-артефактов** (перекрывает дефолт): артефакт (`task` / `analysis` / `idea` / `open-question` / `decision` / `business-spec` / `implementation-spec` / …) с **ровно одним** проектом в `parent:` кладётся в папку инстанса этого проекта — `projects/<proj>/{tasks,analysis,ideas,decisions,spec,…}/<slug>.md`. Глобальная типовая папка — только для мульти-parent и без project-родителя. Со-локованный инстанс — полноценный typed-инстанс (несёт `type:`), НЕ sub-файл; `location-mismatch` warning валидатора на нём ожидаем. Решение: `areas/vault-management/decisions/effort-artifacts-colocated-in-project.md`.
 - Инстанс — либо файл `<folder>/<slug>.md`, либо папка `<folder>/<slug>/<slug>.md` + sub-файлы. Папка — только когда инстанс разросся.
 - Sub-файлы **не имеют `type:`** — они часть main-файла, не самостоятельные сущности. Файл, который осмысленно цитировать отдельно, — не sub, а отдельный инстанс в своей типовой папке.
 - На диске всё **kebab-case** (файлы и папки). `title:` во frontmatter — обычный Title Case или нормальная фраза. Имя файла ≠ `title`.
+
+## Assets (картинки, вложения)
+
+Вложение — sub-файл (без `type:`, часть main-файла): живёт в папке своего инстанса, не в общей свалке.
+
+- **Folder-инстанс** → `<инстанс>/assets/<имя>.<ext>` рядом с main.md (как `projects/kitten-care/assets/`).
+- **Flat-инстанс** (`<folder>/<slug>.md`) при первом вложении — **промоуть в folder-инстанс**: `<folder>/<slug>/<slug>.md` + `<folder>/<slug>/assets/`. Вложение — это «инстанс разросся». Безопасно: bases фильтруют по `type:`, `[[slug]]` резолвится по shortest-path — ни запросы, ни ссылки не рвутся.
+- Глобальный `_assets/` в корне — **не использовать** (рвёт co-location, отрывает asset от дока).
+- Имя — семантичное и vault-уникальное; `<slug-дока>-N.png` — безопасный дефолт (гарантирует резолв wikilink), описательное (`ear-lesion-01.png`) — лучше.
+- Embed — wikilink: `![[<имя>.png]]` (vault на shortest-path). Markdown-ссылки `![](…)` не использовать.
+- Нативная вставка в Obsidian настроена на `./assets` (`attachmentFolderPath`) — кладёт в `assets/` рядом с заметкой.
+- **Скрины, вставленные в чат агенту** — не файлы, а base64 в session-транскрипте: достать байты скриптом `extract-images` (механизм — в глобальном `AGENTS.md`), затем разложить по правилам выше.
+- Решение и обоснование: `areas/vault-management/decisions/assets-colocated-in-instance-folder.md`.
 
 ## Связи — только во frontmatter
 

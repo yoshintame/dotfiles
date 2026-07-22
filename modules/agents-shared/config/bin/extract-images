@@ -1,0 +1,246 @@
+#!/usr/bin/env bun
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
+import { homedir } from "node:os"
+import { dirname, join } from "node:path"
+
+const HELP = `usage: extract-images [options] <output-prefix>
+
+Decode images pasted into a Claude Code session into files on disk. Pasted
+images are not exposed to the agent as files, but persist byte-for-byte as
+base64 image blocks in the session transcript; this reads them back out.
+
+Writes <output-prefix>-1.<ext>, <output-prefix>-2.<ext>, ... one per image,
+in the order they appear in the message. Extension derives from media type.
+The parent directory of <output-prefix> is created if missing. Each written
+path is printed to stdout, one per line.
+
+By default extracts every image from the most recent user message that
+contains images, in the current session.
+
+Options:
+  --session <id>    Session id to read (default: $CLAUDE_CODE_SESSION_ID, else
+                    the most recently modified transcript for the current cwd).
+  --back <N>        Pick the Nth image-bearing user message counting back from
+                    the end: 0 = most recent (default), 1 = the one before it.
+  --indices <spec>  Comma/range list of 0-based image indices within the chosen
+                    message to extract, e.g. "0,2" or "1-3". Default: all.
+  --dry-run         Report what would be written; write nothing.
+  --json            Emit a JSON array [{index, path, mediaType, bytes}] instead
+                    of bare paths.
+  -h, --help        Show this help.
+`
+
+function die(msg: string): never {
+  process.stderr.write(`extract-images: ${msg}\n`)
+  process.exit(1)
+}
+
+type Args = {
+  prefix: string
+  session?: string
+  back: number
+  indices?: number[]
+  dryRun: boolean
+  json: boolean
+}
+
+function parseBack(v: string): number {
+  if (!/^\d+$/.test(v)) die(`--back must be a non-negative integer, got ${JSON.stringify(v)}`)
+  return Number(v)
+}
+
+function parseIndices(spec: string): number[] {
+  const out: number[] = []
+  for (const token of spec.split(",")) {
+    const p = token.trim()
+    if (p === "") continue
+    const range = p.match(/^(\d+)-(\d+)$/)
+    if (range) {
+      const lo = Number(range[1])
+      const hi = Number(range[2])
+      if (lo > hi) die(`invalid --indices range ${JSON.stringify(p)}: start > end`)
+      for (let i = lo; i <= hi; i++) out.push(i)
+    } else if (/^\d+$/.test(p)) {
+      out.push(Number(p))
+    } else {
+      die(`invalid --indices token ${JSON.stringify(p)} (expected N or N-M)`)
+    }
+  }
+  if (out.length === 0) die("--indices resolved to an empty set")
+  return out
+}
+
+function parseArgs(argv: readonly string[]): Args {
+  let session: string | undefined
+  let back = 0
+  let indices: number[] | undefined
+  let dryRun = false
+  let json = false
+  const positional: string[] = []
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]!
+    const takeValue = (name: string): string => {
+      const v = argv[++i]
+      if (v === undefined) die(`${name} requires a value`)
+      return v
+    }
+    if (arg === "--session") session = takeValue("--session")
+    else if (arg.startsWith("--session=")) session = arg.slice("--session=".length)
+    else if (arg === "--back") back = parseBack(takeValue("--back"))
+    else if (arg.startsWith("--back=")) back = parseBack(arg.slice("--back=".length))
+    else if (arg === "--indices") indices = parseIndices(takeValue("--indices"))
+    else if (arg.startsWith("--indices=")) indices = parseIndices(arg.slice("--indices=".length))
+    else if (arg === "--dry-run") dryRun = true
+    else if (arg === "--json") json = true
+    else if (arg === "-h" || arg === "--help") {
+      process.stdout.write(HELP)
+      process.exit(0)
+    } else if (arg.startsWith("-")) {
+      die(`unknown flag ${JSON.stringify(arg)}`)
+    } else {
+      positional.push(arg)
+    }
+  }
+  if (positional.length === 0) die("missing positional <output-prefix>")
+  if (positional.length > 1) {
+    die(`expected a single <output-prefix>, got ${positional.length}: ${positional.join(" ")}`)
+  }
+  return { prefix: positional[0]!, session, back, indices, dryRun, json }
+}
+
+function hashCwd(cwd: string): string {
+  return cwd.replace(/[\/.]/g, "-")
+}
+
+function discoverTranscript(session: string | undefined): string {
+  const projectsRoot = join(homedir(), ".claude", "projects")
+  if (!existsSync(projectsRoot)) die(`projects root not found: ${projectsRoot}`)
+  const sessionId = session ?? process.env.CLAUDE_CODE_SESSION_ID
+  const cwdDir = join(projectsRoot, hashCwd(process.cwd()))
+
+  if (sessionId) {
+    const direct = join(cwdDir, `${sessionId}.jsonl`)
+    if (existsSync(direct)) return direct
+    for (const project of readdirSync(projectsRoot)) {
+      const candidate = join(projectsRoot, project, `${sessionId}.jsonl`)
+      if (existsSync(candidate)) return candidate
+    }
+    die(`session ${sessionId} set, but ${sessionId}.jsonl not found under ${projectsRoot}`)
+  }
+
+  if (!existsSync(cwdDir)) {
+    die(
+      `no project dir for cwd ${process.cwd()} (expected ${cwdDir}); pass --session or set CLAUDE_CODE_SESSION_ID`,
+    )
+  }
+  const candidates = readdirSync(cwdDir)
+    .filter(name => name.endsWith(".jsonl"))
+    .map(name => {
+      const full = join(cwdDir, name)
+      return { full, mtimeMs: statSync(full).mtimeMs }
+    })
+    .sort((a, b) => b.mtimeMs - a.mtimeMs)
+  if (candidates.length === 0) die(`no .jsonl transcripts in ${cwdDir}; pass --session`)
+  return candidates[0]!.full
+}
+
+type ImageBlock = { mediaType: string; data: string }
+type ImageMessage = { line: number; images: ImageBlock[] }
+
+function collectImageMessages(transcript: string): ImageMessage[] {
+  const lines = readFileSync(transcript, "utf8").split("\n")
+  const result: ImageMessage[] = []
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!
+    if (!line.includes("image")) continue
+    let obj: unknown
+    try {
+      obj = JSON.parse(line)
+    } catch {
+      process.stderr.write(`extract-images: warning: skipping unparseable transcript line ${i + 1}\n`)
+      continue
+    }
+    const rec = obj as Record<string, unknown>
+    if (rec.type !== "user" || rec.isSidechain === true) continue
+    const message = rec.message as Record<string, unknown> | undefined
+    if (!message || message.role !== "user") continue
+    const content = message.content
+    if (!Array.isArray(content)) continue
+    if (content.some(b => (b as Record<string, unknown>)?.type === "tool_result")) continue
+    const images: ImageBlock[] = []
+    for (const block of content as Record<string, unknown>[]) {
+      if (block?.type !== "image") continue
+      const source = block.source as Record<string, unknown> | undefined
+      if (
+        !source ||
+        source.type !== "base64" ||
+        typeof source.data !== "string" ||
+        typeof source.media_type !== "string"
+      ) {
+        const shape = source ? JSON.stringify({ ...source, data: "<omitted>" }) : String(source)
+        die(
+          `transcript line ${i + 1}: image block has unexpected shape (source=${shape}); ` +
+            `transcript format may have changed — refusing to guess`,
+        )
+      }
+      if (!source.media_type.startsWith("image/")) {
+        die(`transcript line ${i + 1}: unexpected media_type ${JSON.stringify(source.media_type)} (not image/*)`)
+      }
+      images.push({ mediaType: source.media_type, data: source.data })
+    }
+    if (images.length > 0) result.push({ line: i + 1, images })
+  }
+  return result
+}
+
+function extFor(mediaType: string): string {
+  const subtype = mediaType.slice("image/".length).toLowerCase()
+  const remap: Record<string, string> = { jpeg: "jpg", "svg+xml": "svg" }
+  const ext = remap[subtype] ?? subtype
+  if (!/^[a-z0-9]+$/.test(ext)) die(`cannot derive a file extension from media_type ${JSON.stringify(mediaType)}`)
+  return ext
+}
+
+const args = parseArgs(process.argv.slice(2))
+const transcript = discoverTranscript(args.session)
+const messages = collectImageMessages(transcript)
+if (messages.length === 0) die(`no user message with pasted images found in ${transcript}`)
+if (args.back >= messages.length) {
+  die(`--back ${args.back} out of range: only ${messages.length} image-bearing user message(s) in transcript`)
+}
+const chosen = messages[messages.length - 1 - args.back]!
+
+let selection: { srcIndex: number; block: ImageBlock }[]
+if (args.indices) {
+  const max = chosen.images.length - 1
+  for (const idx of args.indices) {
+    if (idx < 0 || idx > max) {
+      die(`--indices ${idx} out of range: chosen message has ${chosen.images.length} image(s) (valid 0..${max})`)
+    }
+  }
+  selection = args.indices.map(idx => ({ srcIndex: idx, block: chosen.images[idx]! }))
+} else {
+  selection = chosen.images.map((block, srcIndex) => ({ srcIndex, block }))
+}
+
+const dir = dirname(args.prefix)
+if (!args.dryRun && dir && !existsSync(dir)) mkdirSync(dir, { recursive: true })
+
+const written: { index: number; path: string; mediaType: string; bytes: number }[] = []
+selection.forEach(({ srcIndex, block }, n) => {
+  const path = `${args.prefix}-${n + 1}.${extFor(block.mediaType)}`
+  const buf = Buffer.from(block.data, "base64")
+  if (buf.length === 0) die(`image at index ${srcIndex} decoded to 0 bytes — refusing to write an empty file`)
+  if (!args.dryRun) writeFileSync(path, buf)
+  written.push({ index: srcIndex, path, mediaType: block.mediaType, bytes: buf.length })
+})
+
+if (args.json) {
+  process.stdout.write(`${JSON.stringify(written, null, 2)}\n`)
+} else {
+  for (const w of written) process.stdout.write(`${w.path}\n`)
+}
+const verb = args.dryRun ? "would extract" : "extracted"
+process.stderr.write(
+  `extract-images: ${verb} ${written.length} image(s) from ${transcript} (transcript line ${chosen.line})\n`,
+)

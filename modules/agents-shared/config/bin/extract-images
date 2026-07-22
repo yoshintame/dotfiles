@@ -2,6 +2,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { dirname, join } from "node:path"
+import { parseArgs } from "node:util"
 
 const HELP = `usage: extract-images [options] <output-prefix>
 
@@ -70,42 +71,40 @@ function parseIndices(spec: string): number[] {
   return out
 }
 
-function parseArgs(argv: readonly string[]): Args {
-  let session: string | undefined
-  let back = 0
-  let indices: number[] | undefined
-  let dryRun = false
-  let json = false
-  const positional: string[] = []
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i]!
-    const takeValue = (name: string): string => {
-      const v = argv[++i]
-      if (v === undefined) die(`${name} requires a value`)
-      return v
-    }
-    if (arg === "--session") session = takeValue("--session")
-    else if (arg.startsWith("--session=")) session = arg.slice("--session=".length)
-    else if (arg === "--back") back = parseBack(takeValue("--back"))
-    else if (arg.startsWith("--back=")) back = parseBack(arg.slice("--back=".length))
-    else if (arg === "--indices") indices = parseIndices(takeValue("--indices"))
-    else if (arg.startsWith("--indices=")) indices = parseIndices(arg.slice("--indices=".length))
-    else if (arg === "--dry-run") dryRun = true
-    else if (arg === "--json") json = true
-    else if (arg === "-h" || arg === "--help") {
-      process.stdout.write(HELP)
-      process.exit(0)
-    } else if (arg.startsWith("-")) {
-      die(`unknown flag ${JSON.stringify(arg)}`)
-    } else {
-      positional.push(arg)
-    }
+function parseCliArgs(): Args {
+  let parsed: ReturnType<typeof parseArgs>
+  try {
+    parsed = parseArgs({
+      allowPositionals: true,
+      options: {
+        session: { type: "string" },
+        back: { type: "string" },
+        indices: { type: "string" },
+        "dry-run": { type: "boolean" },
+        json: { type: "boolean" },
+        help: { type: "boolean", short: "h" },
+      },
+    })
+  } catch (err) {
+    die(err instanceof Error ? err.message : String(err))
   }
-  if (positional.length === 0) die("missing positional <output-prefix>")
-  if (positional.length > 1) {
-    die(`expected a single <output-prefix>, got ${positional.length}: ${positional.join(" ")}`)
+  const { values, positionals } = parsed
+  if (values.help) {
+    process.stdout.write(HELP)
+    process.exit(0)
   }
-  return { prefix: positional[0]!, session, back, indices, dryRun, json }
+  if (positionals.length === 0) die("missing positional <output-prefix>")
+  if (positionals.length > 1) {
+    die(`expected a single <output-prefix>, got ${positionals.length}: ${positionals.join(" ")}`)
+  }
+  return {
+    prefix: positionals[0]!,
+    session: typeof values.session === "string" ? values.session : undefined,
+    back: typeof values.back === "string" ? parseBack(values.back) : 0,
+    indices: typeof values.indices === "string" ? parseIndices(values.indices) : undefined,
+    dryRun: values["dry-run"] === true,
+    json: values.json === true,
+  }
 }
 
 function hashCwd(cwd: string): string {
@@ -201,7 +200,7 @@ function extFor(mediaType: string): string {
   return ext
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseCliArgs()
 const transcript = discoverTranscript(args.session)
 const messages = collectImageMessages(transcript)
 if (messages.length === 0) die(`no user message with pasted images found in ${transcript}`)

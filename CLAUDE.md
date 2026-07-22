@@ -23,6 +23,12 @@
 
 **Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/claude/` и `modules/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится только после `dot:rebuild`; проверить раньше — `ln -s "$DOTFILES/modules/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
 
+## Скрипты (bun/TS)
+
+Скрипты репо (`packages/*`, `modules/*/config/bin/`, скилловые `scripts/`) пишу и поддерживаю я один, и они уже требуют `bun` — «запуск где угодно без зависимостей» неприменим изначально. **Не жертвуй читаемостью ради zero-dep и не переизобретай базовое в каждом скрипте** — внешние библиотеки бери свободно: CLI-аргументы — `citty` (`defineCommand`/`runMain`), shell-операции — `dax-sh` (`$`). Обратное тоже верно: не тащи либу, которая в конкретном скрипте не нужна (напр. `dax-sh` в скрипт без шелла — мёртвый груз).
+
+Деп декларируй в ближайшем **tracked** `package.json` + `bun.lock` (для `bin/`-скриптов — корневой `~/.dotfiles/package.json`), чтобы был запинен и воспроизводим; `node_modules` в .gitignore, ставится `bun install` / bun auto-install.
+
 ## Документация
 
 **НЕ создавай каталог `docs/` в этом репозитории и не пиши туда документацию.** Вся документация по dotfiles живёт в Obsidian vault, а не в репо.

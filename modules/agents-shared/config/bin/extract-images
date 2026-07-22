@@ -1,48 +1,12 @@
 #!/usr/bin/env bun
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { dirname, join } from "node:path"
-import { parseArgs } from "node:util"
-
-const HELP = `usage: extract-images [options] <output-prefix>
-
-Decode images pasted into a Claude Code session into files on disk. Pasted
-images are not exposed to the agent as files, but persist byte-for-byte as
-base64 image blocks in the session transcript; this reads them back out.
-
-Writes <output-prefix>-1.<ext>, <output-prefix>-2.<ext>, ... one per image,
-in the order they appear in the message. Extension derives from media type.
-The parent directory of <output-prefix> is created if missing. Each written
-path is printed to stdout, one per line.
-
-By default extracts every image from the most recent user message that
-contains images, in the current session.
-
-Options:
-  --session <id>    Session id to read (default: $CLAUDE_CODE_SESSION_ID, else
-                    the most recently modified transcript for the current cwd).
-  --back <N>        Pick the Nth image-bearing user message counting back from
-                    the end: 0 = most recent (default), 1 = the one before it.
-  --indices <spec>  Comma/range list of 0-based image indices within the chosen
-                    message to extract, e.g. "0,2" or "1-3". Default: all.
-  --dry-run         Report what would be written; write nothing.
-  --json            Emit a JSON array [{index, path, mediaType, bytes}] instead
-                    of bare paths.
-  -h, --help        Show this help.
-`
+import { defineCommand, runMain } from "citty"
 
 function die(msg: string): never {
   process.stderr.write(`extract-images: ${msg}\n`)
   process.exit(1)
-}
-
-type Args = {
-  prefix: string
-  session?: string
-  back: number
-  indices?: number[]
-  dryRun: boolean
-  json: boolean
 }
 
 function parseBack(v: string): number {
@@ -71,76 +35,33 @@ function parseIndices(spec: string): number[] {
   return out
 }
 
-function parseCliArgs(): Args {
-  let parsed: ReturnType<typeof parseArgs>
-  try {
-    parsed = parseArgs({
-      allowPositionals: true,
-      options: {
-        session: { type: "string" },
-        back: { type: "string" },
-        indices: { type: "string" },
-        "dry-run": { type: "boolean" },
-        json: { type: "boolean" },
-        help: { type: "boolean", short: "h" },
-      },
-    })
-  } catch (err) {
-    die(err instanceof Error ? err.message : String(err))
-  }
-  const { values, positionals } = parsed
-  if (values.help) {
-    process.stdout.write(HELP)
-    process.exit(0)
-  }
-  if (positionals.length === 0) die("missing positional <output-prefix>")
-  if (positionals.length > 1) {
-    die(`expected a single <output-prefix>, got ${positionals.length}: ${positionals.join(" ")}`)
-  }
-  return {
-    prefix: positionals[0]!,
-    session: typeof values.session === "string" ? values.session : undefined,
-    back: typeof values.back === "string" ? parseBack(values.back) : 0,
-    indices: typeof values.indices === "string" ? parseIndices(values.indices) : undefined,
-    dryRun: values["dry-run"] === true,
-    json: values.json === true,
-  }
-}
-
 function hashCwd(cwd: string): string {
   return cwd.replace(/[\/.]/g, "-")
 }
 
-function discoverTranscript(session: string | undefined): string {
+async function discoverTranscript(session: string | undefined): Promise<string> {
   const projectsRoot = join(homedir(), ".claude", "projects")
   if (!existsSync(projectsRoot)) die(`projects root not found: ${projectsRoot}`)
   const sessionId = session ?? process.env.CLAUDE_CODE_SESSION_ID
-  const cwdDir = join(projectsRoot, hashCwd(process.cwd()))
 
   if (sessionId) {
-    const direct = join(cwdDir, `${sessionId}.jsonl`)
-    if (existsSync(direct)) return direct
-    for (const project of readdirSync(projectsRoot)) {
-      const candidate = join(projectsRoot, project, `${sessionId}.jsonl`)
-      if (existsSync(candidate)) return candidate
+    for await (const p of new Bun.Glob(`**/${sessionId}.jsonl`).scan({ cwd: projectsRoot, absolute: true })) {
+      return p
     }
-    die(`session ${sessionId} set, but ${sessionId}.jsonl not found under ${projectsRoot}`)
+    die(`session ${sessionId} set, but no ${sessionId}.jsonl found under ${projectsRoot}`)
   }
 
+  const cwdDir = join(projectsRoot, hashCwd(process.cwd()))
   if (!existsSync(cwdDir)) {
-    die(
-      `no project dir for cwd ${process.cwd()} (expected ${cwdDir}); pass --session or set CLAUDE_CODE_SESSION_ID`,
-    )
+    die(`no project dir for cwd ${process.cwd()} (expected ${cwdDir}); pass --session or set CLAUDE_CODE_SESSION_ID`)
   }
-  const candidates = readdirSync(cwdDir)
-    .filter(name => name.endsWith(".jsonl"))
-    .map(name => {
-      const full = join(cwdDir, name)
-      return { full, mtimeMs: statSync(full).mtimeMs }
-    })
-    .sort((a, b) => b.mtimeMs - a.mtimeMs)
-  if (candidates.length === 0) die(`no .jsonl transcripts in ${cwdDir}; pass --session`)
-  return candidates[0]!.full
+  const files: string[] = []
+  for await (const p of new Bun.Glob("*.jsonl").scan({ cwd: cwdDir, absolute: true })) {
+    files.push(p)
+  }
+  if (files.length === 0) die(`no .jsonl transcripts in ${cwdDir}; pass --session`)
+  files.sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)
+  return files[0]!
 }
 
 type ImageBlock = { mediaType: string; data: string }
@@ -200,46 +121,87 @@ function extFor(mediaType: string): string {
   return ext
 }
 
-const args = parseCliArgs()
-const transcript = discoverTranscript(args.session)
-const messages = collectImageMessages(transcript)
-if (messages.length === 0) die(`no user message with pasted images found in ${transcript}`)
-if (args.back >= messages.length) {
-  die(`--back ${args.back} out of range: only ${messages.length} image-bearing user message(s) in transcript`)
-}
-const chosen = messages[messages.length - 1 - args.back]!
+const main = defineCommand({
+  meta: {
+    name: "extract-images",
+    description:
+      "Decode images pasted into a Claude Code session to files on disk. Pasted images are not exposed to the agent as files, but persist byte-for-byte as base64 blocks in the session transcript; this reads them back out, byte-identical to the originals. Writes <prefix>-1.<ext>, <prefix>-2.<ext>, … (extension from media type), creating the parent dir, and prints each path to stdout. Defaults to every image from the most recent image-bearing user message.",
+  },
+  args: {
+    prefix: {
+      type: "positional",
+      required: true,
+      description: "Output path prefix; files become <prefix>-1.<ext>, <prefix>-2.<ext>, …",
+    },
+    session: {
+      type: "string",
+      description: "Session id to read (default: $CLAUDE_CODE_SESSION_ID, else newest transcript for the cwd)",
+    },
+    back: {
+      type: "string",
+      description: "Nth image-bearing user message from the end: 0 = most recent (default), 1 = the one before it",
+    },
+    indices: {
+      type: "string",
+      description: "0-based image indices within the chosen message, e.g. 0,2 or 1-3 (default: all)",
+    },
+    "dry-run": {
+      type: "boolean",
+      description: "Report what would be written; write nothing",
+    },
+    json: {
+      type: "boolean",
+      description: "Emit a JSON array [{index, path, mediaType, bytes}] instead of bare paths",
+    },
+  },
+  async run({ args }) {
+    const back = args.back === undefined ? 0 : parseBack(String(args.back))
+    const indices = args.indices === undefined ? undefined : parseIndices(String(args.indices))
 
-let selection: { srcIndex: number; block: ImageBlock }[]
-if (args.indices) {
-  const max = chosen.images.length - 1
-  for (const idx of args.indices) {
-    if (idx < 0 || idx > max) {
-      die(`--indices ${idx} out of range: chosen message has ${chosen.images.length} image(s) (valid 0..${max})`)
+    const transcript = await discoverTranscript(typeof args.session === "string" ? args.session : undefined)
+    const messages = collectImageMessages(transcript)
+    if (messages.length === 0) die(`no user message with pasted images found in ${transcript}`)
+    if (back >= messages.length) {
+      die(`--back ${back} out of range: only ${messages.length} image-bearing user message(s) in transcript`)
     }
-  }
-  selection = args.indices.map(idx => ({ srcIndex: idx, block: chosen.images[idx]! }))
-} else {
-  selection = chosen.images.map((block, srcIndex) => ({ srcIndex, block }))
-}
+    const chosen = messages[messages.length - 1 - back]!
 
-const dir = dirname(args.prefix)
-if (!args.dryRun && dir && !existsSync(dir)) mkdirSync(dir, { recursive: true })
+    let selection: { srcIndex: number; block: ImageBlock }[]
+    if (indices) {
+      const max = chosen.images.length - 1
+      for (const idx of indices) {
+        if (idx < 0 || idx > max) {
+          die(`--indices ${idx} out of range: chosen message has ${chosen.images.length} image(s) (valid 0..${max})`)
+        }
+      }
+      selection = indices.map(idx => ({ srcIndex: idx, block: chosen.images[idx]! }))
+    } else {
+      selection = chosen.images.map((block, srcIndex) => ({ srcIndex, block }))
+    }
 
-const written: { index: number; path: string; mediaType: string; bytes: number }[] = []
-selection.forEach(({ srcIndex, block }, n) => {
-  const path = `${args.prefix}-${n + 1}.${extFor(block.mediaType)}`
-  const buf = Buffer.from(block.data, "base64")
-  if (buf.length === 0) die(`image at index ${srcIndex} decoded to 0 bytes — refusing to write an empty file`)
-  if (!args.dryRun) writeFileSync(path, buf)
-  written.push({ index: srcIndex, path, mediaType: block.mediaType, bytes: buf.length })
+    const dryRun = args["dry-run"] === true
+    const dir = dirname(args.prefix)
+    if (!dryRun && dir && !existsSync(dir)) mkdirSync(dir, { recursive: true })
+
+    const written: { index: number; path: string; mediaType: string; bytes: number }[] = []
+    selection.forEach(({ srcIndex, block }, n) => {
+      const path = `${args.prefix}-${n + 1}.${extFor(block.mediaType)}`
+      const buf = Buffer.from(block.data, "base64")
+      if (buf.length === 0) die(`image at index ${srcIndex} decoded to 0 bytes — refusing to write an empty file`)
+      if (!dryRun) writeFileSync(path, buf)
+      written.push({ index: srcIndex, path, mediaType: block.mediaType, bytes: buf.length })
+    })
+
+    if (args.json === true) {
+      process.stdout.write(`${JSON.stringify(written, null, 2)}\n`)
+    } else {
+      for (const w of written) process.stdout.write(`${w.path}\n`)
+    }
+    process.stderr.write(
+      `extract-images: ${dryRun ? "would extract" : "extracted"} ${written.length} image(s) from ${transcript} ` +
+        `(transcript line ${chosen.line})\n`,
+    )
+  },
 })
 
-if (args.json) {
-  process.stdout.write(`${JSON.stringify(written, null, 2)}\n`)
-} else {
-  for (const w of written) process.stdout.write(`${w.path}\n`)
-}
-const verb = args.dryRun ? "would extract" : "extracted"
-process.stderr.write(
-  `extract-images: ${verb} ${written.length} image(s) from ${transcript} (transcript line ${chosen.line})\n`,
-)
+runMain(main)

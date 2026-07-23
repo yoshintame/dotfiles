@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { homedir } from "node:os"
-import { basename, join } from "node:path"
+import { join } from "node:path"
 import { defineCommand, runMain } from "citty"
 
 function die(msg: string): never {
@@ -85,7 +85,7 @@ async function discoverTranscript(session: string | undefined): Promise<string> 
 }
 
 type ImageBlock = { mediaType: string; data: string }
-type ImageMessage = { line: number; images: ImageBlock[] }
+type ImageMessage = { line: number; uuid: string | undefined; images: ImageBlock[] }
 
 function collectImageMessages(transcript: string): ImageMessage[] {
   const lines = readFileSync(transcript, "utf8").split("\n")
@@ -128,7 +128,9 @@ function collectImageMessages(transcript: string): ImageMessage[] {
       }
       images.push({ mediaType: source.media_type, data: source.data })
     }
-    if (images.length > 0) result.push({ line: i + 1, images })
+    if (images.length > 0) {
+      result.push({ line: i + 1, uuid: typeof rec.uuid === "string" ? rec.uuid : undefined, images })
+    }
   }
   return result
 }
@@ -145,7 +147,7 @@ const main = defineCommand({
   meta: {
     name: "extract-images",
     description:
-      "Decode images pasted into a Claude Code session to files on disk. Pasted images are not exposed to the agent as files, but persist byte-for-byte as base64 blocks in the session transcript; this reads them back out, byte-identical to the originals. Writes into <dir> (created if missing) and prints each path to stdout. Names come from --names, else default to <session-uuid>-<back>-<index>.<ext> — a coordinate you can feed straight back to --back/--indices. Defaults to every image from the most recent image-bearing user message.",
+      "Decode images pasted into a Claude Code session to files on disk. Pasted images are not exposed to the agent as files, but persist byte-for-byte as base64 blocks in the session transcript; this reads them back out, byte-identical to the originals. Writes into <dir> (created if missing) and prints each path to stdout. Names come from --names, else default to <message-uuid>-<index>.<ext> — a stable identity that survives later messages. Defaults to every image from the most recent image-bearing user message.",
   },
   args: {
     dir: {
@@ -156,7 +158,7 @@ const main = defineCommand({
     names: {
       type: "string",
       description:
-        "Comma-separated names for the selected images, in order; extension is added from media type. Default: <session-uuid>-<back>-<index>",
+        "Comma-separated names for the selected images, in order; extension is added from media type. Default: <message-uuid>-<index>",
     },
     session: {
       type: "string",
@@ -205,14 +207,18 @@ const main = defineCommand({
     }
 
     const dryRun = args["dry-run"] === true
-    const sessionId = basename(transcript, ".jsonl")
     const names = args.names === undefined ? undefined : parseNames(String(args.names), selection.length)
+    if (!names && chosen.uuid === undefined) {
+      die(
+        `transcript line ${chosen.line}: message has no uuid — cannot build a default filename; pass --names instead`,
+      )
+    }
     if (!dryRun && !existsSync(args.dir)) mkdirSync(args.dir, { recursive: true })
 
     const written: { index: number; path: string; mediaType: string; bytes: number }[] = []
     selection.forEach(({ srcIndex, block }, n) => {
       const ext = extFor(block.mediaType)
-      const base = names ? withExt(names[n]!, ext) : `${sessionId}-${back}-${srcIndex}.${ext}`
+      const base = names ? withExt(names[n]!, ext) : `${chosen.uuid}-${srcIndex}.${ext}`
       const path = join(args.dir, base)
       const buf = Buffer.from(block.data, "base64")
       if (buf.length === 0) die(`image at index ${srcIndex} decoded to 0 bytes — refusing to write an empty file`)

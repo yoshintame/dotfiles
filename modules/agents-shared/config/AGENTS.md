@@ -22,7 +22,7 @@ All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-
 
 ## Pasted images
 
-Images pasted into a chat message are never exposed to the agent as files — they persist as base64 image blocks in the session transcript. Recover the bytes (byte-for-byte identical to the original, no re-encoding) with `extract-images` (on `PATH`; run `extract-images --help`): it discovers the current session's transcript and decodes images from the most recent image-bearing user message to files on disk. Reach for it whenever you need a pasted screenshot as a real file — bug-report assets, saving an attachment, diffing an image. **Where** the files land and **how** to reference them is a per-context convention (e.g. this vault's `obsidian-vault` skill), not a global rule.
+Images pasted into a chat message are never exposed to the agent as files — they persist as base64 image blocks in the session transcript. Recover the bytes (byte-for-byte identical to the original, no re-encoding) with `extract-images` (on `PATH`; run `extract-images --help`): it discovers the current session's transcript and decodes images from the most recent image-bearing user message to files on disk. Reach for it whenever you need a pasted screenshot as a real file — bug-report assets, saving an attachment, diffing an image.
 
 ## Package managers
 

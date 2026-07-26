@@ -18,3 +18,9 @@ modules/claude/config/settings.backup-*.json
 /.vscode/
 
 node_modules
+
+# Decrypted SOPS render — real secrets, must never be tracked.
+# The live config renders to ~/.config/resticprofile/profiles.yaml;
+# this repo copy is a stray that leaked healthchecks UUIDs to the public
+# mirror. Ignored so `dot:rebuild`'s `git add -A` can't re-stage it.
+modules/resticprofile/config/profiles.yaml

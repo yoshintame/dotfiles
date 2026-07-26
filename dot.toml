@@ -137,3 +137,7 @@ SSH_AUTH_SOCK="$AGENT_SOCK" ssh-add -l || {
     exit 1
 }
 '''
+
+["dot:bootstrap-onedrive"]
+description = "Authorize the OneDrive rclone remote in a browser (run once on new machine)"
+run = 'python3 "$HOME/.dotfiles/modules/rclone/onedrive-authorize.py"'

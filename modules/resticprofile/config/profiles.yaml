@@ -16,10 +16,68 @@ groups:
     profiles:
       - local-ops
       - b2-ops
+      - gdrive-ops
   check:
     profiles:
       - local-ops
       - b2-ops
+      - gdrive-ops
+
+# Reusable parameterized blocks for offsite remotes (B2, Google Drive).
+# Variables (`$NAME`) are resolved by resticprofile mixin engine when a
+# profile invokes the mixin via `use:`. `${HC_*_UUID}` placeholders inside
+# the `use:` block go through SOPS envsubst earlier and are replaced with
+# real UUIDs at render time (see modules/resticprofile/default.nix).
+mixins:
+  remote-copy:
+    default-vars:
+      TARGET: ""
+      HC_UUID: ""
+      REPOSITORY: ""
+    copy:
+      initialize: true
+      initialize-copy-chunker-params: true
+      repository: "$REPOSITORY"
+      password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
+      schedule: "0,3,6,9,12,15,18,21:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-$TARGET.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/fail"
+
+  remote-ops:
+    default-vars:
+      TARGET: ""
+      HC_UUID: ""
+      FORGET_SCHEDULE: ""
+      CHECK_SCHEDULE: ""
+    forget:
+      group-by: "host,tags"
+      keep-daily: 30
+      keep-weekly: 12
+      keep-monthly: 12
+      keep-yearly: 3
+      prune: true
+      host: true
+      tag: true
+      schedule: "$FORGET_SCHEDULE"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-forget.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/fail"
+    check:
+      read-data-subset: "5%"
+      schedule: "$CHECK_SCHEDULE"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-check.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/fail"
 
 profiles:
   default:
@@ -38,6 +96,7 @@ profiles:
         - "**/.cursor/extensions"
         - "**/.claude/cache"
         - "**/.claude/debug"
+        - "**/Documents/huggingface"
         - "**/Library/Application Support/CleanShot/media"
         - "**/Cache"
         - "**/Code Cache"
@@ -67,6 +126,18 @@ profiles:
     repository: "b2:yoshintame:restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
+  # --- Google Drive repository (offsite copy via rclone) ---
+  # Requires rclone remote `gdrive` configured via `rclone config`
+  # (~/.config/rclone/rclone.conf). Path is relative to My Drive root.
+  # `rclone.program`: cron-окружение macOS не имеет /opt/homebrew/bin в PATH,
+  # restic не находит rclone — указываем явный путь.
+  gdrive:
+    inherit: base
+    repository: "rclone:gdrive:backups/restic/main"
+    lock: "/tmp/resticprofile-gdrive.lock"
+    option:
+      - "rclone.program=/opt/homebrew/bin/rclone"
+
   quicksave:
     inherit: local
     backup:
@@ -95,9 +166,8 @@ profiles:
     inherit: local
     backup:
       run-before:
-        - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 {{ .Env.HOME }}/.local/share/mise/shims/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
-        - "/usr/bin/env HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew bundle dump --force --file={{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
-        - "/bin/sh -c 'echo go \"golang.org/x/tools/gopls\" >> {{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile'"
+        - "/usr/bin/env PATH=/opt/homebrew/bin:/usr/bin:/bin HOMEBREW_NO_AUTO_UPDATE=1 {{ .Env.HOME }}/.local/share/mise/shims/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
+        - "/bin/sh {{ .Env.HOME }}/.dotfiles/modules/resticprofile/config/dump-brewfile.sh {{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
       source-base: "{{ .Env.HOME }}"
       source:
         - ".ssh"
@@ -155,18 +225,22 @@ profiles:
   local-to-b2:
     inherit: local
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
+    use:
+      - name: remote-copy
+        TARGET: b2
+        HC_UUID: "bf672dd5-948d-44d6-94e7-c8460617347d"
+        REPOSITORY: "b2:yoshintame:restic/main"
+
+  local-to-gdrive:
+    inherit: local
+    use:
+      - name: remote-copy
+        TARGET: gdrive
+        HC_UUID: "779e626c-f579-4e73-ab6d-b0a620fc854e"
+        REPOSITORY: "rclone:gdrive:backups/restic/main"
     copy:
-      initialize: true
-      initialize-copy-chunker-params: true
-      repository: "b2:yoshintame:restic/main"
-      password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
-      schedule: "0,3,6,9,12,15,18,21:00"
-      schedule-permission: user
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-b2.log"
-      run-after:
-        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/bf672dd5-948d-44d6-94e7-c8460617347d"
-      run-after-fail:
-        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/bf672dd5-948d-44d6-94e7-c8460617347d/fail"
+      option:
+        - "rclone.program=/opt/homebrew/bin/rclone"
 
   local-ops:
     inherit: local
@@ -197,28 +271,18 @@ profiles:
 
   b2-ops:
     inherit: b2
-    forget:
-      group-by: "host,tags"
-      keep-daily: 30
-      keep-weekly: 12
-      keep-monthly: 12
-      keep-yearly: 3
-      prune: true
-      host: true
-      tag: true
-      schedule: "sun 5:00"
-      schedule-permission: user
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log"
-      run-after:
-        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b"
-      run-after-fail:
-        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b/fail"
-    check:
-      read-data-subset: "5%"
-      schedule: "*-*-01 7:00"
-      schedule-permission: user
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log"
-      run-after:
-        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b"
-      run-after-fail:
-        - "curl -fsS -m 10 --retry 5 https://hc-ping.com/38d37c90-ac51-40ad-917c-2179cf03ba0b/fail"
+    use:
+      - name: remote-ops
+        TARGET: b2
+        HC_UUID: "38d37c90-ac51-40ad-917c-2179cf03ba0b"
+        FORGET_SCHEDULE: "sun 5:00"
+        CHECK_SCHEDULE: "*-*-01 7:00"
+
+  gdrive-ops:
+    inherit: gdrive
+    use:
+      - name: remote-ops
+        TARGET: gdrive
+        HC_UUID: "0368d0c6-bce3-42fd-a76b-40db76e23a3f"
+        FORGET_SCHEDULE: "sun 6:00"
+        CHECK_SCHEDULE: "*-*-01 8:00"

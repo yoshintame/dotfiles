@@ -11,9 +11,22 @@ run = '${EDITOR:-code} .'
 description = "Rebuild nix-darwin configuration"
 dir = "{{env.DOTFILES}}"
 depends = ["dot:proxy-bindings"]
+# --impure: sopsTemplates gates sops.templates wiring on `builtins.pathExists`
+# of the age key, which only works under --impure. Without it the gate stays
+# false, sops.templates aren't activated, and rendered secret files (profiles.yaml,
+# b2.env, hc.env, repo.key) silently disappear from new sops-nix generations.
 run = '''
 git add -A
-sudo darwin-rebuild switch --flake .#lasthaze-mbp
+sudo darwin-rebuild switch --impure --flake .#lasthaze-mbp
+'''
+
+["dot:rebuild-full"]
+description = "Rebuild AND converge Homebrew to the Brewfile (install missing + uninstall extras)"
+dir = "{{env.DOTFILES}}"
+depends = ["dot:proxy-bindings"]
+run = '''
+git add -A
+sudo env DOT_BREW_FULL=1 darwin-rebuild switch --impure --flake .#lasthaze-mbp
 '''
 
 ["dot:proxy-bindings"]

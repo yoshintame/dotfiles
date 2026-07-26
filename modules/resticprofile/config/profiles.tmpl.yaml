@@ -182,6 +182,7 @@ profiles:
         - ".npmrc"
         - "Documents"
         - "Pictures"
+        - "Video"
         - "remnote"
         - "Backups"
         - ".gnupg"

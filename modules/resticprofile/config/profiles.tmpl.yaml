@@ -17,11 +17,13 @@ groups:
       - local-ops
       - b2-ops
       - gdrive-ops
+      - onedrive-ops
   check:
     profiles:
       - local-ops
       - b2-ops
       - gdrive-ops
+      - onedrive-ops
 
 mixins:
   remote-copy:
@@ -133,6 +135,18 @@ profiles:
     option:
       - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone"
 
+  # OneDrive намеренно отсутствует в programs.rclone: Microsoft ротирует
+  # refresh_token при каждом использовании, а home-manager перезаписывает
+  # rclone.conf целиком на каждой активации. Токен поэтому живёт в отдельном
+  # конфиге, которым владеет только rclone, и путь к нему указывается явно.
+  # Обоснование — decision `onedrive-token-outside-nix` в Obsidian vault.
+  onedrive:
+    inherit: base
+    repository: "rclone:onedrive:backups/restic/main"
+    lock: "/tmp/resticprofile-onedrive.lock"
+    option:
+      - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone --config {{ .Env.HOME }}/.config/rclone/onedrive.conf"
+
   quicksave:
     inherit: local
     lock: "/tmp/resticprofile-quicksave.lock"
@@ -242,6 +256,44 @@ profiles:
     copy:
       option:
         - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone"
+
+  # Хуки Healthchecks здесь пока не заведены: чеки onedrive в HC не созданы, а
+  # сам канал оповещений сломан (см. problem `backup-failures-invisible`).
+  # Пустой UUID дал бы 404 на каждый пинг, то есть шум вместо сигнала. Перевести
+  # на mixin `remote-copy`/`remote-ops` вместе с починкой алертинга.
+  local-to-onedrive:
+    inherit: local
+    lock: "/tmp/resticprofile-local-to-onedrive.lock"
+    copy:
+      initialize: true
+      initialize-copy-chunker-params: true
+      repository: "rclone:onedrive:backups/restic/main"
+      password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
+      option:
+        - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone --config {{ .Env.HOME }}/.config/rclone/onedrive.conf"
+      schedule: "2,5,8,11,14,17,20,23:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-onedrive.log"
+
+  onedrive-ops:
+    inherit: onedrive
+    forget:
+      group-by: "host,tags"
+      keep-daily: 30
+      keep-weekly: 12
+      keep-monthly: 12
+      keep-yearly: 3
+      prune: true
+      host: true
+      tag: true
+      schedule: "sun 7:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-forget.log"
+    check:
+      read-data-subset: "5%"
+      schedule: "*-*-01 9:00"
+      schedule-permission: user
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-check.log"
 
   local-ops:
     inherit: local

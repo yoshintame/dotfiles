@@ -69,4 +69,4 @@ rg -l "\[\[<slug>\]\]" "$OBSIDIAN_VAULT" -g "*.md"  # бэклинки на но
 ## Прочее
 
 - Содержимое — на русском; английский только в технических идентификаторах и цитатах. Без emoji.
-- Полная модель, таксономия и обоснования (читать при необходимости, не по умолчанию): `$OBSIDIAN_VAULT/projects/obsidian-vault-structure/obsidian-vault-structure.md`.
+- Полная модель, таксономия и обоснования (читать при необходимости, не по умолчанию): `$OBSIDIAN_VAULT/areas/vault-management/vault-management.md` — хаб области, оттуда роутинг в `spec/storage-model`, `spec/type-groups` и `decisions/`.

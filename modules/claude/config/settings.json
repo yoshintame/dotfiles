@@ -536,6 +536,7 @@
     }
   },
   "cleanupPeriodDays": 36500,
+  "includeCoAuthoredBy": false,
   "autoMemoryEnabled": false,
   "theme": "dark-ansi",
   "agentPushNotifEnabled": true,

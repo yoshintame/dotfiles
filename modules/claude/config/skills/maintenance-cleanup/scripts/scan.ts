@@ -13,7 +13,7 @@ const SPOTS = [
   ["vm", "~/Library/Containers/com.docker.docker", "Docker.raw; del Data/vms only if moved to OrbStack"],
   ["vm", "~/Library/Group Containers/HUAQ24HBR6.dev.orbstack", "OrbStack; prune via `docker system prune -a --volumes`"],
   ["cache", "~/.npm/_cacache", "npm cache"],
-  ["cache", "~/.cache", "del listed subdirs (hf/uv/pnpm/nix/act), not whole dir"],
+  ["cache", "~/.cache", "del listed subdirs (hf/uv/pnpm/nix/act/.bun), not whole dir; `*` hides .bun"],
   ["cache", "~/Library/Caches", "Homebrew(`brew cleanup`)/restic/playwright/cypress/spotify"],
   ["cache", "/nix/store", "`nix-collect-garbage -d`"],
   ["data", "~/Library/Application Support/Steam", "games"],

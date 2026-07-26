@@ -82,6 +82,7 @@ profiles:
     initialize: true
     password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
     backup:
+      group-by: "host,tags"
       exclude:
         - "**/node_modules"
         - "**/.venv"

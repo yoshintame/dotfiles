@@ -29,12 +29,18 @@ Caches regenerate on their own — delete without asking:
 
 ```
 brew cleanup -s
-command rm -rf ~/.npm/_cacache ~/.cache/{huggingface,uv,pnpm,nix,puppeteer,act,bun}
+command rm -rf ~/.npm/_cacache ~/.cache/{huggingface,uv,pnpm,nix,puppeteer,act,bun,.bun}
 command rm -rf ~/Library/Caches/{Homebrew,restic,ms-playwright,Cypress,com.spotify.client}
 nix-collect-garbage -d
 ```
 
 Delete the listed `~/.cache` subdirs, not the whole dir. Session transcripts live in `~/.claude/projects/` (not a cache — never touched by cleanup); `~/.cache/claude-history` is only a rebuildable search index of them, despite the name.
+
+`~/.cache` holds dot-prefixed subdirs that `*` does not match — `~/.cache/.bun` is a real hotspot (17G on one pass) and is distinct from `~/.cache/bun`. When breaking the dir down, glob both or the biggest item stays invisible:
+
+```
+du -sh ~/.cache/.[!.]* ~/.cache/* | sort -rh | head -20
+```
 
 Confirm before touching the `ASK` rows:
 

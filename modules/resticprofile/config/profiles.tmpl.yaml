@@ -299,10 +299,10 @@ profiles:
     inherit: local
     forget:
       group-by: "host,tags"
-      keep-within: 1d
-      keep-daily: 14
-      keep-weekly: 8
-      keep-monthly: 6
+      keep-within: 7d
+      keep-daily: 30
+      keep-weekly: 12
+      keep-monthly: unlimited
       prune: true
       host: true
       tag: true

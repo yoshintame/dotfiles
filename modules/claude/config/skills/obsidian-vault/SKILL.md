@@ -24,7 +24,7 @@ description: Конвенции этого Obsidian vault — type-driven мод
 
 `extends:` — **single-inheritance by design**: у типа ровно один родитель. Multi-parent в data-model, как и в OOP, — признак неправильной абстракции; правильный ход — разложить на два типа, а не наследовать от двух.
 
-**Folder-hierarchy отражает наследование**: подтип лежит в подпапке базы (`events/meeting/*.md`, `seeds/idea/*.md`), а не в собственной папке верхнего уровня. Со-локация effort-артефактов перекрывает это тем же образом, что и дефолт: `projects/<proj>/seeds/idea/<slug>.md`.
+**Folder-hierarchy отражает наследование**: подтип лежит в подпапке базы (`events/meetings/*.md`, `seeds/ideas/*.md`), а не в собственной папке верхнего уровня. Со-локация effort-артефактов перекрывает это тем же образом, что и дефолт: `projects/<proj>/seeds/ideas/<slug>.md`.
 
 `extends:` в vault-types пока reserved — парсер не мёржит поля базы, поэтому подтип носит полную схему вручную, дублируя базовые поля. Не блокер: подтип валидируется как самостоятельный тип.
 
@@ -50,7 +50,7 @@ problem     «сломано» — вход, деферрабельный (ле�
 
 **Occurrence и fault — разные оси.** `event` — база «нечто произошло во времени»; `meeting` и `incident` — её подтипы. `incident` держит только occurrence-line и линкует фолт полем `problem:`: рестарт закрывает `incident: resolved`, а корневой баг ещё месяц лежит `problem: open`. Одна `problem` порождает сколько угодно `incident`-ов.
 
-**Recurring — это `routine`**, а не project со странным статусом и не одноразовая task. Рутина садится между `area` и `project`: конфиг повторения, шаблон, накопленное знание, никакого DoD. Occurrence — всегда типизированный файл (`task` или `project` по `occurrence-kind`), не inline-чекбокс: иначе не спросить «платил ли в июле». Occurrences колоцируются под рутиной, стенсилы лежат в `routines/<slug>/template/` и `type:` не несут. Intent-роль occurrences наследуют от рутины — свой seed каждому не заводится.
+**Recurring — это `routine`**, а не project со странным статусом и не одноразовая task. Рутина садится между `area` и `project`: конфиг повторения, шаблон, накопленное знание, никакого DoD. Occurrence — всегда типизированный файл (`task` или `project` по `occurrence-kind`), не inline-чекбокс: иначе не спросить «платил ли в июле». Occurrences колоцируются под рутиной; стенсилы — полноценные task-ноты с frontmatter в `routines/<slug>/template/`, маркер заготовки даёт локация, а не отсутствие типа. Intent-роль occurrences наследуют от рутины — свой seed каждому не заводится.
 
 **Boundary-тесты**, когда линия плывёт:
 
@@ -63,7 +63,7 @@ problem     «сломано» — вход, деферрабельный (ле�
 ## Размещение и именование
 
 - Дефолт: инстанс `type: X` лежит в папке из `location.folder` этого типа. Один тип — одна папка — один base.
-- **Со-локация effort-артефактов** (перекрывает дефолт): артефакт (`task` / `analysis` / `idea` / `problem` / `open-question` / `decision` / `business-spec` / `implementation-spec` / …) с **ровно одним** проектом в `parent:` кладётся в папку инстанса этого проекта — `projects/<proj>/{tasks,analysis,seeds/idea,seeds/problem,decisions,spec,…}/<slug>.md`. Глобальная типовая папка — только для мульти-parent и без project-родителя. Со-локованный инстанс — полноценный typed-инстанс (несёт `type:`), НЕ sub-файл; `location-mismatch` warning валидатора на нём ожидаем. Решение: `areas/vault-management/decisions/effort-artifacts-colocated-in-project.md`.
+- **Со-локация effort-артефактов** (перекрывает дефолт): артефакт (`task` / `analysis` / `idea` / `problem` / `open-question` / `decision` / `business-spec` / `implementation-spec` / …) с **ровно одним** проектом в `parent:` кладётся в папку инстанса этого проекта — `projects/<proj>/{tasks,analysis,seeds/ideas,seeds/problems,decisions,spec,…}/<slug>.md`. Глобальная типовая папка — только для мульти-parent и без project-родителя. Со-локованный инстанс — полноценный typed-инстанс (несёт `type:`), НЕ sub-файл; `location-mismatch` warning валидатора на нём ожидаем. Решение: `areas/vault-management/decisions/effort-artifacts-colocated-in-project.md`.
 - Инстанс — либо файл `<folder>/<slug>.md`, либо папка `<folder>/<slug>/<slug>.md` + sub-файлы. Папка — только когда инстанс разросся.
 - Sub-файлы **не имеют `type:`** — они часть main-файла, не самостоятельные сущности. Файл, который осмысленно цитировать отдельно, — не sub, а отдельный инстанс в своей типовой папке.
 - На диске всё **kebab-case** (файлы и папки). `title:` во frontmatter — обычный Title Case или нормальная фраза. Имя файла ≠ `title`.

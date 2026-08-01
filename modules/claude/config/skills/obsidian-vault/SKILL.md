@@ -30,10 +30,40 @@ description: Конвенции этого Obsidian vault — type-driven мод
 
 Canonical-разбор правила: `projects/effort-management/analysis/kind-vs-type-inheritance.md`.
 
+## Модель эффорта — какие роли обязаны стоять отдельно
+
+Дефолт агента — слепить всю историю в один док: триггер первой секцией, разбор второй, фикс третьей. Здесь так нельзя: каждая роль — отдельный артефакт.
+
+**Intent-роль обязательна.** Как только работа порождает `analysis`, `task` или спеку, её причина обязана быть читаема отдельным артефактом — `idea` (additive, «надо бы X») или `problem` (corrective, «нечто сломано»). Интент, вписанный первой секцией в тело analysis, — hygiene violation того же класса, что история в спеке. Единственная альтернатива — **inheritance**: если intent уже зафиксирован upstream (originating-seed рутины, rationale спеки, контекст decision, upstream-task), дубль не заводится, роль уже занята. Порог: работа без артефакт-графа (мысль в daily-note) под правило не подпадает — seed на каждый чих не нужен.
+
+**Corrective chain** — фолт раскладывается по ролям, а не пишется одной простынёй:
+
+```
+problem     «сломано» — вход, деферрабельный (лежать open месяцами легитимно)
+  → analysis kind: investigation   «почему» — разбор причины, если он нетривиален
+  → task                            «делаю фикс»
+  → knowledge                       переиспользуемый обход / понимание
+  [+ incident                       если фолт манифестировал во времени]
+```
+
+Звенья опциональны — входить можно на нужной высоте (очевидный фикс схлопывает цепочку в `knowledge`). Ownership-разрез: **свой код** чинится напрямую через `task` (kind `bugfix` у dev-work); **чужой тул или среда**, где в корне не починить, — `problem` с обходом.
+
+**Occurrence и fault — разные оси.** `event` — база «нечто произошло во времени»; `meeting` и `incident` — её подтипы. `incident` держит только occurrence-line и линкует фолт полем `problem:`: рестарт закрывает `incident: resolved`, а корневой баг ещё месяц лежит `problem: open`. Одна `problem` порождает сколько угодно `incident`-ов.
+
+**Recurring — это `routine`**, а не project со странным статусом и не одноразовая task. Рутина садится между `area` и `project`: конфиг повторения, шаблон, накопленное знание, никакого DoD. Occurrence — всегда типизированный файл (`task` или `project` по `occurrence-kind`), не inline-чекбокс: иначе не спросить «платил ли в июле». Occurrences колоцируются под рутиной, стенсилы лежат в `routines/<slug>/template/` и `type:` не несут. Intent-роль occurrences наследуют от рутины — свой seed каждому не заводится.
+
+**Boundary-тесты**, когда линия плывёт:
+
+- запланировал и присутствуешь → `event`; сломалось само → `incident` + `problem` на фолт;
+- есть окно во времени с impact → добавляется `incident`; стоячий латентный фолт → только `problem`;
+- зафиксировано, **что** сломано → `problem`; идёт разбор **почему** → `analysis kind: investigation` рядом;
+- обход ещё в работе → внутри `problem`; обход переиспользуемый → выпускается в `knowledge`;
+- «не знаю, как сделать X, ничего не сломано» → `open-question` или `analysis`, **не** `problem` (problem требует malfunction).
+
 ## Размещение и именование
 
 - Дефолт: инстанс `type: X` лежит в папке из `location.folder` этого типа. Один тип — одна папка — один base.
-- **Со-локация effort-артефактов** (перекрывает дефолт): артефакт (`task` / `analysis` / `idea` / `open-question` / `decision` / `business-spec` / `implementation-spec` / …) с **ровно одним** проектом в `parent:` кладётся в папку инстанса этого проекта — `projects/<proj>/{tasks,analysis,ideas,decisions,spec,…}/<slug>.md`. Глобальная типовая папка — только для мульти-parent и без project-родителя. Со-локованный инстанс — полноценный typed-инстанс (несёт `type:`), НЕ sub-файл; `location-mismatch` warning валидатора на нём ожидаем. Решение: `areas/vault-management/decisions/effort-artifacts-colocated-in-project.md`.
+- **Со-локация effort-артефактов** (перекрывает дефолт): артефакт (`task` / `analysis` / `idea` / `problem` / `open-question` / `decision` / `business-spec` / `implementation-spec` / …) с **ровно одним** проектом в `parent:` кладётся в папку инстанса этого проекта — `projects/<proj>/{tasks,analysis,seeds/idea,seeds/problem,decisions,spec,…}/<slug>.md`. Глобальная типовая папка — только для мульти-parent и без project-родителя. Со-локованный инстанс — полноценный typed-инстанс (несёт `type:`), НЕ sub-файл; `location-mismatch` warning валидатора на нём ожидаем. Решение: `areas/vault-management/decisions/effort-artifacts-colocated-in-project.md`.
 - Инстанс — либо файл `<folder>/<slug>.md`, либо папка `<folder>/<slug>/<slug>.md` + sub-файлы. Папка — только когда инстанс разросся.
 - Sub-файлы **не имеют `type:`** — они часть main-файла, не самостоятельные сущности. Файл, который осмысленно цитировать отдельно, — не sub, а отдельный инстанс в своей типовой папке.
 - На диске всё **kebab-case** (файлы и папки). `title:` во frontmatter — обычный Title Case или нормальная фраза. Имя файла ≠ `title`.

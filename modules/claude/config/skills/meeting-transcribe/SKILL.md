@@ -11,7 +11,7 @@ Argument: one or more recording file paths (usually in `~/Downloads`). One recor
 
 ## Steps
 
-1. **Find the meeting note.** The stub is created by `_scripts/meeting-note.ts create` (run at meeting start: `status: scheduled`, empty body, slug `meeting-<date>-<HHMM>`), so it usually already exists under `meetings/<slug>/` — match the recording to it by date/time. If missing, create it (no `.env` needed, any cwd):
+1. **Find the meeting note.** The stub is created by `_scripts/meeting-note.ts create` (run at meeting start: `status: scheduled`, empty body, slug `meeting-<date>-<HHMM>`), so it usually already exists under `events/meeting/<slug>/` — match the recording to it by date/time. If missing, create it (no `.env` needed, any cwd):
 
    ```sh
    bun "$OBSIDIAN_VAULT/_scripts/meeting-note.ts" create --type ad-hoc
@@ -24,7 +24,7 @@ Argument: one or more recording file paths (usually in `~/Downloads`). One recor
 3. **Copy the recording into the folder**, named after the slug. The import picks the first file with extension `mp4 mkv webm mov m4a mp3 wav` — the name is free, but `<slug>.<ext>` is what the archive will hold, so use it from the start and skip a rename later:
 
    ```sh
-   cp "<recording>" "$OBSIDIAN_VAULT/meetings/<slug>/<slug>.mp4"
+   cp "<recording>" "$OBSIDIAN_VAULT/events/meeting/<slug>/<slug>.mp4"
    ```
 
    The copy is transient: it lives in the vault only while the import reads it.
@@ -32,7 +32,7 @@ Argument: one or more recording file paths (usually in `~/Downloads`). One recor
 4. **Run the import.** Do not `cd` into `_scripts` — `--cwd` makes bun load `_scripts/.env` (the `DEEPGRAM_API_KEY`) while you stay put:
 
    ```sh
-   bun --cwd="$OBSIDIAN_VAULT/_scripts" "$OBSIDIAN_VAULT/_scripts/meeting-import.ts" "$OBSIDIAN_VAULT/meetings/<slug>"
+   bun --cwd="$OBSIDIAN_VAULT/_scripts" "$OBSIDIAN_VAULT/_scripts/meeting-import.ts" "$OBSIDIAN_VAULT/events/meeting/<slug>"
    ```
 
    Run it in the background — a 45-minute recording takes ~8 minutes end to end and a foreground call dies on the tool timeout. Transcription is only cached when `MP_CACHE_DIR` is set, so a run killed midway bills Deepgram again on retry.
@@ -42,7 +42,7 @@ Argument: one or more recording file paths (usually in `~/Downloads`). One recor
 5. **Archive the recording.** Raw media does not live in the vault — move it out once the import has read it:
 
    ```sh
-   mv "$OBSIDIAN_VAULT/meetings/<slug>/<slug>.mp4" ~/Video/meetings/
+   mv "$OBSIDIAN_VAULT/events/meeting/<slug>/<slug>.mp4" ~/Video/meetings/
    ```
 
    `~/Video` is outside iCloud and is covered by the restic `home` profile. Leaving the file in the vault re-creates the problem the archive exists to solve — see `[[meeting-recordings-inflate-vault]]`.
@@ -51,7 +51,7 @@ Argument: one or more recording file paths (usually in `~/Downloads`). One recor
 
 The run writes three files:
 
-- `meetings/<slug>/<slug>.md` — stub filled with body, `duration`, `status: completed`, tags
+- `events/meeting/<slug>/<slug>.md` — stub filled with body, `duration`, `status: completed`, tags
 - `meeting-transcripts/<slug>-summary.md` — summary, decisions, action items, topic timeline
 - `meeting-transcripts/<slug>-transcript.md`
 

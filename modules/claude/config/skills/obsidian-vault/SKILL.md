@@ -13,6 +13,23 @@ description: Конвенции этого Obsidian vault — type-driven мод
 
 `ls _types/` — это **индекс** всех типов. Не читай `.type` пачкой: это засоряет контекст. Открывай `_types/<type>.type` **только** перед созданием или правкой инстанса этого типа — чтобы frontmatter совпал со схемой (обязательные поля, допустимые `values`).
 
+## Подкатегоризация — `kind:` vs подтип через `extends:`
+
+Деление внутри типа — не свободный выбор, а детерминированное правило. Тест — **schema-divergence delta**:
+
+- **`kind:`** (поле внутри типа) — подварианты делят один lifecycle-словарь статусов, один structural-template тела и один field-set; различие лежит в optional-полях, downstream или роли инстанса. Так живут `task` (feature / bugfix / refactor / hotfix / maintenance), `analysis` (grooming / investigation / optimization / spec-draft), `open-question`, `meeting-type`.
+- **`extends:`** (подтип отдельной схемой) — подварианты расходятся в lifecycle-словаре (`scheduled → completed` против `active → resolved`), в structural-template'е тела или в field-set'е сверх нескольких optional. Так живут `dev-task extends task`, `dev-project extends project`, `meeting` / `incident extends event`, `idea` / `problem extends seed`.
+
+Порог: другой lifecycle или дельта больше нескольких optional-полей — территория `extends:`; меньше — `kind:`. Первым фильтром идёт тест на вредное протекание (если держать одним типом, потечёт ли реализация в business-часть): течёт — точно разные типы, а не `kind`.
+
+`extends:` — **single-inheritance by design**: у типа ровно один родитель. Multi-parent в data-model, как и в OOP, — признак неправильной абстракции; правильный ход — разложить на два типа, а не наследовать от двух.
+
+**Folder-hierarchy отражает наследование**: подтип лежит в подпапке базы (`events/meeting/*.md`, `seeds/idea/*.md`), а не в собственной папке верхнего уровня. Со-локация effort-артефактов перекрывает это тем же образом, что и дефолт: `projects/<proj>/seeds/idea/<slug>.md`.
+
+`extends:` в vault-types пока reserved — парсер не мёржит поля базы, поэтому подтип носит полную схему вручную, дублируя базовые поля. Не блокер: подтип валидируется как самостоятельный тип.
+
+Canonical-разбор правила: `projects/effort-management/analysis/kind-vs-type-inheritance.md`.
+
 ## Размещение и именование
 
 - Дефолт: инстанс `type: X` лежит в папке из `location.folder` этого типа. Один тип — одна папка — один base.
@@ -20,6 +37,8 @@ description: Конвенции этого Obsidian vault — type-driven мод
 - Инстанс — либо файл `<folder>/<slug>.md`, либо папка `<folder>/<slug>/<slug>.md` + sub-файлы. Папка — только когда инстанс разросся.
 - Sub-файлы **не имеют `type:`** — они часть main-файла, не самостоятельные сущности. Файл, который осмысленно цитировать отдельно, — не sub, а отдельный инстанс в своей типовой папке.
 - На диске всё **kebab-case** (файлы и папки). `title:` во frontmatter — обычный Title Case или нормальная фраза. Имя файла ≠ `title`.
+- **Media-слаг всегда с годом**: инстанс `movie` / `serial` / `anime` / `game` / `book` именуется `<название>-<year>` — `bird-box-2018`, `quake-iii-arena-1999`. Безусловно, даже когда коллизии сейчас нет: ремейки и ремастеры переиспользуют названия плотнее всего. Правило и границы — `areas/vault-management/file-naming-convention.md` § Медиа.
+- **Слаг `instance` — с годом покупки**: `<product-slug>-<год из purchase-date>` (`lg-oled55c4-2025`), иначе инстанс неотличим от своего product'а в `[[wikilink]]`. Точность повышается только при конфликте (`-YYYY-MM`, `-YYYY-MM-DD`), покупки одного дня — `-a`/`-b`, чужая вещь несёт имя владельца (`ksusha-glasses-round-black`), пустой `purchase-date` — без суффикса. § Инстансы там же.
 
 ## Assets (картинки, вложения)
 

@@ -1,5 +1,5 @@
 {
-  "loginProfile": "~/chrome-agent-login",
+  "loginProfile": "~/.local/share/chrome-agent/login-profile",
   "chromePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   "debugPort": 9222,
   "proxyPort": 18119,

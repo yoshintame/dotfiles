@@ -16,8 +16,12 @@ export type Config = {
   crmHosts: string[]
 }
 
+function dataHome(): string {
+  return process.env.XDG_DATA_HOME ?? join(homedir(), ".local", "share")
+}
+
 const DEFAULTS: Config = {
-  loginProfile: join(homedir(), "chrome-agent-login"),
+  loginProfile: join(dataHome(), "chrome-agent", "login-profile"),
   chromePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   debugPort: 9222,
   proxyPort: 18119,

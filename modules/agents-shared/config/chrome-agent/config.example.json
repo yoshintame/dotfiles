@@ -1,0 +1,11 @@
+{
+  "loginProfile": "~/chrome-agent-login",
+  "chromePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "debugPort": 9222,
+  "proxyPort": 18119,
+  "headless": false,
+  "crmUrl": "",
+  "allowHosts": ["localhost", "127.0.0.1"],
+  "stripExtensionIds": ["aeblfdkhhhdcdjpifhhbdiojplfjncoa"],
+  "crmHosts": []
+}

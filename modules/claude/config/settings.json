@@ -328,7 +328,9 @@
     ],
     "deny": [
       "Read(//Users/yoshintame/Backups/**)",
-      "Read(//Users/yoshintame/.config/resticprofile/**)"
+      "Read(//Users/yoshintame/.config/resticprofile/**)",
+      "Edit(//Users/yoshintame/.claude/projects/**/memory/**)",
+      "Write(//Users/yoshintame/.claude/projects/**/memory/**)"
     ],
     "ask": [
       "Bash(ssh:*)",

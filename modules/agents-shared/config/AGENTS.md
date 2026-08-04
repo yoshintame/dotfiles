@@ -16,6 +16,10 @@
 
 - *When linking to a file in a response, always use markdown link syntax with the file's **absolute path** as the target, without the `file://` scheme: `[name](/Users/.../file.ts)`. VSCode Claude Code extension renders bare absolute paths as clickable links; `file://` URIs and relative paths to files outside the open workspace do not open.*
 
+## Agent memory
+
+- *NEVER create or write files under `~/.claude/projects/*/memory/` (Claude Code auto-memory storage). Auto-memory is disabled (`autoMemoryEnabled: false`) and the store stays closed until the rules from the vault idea `agent-memory-meta-only-policy` are implemented (what qualifies, source tracing, expiry). When asked to remember something durable, put it in its typed home instead: an agent behavior rule → this file or the relevant skill; knowledge → a typed note in the Obsidian vault.*
+
 ## Agent configs & skills
 
 All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-dotbot symlinks from `~/.dotfiles`. Edit the **original in the repo**, never the `~/.claude/` copy. For the full path map and linking mechanics — what is live immediately vs. needs `mise run dot:rebuild` — see `~/.dotfiles/CLAUDE.md`.

@@ -196,9 +196,16 @@ spoon.LeaderFlow:setup({
 
         { "p", "Passwords", shortcut(proxy.passwords) },
 
-        { "m", "Menu Bar Picker", shortcut(proxy.ice_menu_item_picker) },
+        { "m", "[model]", {
+            { "m", "Opus 4.8", text("/model claude-opus-4-8") },
+            { "o", "Opus 5", text("/model claude-opus-5") },
+            { "f", "Fable 5", text("/model claude-fable-5") },
+            { "s", "Sonnet 5", text("/model claude-sonnet-5") },
+            { "h", "Haiku 4.5", text("/model claude-haiku-4-5") },
+        }},
 
         { "u", "[utils]", {
+            { "m", "Menu Bar Picker", shortcut(proxy.ice_menu_item_picker) },
             { "c", "Color Picker", shortcut(proxy.color_picker) },
             { "r", "Roulette", shortcut(proxy.roulette) },
             { "x", "Roulette Clear", shortcut(proxy.roulette_clear) },

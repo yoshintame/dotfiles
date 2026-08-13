@@ -40,5 +40,6 @@
     whichis = "type -a --path";
     sp = "speedtest";
     cl = "clear";
+    aliasessh = "manssh list";
   };
 }

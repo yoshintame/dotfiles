@@ -18,3 +18,15 @@ uv = "latest"
 python.uv_venv_auto = true
 color_theme = "catppuccin"
 trusted_config_paths = ["~/Development/work"]
+
+[tasks."cc:model-reset"]
+description = "Вернуть дефолтную модель Claude Code на claude-opus-4-8[1m] (откат перезаписи нативным пикером расширения)"
+run = '''
+set -e
+f="$HOME/.dotfiles/modules/claude/config/settings.json"
+tmp="$(mktemp)"
+jq '.model = "claude-opus-4-8[1m]"' "$f" > "$tmp"
+cat "$tmp" > "$f"
+rm -f "$tmp"
+echo "cc:model-reset: model = $(jq -r .model "$f")"
+'''

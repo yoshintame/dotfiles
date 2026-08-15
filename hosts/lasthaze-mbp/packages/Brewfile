@@ -178,6 +178,8 @@ cask "remnote"
 cask "responsively"
 cask "rewritebar"
 cask "rustdesk"
+# SSH agent for Secure Enclave keys (git commit signing without prompts)
+cask "secretive"
 cask "setapp"
 cask "slack"
 cask "spotify"

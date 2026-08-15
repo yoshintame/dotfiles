@@ -3,7 +3,10 @@
 # Used by: git log --show-signature, git verify-commit.
 # Old keys are kept so historical commits stay verifiable locally.
 
-# yoshintame-mbp — current signing key (this Mac)
+# yoshintame-mbp-git-sign — current signing key (Secure Enclave of this Mac, via Secretive)
+m.ivanov0427@gmail.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIbTATm+HASu4lHB7ve40n0/0GBz7mj5zpCi+jGUy+eORgYBm2bbzsLcpf6PZPYaFoXM7tDh7kRXtb0GZgg6xVQ=
+
+# yoshintame-mbp — previous signing key (1Password; now auth-only)
 m.ivanov0427@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev
 
 # GitHub — previous per-service signing key

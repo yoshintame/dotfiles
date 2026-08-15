@@ -1,13 +1,54 @@
 #!/usr/bin/env bash
 # git-ssh-sign: gpg.ssh.program for commit/tag signing.
-# Routes ssh-keygen -Y sign/verify to the Secretive agent (Secure Enclave
-# signing key, no interactive approval) instead of the global SSH_AUTH_SOCK,
-# which stays on 1Password for authentication.
+#
+# Primary: ssh-keygen against the Secretive agent (Secure Enclave signing key,
+# no interactive approval). The global SSH_AUTH_SOCK stays on 1Password for
+# authentication and is not touched.
+#
+# Fallback: Secretive stores SE keys with kSecAttrAccessibleWhenUnlocked, so
+# signing fails while the screen is locked (maxgoedjen/secretive#462). When a
+# `-Y sign` request fails, re-sign with the previous 1Password key through
+# op-ssh-sign — that key stays registered on GitHub and in allowed_signers, and
+# 1Password prompts once the screen is unlocked. Non-sign requests (verify,
+# find-principals) never fall back.
 
 SECRETIVE_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
+OP_SSH_SIGN="/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+FALLBACK_PUBKEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev"
 
 if [ -S "$SECRETIVE_SOCK" ]; then
-    export SSH_AUTH_SOCK="$SECRETIVE_SOCK"
+    SSH_AUTH_SOCK="$SECRETIVE_SOCK" ssh-keygen "$@" && exit 0
+    status=$?
+else
+    status=1
 fi
 
-exec ssh-keygen "$@"
+is_sign=0
+prev=""
+for arg in "$@"; do
+    if [ "$prev" = "-Y" ] && [ "$arg" = "sign" ]; then
+        is_sign=1
+    fi
+    prev="$arg"
+done
+
+if [ "$is_sign" -ne 1 ] || [ ! -x "$OP_SSH_SIGN" ]; then
+    exit "$status"
+fi
+
+fallback_keyfile="$(mktemp -t git-ssh-sign-fallback)" || exit "$status"
+trap 'rm -f "$fallback_keyfile"' EXIT
+printf '%s\n' "$FALLBACK_PUBKEY" > "$fallback_keyfile"
+
+args=()
+prev=""
+for arg in "$@"; do
+    if [ "$prev" = "-f" ]; then
+        args+=("$fallback_keyfile")
+    else
+        args+=("$arg")
+    fi
+    prev="$arg"
+done
+
+"$OP_SSH_SIGN" "${args[@]}"

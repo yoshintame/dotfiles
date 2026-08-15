@@ -2,7 +2,7 @@
 # Keys are offered to servers top-to-bottom; this keeps the key a server
 # actually wants within its MaxAuthTries window.
 
-# 1 — primary key (current main, ed25519): auth + git commit signing
+# 1 — primary key (current main, ed25519): auth only (commit signing moved to Secure Enclave, see git-ssh-sign)
 [[ssh-keys]]
 item = "yoshintame-mbp"
 

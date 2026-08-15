@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# git-ssh-sign: gpg.ssh.program for commit/tag signing.
+# Routes ssh-keygen -Y sign/verify to the Secretive agent (Secure Enclave
+# signing key, no interactive approval) instead of the global SSH_AUTH_SOCK,
+# which stays on 1Password for authentication.
+
+SECRETIVE_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
+
+if [ -S "$SECRETIVE_SOCK" ]; then
+    export SSH_AUTH_SOCK="$SECRETIVE_SOCK"
+fi
+
+exec ssh-keygen "$@"

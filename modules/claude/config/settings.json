@@ -431,10 +431,6 @@
           },
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/chrome-agent-guard.sh"
-          },
-          {
-            "type": "command",
             "command": "$HOME/.claude/hooks/commit-attribution-guard.sh"
           },
           {

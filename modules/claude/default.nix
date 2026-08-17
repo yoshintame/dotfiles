@@ -52,6 +52,7 @@
     };
     "~/.local/bin/chrome-agent" = "modules/agents-shared/config/chrome-agent/cli.ts";
     "~/.local/bin/crm-chrome" = "modules/agents-shared/config/crm-chrome/cli.ts";
+    "~/.local/bin/cc-fork-recover" = "modules/agents-shared/config/bin/cc-fork-recover";
     "~/.local/bin/extract-images" = "modules/agents-shared/config/bin/extract-images";
     "~/.local/bin/search-reddit" = "modules/agents-shared/config/bin/search-reddit";
     "~/.local/bin/search-hn" = "modules/agents-shared/config/bin/search-hn";

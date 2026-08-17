@@ -1,0 +1,167 @@
+#!/usr/bin/env bun
+import { closeSync, openSync, readdirSync, readFileSync, statSync, writeSync } from "node:fs"
+import { homedir } from "node:os"
+import { join } from "node:path"
+import { defineCommand, runMain } from "citty"
+
+const SELF = "cc-fork-recover"
+const PROJECTS = join(homedir(), ".claude", "projects")
+const MIN_OVERLAP = 3
+const MIN_FRACTION = 0.5
+
+function die(msg: string): never {
+  process.stderr.write(`${SELF}: ${msg}\n`)
+  process.exit(1)
+}
+
+function hhmm(mtimeMs: number): string {
+  const d = new Date(mtimeMs)
+  const p = (n: number) => String(n).padStart(2, "0")
+  return `${p(d.getHours())}:${p(d.getMinutes())}`
+}
+
+function timestamps(text: string): string[] {
+  const out: string[] = []
+  const re = /"timestamp":"([^"]+)"/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text))) out.push(m[1])
+  return out
+}
+
+function countLines(text: string): number {
+  let n = 0
+  for (const l of text.split("\n")) if (l !== "") n++
+  return n
+}
+
+function projectDirs(): string[] {
+  return readdirSync(PROJECTS, { withFileTypes: true })
+    .filter(d => d.isDirectory())
+    .map(d => join(PROJECTS, d.name))
+}
+
+type Source = { uuid: string; dir: string; stamps: Set<string> }
+
+function resolveSources(source: string): Source[] {
+  const out: Source[] = []
+  for (const dir of projectDirs()) {
+    for (const name of readdirSync(dir)) {
+      if (name.endsWith(".jsonl") && name.slice(0, -6).startsWith(source)) {
+        const stamps = new Set(timestamps(readFileSync(join(dir, name), "utf8")))
+        out.push({ uuid: name.slice(0, -6), dir, stamps })
+      }
+    }
+  }
+  return out
+}
+
+type Fork = { uuid: string; path: string; lines: number; mtime: number; overlap: number; titled: boolean }
+
+function inspect(path: string, src: Source): Fork | null {
+  const uuid = path.slice(path.lastIndexOf("/") + 1, -6)
+  if (uuid === src.uuid) return null
+  const text = readFileSync(path, "utf8")
+  const ts = timestamps(text)
+  if (ts.length === 0) return null
+  let overlap = 0
+  for (const t of ts) if (src.stamps.has(t)) overlap++
+  if (overlap < MIN_OVERLAP || overlap / ts.length < MIN_FRACTION) return null
+  return {
+    uuid,
+    path,
+    lines: countLines(text),
+    mtime: statSync(path).mtimeMs,
+    overlap,
+    titled: text.includes('"type":"custom-title"'),
+  }
+}
+
+function findForks(sources: Source[]): Fork[] {
+  const dirs = [...new Set(sources.map(s => s.dir))]
+  const byUuid = new Map<string, Fork>()
+  for (const dir of dirs) {
+    for (const name of readdirSync(dir)) {
+      if (!name.endsWith(".jsonl")) continue
+      const path = join(dir, name)
+      for (const src of sources.filter(s => s.dir === dir)) {
+        const f = inspect(path, src)
+        if (f) {
+          byUuid.set(f.uuid, f)
+          break
+        }
+      }
+    }
+  }
+  return [...byUuid.values()].sort((a, b) => a.mtime - b.mtime)
+}
+
+function titleFor(f: Fork, source: string): string {
+  return `fork ${source.slice(0, 8)} (${hhmm(f.mtime)}, ${f.lines} lines)`
+}
+
+function writeTitle(f: Fork, title: string): void {
+  const rec = JSON.stringify({ type: "custom-title", sessionId: f.uuid, customTitle: title }) + "\n"
+  const fd = openSync(f.path, "a")
+  try {
+    writeSync(fd, rec)
+  } finally {
+    closeSync(fd)
+  }
+}
+
+const main = defineCommand({
+  meta: { name: SELF, description: "Make orphaned Claude Code fork sessions visible in the VSCode session list" },
+  args: {
+    session: { type: "positional", required: true, description: "Source session id (full uuid or >=8-char prefix) that was forked" },
+    all: { type: "boolean", description: "Title every orphaned fork, not just the newest" },
+    "dry-run": { type: "boolean", description: "Report what would be titled without writing" },
+    json: { type: "boolean", description: "Emit machine-readable JSON" },
+  },
+  run({ args }) {
+    const source = String(args.session)
+    if (source.length < 8) die("session id must be at least 8 characters")
+    const sources = resolveSources(source)
+    if (sources.length === 0) die(`source session ${source.slice(0, 8)} not found under ${PROJECTS}`)
+
+    const forks = findForks(sources)
+    const orphans = forks.filter(f => !f.titled)
+    const targets = args.all ? orphans : orphans.slice(-1)
+
+    if (args.json) {
+      if (!args["dry-run"]) for (const f of targets) writeTitle(f, titleFor(f, source))
+      process.stdout.write(
+        JSON.stringify(
+          {
+            source,
+            forks: forks.map(f => ({ uuid: f.uuid, lines: f.lines, overlap: f.overlap, titled: f.titled })),
+            titled: args["dry-run"] ? [] : targets.map(f => ({ uuid: f.uuid, customTitle: titleFor(f, source) })),
+          },
+          null,
+          2,
+        ) + "\n",
+      )
+      return
+    }
+
+    if (forks.length === 0) die(`no forks of ${source.slice(0, 8)} found in its project dir`)
+    if (orphans.length === 0) {
+      process.stdout.write(`All ${forks.length} fork(s) of ${source.slice(0, 8)} already have titles — nothing to recover.\n`)
+      return
+    }
+
+    process.stdout.write(`Found ${orphans.length} orphaned fork(s) of ${source.slice(0, 8)}:\n`)
+    for (const f of orphans) {
+      const mark = targets.includes(f) ? "  <-" : "    "
+      process.stdout.write(`  ${f.uuid.slice(0, 8)}  ${String(f.lines).padStart(4)} lines  ${hhmm(f.mtime)}${mark}\n`)
+    }
+    if (args["dry-run"]) {
+      process.stdout.write(`\n(dry run) would title ${targets.length}; pass --all to title every orphan.\n`)
+      return
+    }
+    for (const f of targets) writeTitle(f, titleFor(f, source))
+    process.stdout.write(`\nTitled ${targets.length} fork(s). Reload the VSCode window (Developer: Reload Window) to see them in the session list.\n`)
+    if (!args.all && orphans.length > 1) process.stdout.write(`${orphans.length - 1} more orphan(s) left; pass --all to title them too.\n`)
+  },
+})
+
+runMain(main).catch((e: unknown) => die(e instanceof Error ? e.message : String(e)))

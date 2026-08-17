@@ -438,6 +438,16 @@
             "command": "$HOME/.claude/hooks/smart-approve.sh"
           }
         ]
+      },
+      {
+        "matcher": "mcp__chrome-devtools__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/crm-chrome-ensure.sh",
+            "timeout": 30
+          }
+        ]
       }
     ],
     "WorktreeCreate": [

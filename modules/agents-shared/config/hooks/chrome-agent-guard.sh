@@ -12,21 +12,20 @@ if [[ -z "$cmd" ]]; then
   exit 0
 fi
 
-# Blank out quoted strings before matching, so a Chrome path inside an echo /
-# grep / commit message is not mistaken for a real launch (same heuristic as
-# tool-steering.sh).
-scan="$(printf '%s' "$cmd" | sed -E "s/'[^']*'//g; s/\"[^\"]*\"//g")"
-
-# Only a real Chrome/Chromium launch that opens a debug port is of interest.
-if ! echo "$scan" | grep -qiE '(google chrome|chromium|chrome\.app)'; then
+# Match on the RAW command. Do NOT blank quoted strings here: the Chrome binary
+# path legitimately lives inside double quotes ("…/Google Chrome" has a space),
+# so blanking quotes would erase exactly what we detect and the guard goes blind
+# to every normal launch. The `--remote-debugging-*` flag is specific enough
+# that matching it on the raw string is safe.
+if ! echo "$cmd" | grep -qE '\-\-remote-debugging-(port|pipe)'; then
   exit 0
 fi
-if ! echo "$scan" | grep -qE '\-\-remote-debugging-(port|pipe)'; then
+if ! echo "$cmd" | grep -qiE '(google chrome|chromium|chrome\.app|chrome-canary|Contents/MacOS/Google Chrome)'; then
   exit 0
 fi
 
 # Allow the sanctioned path: the wrapper itself launches Chrome.
-if echo "$scan" | grep -qE '(^|[;&|`(]\s*)chrome-agent(\s|$)'; then
+if echo "$cmd" | grep -qE '(^|[;&|`(]\s*)(crm-chrome|chrome-agent)(\s|$)'; then
   exit 0
 fi
 

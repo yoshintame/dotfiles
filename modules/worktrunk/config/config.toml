@@ -3,9 +3,9 @@ worktree-path = "~/.local/share/worktrees/{{ repo }}/{{ branch | sanitize }}"
 [merge]
 commit = false
 squash = false
-rebase = true
+rebase = false
 ff = false
-remove = true
+remove = false
 
 [[pre-start]]
 setup = "$HOME/.dotfiles/modules/worktrunk/config/hooks/pre-start.sh {{ primary_worktree_path }} {{ worktree_path }}"

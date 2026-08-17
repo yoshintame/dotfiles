@@ -4,7 +4,7 @@ worktree-path = "~/.local/share/worktrees/{{ repo }}/{{ branch | sanitize }}"
 commit = false
 squash = false
 rebase = true
-ff = true
+ff = false
 remove = true
 
 [[pre-start]]

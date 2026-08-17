@@ -84,6 +84,47 @@ local function hardReopenFront()
     end
 end
 
+local restartUid = (hs.execute("id -u") or "501"):gsub("%s+", "")
+
+local function killAndReopen(bundleID)
+    local app = hs.application.get(bundleID)
+    if app then app:kill9() end
+    hs.timer.doAfter(0.8, function()
+        hs.application.launchOrFocusByBundleID(bundleID)
+    end)
+end
+
+local function restartApp(bundleID)
+    return function() killAndReopen(bundleID) end
+end
+
+local function karabinerKickstartTask()
+    hs.task.new("/bin/launchctl", nil,
+        { "kickstart", "-k", "gui/" .. restartUid .. "/org.pqrs.service.agent.karabiner_console_user_server" }):start()
+end
+
+local function kickstartKarabiner()
+    karabinerKickstartTask()
+    hs.alert.show("⌨︎ Karabiner console_user_server kickstarted")
+end
+
+local restartStack = {
+    "bobko.aerospace",
+    "com.raycast.macos",
+    "com.getcleanshot.app-setapp",
+    "io.sipapp.Sip-setapp",
+}
+
+local function restartAll()
+    karabinerKickstartTask()
+    for i, bundleID in ipairs(restartStack) do
+        hs.timer.doAfter((i - 1) * 0.15, function()
+            killAndReopen(bundleID)
+        end)
+    end
+    hs.alert.show("♻︎ Restarting tool stack…")
+end
+
 local function osa(script)
     return function() hs.osascript.applescript(script) end
 end
@@ -342,6 +383,16 @@ spoon.LeaderFlow:setup({
             { "o", "Log Out", osa('tell application "System Events" to log out') },
             { "l", "Lock", function() hs.caffeinate.lockScreen() end },
             { "z", "Sleep", function() hs.caffeinate.systemSleep() end },
+        }},
+
+        { "R", "[restart]", {
+            { "k", "Karabiner", kickstartKarabiner },
+            { "s", "AeroSpace", restartApp("bobko.aerospace") },
+            { "r", "Raycast", restartApp("com.raycast.macos") },
+            { "c", "CleanShot X", restartApp("com.getcleanshot.app-setapp") },
+            { "p", "Color Picker", restartApp("io.sipapp.Sip-setapp") },
+            { "h", "Hammerspoon", reload() },
+            { "a", "All", restartAll },
         }},
 
         { "h", "[hammerspoon]", {

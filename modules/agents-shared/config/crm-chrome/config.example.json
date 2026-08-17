@@ -1,0 +1,7 @@
+{
+  "profile": "~/.local/share/crm-chrome/profile",
+  "chromePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "port": 9222,
+  "url": "",
+  "headless": false
+}

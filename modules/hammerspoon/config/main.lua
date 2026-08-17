@@ -84,6 +84,17 @@ local function hardReopenFront()
     end
 end
 
+local function osa(script)
+    return function() hs.osascript.applescript(script) end
+end
+
+local function osaAdmin(shellCommand)
+    return function()
+        hs.task.new("/usr/bin/osascript", nil,
+            { "-e", 'do shell script "' .. shellCommand .. '" with administrator privileges' }):start()
+    end
+end
+
 local meetingNotes = require("meeting-notes").setup({ autoOpenAfterMeeting = true })
 
 local function joinMeeting(zoomUrl, mtype)
@@ -321,6 +332,16 @@ spoon.LeaderFlow:setup({
             { "q", "Hard Close (kill)", hardCloseFront },
             { "d", "Force Quit dialog", shortcut("cmd alt escape") },
             { "r", "Hard Reopen", hardReopenFront },
+        }},
+
+        { "Q", "[power]", {
+            { "r", "Restart", osa('tell application "System Events" to restart') },
+            { "R", "Hard Restart", osaAdmin("shutdown -r now") },
+            { "s", "Shutdown", osa('tell application "System Events" to shut down') },
+            { "S", "Hard Shutdown", osaAdmin("shutdown -h now") },
+            { "o", "Log Out", osa('tell application "System Events" to log out') },
+            { "l", "Lock", function() hs.caffeinate.lockScreen() end },
+            { "z", "Sleep", function() hs.caffeinate.systemSleep() end },
         }},
 
         { "h", "[hammerspoon]", {

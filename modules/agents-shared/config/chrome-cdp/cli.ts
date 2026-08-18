@@ -14,7 +14,7 @@ type Config = {
 }
 
 const DEFAULTS: Config = {
-  profile: join(dataHome(), "crm-chrome", "profile"),
+  profile: join(dataHome(), "chrome-cdp", "profile"),
   chromePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   port: 9222,
   url: "",
@@ -28,7 +28,7 @@ function configHome(): string {
   return process.env.XDG_CONFIG_HOME ?? join(homedir(), ".config")
 }
 function stateDir(): string {
-  const d = join(process.env.XDG_STATE_HOME ?? join(homedir(), ".local", "state"), "crm-chrome")
+  const d = join(process.env.XDG_STATE_HOME ?? join(homedir(), ".local", "state"), "chrome-cdp")
   if (!existsSync(d)) mkdirSync(d, { recursive: true })
   return d
 }
@@ -39,13 +39,13 @@ function expandHome(p: string): string {
 }
 
 function loadConfig(): Config {
-  const path = join(configHome(), "crm-chrome", "config.json")
+  const path = join(configHome(), "chrome-cdp", "config.json")
   let user: Partial<Config> = {}
   if (existsSync(path)) {
     try {
       user = JSON.parse(readFileSync(path, "utf8")) as Partial<Config>
     } catch (e) {
-      throw new Error(`crm-chrome: bad config at ${path}: ${(e as Error).message}`)
+      throw new Error(`chrome-cdp: bad config at ${path}: ${(e as Error).message}`)
     }
   }
   const c = { ...DEFAULTS, ...user }
@@ -127,23 +127,23 @@ const up = defineCommand({
     const log = openSync(join(stateDir(), "chrome.log"), "a")
     const child = spawn(cfg.chromePath, chromeArgs, { detached: true, stdio: ["ignore", log, log] })
     child.unref()
-    if (typeof child.pid !== "number") throw new Error("crm-chrome: failed to launch Chrome")
+    if (typeof child.pid !== "number") throw new Error("chrome-cdp: failed to launch Chrome")
 
     const browser = await cdpBrowser(port, 15000)
     if (!browser) {
       throw new Error(
-        `crm-chrome: launched Chrome (pid ${child.pid}) but :${port} never answered. ` +
+        `chrome-cdp: launched Chrome (pid ${child.pid}) but :${port} never answered. ` +
           `If run from an agent's sandboxed shell, retry unsandboxed (Chrome's crashpad needs it). Log: ${join(stateDir(), "chrome.log")}`,
       )
     }
     writePid(child.pid)
     console.log(`Up: ${browser} on http://127.0.0.1:${port} (pid ${child.pid}, profile ${profile})`)
-    console.log("chrome-devtools MCP attaches via --browser-url=http://127.0.0.1:" + port + ". Run 'crm-chrome down' to stop.")
+    console.log("chrome-devtools MCP attaches via --browser-url=http://127.0.0.1:" + port + ". Run 'chrome-cdp down' to stop.")
   },
 })
 
 const down = defineCommand({
-  meta: { name: "down", description: "Stop the Chrome that crm-chrome launched (leaves any other Chrome alone)." },
+  meta: { name: "down", description: "Stop the Chrome that chrome-cdp launched (leaves any other Chrome alone)." },
   run: () => {
     const pid = readPid()
     if (pid && alive(pid)) {
@@ -155,7 +155,7 @@ const down = defineCommand({
       writePid(null)
       console.log(`Stopped Chrome (pid ${pid}).`)
     } else {
-      console.log("No crm-chrome Chrome tracked as running.")
+      console.log("No chrome-cdp Chrome tracked as running.")
       writePid(null)
     }
   },
@@ -178,7 +178,7 @@ const status = defineCommand({
 runMain(
   defineCommand({
     meta: {
-      name: "crm-chrome",
+      name: "chrome-cdp",
       description: "Reliable on-demand CDP Chrome for chrome-devtools MCP. Launch once; the MCP attaches to :9222.",
     },
     subCommands: { up, down, status },

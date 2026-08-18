@@ -444,7 +444,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/crm-chrome-ensure.sh",
+            "command": "$HOME/.claude/hooks/chrome-cdp-ensure.sh",
             "timeout": 30
           }
         ]

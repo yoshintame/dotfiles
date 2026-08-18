@@ -25,7 +25,7 @@ if ! echo "$cmd" | grep -qiE '(google chrome|chromium|chrome\.app|chrome-canary|
 fi
 
 # Allow the sanctioned path: the wrapper itself launches Chrome.
-if echo "$cmd" | grep -qE '(^|[;&|`(]\s*)(crm-chrome|chrome-agent)(\s|$)'; then
+if echo "$cmd" | grep -qE '(^|[;&|`(]\s*)(chrome-cdp|chrome-agent)(\s|$)'; then
   exit 0
 fi
 

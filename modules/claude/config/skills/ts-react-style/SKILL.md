@@ -28,10 +28,12 @@ differ from default code generation.
 | Functions | top-level `function` declarations | top-level `const fn = () => {}` |
 | Callbacks | arrow functions for inline callbacks | wrapping inline callbacks in declarations |
 | Parameters | destructure in the signature | positional params + `.prop` access inside |
-| Comments | none — write self-documenting code | inline / JSDoc / TODO comments unless asked |
+| Comments | none — write self-documenting code; the only carve-outs: a one-line hint over a field of an exported shared type (autocomplete surface), and a one-line "why" at the exact spot of a non-derivable constraint (`biome-ignore`-shaped, ideally naming the spec that owns the full context) | inline / JSDoc / TODO comments unless asked; block comments that retell architecture or intent — that knowledge lives in the spec, and comments have no actualize process so they rot faster than the code they sit on |
 | Debug logs | `console.log({ value })` | `console.log(value)` |
 | Quotes / semicolons | single quotes, no semicolons | double quotes, trailing semicolons |
 | Indentation | spaces | tabs |
+| Branching | `ts-pattern` `match().exhaustive()` for dispatch / multi-field | `switch`, or a run of 2+ consecutive `if`s |
+| Value-sets | string `enum` (+ `` `${E}` `` at string boundaries) | string-literal union used as a value |
 
 ## Formatting
 

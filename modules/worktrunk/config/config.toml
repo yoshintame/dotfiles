@@ -7,6 +7,10 @@ rebase = false
 ff = false
 remove = false
 
+[aliases]
+land = "git -C {{ primary_worktree_path }} merge --no-ff {{ branch }}"
+"dev:local" = "PORT={% if branch == 'main' %}4003{% else %}{{ branch | hash_port }}{% endif %} bun run dev:local"
+
 [[pre-start]]
 setup = "$HOME/.dotfiles/modules/worktrunk/config/hooks/pre-start.sh {{ primary_worktree_path }} {{ worktree_path }}"
 

@@ -112,6 +112,9 @@
     pver = "uv version";
     ph = "uv help";
 
+    # claude
+    ccr = "bun ~/.claude/skills/reset-sessions/scripts/reset-sessions.ts --all";
+
     # misc
     ltl = "lt --level";
   };

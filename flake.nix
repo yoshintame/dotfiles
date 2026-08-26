@@ -14,8 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-dotbot.url = "github:yoshintame/nix-dotbot";
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,7 +27,6 @@
     nixpkgs-darwin,
     nix-darwin,
     home-manager,
-    nix-dotbot,
     sops-nix,
     ...
   } @ inputs: let
@@ -49,7 +46,7 @@
             pkgs-unstable = nixpkgs-unstable.legacyPackages.aarch64-darwin;
           };
           home-manager.sharedModules = [
-            nix-dotbot.homeManagerModules.default
+            ./lib/nix-link.nix
             sops-nix.homeManagerModules.sops
             ./modules/sops-templates
           ];
@@ -75,7 +72,7 @@
             pkgs-unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
           };
           home-manager.sharedModules = [
-            nix-dotbot.homeManagerModules.default
+            ./lib/nix-link.nix
             sops-nix.homeManagerModules.sops
             ./modules/sops-templates
           ];

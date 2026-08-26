@@ -13,13 +13,7 @@
       glob = true;
     };
 
-    "~/.cursor/extensions/" = {
-      path = "modules/vscode/theme/**";
-      glob = true;
-    };
-    "~/.vscode/extensions/" = {
-      path = "modules/vscode/theme/**";
-      glob = true;
-    };
+    "~/.cursor/extensions/true-vibrant-vscode-theme" = "modules/vscode/theme/true-vibrant-vscode-theme";
+    "~/.vscode/extensions/true-vibrant-vscode-theme" = "modules/vscode/theme/true-vibrant-vscode-theme";
   };
 }

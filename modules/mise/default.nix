@@ -10,18 +10,6 @@
 
   dotCli = mkMiseCli {
     name = "dot";
-    proxied = [
-      {
-        sub = "link";
-        target = "doc";
-        help = "Link dotfiles via dotbot";
-      }
-      {
-        sub = "config";
-        target = "doc";
-        help = "Print dotbot config";
-      }
-    ];
     specials = [
       {
         sub = "go";

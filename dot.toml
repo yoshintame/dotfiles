@@ -17,7 +17,7 @@ depends = ["dot:proxy-bindings"]
 # b2.env, hc.env, repo.key) silently disappear from new sops-nix generations.
 run = '''
 git add -A
-sudo darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
 '''
 
 ["dot:rebuild-full"]
@@ -26,7 +26,18 @@ dir = "{{env.DOTFILES}}"
 depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
-sudo env DOT_BREW_FULL=1 darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env DOT_BREW_FULL=1 NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+'''
+
+["dot:link"]
+description = "Materialize home-manager links without a full switch (no sudo, $HOME only)"
+dir = "{{env.DOTFILES}}"
+run = '''
+export NIX_PATH="nixpkgs=flake:nixpkgs"
+out="$(mktemp -d)/result"
+nix build --impure --out-link "$out" \
+  '.#darwinConfigurations.lasthaze-mbp.config.home-manager.users.yoshintame.home.activationPackage'
+"$out/activate"
 '''
 
 ["dot:proxy-bindings"]

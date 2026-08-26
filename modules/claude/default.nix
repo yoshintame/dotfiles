@@ -46,13 +46,22 @@
       path = "modules/agents-shared/config/skills/senate-vault/**";
       glob = true;
     };
+    "~/.claude/skills/state-reconstruction/" = {
+      path = "modules/agents-shared/config/skills/state-reconstruction/**";
+      glob = true;
+    };
     "~/.claude/skills/" = {
       path = "modules/claude/config/skills/**";
+      glob = true;
+    };
+    "~/.claude/commands/" = {
+      path = "modules/claude/config/commands/**";
       glob = true;
     };
     "~/.local/bin/chrome-agent" = "modules/agents-shared/config/chrome-agent/cli.ts";
     "~/.local/bin/chrome-cdp" = "modules/agents-shared/config/chrome-cdp/cli.ts";
     "~/.local/bin/cc-fork-recover" = "modules/agents-shared/config/bin/cc-fork-recover";
+    "~/.local/bin/clean-session-log" = "modules/agents-shared/config/bin/clean-session-log";
     "~/.local/bin/extract-images" = "modules/agents-shared/config/bin/extract-images";
     "~/.local/bin/search-reddit" = "modules/agents-shared/config/bin/search-reddit";
     "~/.local/bin/search-hn" = "modules/agents-shared/config/bin/search-hn";

@@ -14,14 +14,19 @@
 
 Записи `nixDotbot.links` в `modules/*/default.nix` — живые симлинки: **оригинал в репо, путь в системе — симлинк на него** (резолвится через `readlink -f`). Правка содержимого уже слинкованного файла видна сразу.
 
-`dot:rebuild` нужен **только** при изменении самой `nixDotbot.links` или при добавлении файла под glob-link:
+Перематериализация нужна **только** при изменении самой `nixDotbot.links` или при добавлении файла под glob-link:
 
 - **Folder-link** (`"~/.config/x" = "modules/x/config"`) — симлинк на **саму папку**: добавление/удаление файлов внутри видно сразу.
-- **Glob-link** (`{ path = "...**"; glob = true; }`) — папка реальная, внутри пофайловые симлинки с момента сборки → **новый файл не слинкуется до `dot:rebuild`**.
+- **Glob-link** (`{ path = "...**"; glob = true; }`) — папка реальная, внутри пофайловые симлинки с момента сборки → **новый файл не слинкуется до перематериализации**.
 
-(`dot:rebuild` сам делает `git add -A` — флейк видит только tracked-файлы.)
+Раскладку теперь делает нативный модуль `lib/nix-link.nix` (`home.file` + `mkOutOfStoreSymlink`), не dotbot. Перематериализовать:
 
-**Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/claude/` и `modules/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится только после `dot:rebuild`; проверить раньше — `ln -s "$DOTFILES/modules/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
+- **`mise run dot:link`** — собирает home-generation и активирует его, **без sudo** (пишет только `$HOME`) и **без `git add`** (glob читает живое дерево под `--impure`, untracked-файл виден). Штатный путь агента для нового файла под glob.
+- **`mise run dot:rebuild`** — полный системный switch (sudo): нужен для системного слоя, пакетов, sops. Сам делает `git add -A`.
+
+Исключение — новый **Nix-код** (`*.nix`): флейк видит только git-tracked, его надо `git add` перед любой из команд.
+
+**Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/claude/` и `modules/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится после `mise run dot:link` (без sudo и `git add`); совсем быстро для одного файла — `ln -s "$DOTFILES/modules/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
 
 ## Скрипты (bun/TS)
 

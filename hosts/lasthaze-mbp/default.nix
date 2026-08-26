@@ -52,6 +52,7 @@ in {
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
   nix.settings.trusted-users = ["@admin" username];
+  nix.channel.enable = false;
 
   nix.linux-builder = {
     enable = true;

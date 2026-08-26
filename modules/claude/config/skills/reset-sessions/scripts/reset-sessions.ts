@@ -72,11 +72,37 @@ if (dryRun) {
   process.exit(0);
 }
 
-for (const p of targets) {
-  try { process.kill(p.pid, "SIGTERM"); } catch {}
-}
-await new Promise((r) => setTimeout(r, 1500));
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+async function waitGone(pids: number[], ms: number): Promise<number[]> {
+  const end = Date.now() + ms;
+  let alive = pids;
+  while (alive.length && Date.now() < end) {
+    await sleep(250);
+    const live = new Set(snapshot().filter(isSession).map((p) => p.pid));
+    alive = alive.filter((pid) => live.has(pid));
+  }
+  return alive;
+}
+
+const targetPids = targets.map((p) => p.pid);
+for (const pid of targetPids) {
+  try { process.kill(pid, "SIGTERM"); } catch {}
+}
+
+let alive = await waitGone(targetPids, 3000);
+if (alive.length) {
+  for (const pid of alive) {
+    try { process.kill(pid, "SIGKILL"); } catch {}
+  }
+  alive = await waitGone(alive, 2000);
+}
+
+const stuck = new Set(alive);
+const killed = targets.filter((p) => !stuck.has(p.pid));
+const freedMem = killed.reduce((s, p) => s + p.rss, 0);
 const after = snapshot().filter(isSession);
 const afterMem = after.reduce((s, p) => s + p.rss, 0);
-console.log(`\nУбито: ${targets.length}. Освобождено ~${mb(beforeMem - afterMem)} MB. Осталось: ${after.length} (${mb(afterMem)} MB).`);
+
+console.log(`\nУбито: ${killed.length}/${targets.length}. Освобождено ~${mb(freedMem)} MB. Осталось сессий: ${after.length} (${mb(afterMem)} MB).`);
+if (alive.length) console.log(`Не отозвались даже на SIGKILL (зомби/reparent): ${alive.join(", ")}`);

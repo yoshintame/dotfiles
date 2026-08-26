@@ -238,8 +238,6 @@ in {
         disableHotPlug = true;
       };
 
-      sopsTemplates.dotfilesDir = flakeRoot;
-
       nixDotbot = {
         enable = true;
         dotfilesDir = flakeRoot;

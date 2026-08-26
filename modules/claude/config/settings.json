@@ -545,7 +545,9 @@
       "rsync *",
       "yt-dlp *",
       "act *",
-      "bun *link-and-open.ts"
+      "bun *link-and-open.ts",
+      "ps *",
+      "bun *reset-sessions.ts*"
     ],
     "env": {
       "BUN_TMPDIR": "/tmp",

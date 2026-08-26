@@ -68,8 +68,6 @@ in {
     home.username = username;
     home.homeDirectory = homeDir;
 
-    sopsTemplates.dotfilesDir = flakeRoot;
-
     nixDotbot = {
       enable = true;
       dotfilesDir = flakeRoot;

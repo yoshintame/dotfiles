@@ -21,20 +21,20 @@ in {
 
   sopsTemplates.render = {
     "~/.config/resticprofile/profiles.yaml" = {
-      template = "modules/resticprofile/config/profiles.tmpl.yaml";
-      secretsFile = "modules/resticprofile/secrets.yaml";
+      template = ./config/profiles.tmpl.yaml;
+      secretsFile = ./secrets.yaml;
     };
     "~/.config/resticprofile/hc.env" = {
-      template = "modules/resticprofile/config/hc.env.tmpl";
-      secretsFile = "modules/resticprofile/secrets.yaml";
+      template = ./config/hc.env.tmpl;
+      secretsFile = ./secrets.yaml;
     };
     "~/.config/resticprofile/b2.env" = {
-      template = "modules/resticprofile/config/b2.env.tmpl";
-      secretsFile = "modules/resticprofile/secrets.yaml";
+      template = ./config/b2.env.tmpl;
+      secretsFile = ./secrets.yaml;
     };
     "~/.config/resticprofile/repo.key" = {
-      template = "modules/resticprofile/config/repo.key.tmpl";
-      secretsFile = "modules/resticprofile/secrets.yaml";
+      template = ./config/repo.key.tmpl;
+      secretsFile = ./secrets.yaml;
     };
   };
 }

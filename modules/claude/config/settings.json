@@ -1,8 +1,10 @@
 {
+  "cleanupPeriodDays": 36500,
   "env": {
     "BUN_TMPDIR": "/tmp",
     "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache"
   },
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Grep",
@@ -324,7 +326,95 @@
       "Bash(git -C /Users/yoshintame/Development/work/senate/senate@docs push)",
       "Bash(kill 85023)",
       "Bash(xargs kill)",
-      "Bash(tee /tmp/fumadocs-dev.log)"
+      "Bash(tee /tmp/fumadocs-dev.log)",
+      "Bash(/bin/rm -rf .next)",
+      "Bash(curl -sf -o /dev/null http://localhost:8031/login)",
+      "Bash(curl -s http://localhost:8031/docs/analysis/partner/partner-proxy-exchanger)",
+      "Bash(git push *)",
+      "WebFetch(domain:marketplace.visualstudio.com)",
+      "WebFetch(domain:dykamino.gallerycdn.vsassets.io)",
+      "WebFetch(domain:anthropic.gallerycdn.azure.cn)",
+      "WebFetch(domain:mobile.events.data.microsoft.com)",
+      "WebFetch(domain:main.vscode-cdn.net)",
+      "WebFetch(domain:anthropic.gallery.vsassets.io)",
+      "WebFetch(domain:anthropic.gallerycdn.vsassets.io)",
+      "Edit(~/.claude/skills/effect-ts/**)",
+      "Edit(~/.claude/skills/mobx-keystone/**)",
+      "Bash(bunx --bun tsc --noEmit --project /Users/yoshintame/.local/share/worktrees/senate@crm-frontend/persist-rework/tsconfig.app.json)",
+      "WebFetch(domain:api.anthropic.com)",
+      "WebFetch(domain:http-intake.logs.us5.datadoghq.com)",
+      "WebFetch(domain:mcp-proxy.anthropic.com)",
+      "mcp__raindrop__collection_list",
+      "Bash(gh gist *)",
+      "WebFetch(domain:cafe.github.com)",
+      "Edit(~/.claude/skills/session-status-a/**)",
+      "Edit(~/.claude/skills/session-status-b/**)",
+      "Edit(~/.claude/skills/session-status-draft/**)",
+      "Bash(bunx skills *)",
+      "Bash(set +e)",
+      "Bash(FORCE_NPM=1 npm --prefix \"/Users/yoshintame/.local/share/worktrees/fe-common-870-build\" run build)",
+      "Bash(orb status *)",
+      "Edit(~/.claude/skills/ts-react-style/**)",
+      "Bash(git restore *)",
+      "Bash(SANDBOX=0 bun run lint)",
+      "Bash(gtrash put *)",
+      "Read(//Users/yoshintame/.claude/skills/thermo-nuclear-code-quality-review/**)",
+      "Read(//Users/yoshintame/.agents/skills/thermo-nuclear-code-quality-review/**)",
+      "WebFetch(domain:api.pullpush.io)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/write-a-skill/SKILL.md -o __TRACKED_VAR__/write-a-skill.md)",
+      "Bash(pkill -f \"webpack serve\")",
+      "Bash(pkill -f \"remote-debugging-port=9222\")",
+      "mcp__claude_ai_Context7__query-docs",
+      "WebFetch(domain:formulae.brew.sh)",
+      "Bash(and git *)",
+      "Bash(and echo *)",
+      "Bash(or echo *)",
+      "Bash(pnpm install *)",
+      "WebFetch(domain:api.deepgram.com)",
+      "WebFetch(domain:www.youtube.com)",
+      "Bash(duckdb --version)",
+      "WebFetch(domain:code.claude.com)",
+      "Bash(swift build *)",
+      "WebFetch(domain:www.raycast.com)",
+      "Read(//Users/yoshintame/.local/bin/**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://registry.npmjs.org/@yoshintame%2Feffect-runtime-kit\")",
+      "WebFetch(domain:skills.sh)",
+      "Bash(curl -sL https://raw.githubusercontent.com/__TRACKED_VAR__/main/README.md)",
+      "Bash(duckdb -init ~/.claude/skills/find-session/assets/cc.sql -c ' *)",
+      "Bash(nc -z 127.0.0.1 15432)",
+      "Bash(ls -1 business/core)",
+      "Bash(ls -1 business/partner)",
+      "Bash(ls -1 analysis/financial)",
+      "Bash(ls -1 analysis/crm)",
+      "Bash(ls -1 tasks/partner)",
+      "Bash(bunx husky *)",
+      "Bash(ls analysis/crm/)",
+      "Bash(ls analysis/partner/)",
+      "Bash(ls business/partner/)",
+      "Bash(ls technical/backend/)",
+      "Bash(ls tasks/chat/)",
+      "Bash(xargs -I {} bash -c 'echo \"=== {} ===\" && cat {}')",
+      "mcp__grafana-monitor__list_datasources",
+      "mcp__grafana-monitor__list_prometheus_metric_names",
+      "mcp__grafana-monitor__search_dashboards",
+      "mcp__grafana-monitor__list_prometheus_label_values",
+      "mcp__grafana-monitor__query_prometheus",
+      "mcp__grafana-monitor__list_loki_label_names",
+      "mcp__grafana-monitor__list_loki_label_values",
+      "mcp__grafana-monitor__query_loki_stats",
+      "mcp__grafana-monitor__query_loki_logs",
+      "Bash(gh auth *)",
+      "Bash(fish -n /Users/yoshintame/.dotfiles/modules/fish/config/functions/killport.fish)",
+      "Bash(fish -c 'killport 59999; echo \"rc=$status\"; killport abc; echo \"rc=$status\"; killport; echo \"rc=$status\"')",
+      "Bash(cd /Users/yoshintame/Development/work/vtb/repos/nook *)",
+      "Read(//Users/yoshintame/**)",
+      "Bash(ls items/)",
+      "Bash(ls products/)",
+      "Bash(git -C /Users/yoshintame/Development/work/senate/senate@e2e stash list)",
+      "Bash(pkill -f \"ssh.*15432\")",
+      "Bash(/Users/yoshintame/.local/share/worktrees/senate@e2e/feat-calc-layer-a-locked-er/node_modules/.bin/tsc --noEmit --project /Users/yoshintame/.local/share/worktrees/senate@e2e/feat-calc-layer-a-locked-er/tsconfig.json)",
+      "Bash(node_modules/.bin/tsc --noEmit --project tsconfig.json)",
+      "Bash(export REPO=/Users/yoshintame/Development/work/senate/senate@e2e)"
     ],
     "deny": [
       "Read(//Users/yoshintame/Backups/**)",
@@ -343,6 +433,7 @@
       "Bash(git push --force:*)",
       "Bash(git push --force-with-lease:*)"
     ],
+    "defaultMode": "auto",
     "additionalDirectories": [
       "/Users/yoshintame/Development",
       "/Users/yoshintame/.local/share/worktrees",
@@ -350,7 +441,8 @@
       "/Users/yoshintame/Documents/obsidian/yoshintame",
       "/Users/yoshintame/.claude",
       "/tmp",
-      "/private/tmp"
+      "/private/tmp",
+      "/Users/yoshintame/.claude/handoffs/-Users-yoshintame-Documents-obsidian-yoshintame"
     ]
   },
   "hooks": {
@@ -477,7 +569,10 @@
   },
   "enabledPlugins": {
     "worktrunk@worktrunk": false,
-    "warp@claude-code-warp": true
+    "warp@claude-code-warp": true,
+    "fallow@fallow-skills": true,
+    "serena@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "worktrunk": {
@@ -491,6 +586,12 @@
         "source": "github",
         "repo": "warpdotdev/claude-code-warp"
       }
+    },
+    "fallow-skills": {
+      "source": {
+        "source": "github",
+        "repo": "fallow-rs/fallow-skills"
+      }
     }
   },
   "sandbox": {
@@ -498,11 +599,6 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": true,
     "network": {
-      "allowUnixSockets": [
-        "/Users/yoshintame/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock",
-        "/Users/yoshintame/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
-      ],
-      "allowLocalBinding": true,
       "allowedDomains": [
         "github.com",
         "api.github.com",
@@ -513,7 +609,12 @@
         "*.senateexchange.com",
         "www.reddit.com",
         "oauth.reddit.com"
-      ]
+      ],
+      "allowUnixSockets": [
+        "/Users/yoshintame/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock",
+        "/Users/yoshintame/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
+      ],
+      "allowLocalBinding": true
     },
     "filesystem": {
       "allowWrite": [
@@ -545,6 +646,8 @@
       "rsync *",
       "yt-dlp *",
       "act *",
+      "git-commit-atomic *",
+      "git -C * commit-atomic *",
       "bun *link-and-open.ts",
       "ps *",
       "bun *reset-sessions.ts*"
@@ -554,11 +657,12 @@
       "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache"
     }
   },
-  "cleanupPeriodDays": 36500,
-  "includeCoAuthoredBy": false,
+  "effortLevel": "xhigh",
   "autoMemoryEnabled": false,
   "theme": "dark-ansi",
+  "switchModelsOnFlag": false,
   "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
   "mcpServers": {
     "console-ninja": {
       "command": "npx",

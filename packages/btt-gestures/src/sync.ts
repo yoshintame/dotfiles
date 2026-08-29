@@ -4,55 +4,86 @@ import { TriggerClass } from "./triggers.ts";
 import { gestureUuid } from "./gesture-uuid.ts";
 import type { Config } from "./schema.ts";
 
-export interface SyncPlan {
-  upsert: { uuid: string; id: string; trigger: string }[];
-  delete: { uuid: string; description: string }[];
-}
+const NUKE_RETRY_LIMIT = 3;
 
 function isManaged(description: string | undefined): boolean {
   return Boolean(description?.includes(MANAGED_TAG));
 }
 
-export async function planSync(config: Config, sharedSecret: string | undefined): Promise<SyncPlan> {
-  const client = new BttClient({ url: config.webserver.url, sharedSecret });
-  const remote = await client.getTriggers(TriggerClass.trackpad);
-
-  const desiredUuids = new Set(config.gestures.map((g) => gestureUuid(g.id)));
-
-  const toDelete = remote
-    .filter((t) => isManaged(t.BTTTriggerTypeDescription))
-    .filter((t) => t.BTTUUID && !desiredUuids.has(t.BTTUUID))
-    .map((t) => ({
-      uuid: t.BTTUUID as string,
-      description: t.BTTTriggerTypeDescription,
-    }));
-
-  const toUpsert = config.gestures.map((g) => ({
-    uuid: gestureUuid(g.id),
-    id: g.id,
-    trigger: g.trigger,
-  }));
-
-  return { upsert: toUpsert, delete: toDelete };
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
 }
 
-export async function applySync(config: Config, sharedSecret: string | undefined): Promise<void> {
+async function nukeManaged(client: BttClient, desiredUuids: readonly string[]): Promise<number> {
+  let total = 0;
+
+  for (const uuid of desiredUuids) await client.deleteTrigger(uuid);
+  total += desiredUuids.length;
+
+  for (let pass = 0; pass < NUKE_RETRY_LIMIT; pass++) {
+    await sleep(300);
+    const remote = await client.getTriggers(TriggerClass.trackpad);
+    const stale = remote.filter((t) => t.BTTUUID && isManaged(t.BTTTriggerTypeDescription));
+    if (stale.length === 0) return total;
+    for (const t of stale) await client.deleteTrigger(t.BTTUUID as string);
+    total += stale.length;
+  }
+  return total;
+}
+
+async function nukeAllTrackpad(client: BttClient): Promise<number> {
+  let total = 0;
+  for (let pass = 0; pass < NUKE_RETRY_LIMIT; pass++) {
+    const remote = await client.getTriggers(TriggerClass.trackpad);
+    if (remote.length === 0) return total;
+    for (const t of remote) if (t.BTTUUID) await client.deleteTrigger(t.BTTUUID);
+    total += remote.length;
+    await sleep(100);
+  }
+  return total;
+}
+
+export interface SyncOptions {
+  nukeAll?: boolean;
+}
+
+export async function applySync(
+  config: Config,
+  sharedSecret: string | undefined,
+  opts: SyncOptions = {},
+): Promise<void> {
   const client = new BttClient({ url: config.webserver.url, sharedSecret });
+  const desiredUuids = config.gestures.map((g) => gestureUuid(g.id));
+
+  const removed = opts.nukeAll ? await nukeAllTrackpad(client) : await nukeManaged(client, desiredUuids);
+  console.log(`  ⊘ removed ${removed} ${opts.nukeAll ? "trackpad" : "managed"} trigger(s)`);
+
+  await sleep(300);
 
   for (const gesture of config.gestures) {
     const uuid = gestureUuid(gesture.id);
-    const payload = buildTrigger(gesture, { preset: config.preset });
+    const payload = buildTrigger(gesture, { preset: config.preset, sound: config.feedback?.sound });
     payload.BTTUUID = uuid;
-    await client.deleteTrigger(uuid);
-    await client.addTrigger(payload);
+    await client.updateTrigger(uuid, payload);
     console.log(`  ✓ ${gesture.id} (${gesture.trigger})`);
   }
 
-  const plan = await planSync(config, sharedSecret);
-  for (const stale of plan.delete) {
-    await client.deleteTrigger(stale.uuid);
-    console.log(`  ✗ stale ${stale.description}`);
-  }
+  console.log(`\n${config.gestures.length} synced, ${removed} removed.`);
+}
 
-  console.log(`\n${config.gestures.length} synced, ${plan.delete.length} stale removed.`);
+export interface CleanOptions {
+  filter?: (description: string | undefined, uuid: string) => boolean;
+}
+
+export async function clean(config: Config, sharedSecret: string | undefined, opts: CleanOptions = {}): Promise<number> {
+  const client = new BttClient({ url: config.webserver.url, sharedSecret });
+  const remote = await client.getTriggers(TriggerClass.trackpad);
+  const predicate = opts.filter ?? ((d) => isManaged(d));
+
+  const toDelete = remote.filter((t) => t.BTTUUID && predicate(t.BTTTriggerTypeDescription, t.BTTUUID));
+  for (const t of toDelete) {
+    await client.deleteTrigger(t.BTTUUID as string);
+    console.log(`  ✗ ${t.BTTUUID?.slice(0, 8)}  ${t.BTTTriggerTypeDescription ?? "(no description)"}`);
+  }
+  return toDelete.length;
 }

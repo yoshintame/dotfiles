@@ -9,13 +9,15 @@ const PROJECTS = `${process.env.HOME}/.claude/projects`;
 const RU_STOP = new Set("для и во в на с со по к ко у о об что как это не но а же ли от до из за при я мне меня мной ты".split(" "));
 const EN_STOP = new Set("the for a an to of in on and or with is are my me i it this that".split(" "));
 
+const DEEP_LINK = "vscode://anthropic.claude-code/open?session=";
+
 type Args = {
   synonyms: string[];
   kind?: string;
   tool?: string;
   limit: number;
   sessions: boolean;
-  resume: boolean;
+  link: boolean;
   noStem: boolean;
   showSql: boolean;
   distinct: boolean;
@@ -25,10 +27,10 @@ type Args = {
 };
 
 function parseArgs(argv: string[]): Args {
-  const a: Args = { synonyms: [], limit: 40, sessions: false, resume: false, noStem: false, showSql: false, distinct: false, bm25: false, full: false, rebuild: false };
+  const a: Args = { synonyms: [], limit: 40, sessions: false, link: false, noStem: false, showSql: false, distinct: false, bm25: false, full: false, rebuild: false };
   for (const t of argv) {
     if (t === "--sessions") a.sessions = true;
-    else if (t === "--resume") { a.sessions = true; a.resume = true; }
+    else if (t === "--link" || t === "--resume") { a.sessions = true; a.link = true; }
     else if (t === "--no-stem") a.noStem = true;
     else if (t === "--distinct") a.distinct = true;
     else if (t === "--sql") a.showSql = true;
@@ -42,7 +44,8 @@ function parseArgs(argv: string[]): Args {
     else a.synonyms.push(t);
   }
   if (a.synonyms.length === 0) {
-    console.error('usage: search.ts "<words>" [...] [--bm25 [--full] [--rebuild]] [--kind=K] [--tool=NAME] [--sessions] [--resume] [--distinct] [--limit=N] [--no-stem] [--sql]');
+    console.error('usage: search.ts "<words>" [...] [--bm25 [--full] [--rebuild]] [--kind=K] [--tool=NAME] [--sessions] [--link] [--distinct] [--limit=N] [--no-stem] [--sql]');
+    console.error('       open-session.ts <session-id>   # actually open it, in a window on its own cwd');
     process.exit(2);
   }
   return a;
@@ -129,7 +132,7 @@ if (args.bm25) {
     ? `LOAD fts;
        SELECT project, session_id, round(max(score), 2) AS score, round(sum(score), 2) AS total, count(*) AS hits,
          min(ts)::date AS first_seen, max(ts)::date AS last_seen,
-         'claude --resume ' || session_id AS resume
+         '${DEEP_LINK}' || session_id AS link
        FROM (${scored}) s WHERE score IS NOT NULL
        GROUP BY project, session_id ORDER BY score DESC LIMIT ${args.limit};`
     : `LOAD fts;
@@ -168,8 +171,8 @@ const NORM = "regexp_replace(regexp_replace(m.text, '<ide_selection>.*?</ide_sel
 
 const select = args.sessions
   ? `SELECT m.project, m.session_id, ${args.distinct ? `count(DISTINCT ${NORM})` : "count(*)"} AS hits,
-       min(m.ts)::date AS first_seen, max(m.ts)::date AS last_seen${args.resume ? `,
-       'claude --resume ' || m.session_id AS resume` : ""}
+       min(m.ts)::date AS first_seen, max(m.ts)::date AS last_seen${args.link ? `,
+       '${DEEP_LINK}' || m.session_id AS link` : ""}
    FROM ${view} m WHERE ${where.join(" AND ")}
    GROUP BY m.project, m.session_id ORDER BY last_seen DESC LIMIT ${args.limit}`
   : `SELECT m.ts::date AS dt, m.project,

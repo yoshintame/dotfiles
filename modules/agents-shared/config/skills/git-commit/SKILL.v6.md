@@ -3,7 +3,7 @@ name: git-commit
 description: Generates Conventional Commits messages by analyzing staged changes and repo commit history. Use when the user says "commit", "git commit", or asks to commit changes.
 license: MIT
 metadata:
-  version: 6.2.0
+  version: 6.4.0
 ---
 
 # Git Commit
@@ -29,12 +29,12 @@ metadata:
 
    `<repo>` — absolute path to the worktree. Default output: branch info, working-tree status, **worktree diff `--stat` only**, branch divergence, recent-commits style, detected repo commit conventions. Add `--full-diff` if a full unified diff is genuinely needed (rare — you usually have edit context already and can request specific hunks via `git -C <repo> diff HEAD -- <path>`).
 
-2. Choose commit mode:
+2. Choose commit mode — **`--auto` is the default**:
 
-   - **Autonomous commit — default when you are committing as part of carrying out a task** (the user did NOT explicitly invoke `/git-commit` for interactive review): pass `--auto` **without** `-S` (unsigned, no editor preview). A locked 1Password agent must never block an autonomous commit, and signing is deferred to human review — the human signs the reviewed range later with `git rebase <base> --exec 'git commit --amend --no-edit -S'`.
-   - Argument `auto` (`/git-commit auto`): a normal commit without the editor preview — pass `--auto -S`. The explicit `-S` is required because the `--auto` path builds via `git commit-tree`, which does not honor `commit.gpgsign`; without it the commit would be unsigned.
-   - Argument `auto-no-sign` (`/git-commit auto-no-sign`): `--auto` without `-S` — explicit unsigned, no editor preview (same as the autonomous default).
-   - No argument (`/git-commit`): the user wants interactive review — open the editor on the message (signed via `commit.gpgsign`).
+   The mode determines signing. **Never pass `-S`** — the agent never signs; signing is deferred to push (`git sp`), and only the opt-in editor commit is signed by the `commit.gpgsign` default.
+
+   - **Default — pass `--auto`** (both an autonomous task commit and an explicit `/git-commit` with no argument): no editor preview. The `--auto` path builds via `git commit-tree`, which ignores `commit.gpgsign`, so the commit is **unsigned** — deliberate, so a locked signing agent can never block a commit and no Touch ID / 1Password-fallback prompt fires mid-task. These commits are signed later in one batch at push by `git sp` (the `git-sign-push` wrapper), which re-signs the whole un-pushed range through the Secure Enclave key.
+   - **Argument `edit` (`/git-commit edit`)** — the user explicitly wants an interactive, reviewed commit: editor mode (no `--auto`). Repo `pre-commit` / `commit-msg` / `post-commit` hooks run and the commit is **signed** via `commit.gpgsign`. Rare — use only on explicit request.
 
 3. Run the wrapper:
 
@@ -49,17 +49,16 @@ metadata:
 
    The wrapper has two execution paths:
 
-   - **Default (no `--auto`)** — delegates to `git commit -e`. The user's real editor opens for message review, repo `pre-commit` / `commit-msg` / `post-commit` hooks fire, lint and test gates run as configured. Race-safety: `.git/index.lock` (git-native), no CAS against `HEAD` movement. Suitable for the typical interactive single-session commit.
-   - **`--auto`** — builds the commit on top of `HEAD` in an ephemeral `GIT_INDEX_FILE` under `$GIT_DIR`, then advances `HEAD` via atomic compare-and-swap (`commit-tree` + `update-ref HEAD <new> <expected>`). On lost CAS the wrapper retries with the new `HEAD` snapshot. Race-safe under parallel Claude sessions sharing the worktree, but hooks are NOT executed (plumbing flow). Suitable when the user invoked the skill with `auto` / `auto-no-sign`, or when concurrent sessions are involved.
+   - **Editor path (no `--auto`)** — delegates to `git commit -e`. The user's real editor opens for message review, repo `pre-commit` / `commit-msg` / `post-commit` hooks fire, lint and test gates run as configured. Race-safety: `.git/index.lock` (git-native), no CAS against `HEAD` movement. Opt-in only, via `/git-commit edit`.
+   - **`--auto`** — builds the commit on top of `HEAD` in an ephemeral `GIT_INDEX_FILE` under `$GIT_DIR`, then advances `HEAD` via atomic compare-and-swap (`commit-tree` + `update-ref HEAD <new> <expected>`). On lost CAS the wrapper retries with the new `HEAD` snapshot. Race-safe under parallel Claude sessions sharing the worktree, but hooks are NOT executed (plumbing flow). **The default path**: autonomous task commits, plain `/git-commit`, and concurrent sessions sharing the worktree.
 
    Supported flags (must precede the message):
 
    | Flag | Effect |
    |---|---|
    | `-C <path>`, `--repo <path>` | `chdir` into `<path>` before committing. Always use this instead of `git -C <path> commit-atomic` to avoid subcommand-token-merge regenerate failures. |
-   | `--auto` | Take the CAS path; skip editor preview. Pass when the user invoked with `auto`. |
+   | `--auto` | Take the CAS path; skip editor preview. The default; the editor path is opt-in via `/git-commit edit`. |
    | `-s`, `--signoff` | Append `Signed-off-by` trailer (forwarded to `git commit -s` in editor mode; manually appended in `--auto`). |
-   | `-S`, `--gpg-sign[=<keyid>]` | GPG-sign the commit. |
    | `-n`, `--no-verify` | In editor mode: forwarded to `git commit --no-verify` (skips hooks). In `--auto`: no-op (hooks aren't run anyway). |
    | `--author "Name <email>"` | Override commit author via `GIT_AUTHOR_NAME`/`EMAIL`. |
    | `--date <when>` | Override author date via `GIT_AUTHOR_DATE`. |

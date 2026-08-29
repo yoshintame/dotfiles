@@ -16,6 +16,8 @@ function ssh --wraps ssh --description "ssh; offer to save a raw user@host as a 
             read -l -P "💾 save '$target' as ssh alias? name (empty = skip): " name
             test -n "$name"; and savessh $name $target
         end
+
+        __sshf_log_alias $argv
     end
 
     command ssh $argv

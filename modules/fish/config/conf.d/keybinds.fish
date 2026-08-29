@@ -94,13 +94,23 @@ set -l smart_enter_git_cmd "git status -sb"
 bind \e\[D "_fish_smart_arrow backward-char $smart_left_cmd $smart_left_git_cmd"
 bind \e\[C "_fish_smart_arrow forward-char $smart_right_cmd $smart_right_git_cmd"
 
-function _sshf_widget --description "fzf ssh alias picker -> run ssh <alias>"
-    set -l host (__sshf_pick)
-    if test -n "$host"
-        commandline -r -- "ssh $host"
-        commandline -f execute
-    else
+function _sshf_widget --description "fzf ssh alias picker -> connect / edit / copy / tmux"
+    set -l sel (__sshf_pick)
+    if test -z "$sel"
         commandline -f repaint
+        return
+    end
+
+    set -l action (string split -f1 \t -- $sel)
+    set -l host (string split -f2 \t -- $sel)
+
+    switch $action
+        case connect
+            commandline -r -- "ssh $host"
+            commandline -f execute
+        case '*'
+            __sshf_action $action $host
+            commandline -f repaint
     end
 end
 

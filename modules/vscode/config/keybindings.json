@@ -306,10 +306,27 @@
   // VSCode-specific bindings
   // =============================================
 
-  // Open Claude Code sidebar
+  // Open Claude Code sidebar.
+  // Note: in the InLineMd WYSIWYG webview the keybinding system cannot reach
+  // here because ProseMirror's keymap captures Cmd+I (italic) at the iframe's
+  // keydown bubble phase. The inlinemd-claude-bridge patch installs a
+  // document-level capture-phase listener inside the webview that hijacks
+  // Cmd+I before ProseMirror sees it, posts to the host, and the host fires
+  // inlinemdBridge.insertAtMention directly — no keybinding entry needed for
+  // the WYSIWYG case.
   {
     "key": "cmd+i",
     "command": "claude-vscode.focus"
+  },
+  {
+    "key": "cmd+z",
+    "command": "-undo",
+    "when": "focusedView == claudeVSCodeSidebar"
+  },
+  {
+    "key": "cmd+z",
+    "command": "-undo",
+    "when": "focusedView == claudeVSCodeSidebarSecondary"
   },
 
   // Open Codex sidebar (mirrors Claude Code cmd+i — opens view + attaches editor selection)
@@ -342,5 +359,13 @@
     "key": "cmd+g",
     "command": "-editor.action.nextMatchFindAction",
     "when": "editorFocus"
-  }
+},
+{
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+        "text": "\u001b\r"
+    },
+    "when": "terminalFocus"
+}
 ]

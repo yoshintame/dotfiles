@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["bun", "node"]
+  },
+  "include": ["modules/**/*.ts"],
+  "exclude": ["**/node_modules", "modules/karabiner", "modules/vscode/theme"]
+}

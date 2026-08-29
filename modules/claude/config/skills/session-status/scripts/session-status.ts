@@ -27,15 +27,16 @@ type Parsed = {
 }
 
 function cwdHash(): string {
-  return process.cwd().replaceAll("/", "-").replaceAll(".", "-")
+  return process.cwd().replace(/[^a-zA-Z0-9]/g, "-")
 }
 
 async function findSessionJsonl(sessionId: string | null): Promise<string | null> {
-  if (sessionId) {
-    for await (const p of new Bun.Glob(`**/${sessionId}.jsonl`).scan({ cwd: PROJECTS, absolute: true })) {
+  const id = sessionId ?? process.env.CLAUDE_CODE_SESSION_ID ?? null
+  if (id) {
+    for await (const p of new Bun.Glob(`**/${id}.jsonl`).scan({ cwd: PROJECTS, absolute: true })) {
       return p
     }
-    return null
+    if (sessionId) return null
   }
   const projDir = join(PROJECTS, cwdHash())
   if (!existsSync(projDir)) return null

@@ -3,13 +3,14 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
 const path = (process.argv[2] ?? "").trim();
 if (!path) {
-  console.error("usage: handoff-pickup.ts <absolute-path>");
+  console.error("usage: handoff-pickup.ts <absolute-path> [force]");
   process.exit(1);
 }
 if (!existsSync(path)) {
   console.error(`handoff not found: ${path}`);
   process.exit(1);
 }
+const force = process.argv.slice(3).some((a) => a === "force" || a === "--force");
 
 const sessionId = process.env.CLAUDE_CODE_SESSION_ID ?? "unknown";
 const now = new Date().toISOString();
@@ -44,6 +45,21 @@ const parseList = (v: string | undefined): string[] => {
 
 const consumedBy = parseList(kv.consumed_by);
 const consumedAt = parseList(kv.consumed_at);
+
+const others = consumedBy
+  .map((id, i) => ({ id, at: consumedAt[i] ?? "?" }))
+  .filter((p) => p.id !== sessionId);
+if (others.length > 0 && !consumedBy.includes(sessionId) && !force) {
+  const rows = others.map((p) => `  - ${p.id}  at ${p.at}`).join("\n");
+  process.stdout.write(
+    "ALREADY PICKED UP — nothing written, file untouched (no `force`).\n" +
+      `${others.length} other session(s) already picked up this handoff:\n${rows}\n` +
+      `status: ${kv.status ?? "?"}\n` +
+      "This handoff is in progress elsewhere. Confirm with the user before taking it; " +
+      "then re-run with `force` as the second argument.\n",
+  );
+  process.exit(3);
+}
 
 if (!consumedBy.includes(sessionId)) {
   consumedBy.push(sessionId);

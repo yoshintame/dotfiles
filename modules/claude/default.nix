@@ -34,6 +34,10 @@
       path = "modules/agents-shared/config/skills/rewrite/**";
       glob = true;
     };
+    "~/.claude/skills/rewrite-audit/" = {
+      path = "modules/agents-shared/config/skills/rewrite-audit/**";
+      glob = true;
+    };
     "~/.claude/skills/done/" = {
       path = "modules/agents-shared/config/skills/done/**";
       glob = true;

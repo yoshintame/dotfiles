@@ -1,6 +1,6 @@
 personality = "pragmatic"
 model = "gpt-5.4"
-model_reasoning_effort = "high"
+model_reasoning_effort = "xhigh"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 project_doc_fallback_filenames = ["CLAUDE.md"]
@@ -27,4 +27,10 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/yoshintame"]
+trust_level = "trusted"
+
+[projects."/Users/yoshintame/Development/work/senate/senate@crm-frontend"]
+trust_level = "trusted"
+
+[projects."/Users/yoshintame/Development/work/vtb/repos/fact"]
 trust_level = "trusted"

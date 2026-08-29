@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# git-sign-push: (re)sign every local un-pushed commit, then push.
+#
+# A commit's signature lives inside the commit object, so signing it "later"
+# means rewriting the un-pushed commits in place — same tree and parent, a
+# fresh signature, a new SHA. Only commits not yet on any remote are touched,
+# so shared history is never rewritten. Signing goes through the configured
+# gpg.ssh.program (git-ssh-sign -> Secure Enclave via Secretive), silent while
+# the screen is unlocked, so a whole batch signs with no prompts.
+#
+# Purpose: let agents commit unsigned (no per-commit Touch ID / 1Password
+# fallback), then sign the batch once at push, when you are at the machine.
+#
+# Usage: git sign-push [<git push args...>]   (alias: git sp)
+
+set -uo pipefail
+
+die() { echo "git-sign-push: $*" >&2; exit 1; }
+
+git rev-parse --git-dir >/dev/null 2>&1 || die "not a git repository"
+
+# Fork-point base: replay ONLY our local commits onto their existing parent,
+# never restacking onto newer upstream work.
+base=""
+if up=$(git rev-parse --verify --quiet '@{upstream}'); then
+    base=$(git merge-base "$up" HEAD)
+elif pu=$(git rev-parse --verify --quiet '@{push}'); then
+    base=$(git merge-base "$pu" HEAD)
+fi
+
+# No upstream (first push of a new branch): sign everything not reachable from
+# any remote-tracking ref.
+root_rebase=0
+if [ -z "$base" ]; then
+    oldest=$(git rev-list --reverse HEAD --not --remotes | head -n1)
+    if [ -n "$oldest" ]; then
+        if parent=$(git rev-parse --verify --quiet "${oldest}^"); then
+            base="$parent"
+        else
+            root_rebase=1
+        fi
+    fi
+fi
+
+sign_exec='git commit --amend --no-edit --no-verify -S'
+
+if [ "$root_rebase" -eq 1 ]; then
+    git rebase --root --rebase-merges --exec "$sign_exec" || die "sign rebase failed"
+elif [ -n "$base" ] && [ -n "$(git rev-list "$base"..HEAD)" ]; then
+    git rebase --rebase-merges --exec "$sign_exec" "$base" || die "sign rebase failed"
+else
+    echo "git-sign-push: nothing local to sign" >&2
+fi
+
+exec git push "$@"

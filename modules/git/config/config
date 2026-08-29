@@ -41,11 +41,11 @@
     coloring = highlightRecent
     date     = relative
 
-[difftool "vscode"]
-    cmd         = cursor --wait --diff $LOCAL $REMOTE
+[difftool "editor"]
+	cmd = sh -c '${VISUAL:-$EDITOR} --diff \"$@\"' -- \"$LOCAL\" \"$REMOTE\"
 
 [diff]
-    tool              = vscode
+	tool = editor
     context           = 3       # less context in diffs
     renames           = copies  # detect copies as renames in diffs
     interHunkContext  = 10      # merge near hunks in diffs
@@ -53,11 +53,11 @@
 [diff "sopsdiffer"]
 	textconv = sops -d --config /dev/null
 
-[mergetool "vscode"]
-    cmd         = cursor --wait $MERGED
+[mergetool "editor"]
+	cmd = sh -c '${VISUAL:-$EDITOR} \"$@\"' -- \"$MERGED\"
 
 [merge]
-    tool        = vscode
+	tool = editor
     log         = true
 
 [init]
@@ -83,7 +83,7 @@
     followTags      = true  # push also tags
 
 [pull]
-    rebase      = true
+    ff          = only
 
 [submodule]
     fetchJobs   = 16
@@ -221,6 +221,8 @@
     f           = fetch --prune
     p           = push
     ps          = push
+    # sign every un-pushed commit (Secure Enclave, silent when unlocked), then push
+    sp          = sign-push
     pl          = pull
     pur         = pull --rebase
     pr          = pull-request
@@ -234,6 +236,7 @@
     va          = log --oneline --decorate --all --graph
     logs        = log --color --graph --pretty=format:\"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset\" --abbrev-commit
     lg          = log --color --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    tree        = log --first-parent --graph --oneline
 
     # show tracked branches
     tracked     = '!d() { git for-each-ref --format='%(refname:short)' refs/heads/ | while read b; do if r=$(git config --get branch.$b.remote); then m=$(git config --get branch.$b.merge); echo \"$b -> $r/${m##*/}\"; fi; done } ; d'

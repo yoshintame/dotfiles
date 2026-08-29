@@ -6,9 +6,11 @@ tap "doron-cohen/tap"
 tap "dotenv-org/brew"
 tap "dsully/tap"
 tap "garethgeorge/backrest-tap"
+tap "gateway-of-last-resort/tap"
+tap "gu1llaum-3/sshm", "https://github.com/Gu1llaum-3/homebrew-sshm"
 tap "hongkongkiwi/vsix-cli"
 tap "josephyaduvanshi/chronicle"
-tap "koekeishiya/formulae"
+tap "koekeishiya/formulae", "https://github.com/asmvik/homebrew-formulae.git"
 tap "lusingander/tap"
 tap "madzarm/tap"
 tap "mylee04/tools"
@@ -19,114 +21,202 @@ tap "peterldowns/tap"
 tap "qmk/qmk"
 tap "raine/claude-history"
 tap "umlx5h/tap"
-tap "valkyrie00/bbrew"
+tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew"
 tap "xwjdsh/tap"
 tap "yoshintame/cask"
+# Search tool like grep, but optimized for programmers
 brew "ack"
+# Run your GitHub Actions locally
 brew "act"
+# Simple, modern, secure file encryption
 brew "age"
+# Command-line tool for formatting Nix Code
 brew "alejandra"
+# Official Amazon AWS command-line interface
 brew "awscli"
+# Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Toolchain of the web
 brew "biome"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Manage multiple AI agents like Claude Code, Aider and Codex in your terminal
 brew "claude-squad"
+# Cut, copy, and paste anything, anywhere, all from the terminal
 brew "clipboard"
+# Cloudflare Tunnel client (formerly Argo Tunnel)
 brew "cloudflared"
+# GNU File, Shell, and Text utilities
 brew "coreutils"
+# Diff that understands syntax
 brew "difftastic"
+# Pack, ship and run any application as a lightweight container
 brew "docker"
+# CLI for interacting with Doppler secrets and configuration
 brew "doppler"
+# Tool that bootstraps your dotfiles
 brew "dotbot"
+# Embeddable SQL OLAP Database Management System
 brew "duckdb"
+# Select default apps for documents and URL schemes on macOS
 brew "duti"
+# Modern, maintained replacement for ls
 brew "eza"
+# Simple, fast and user-friendly alternative to find
 brew "fd"
+# Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
+# GitHub command-line tool
 brew "gh"
+# Distributed revision control system
 brew "git"
+# Syntax-highlighting pager for git and diff output
 brew "git-delta"
+# Small git utilities
 brew "git-extras"
+# Quickly rewrite git repository history
 brew "git-filter-repo"
+# Git Submodule Alternative
 brew "git-subrepo"
+# Render markdown on the CLI
 brew "glow"
+# GNU Privacy Guard (OpenPGP)
 brew "gnupg"
+# Colorize logfiles and command output
 brew "grc"
+# Tool for glamorous shell scripts
 brew "gum"
+# Tools and libraries to manipulate images in select formats
 brew "imagemagick"
+# Git-compatible distributed version control system
 brew "jj"
+# TUI for interacting with the Jujutsu version control system
+brew "jjui"
+# Lightweight and flexible command-line JSON processor
 brew "jq"
+# TUI playground to experiment and play with jq
 brew "jqp"
+# Handy way to save and run project-specific commands
 brew "just"
+# Simple terminal UI for git commands
 brew "lazygit"
+# TUI for Jujutsu/jj
 brew "lazyjj"
+# Terminal-based SSH manager
 brew "lazyssh"
+# Postgres C API library
+brew "libpq"
+# Linux virtual machines
 brew "lima"
+# Rotates, compresses, and mails system logs
 brew "logrotate"
+# Rainbows and unicorns in your console!
 brew "lolcat"
+# Mac App Store command-line interface
 brew "mas"
+# Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# CLI for NextDNS's DNS-over-HTTPS (DoH)
 brew "nextdns"
+# HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
 brew "nginx"
+# Port scanning utility for large networks
 brew "nmap"
+# Create, run, and share large language models (LLMs)
 brew "ollama", restart_service: :changed
+# Open client for Cisco AnyConnect VPN
 brew "openconnect"
+# Painless compression and decompression for your terminal
 brew "ouch"
+# Package compiler and linker metadata toolkit
 brew "pkgconf"
+# Fast, disk space efficient package manager
 brew "pnpm"
+# PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
+# Object-relational database system
 brew "postgresql@16"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
+# Tools for and transforming and inspecting PDF files
 brew "qpdf"
+# Fast, efficient and secure backup program
 brew "restic"
+# Configuration profiles manager and scheduler for restic backup
+brew "resticprofile"
+# Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# 7-Zip is a file archiver with a high compression ratio
 brew "sevenzip"
+# Editor of encrypted files
 brew "sops"
+# Command-line interface for https://speedtest.net bandwidth tests
 brew "speedtest-cli"
+# Add a public key to a remote machine's authorized_keys file
 brew "ssh-copy-id"
+# Graphical command-line client for SSH
+brew "sshs"
+# Cross-shell prompt for astronauts
 brew "starship"
+# Very fast implementation of tldr in Rust
 brew "tealdeer"
+# User interface to the TELNET protocol
 brew "telnet"
+# Programmatically correct mistyped console commands
 brew "thefuck"
+# Terminal multiplexer
 brew "tmux"
+# Upgrade all the things
 brew "topgrade"
+# Extraction utility for .zip compressed archives
 brew "unzip"
+# Execute commands when watched files change
 brew "watchexec"
+# Internet file retriever
 brew "wget"
+# CLI for Git worktree management, designed for parallel AI agent workflows
 brew "worktrunk"
+# Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
-brew "ajayrmk/tap/trnscrb"
-brew "creativeprojects/tap/resticprofile"
-brew "doron-cohen/tap/antidot"
-brew "dsully/tap/macos-defaults"
-brew "hongkongkiwi/vsix-cli/vsix-cli"
-brew "lusingander/tap/serie"
-brew "madzarm/tap/ccsearch", trusted: true
-brew "mylee04/tools/code-notify"
-brew "peterldowns/tap/localias"
-brew "raine/claude-history/claude-history"
-brew "umlx5h/tap/gtrash"
-brew "valkyrie00/bbrew/bbrew"
-brew "xwjdsh/tap/manssh"
+# Password manager that keeps all passwords secure behind one password
 cask "1password"
+# Command-line interface for 1Password
 cask "1password-cli"
+# Privacy-focused app for managing your finances
 cask "actual"
-cask "nikitabobko/tap/aerospace"
+cask "aerospace"
+# Utility to add Dynamic Island like features to notch area
 cask "alcove"
+# Enable Windows-like alt-tab
 cask "alt-tab"
+# iOS App Store alternative
 cask "altserver"
+# Chromium based browser
 cask "arc"
+# OpenAI's official ChatGPT desktop app
 cask "chatgpt"
+# Anthropic's official Claude AI desktop app
 cask "claude"
+# Terminal-based AI coding assistant
 cask "claude-code"
+# OpenAI's coding agent that runs in your terminal
 cask "codex"
+# OpenAI's Codex desktop app for managing coding agents
 cask "codex-app"
-cask "yoshintame/cask/cotypist"
+cask "cotypist"
+# Disk space visualiser
 cask "daisydisk"
+# Command-line tool to set the desktop picture
 cask "desktoppr"
+# Voice and text chat software
 cask "discord"
+# Client for the Dropbox cloud storage service
 cask "dropbox"
+# Collaborative team software
 cask "figma"
 cask "font-cascadia-code"
 cask "font-cascadia-mono"
@@ -139,77 +229,125 @@ cask "font-ibm-plex-mono"
 cask "font-input"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-symbols-only-nerd-font"
+# GIT client
 cask "fork"
+# Set of tools to manage resources and applications hosted on Google Cloud
+cask "gcloud-cli"
+# Git client for simultaneous branches on top of your existing workflow
 cask "gitbutler"
+# Web browser
 cask "google-chrome"
+# Desktop automation application
 cask "hammerspoon"
+# All-in-one project management tool
 cask "height"
+# Link and retrieve key information
 cask "hookmark"
-cask "yoshintame/cask/hyperswitch"
+# HTTP(S) debugging proxy, analyzer, and client
+cask "http-toolkit"
+cask "hyperswitch"
+# Free and open-source media player
 cask "iina"
+# HTTP and GraphQL Client
 cask "insomnia"
+# Menu bar manager
 cask "jordanbaird-ice"
+# Keyboard customiser
 cask "karabiner-elements"
+cask "keyward"
+# App to manage software development and track bugs
 cask "linear"
+# UI replacement for volume, brightness and now playing controls
 cask "mediamate"
+# Provides updates to various Microsoft products
 cask "microsoft-auto-update"
+# Multi-platform web browser
 cask "microsoft-edge"
+# Office suite
 cask "microsoft-office"
+# Create mock APIs in seconds
 cask "mockoon"
+# All-in-one calendars, tasks and scheduler
 cask "morgen"
+# To-do list and project management app
 cask "motion"
+# Reverse proxy, secure introspectable tunnels to localhost
 cask "ngrok"
+# Visual workspace for building with Codex and Claude Code
 cask "nimbalyst"
+# App to write, plan, collaborate, and get organised
 cask "notion"
+# Calendar for professionals and teams
 cask "notion-calendar"
+# Open-source software for live streaming and screen recording
 cask "obs"
+# Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# Replacement for Docker Desktop
 cask "orbstack"
+# SQL powered operating system instrumentation and analytics
 cask "osquery"
+# Desktop virtualization software
 cask "parallels"
+# Utility to uninstall apps and remove leftover files from old/uninstalled apps
 cask "pearcleaner"
+# Home media player
 cask "plex"
+# Peer to peer Bitorrent client
 cask "qbittorrent"
+# All-in-one bookmark manager
 cask "raindropio"
+# Archive manager for data compression and backups
 cask "rar"
+# Control your tools with a few keystrokes
 cask "raycast"
+# Spaced-repetition powered note-taking tool
 cask "remnote"
+# Modified browser that helps in responsive web development
 cask "responsively"
+# AI-powered writing assistant
 cask "rewritebar"
+# Open source virtual/remote desktop application
 cask "rustdesk"
-# SSH agent for Secure Enclave keys (git commit signing without prompts)
+# Store SSH keys in the Secure Enclave
 cask "secretive"
+# Collection of apps available by subscription
 cask "setapp"
+# Team communication and collaboration software
 cask "slack"
+# Music streaming service
 cask "spotify"
+# Video game digital distribution service
 cask "steam"
+# Mesh VPN based on WireGuard
 cask "tailscale-app"
-cask "yoshintame/cask/tana"
+cask "tana"
+# Voice communication client
 cask "teamspeak-client"
+# Messaging app with a focus on speed and security
 cask "telegram"
+# To-do & task list manager
 cask "ticktick"
+# Open-source code editor
 cask "visual-studio-code"
+# Voice to text app
 cask "voiceink"
+# Rust-based terminal
 cask "warp"
+# Native desktop client for WhatsApp
 cask "whatsapp"
+# REST, GraphQL and gRPC client
 cask "yaak"
+# Multiplayer code editor
 cask "zed"
+# Video communication and virtual meeting platform
 cask "zoom"
-mas "1Password for Safari", id: 1569813296
-mas "Caramba Switcher", id: 1565826179
-mas "Dropover", id: 1355679052
-mas "ExcalidrawZ", id: 6636493997
-mas "Klack", id: 6446206067
-mas "LINE", id: 539883307
-mas "OK JSON", id: 1576121509
-mas "PDFgear", id: 6469021132
-mas "Shadowrocket", id: 932747118
-mas "Worklog", id: 1668882560
-mas "Xcode", id: 497799835
 vscode "1password.op-vscode"
 vscode "aaron-bond.better-comments"
+vscode "advancer-limited.vscode-md-editor"
 vscode "antfu.file-nesting"
 vscode "anthropic.claude-code"
+vscode "arjuntic.markdown-diff-visualiser"
 vscode "arturock.gitstash"
 vscode "ayushagg31.cli-timeline"
 vscode "biomejs.biome"
@@ -231,8 +369,11 @@ vscode "eamodio.gitlens"
 vscode "ecmel.vscode-html-css"
 vscode "editorconfig.editorconfig"
 vscode "esbenp.prettier-vscode"
+vscode "fallow-rs.fallow-vscode"
 vscode "felipecaputo.git-project-manager"
+vscode "foam.foam-vscode"
 vscode "gantoreno.anysphere-plus"
+vscode "github.copilot-chat"
 vscode "github.remotehub"
 vscode "github.vscode-github-actions"
 vscode "golang.go"
@@ -249,7 +390,6 @@ vscode "joshbolduc.commitlint"
 vscode "kamadorueda.alejandra"
 vscode "koalamer.workspace-in-status-bar"
 vscode "kokakiwi.vscode-just"
-vscode "markdown-inline-preview.markdown-inline-preview"
 vscode "mayerwin.ai-agent-sound-notification"
 vscode "meganrogge.template-string-converter"
 vscode "mermaidchart.vscode-mermaid-chart"
@@ -264,9 +404,11 @@ vscode "ms-python.vscode-pylance"
 vscode "ms-python.vscode-python-envs"
 vscode "ms-vscode.remote-repositories"
 vscode "ms-vsliveshare.vsliveshare"
+vscode "mytooyodev.richdown"
 vscode "naumovs.color-highlight"
 vscode "ohanedan.lowlight-go-errors"
 vscode "openai.chatgpt"
+vscode "phine-apps.rich-markdown-diff"
 vscode "pojokcode.pcode-icon"
 vscode "prisma.prisma"
 vscode "redhat.vscode-yaml"
@@ -282,6 +424,7 @@ vscode "tamasfe.even-better-toml"
 vscode "tyriar.sort-lines"
 vscode "uctakeoff.vscode-counter"
 vscode "unifiedjs.vscode-mdx"
+vscode "velociraptor115.vscode-jj-graph"
 vscode "vincaslt.highlight-matching-tag"
 vscode "vitest.explorer"
 vscode "vspacecode.whichkey"
@@ -292,13 +435,19 @@ vscode "wholroyd.jinja"
 vscode "willasm.obsidian-md-vsc"
 vscode "wmaurer.change-case"
 vscode "wraith13.file-path-bar"
+vscode "xpenghans2.md-diff-preview"
 vscode "yoavbls.pretty-ts-errors"
 vscode "yoshintame.inlinemd-claude-bridge"
 vscode "yzhang.markdown-all-in-one"
-uv "ansible"
-uv "cc-conversation-search"
-uv "claude-conversation-extractor"
-uv "keymap-drawer"
-uv "poetry"
-uv "yamllint"
-uv "yt-dlp"
+mas "1Password for Safari", id: 1569813296
+mas "Caramba Switcher", id: 1565826179
+mas "Dropover", id: 1355679052
+mas "ExcalidrawZ", id: 6636493997
+mas "Happ", id: 6504287215
+mas "Klack", id: 6446206067
+mas "OK JSON", id: 1576121509
+mas "PDFgear", id: 6469021132
+mas "Shadowrocket", id: 932747118
+mas "TaskForge", id: 6744716215
+mas "Worklog", id: 1668882560
+mas "Xcode", id: 497799835

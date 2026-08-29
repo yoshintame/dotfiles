@@ -9,9 +9,13 @@
     "aicommits": "^1.11.0",
     "biome": "^0.3.3",
     "composerize": "^1.7.5",
+    "dbdiagram": "^0.2.0",
     "dotenv-cli": "^10.0.0",
+    "fallow": "^2.89.0",
     "flood": "^4.9.3",
     "opencommit": "^3.2.10",
+    "typescript": "^6.0.3",
+    "typescript-language-server": "^5.3.0",
     "vibe-kanban": "^0.1.29",
     "ynab-import": "^0.0.3"
   }

@@ -186,6 +186,8 @@ require("clipboard-history").start({
     proxy.paste_history5,
 })
 
+require("cc-draft-mirror").start()
+
 hs.loadSpoon("Zoom")
 local meetingDndActive = false
 local function setMeetingDnd(active)

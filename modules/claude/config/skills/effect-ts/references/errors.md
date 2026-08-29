@@ -127,6 +127,18 @@ const handler = userService.findById(id).pipe(
 // Client now sees generic 404 instead of `_tag: 'UserNotFoundError'`
 ```
 
+### Exception: CLI / TTY output
+
+CLI is the one boundary where you **must** remap — exit codes don't live on the error and the user sees plain text. Centralize in `internal/error-mapping.ts` so adding a new tag becomes a compile error in one file, not a scattered `catchTags` block in `main.ts`.
+
+```ts
+export const reportOf = (e: CliError): { exitCode: number; message: string } =>
+  Match.value(e).pipe(Match.tagsExhaustive({
+    ConfigLoadError: (e) => ({ exitCode: 2, message: `… ${e.path}` }),
+    FsError:         (e) => ({ exitCode: 4, message: `cannot ${e.op} ${e.path}` }),
+  }))
+```
+
 ## Inspect `Cause` at the terminal boundary
 
 Errors flowing into the failure channel are typed. But at the very top (telemetry, fatal handlers) you also want defects (unexpected throws) and interruption.

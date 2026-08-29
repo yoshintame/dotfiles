@@ -9,6 +9,7 @@ import { Config, ConfigProvider, Effect, Redacted } from 'effect'
 const config = Config.all({
   port: Config.integer('PORT').pipe(Config.withDefault(3000)),
   apiKey: Config.redacted('API_KEY'),
+  debug: Config.boolean('DEBUG').pipe(Config.withDefault(false)),
   logLevel: Config.literal('debug', 'info', 'warn', 'error')('LOG_LEVEL').pipe(
     Config.withDefault('info' as const),
   ),

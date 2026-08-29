@@ -2,7 +2,18 @@
 
 ## Parse unknown data at the boundary, not later
 
-Any data crossing into your program (HTTP body, LSP response, file contents, env, MCP tool result, queue message) is `unknown`. Parse it once, then downstream code is typed.
+Any data crossing into your program is `unknown`. Parse it once at the boundary, then downstream code is typed. Boundaries include:
+
+- HTTP request body / response body
+- LSP / RPC / WebSocket messages
+- File reads (config JSON, payee rules, fixtures, cached state)
+- Env vars / CLI args
+- MCP tool results
+- Queue / PubSub messages
+- **AI / LLM output** — the model may return malformed JSON even when prompted for strict schema
+- Subprocess stdout
+
+If it didn't originate inside your own typed code path, it's a boundary.
 
 ```ts
 // DO
@@ -29,6 +40,87 @@ const user = body as User                  // lie
 const user2 = body as unknown as User       // longer lie
 return yield* process(user)                 // crashes at runtime field access
 ```
+
+## Round-trip parse equality for strict format checks, not regex
+
+Regex matches the **shape**, not the **validity**. `^\d{4}-\d{2}-\d{2}$` accepts `2026-02-30`, `2026-13-01`, `2026-00-00`. Strict validation = parse and re-format; if it round-trips, it's valid.
+
+```ts
+// DO — strict ISO date validation via schema
+import { Schema } from 'effect'
+
+const IsoDate = Schema.DateFromString.pipe(
+  Schema.filter((d) => !Number.isNaN(d.getTime())),
+)
+
+const validated = yield* Schema.decodeUnknown(IsoDate)(input)
+// '2026-02-30' fails: parses to Invalid Date
+
+// DO — round-trip check for custom formats (e.g. `YYYY-MM-DD`)
+import { DateTime } from 'effect'
+
+const isValidYmd = (s: string): boolean => {
+  const parsed = DateTime.makeFromIsoString(s)
+  if (Option.isNone(parsed)) return false
+  return DateTime.formatIsoDate(parsed.value) === s
+}
+```
+
+```ts
+// DON'T — regex accepts impossible dates
+const isValidYmd = (s: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(s)
+isValidYmd('2026-02-30')  // ✅ passes regex
+isValidYmd('2026-13-01')  // ✅ passes regex
+// Both are invalid; consumer crashes later.
+```
+
+Same principle for: emails (parse via `Schema.String.pipe(Schema.pattern(...))` + post-parse normalize), URLs (`new URL(s).href === s`), UUIDs (`Schema.UUID` not regex).
+
+## Structural equality / dedup: use `Data` + `Equal` + `HashSet`, not JSON.stringify
+
+JS `===` is reference equality. For dedupping structural objects or comparing them in `.filter`/`.some`, reach for Effect's data + equality modules — not JSON.stringify hacks or hand-rolled deep-equal.
+
+```ts
+// DO — Data.struct wraps a plain shape with structural equality + hash
+import { Data, Equal, HashSet } from 'effect'
+
+const a = Data.struct({ ynabId: 'tx_1', sourceId: 'src_1' })
+const b = Data.struct({ ynabId: 'tx_1', sourceId: 'src_1' })
+Equal.equals(a, b)  // true
+
+// Dedup in O(n):
+const uniq = HashSet.fromIterable(matches.map(Data.struct)).pipe(HashSet.toReadonlyArray)
+```
+
+```ts
+// DO — Data.taggedEnum gives structural equality for free
+import { Data } from 'effect'
+
+type Match = Data.TaggedEnum<{
+  exact: { readonly ynabId: string; readonly sourceId: string }
+  fuzzy: { readonly ynabId: string; readonly sourceId: string; readonly score: number }
+}>
+const Match = Data.taggedEnum<Match>()
+
+const seen = HashSet.fromIterable([Match.exact({...}), Match.fuzzy({...})])
+HashSet.has(seen, Match.exact({...}))  // works structurally
+```
+
+```ts
+// DON'T — JSON.stringify dedup; O(n) stringification per item, sensitive to key order
+const uniq = Array.from(
+  new Map(items.map((x) => [JSON.stringify(x, Object.keys(x).sort()), x])).values(),
+)
+
+// DON'T — hand-rolled deep-equal in .some()
+const uniq = items.reduce<Item[]>((acc, x) => {
+  if (acc.some((y) => y.a === x.a && y.b === x.b && y.c === x.c)) return acc
+  return [...acc, x]
+}, [])
+// O(n²), forgets a field when shape grows, no shared semantics
+```
+
+For Map/Set keys: `Map<Data.Struct, V>` is **still reference-keyed** in plain JS. Use `HashMap` / `HashSet` from Effect for structural keying.
 
 ## Brand entity IDs
 

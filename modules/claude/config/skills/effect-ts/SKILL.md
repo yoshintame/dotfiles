@@ -17,6 +17,8 @@ This skill encodes **only the gap** between Claude's default code generation and
    - Writing tests → [references/testing.md](references/testing.md)
    - Forking, retries, resource lifecycle → [references/concurrency-and-resources.md](references/concurrency-and-resources.md)
    - Schema / branded types / parsing boundaries → [references/schema-and-boundaries.md](references/schema-and-boundaries.md)
+   - Discriminated unions / ADTs / `Match` → [references/pattern-matching.md](references/pattern-matching.md)
+   - **Before adding any dep or writing a Path A wrapper** → [references/effect-stdlib-first.md](references/effect-stdlib-first.md)
 3. **Run Effect Language Server diagnostics** on edited files: `bunx effect-language-service diagnostics --file <path>` (or `--project tsconfig.json`). Fixes diagnostics like `unnecessaryFailYieldableError`.
 
 ## Critical rules (DO / DON'T)
@@ -43,6 +45,11 @@ This skill encodes **only the gap** between Claude's default code generation and
 | **State in service** | `Ref.make(...)` inside service `effect:` body | `const ref = await Ref.make(...)` at module scope |
 | **Ref update** | `Ref.modify(ref, old => [result, next])` (atomic) | `Ref.get` → compute → `Ref.set` (race) |
 | **Branded IDs** | `Schema.UUID.pipe(Schema.brand('@app/UserId'))` | `type UserId = string` |
+| **Stdlib first** | `@effect/platform` (FileSystem, Path, HttpClient, Command), `Effect.DateTime`/`Duration`/`Clock`, `Schema`, `Match`, `Data.taggedEnum`, `Equal`/`HashSet`/`HashMap` | Path A wrapper over `node:fs` / manual `Date.UTC` math / `JSON.stringify` dedup / adding `date-fns` / `zod` / `lodash` |
+| **Strict format** | `Schema.decodeUnknown(IsoDate)(s)` or round-trip `format(parse(s)) === s` | regex `^\d{4}-\d{2}-\d{2}$` (passes `2026-02-30`) |
+| **Structural eq** | `Data.struct({...})` + `Equal.equals` / `HashSet.fromIterable(items.map(Data.struct))` | `JSON.stringify` dedup, hand-rolled deep-equal in `.some()` |
+| **ADT / tag dispatch** | `Match.discriminatorsExhaustive('kind')({...})` / `Data.taggedEnum` + `$match` | `switch (x.kind)` / `if (x.kind === 'a') … else if …` |
+| **Value-sets** | string `enum` + `Schema.Enums(E)` decode; `` `${E}` `` to bridge a string surface | `Schema.Literal('a','b')` for a value used *as a value* |
 | **Span attrs** | `Effect.withSpan('verb.target', { attributes: { id } })` | Interpolating dynamic data into span name |
 | **Tests** | `it.effect('...', Effect.fn(function* () {...}))` from `@effect/vitest` | `await Effect.runPromise(...)` inside vanilla `it` |
 | **Test config** | `Layer.setConfigProvider(ConfigProvider.fromMap(new Map([...])))` | Mutating `process.env` / mocking the `Config` service |
@@ -50,6 +57,7 @@ This skill encodes **only the gap** between Claude's default code generation and
 
 ## Anti-patterns (forbidden)
 
+- **Path A wrapper over `node:fs` / `node:path` / `node:child_process` / `Date` / `crypto`** — `@effect/platform` and Effect core already provide these. See [references/effect-stdlib-first.md](references/effect-stdlib-first.md) before writing any wrapper.
 - **`throw` inside `Effect.gen`** — bypasses error channel, can't be caught with `catchTag`. Always `yield* new MyError({...})`.
 - **`Effect.runSync` / `runPromise` inside a service** — breaks composition. Services return Effects; only the boundary runs them.
 - **`async`/`await` in a service method signature** — loses error channel, tracing, interruption. Wrap with `Effect.tryPromise`.

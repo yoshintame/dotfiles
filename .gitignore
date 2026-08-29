@@ -19,6 +19,10 @@ modules/claude/config/settings.backup-*.json
 
 node_modules
 
+# Python bytecode cache (analyze-permissions script)
+__pycache__/
+*.pyc
+
 # Decrypted SOPS render — real secrets, must never be tracked.
 # The live config renders to ~/.config/resticprofile/profiles.yaml;
 # this repo copy is a stray that leaked healthchecks UUIDs to the public

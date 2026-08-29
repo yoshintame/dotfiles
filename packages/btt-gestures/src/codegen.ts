@@ -1,4 +1,4 @@
-import { buildAction } from "./actions.ts";
+import { buildAction, buildSoundAction } from "./actions.ts";
 import { Trigger, TriggerClass } from "./triggers.ts";
 import type { Gesture } from "./schema.ts";
 
@@ -19,9 +19,14 @@ export interface BttTrigger {
 
 export interface BuildTriggerOptions {
   preset?: string;
+  sound?: string;
 }
 
 export function buildTrigger(gesture: Gesture, opts: BuildTriggerOptions = {}): BttTrigger {
+  const sound = gesture.sound ?? opts.sound;
+  const actions = [buildAction(gesture.action)];
+  if (sound) actions.push(buildSoundAction(sound));
+
   return {
     BTTTriggerType: Trigger[gesture.trigger],
     BTTTriggerClass: TriggerClass.trackpad,
@@ -29,8 +34,8 @@ export function buildTrigger(gesture: Gesture, opts: BuildTriggerOptions = {}): 
     BTTEnabled: 1,
     BTTEnabled2: 1,
     BTTOrder: 0,
-    BTTBelongsToApp: "Global",
+    BTTBelongsToApp: gesture.app ?? "Global",
     ...(opts.preset ? { BTTTriggerBelongsToPreset: opts.preset } : {}),
-    BTTActionsToExecute: [buildAction(gesture.action)],
+    BTTActionsToExecute: actions.map((a, i) => ({ ...a, BTTOrder: i })),
   };
 }

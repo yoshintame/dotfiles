@@ -3,6 +3,9 @@ webserver:
 
 preset: yoshintame
 
+feedback:
+  sound: Pop
+
 gestures:
   - id: clipboard.cut
     trigger: 3f-pinch-in
@@ -43,3 +46,27 @@ gestures:
   - id: system.volume-up
     trigger: 1f-tiptap-right
     action: { kind: volume-up }
+
+  # Per-app scope (BTTBelongsToApp) not supported via REST — BTT ignores the field
+  # in add_new_trigger. Per-app triggers must be created manually in BTT GUI.
+  # Backlog: spotify.prev-page (2F swipe right → Cmd+Alt+Left) and spotify.next-page
+  # (2F swipe left → Cmd+Alt+Right), scoped to com.spotify.client.
+
+  - id: launch-bar.show
+    trigger: 5f-tap
+    action:
+      kind: floating-menu
+      items:
+        # Apps
+        - { title: "1Password",  icon: "sfsymbol::lock.fill",                   app: "/Applications/1Password.app" }
+        - { title: "Arc",        icon: "sfsymbol::globe",                       app: "/Applications/Arc.app" }
+        - { title: "Telegram",   icon: "sfsymbol::paperplane.fill",             app: "/Applications/Telegram.app" }
+        - { title: "ChatGPT",    icon: "sfsymbol::bubble.left.and.bubble.right", app: "/Applications/ChatGPT.app" }
+        - { title: "Cursor",     icon: "sfsymbol::cursorarrow.rays",            app: "/Applications/Cursor.app" }
+        - { title: "Spotify",    icon: "sfsymbol::music.note",                  app: "/Applications/Spotify.app" }
+        - { title: "Discord",    icon: "sfsymbol::message.fill",                app: "/Applications/Discord.app" }
+        - { title: "Tana",       icon: "sfsymbol::doc.text",                    app: "/Applications/Tana.app" }
+        - { title: "Finder",     icon: "sfsymbol::folder.fill",                 app: "/System/Library/CoreServices/Finder.app" }
+        # URLs
+        - { title: "GitHub",     icon: "sfsymbol::chevron.left.forwardslash.chevron.right", url: "https://github.com/yoshintame" }
+        - { title: "YouTube",    icon: "sfsymbol::play.tv.fill",                url: "https://youtube.com" }

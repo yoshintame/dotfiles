@@ -31,6 +31,12 @@ export class BttClient {
     if (!res.ok) throw new Error(`add_new_trigger failed: ${res.status} ${await res.text()}`);
   }
 
+  public async updateTrigger(uuid: string, payload: BttTrigger): Promise<void> {
+    const url = this.buildUrl("/update_trigger/", { uuid, json: JSON.stringify(payload) });
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`update_trigger ${uuid} failed: ${res.status} ${await res.text()}`);
+  }
+
   public async deleteTrigger(uuid: string): Promise<void> {
     const url = this.buildUrl("/delete_trigger/", { uuid });
     const res = await fetch(url);

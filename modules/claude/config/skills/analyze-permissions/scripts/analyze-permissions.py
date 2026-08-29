@@ -320,6 +320,58 @@ def find_stale_directories(dirs: list[str]) -> list[tuple[str, str]]:
     return stale
 
 
+# --- allow-list ordering ---
+
+def allow_group(entry: str) -> int:
+    """Tool group index for an allow entry. Defines display order and the
+    blank-line separators written into settings.json."""
+    if entry.startswith("mcp__"):  return 6
+    if "(" not in entry:           return 0  # bare tools: Grep, WebSearch, WebFetch
+    if entry.startswith("Read("):  return 1
+    if entry.startswith("Edit("):  return 2
+    if entry.startswith("Write("): return 3
+    if entry.startswith("Bash("):  return 4
+    if entry.startswith("Skill("): return 5
+    return 7
+
+
+def sort_allow_list(allow: list[str]) -> list[str]:
+    """Deduplicate and sort the allow list by tool group, then alphabetically
+    (case-insensitive) within each group."""
+    return sorted(set(allow), key=lambda e: (allow_group(e), e.lower()))
+
+
+def dump_settings(data: dict) -> str:
+    """Serialize settings.json with a blank line between allow-list tool
+    groups. Blank lines are valid JSON whitespace; they make the curated
+    list readable and are re-established on every run."""
+    text = json.dumps(data, indent=2, ensure_ascii=False)
+    out: list[str] = []
+    in_allow = False
+    prev_group: int | None = None
+    for line in text.split("\n"):
+        stripped = line.strip()
+        if not in_allow:
+            out.append(line)
+            if stripped == '"allow": [':
+                in_allow, prev_group = True, None
+            continue
+        if stripped in ("]", "],"):
+            in_allow = False
+            out.append(line)
+            continue
+        value = stripped[:-1] if stripped.endswith(",") else stripped
+        try:
+            group = allow_group(json.loads(value))
+        except (json.JSONDecodeError, TypeError):
+            group = prev_group
+        if prev_group is not None and group != prev_group:
+            out.append("")
+        out.append(line)
+        prev_group = group
+    return "\n".join(out) + "\n"
+
+
 # Commands that should never be generalized to wildcard
 NEVER_GENERALIZE = {
     "rm", "rmdir", "ssh", "sudo", "kill", "killall",
@@ -478,6 +530,9 @@ def report_cleanup(allow_list: list[str]):
                 print(f"    ? {g}")
     else:
         print("\n  No hardcoded entries found.")
+
+    if allow_list != sort_allow_list(allow_list):
+        print("\n  Allow list is not grouped/sorted — --apply will reorder it.")
 
     return redundant, hardcoded
 
@@ -648,6 +703,10 @@ def apply_changes(
                 added.append(rule)
                 existing.add(rule)
 
+    # Deduplicate, sort into tool groups, alphabetize within each group
+    new_allow = sort_allow_list(new_allow)
+    reordered = new_allow != allow_list
+
     if removed:
         print(f"\n  Removed ({len(removed)}):")
         for r in sorted(removed):
@@ -663,7 +722,10 @@ def apply_changes(
         for d in removed_dirs:
             print(f"    - {d}")
 
-    if not removed and not added and not removed_dirs:
+    if reordered and not removed and not added:
+        print("\n  Allow list re-sorted into tool groups.")
+
+    if not removed and not added and not removed_dirs and not reordered:
         print("\n  No changes needed.")
         if total_count > 0:
             save_marker(total_count)
@@ -679,7 +741,7 @@ def apply_changes(
     settings["permissions"]["allow"] = new_allow
     if removed_dirs:
         settings["permissions"]["additionalDirectories"] = new_dirs
-    save_json(SETTINGS_PATH, settings)
+    SETTINGS_PATH.write_text(dump_settings(settings))
     print(f"  Updated: {SETTINGS_PATH}")
 
     if total_count > 0:

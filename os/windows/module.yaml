@@ -11,10 +11,10 @@
 
 - link:
     # git
-    ~/.gitconfig: modules/git/config/.gitconfig
+    ~/.gitconfig: modules/home/git/config/.gitconfig
 
     # starship
-    ~/.config/starship.toml: modules/starship/config/starship.toml
+    ~/.config/starship.toml: modules/home/starship/config/starship.toml
 
     # posh
     ~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1:  modules/posh/config/yoshintame.settings.ps1
@@ -25,26 +25,26 @@
 
     # vscode
     ~/AppData/Roaming/Code/User/:
-      path: modules/vscode/config/**
+      path: modules/home/vscode/config/**
       glob: true
 
     ~/AppData/Roaming/Cursor/User/:
-      path: modules/vscode/config/**
+      path: modules/home/vscode/config/**
       glob: true
 
     ~/.cursor/extensions/:
-      path: modules/vscode/theme/**
+      path: modules/home/vscode/theme/**
       glob: true
 
     ~/.vscode/extensions/:
-      path: modules/vscode/theme/**
+      path: modules/home/vscode/theme/**
       glob: true
 
     # yazi
     ~/.config/yazi/:
-      path: modules/yazi/config/**
+      path: modules/home/yazi/config/**
       glob: true
 
     ~/.config/yazi/scripts/:
-      path: modules/yazi/scripts/**
+      path: modules/home/yazi/scripts/**
       glob: true

@@ -42,7 +42,7 @@
       };
 
       checks = {
-        toplevel-lasthaze-server = evalToplevel "lasthaze-server" self.nixosConfigurations.lasthaze-server.config.system.build.toplevel;
+        toplevel-lasthaze-homelab = evalToplevel "lasthaze-homelab" self.nixosConfigurations.lasthaze-homelab.config.system.build.toplevel;
       }
       // lib.optionalAttrs (system == "aarch64-darwin") {
         toplevel-lasthaze-mbp = evalToplevel "lasthaze-mbp" self.darwinConfigurations.lasthaze-mbp.config.system.build.toplevel;

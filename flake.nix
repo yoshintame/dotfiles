@@ -49,6 +49,20 @@
         darwin = inputs.home-manager.darwinModules.home-manager;
         nixos = inputs.home-manager.nixosModules.home-manager;
       };
+      systemAspects = {
+        darwin = [
+          ./modules/darwin/macos-defaults
+          ./modules/darwin/homebrew
+          ./modules/darwin/linux-builder
+          ./modules/darwin/session-env
+        ];
+        nixos = [
+          ./modules/nixos/base
+          ./modules/nixos/ssh
+          ./modules/nixos/users
+          ./modules/nixos/sops-age-key
+        ];
+      };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
@@ -70,7 +84,7 @@
         };
 
         perClass = class: {
-          modules = [ homeManagerModule.${class} ];
+          modules = [ homeManagerModule.${class} ] ++ systemAspects.${class};
         };
 
         hosts = {
@@ -79,7 +93,10 @@
             class = "darwin";
             nixpkgs = inputs.nixpkgs-darwin;
             path = ./hosts/lasthaze-mbp;
-            specialArgs.flakeRoot = "/Users/yoshintame/.dotfiles";
+            specialArgs = {
+              flakeRoot = "/Users/yoshintame/.dotfiles";
+              hostFacts = import ./hosts/lasthaze-mbp/facts.nix;
+            };
             modules = [
               (
                 { lib, ... }:
@@ -90,10 +107,10 @@
             ];
           };
 
-          lasthaze-server = {
+          lasthaze-homelab = {
             arch = "x86_64";
             class = "nixos";
-            path = ./hosts/lasthaze-server;
+            path = ./hosts/lasthaze-homelab;
             specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
           };
         };

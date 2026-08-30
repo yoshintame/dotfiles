@@ -40,8 +40,8 @@ in
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --bg --http=80 http://127.0.0.1:${toString config.homelab.services.actual.port}";
-      ExecStop = "${pkgs.tailscale}/bin/tailscale serve --http=80 off";
+      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --bg --https=443 http://127.0.0.1:${toString config.homelab.services.actual.port}";
+      ExecStop = "${pkgs.tailscale}/bin/tailscale serve --https=443 off";
     };
   };
 

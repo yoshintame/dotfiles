@@ -3,9 +3,9 @@
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
 
-[submodule "modules/vscode/theme/true-vibrant-vscode-theme"]
+[submodule "modules/home/vscode/theme/true-vibrant-vscode-theme"]
 	path = modules/home/vscode/theme/true-vibrant-vscode-theme
 	url = git@github.com:Yoshintame/true-vibrant-vscode-theme.git
-[submodule "modules/karabiner/config"]
+[submodule "modules/home/karabiner/config"]
 	path = modules/home/karabiner/config
 	url = git@github.com:Yoshintame/karabiner-config.git

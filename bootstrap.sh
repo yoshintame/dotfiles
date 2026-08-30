@@ -27,13 +27,13 @@ Usage: bootstrap.sh <host>
 
 Hosts defined in flake.nix:
   lasthaze-mbp       macOS (aarch64-darwin), nix-darwin + home-manager
-  lasthaze-server    Linux (x86_64-linux), NixOS + home-manager
+  lasthaze-homelab   Linux (x86_64-linux), NixOS + home-manager
 
 Examples:
   bash bootstrap.sh lasthaze-mbp                     # macOS user-machine
-  bash bootstrap.sh lasthaze-server                  # NixOS server (after nixos-install)
+  bash bootstrap.sh lasthaze-homelab                 # NixOS server (after nixos-install)
 
-For lasthaze-server: install NixOS first (via nixos-anywhere or installer ISO),
+For lasthaze-homelab: install NixOS first (via nixos-anywhere or installer ISO),
 then run this script on the server. age-key is auto-derived from SSH host key
 on first boot via systemd oneshot (Tier 1b in bootstrap-secret-strategies vault note).
 EOF
@@ -97,7 +97,7 @@ source_nix_env() {
 
 is_nixos_host() {
   case "$1" in
-    lasthaze-server) return 0 ;;
+    lasthaze-homelab) return 0 ;;
     *) return 1 ;;
   esac
 }

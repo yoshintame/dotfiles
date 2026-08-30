@@ -1,14 +1,5 @@
-{
-  config,
-  pkgs,
-  myLib,
-  ...
-}:
+{ config, myLib, ... }:
 myLib.mkModule config "vscode" {
-  home.packages = [
-    pkgs.tmux
-  ];
-
   nixDotbot.links = {
     "~/Library/Application Support/Cursor/User/" = {
       path = "modules/home/vscode/config/**";

@@ -1,8 +1,8 @@
 .DS_Store
 .clj-kondo
 .lsp
-modules/git/config/config-sber
-modules/git/config/config-vtb
+modules/home/git/config/config-sber
+modules/home/git/config/config-vtb
 
 # Ignore build outputs from performing a nix-build or `nix build` command
 result
@@ -15,7 +15,7 @@ result-*
 .pre-commit-config.yaml
 
 # Claude permission analyzer backups
-modules/claude/config/settings.backup-*.json
+modules/home/claude/config/settings.backup-*.json
 
 # VSCode workspace state (was polluted by markdown-inline-preview extension)
 /.vscode/
@@ -30,4 +30,4 @@ __pycache__/
 # The live config renders to ~/.config/resticprofile/profiles.yaml;
 # this repo copy is a stray that leaked healthchecks UUIDs to the public
 # mirror. Ignored so `dot:rebuild`'s `git add -A` can't re-stage it.
-modules/resticprofile/config/profiles.yaml
+modules/home/resticprofile/config/profiles.yaml

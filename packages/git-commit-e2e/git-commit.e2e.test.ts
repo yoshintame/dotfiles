@@ -17,10 +17,10 @@ const packageDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(packageDir, "../..");
 const commitContext = join(
   repoRoot,
-  "modules/agents-shared/config/skills/git-commit/scripts/gather-context.v5.sh",
+  "modules/home/agents-shared/config/skills/git-commit/scripts/gather-context.v5.sh",
 );
-const commitEdit = join(repoRoot, "modules/git/bin/git-commit-edit");
-const commitAtomic = join(repoRoot, "modules/git/bin/git-commit-atomic");
+const commitEdit = join(repoRoot, "modules/home/git/bin/git-commit-edit");
+const commitAtomic = join(repoRoot, "modules/home/git/bin/git-commit-atomic");
 const tmpRoots: string[] = [];
 
 function run(

@@ -11,5 +11,5 @@
     "types": ["bun", "node"]
   },
   "include": ["modules/**/*.ts"],
-  "exclude": ["**/node_modules", "modules/karabiner", "modules/vscode/theme"]
+  "exclude": ["**/node_modules", "modules/home/karabiner", "modules/home/vscode/theme"]
 }

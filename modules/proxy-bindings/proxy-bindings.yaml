@@ -1,6 +1,6 @@
 outputs:
-  lua: ../hammerspoon/config/generated/proxy-bindings.lua
-  typescript: ../karabiner/config/src/generated/proxy-bindings.ts
+  lua: ../home/hammerspoon/config/generated/proxy-bindings.lua
+  typescript: ../home/karabiner/config/src/generated/proxy-bindings.ts
 
 bindings:
   # Text processing (RewriteBar)

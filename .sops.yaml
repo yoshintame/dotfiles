@@ -1,3 +1,14 @@
+keys:
+  - &yoshintame age1eedzyp9gqp7qptesdq4yj2nmpxqc0smqgckmrlldn8qvuqrfds5suwkk2n
+  - &homelab-host age1u83d9jdfe6xn2fkr0ek7raczg0r57qpqpnlpl8stt7pvfc893qeqtslaus
+
 creation_rules:
+  - path_regex: secrets/homelab/.*\.yaml$
+    key_groups:
+      - age:
+          - *yoshintame
+          - *homelab-host
   - path_regex: secrets\.yaml$
-    age: age1eedzyp9gqp7qptesdq4yj2nmpxqc0smqgckmrlldn8qvuqrfds5suwkk2n
+    key_groups:
+      - age:
+          - *yoshintame

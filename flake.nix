@@ -44,6 +44,7 @@
       ...
     }:
     let
+      myLib = import ./lib { inherit (inputs.nixpkgs) lib; };
       homeManagerModule = {
         darwin = inputs.home-manager.darwinModules.home-manager;
         nixos = inputs.home-manager.nixosModules.home-manager;
@@ -63,7 +64,10 @@
       ];
 
       easy-hosts = {
-        shared.modules = [ ./modules/home-manager.nix ];
+        shared = {
+          modules = [ ./modules/home-manager.nix ];
+          specialArgs = { inherit myLib; };
+        };
 
         perClass = class: {
           modules = [ homeManagerModule.${class} ];

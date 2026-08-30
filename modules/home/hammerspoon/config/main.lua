@@ -178,6 +178,16 @@ local function toggleFloatMaximize()
 end
 hs.hotkey.bind({ "alt" }, "F", toggleFloatMaximize)
 
+local function newDraft(ext)
+    local dir = os.getenv("HOME") .. "/.local/share/cc-drafts"
+    hs.execute("/bin/mkdir -p '" .. dir .. "'")
+    local path = dir .. "/draft-" .. os.date("%Y-%m-%d--%H-%M-%S") .. "." .. (ext or "md")
+    local f = io.open(path, "w")
+    if f then f:close() end
+    hs.task.new("/usr/bin/open", nil, { "-a", "Visual Studio Code", path }):start()
+end
+hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
+
 require("clipboard-history").start({
     proxy.paste_history1,
     proxy.paste_history2,
@@ -185,8 +195,6 @@ require("clipboard-history").start({
     proxy.paste_history4,
     proxy.paste_history5,
 })
-
-require("cc-draft-mirror").start()
 
 hs.loadSpoon("Zoom")
 local meetingDndActive = false

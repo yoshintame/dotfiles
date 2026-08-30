@@ -14,8 +14,6 @@ in
 
   system.stateVersion = "25.05";
 
-  virtualisation.docker.enable = true;
-
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   homelab.services = {

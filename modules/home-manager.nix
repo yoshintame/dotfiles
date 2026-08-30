@@ -64,6 +64,7 @@
       ./home/resticprofile
       ./home/serena
       ./home/starship
+      ./home/tig
       ./home/tmux
       ./home/uv
       ./home/vscode

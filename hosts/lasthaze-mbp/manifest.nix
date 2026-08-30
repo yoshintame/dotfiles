@@ -43,6 +43,7 @@
     "resticprofile"
     "serena"
     "starship"
+    "tig"
     "tmux"
     "uv"
     "vscode"

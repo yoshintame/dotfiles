@@ -1,4 +1,9 @@
-{ flakeRoot, ... }:
+{
+  flakeRoot,
+  pkgs,
+  config,
+  ...
+}:
 let
   username = "yoshintame";
   homeDir = "/home/${username}";
@@ -22,6 +27,22 @@ in
     actual.enable = true;
     archivebox.enable = false;
     paperless.enable = false;
+  };
+
+  systemd.services.actual-tailscale-serve = {
+    description = "Expose Actual over the tailnet (tailscale serve, HTTP)";
+    after = [
+      "tailscaled.service"
+      "arion-homelab.service"
+    ];
+    wants = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --bg --http=80 http://127.0.0.1:${toString config.homelab.services.actual.port}";
+      ExecStop = "${pkgs.tailscale}/bin/tailscale serve --http=80 off";
+    };
   };
 
   home-manager.users.${username} = {

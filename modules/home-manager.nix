@@ -3,6 +3,7 @@
   lib,
   inputs,
   flakeRoot,
+  myLib,
   ...
 }:
 {
@@ -12,7 +13,7 @@
     backupFileExtension = lib.mkDefault "bkp";
 
     extraSpecialArgs = {
-      inherit flakeRoot;
+      inherit flakeRoot myLib;
       pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
       sopsRefs = import ../lib/sopsRefs.nix { inherit lib; };
     };

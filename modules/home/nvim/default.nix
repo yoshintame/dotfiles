@@ -4,6 +4,11 @@ myLib.mkModule config "nvim" {
   #   pkgs.nvim
   # ];
 
+  home.shellAliases = {
+    vi = "nvim";
+    vim = "nvim";
+  };
+
   nixDotbot.links = {
     "~/.config/nvim/" = {
       path = "modules/home/nvim/config/**";

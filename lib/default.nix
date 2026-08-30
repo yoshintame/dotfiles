@@ -8,4 +8,10 @@
   disabled = {
     enable = false;
   };
+
+  enableList =
+    names:
+    lib.genAttrs names (_: {
+      enable = true;
+    });
 }

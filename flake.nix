@@ -1,8 +1,23 @@
 {
+  description = "yoshintame dotfiles — nix-darwin + home-manager on flake-parts + easy-hosts";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    easy-hosts.url = "github:tgirlcloud/easy-hosts";
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.05";
@@ -20,64 +35,64 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nixpkgs-unstable,
-    nixpkgs-darwin,
-    nix-darwin,
-    home-manager,
-    sops-nix,
-    ...
-  } @ inputs: let
-    flakeRootDarwin = "/Users/yoshintame/.dotfiles";
-    flakeRootLinux = "/home/yoshintame/.dotfiles";
-  in {
-    darwinConfigurations.lasthaze-mbp = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      modules = [
-        home-manager.darwinModules.home-manager
-        ./hosts/lasthaze-mbp
-        {
-          _module.args.inputs = inputs;
-
-          home-manager.extraSpecialArgs = {
-            flakeRoot = flakeRootDarwin;
-            pkgs-unstable = nixpkgs-unstable.legacyPackages.aarch64-darwin;
-          };
-          home-manager.sharedModules = [
-            ./lib/nix-link.nix
-            sops-nix.homeManagerModules.sops
-            ./modules/sops-templates
-          ];
-        }
-      ];
-    };
-
-    nixosConfigurations.lasthaze-server = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {
-        inherit inputs;
-        flakeRoot = flakeRootLinux;
+  outputs =
+    inputs@{
+      flake-parts,
+      easy-hosts,
+      treefmt-nix,
+      git-hooks,
+      ...
+    }:
+    let
+      homeManagerModule = {
+        darwin = inputs.home-manager.darwinModules.home-manager;
+        nixos = inputs.home-manager.nixosModules.home-manager;
       };
-      modules = [
-        home-manager.nixosModules.home-manager
-        ./hosts/lasthaze-server
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "bkp";
-          home-manager.extraSpecialArgs = {
-            flakeRoot = flakeRootLinux;
-            pkgs-unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
-          };
-          home-manager.sharedModules = [
-            ./lib/nix-link.nix
-            sops-nix.homeManagerModules.sops
-            ./modules/sops-templates
-          ];
-        }
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        easy-hosts.flakeModule
+        treefmt-nix.flakeModule
+        git-hooks.flakeModule
+        ./parts/dev.nix
       ];
+
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
+
+      easy-hosts = {
+        shared.modules = [ ./modules/home-manager.nix ];
+
+        perClass = class: {
+          modules = [ homeManagerModule.${class} ];
+        };
+
+        hosts = {
+          lasthaze-mbp = {
+            arch = "aarch64";
+            class = "darwin";
+            nixpkgs = inputs.nixpkgs-darwin;
+            path = ./hosts/lasthaze-mbp;
+            specialArgs.flakeRoot = "/Users/yoshintame/.dotfiles";
+            modules = [
+              (
+                { lib, ... }:
+                {
+                  networking.hostName = lib.mkForce null;
+                }
+              )
+            ];
+          };
+
+          lasthaze-server = {
+            arch = "x86_64";
+            class = "nixos";
+            path = ./hosts/lasthaze-server;
+            specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
+          };
+        };
+      };
     };
-  };
 }

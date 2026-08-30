@@ -1,6 +1,6 @@
 { config, myLib, ... }:
 myLib.mkModule config "iina" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/Library/Application Support/com.colliderli.iina/" = {
       path = "modules/home/iina/config/**";
       glob = true;

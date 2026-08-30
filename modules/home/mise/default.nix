@@ -59,7 +59,7 @@ myLib.mkModule config "mise" {
     dsb = "dot sops-bootstrap";
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/mise/config.toml" = "modules/home/mise/config/config.toml";
     "~/.config/mise/tasks/dot.toml" = "dot.toml";
   };

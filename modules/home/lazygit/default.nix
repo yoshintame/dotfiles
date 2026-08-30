@@ -13,7 +13,7 @@ myLib.mkModule config "lazygit" {
     lg = "lazygit";
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/lazygit" = "modules/home/lazygit/config";
   };
 }

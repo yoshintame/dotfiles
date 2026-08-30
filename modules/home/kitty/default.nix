@@ -1,6 +1,6 @@
 { config, myLib, ... }:
 myLib.mkModule config "kitty" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/kitty" = "modules/home/kitty/config";
   };
 }

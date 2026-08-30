@@ -13,7 +13,7 @@ myLib.mkModule config "atuin" {
     enableZshIntegration = true;
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/atuin" = "modules/home/atuin/config";
   };
 }

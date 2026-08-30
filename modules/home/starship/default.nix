@@ -7,7 +7,7 @@ myLib.mkModule config "starship" {
     enableZshIntegration = true;
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/starship.toml" = "modules/home/starship/config/starship.toml";
   };
 }

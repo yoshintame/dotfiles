@@ -1,8 +1,8 @@
 # Нативная замена nix-dotbot: живые симлинки через home-manager, без dotbot.
-# Drop-in для DSL `nixDotbot` — модули-потребители не меняются.
+# Drop-in для DSL `nixLink` — модули-потребители не меняются.
 { config, lib, ... }:
 let
-  cfg = config.nixDotbot;
+  cfg = config.nixLink;
   mkOOS = config.lib.file.mkOutOfStoreSymlink;
 
   forceOn = cfg.defaults.link.force or false; # create/relink нативны (no-op)
@@ -66,7 +66,7 @@ let
       { ${toKey dest} = entry "${cfg.dotfilesDir}/${value.path}"; };
 in
 {
-  options.nixDotbot = {
+  options.nixLink = {
     enable = lib.mkEnableOption "native live-symlink linking (dotbot-free)";
     dotfilesDir = lib.mkOption {
       type = lib.types.str;

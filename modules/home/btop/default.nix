@@ -9,7 +9,7 @@ myLib.mkModule config "btop" {
     pkgs.btop
   ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/btop" = "modules/home/btop/config";
   };
 }

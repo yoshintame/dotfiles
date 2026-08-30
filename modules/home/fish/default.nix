@@ -55,7 +55,7 @@ myLib.mkModule config "fish" {
     ripgrep
   ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/fish/" = {
       path = "modules/home/fish/config/**";
       glob = true;

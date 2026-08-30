@@ -9,7 +9,7 @@ myLib.mkModule config "tmux" {
     pkgs.tmux
   ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/tmux/" = {
       path = "modules/home/tmux/config/**";
       glob = true;

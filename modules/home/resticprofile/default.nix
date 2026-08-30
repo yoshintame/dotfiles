@@ -16,7 +16,7 @@ in
 myLib.mkModule config "resticprofile" {
   home.packages = [ rpCli ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/resticprofile/logrotate.conf" = "modules/home/resticprofile/config/logrotate.conf";
     "~/.config/mise/tasks/rp.toml" = "modules/home/resticprofile/config/rp.toml";
   };

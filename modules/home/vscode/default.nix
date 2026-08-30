@@ -6,7 +6,7 @@ myLib.mkModule config "vscode" {
     ee = "code --wait .";
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/Library/Application Support/Cursor/User/" = {
       path = "modules/home/vscode/config/**";
       glob = true;

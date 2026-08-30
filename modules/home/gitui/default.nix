@@ -9,7 +9,7 @@ myLib.mkModule config "gitui" {
     pkgs.gitui
   ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/gitui" = "modules/home/gitui/config";
   };
 }

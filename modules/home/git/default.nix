@@ -9,7 +9,7 @@ myLib.mkModule config "git" {
     pkgs.git
   ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/git" = "modules/home/git/config";
     "~/.local/bin/" = {
       path = "modules/home/git/bin/**";

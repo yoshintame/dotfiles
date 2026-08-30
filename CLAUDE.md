@@ -4,7 +4,7 @@
 
 Декларативный конфиг macOS/Linux в три слоя: **Nix** (nix-darwin + home-manager, пакеты и системные настройки) + **nix-link** (нативные живые симлинки конфигов, `lib/nix-link.nix`) + **sops-templates** (секреты). Реально активен только хост `lasthaze-mbp` (aarch64-darwin); прочие хосты в README — планы.
 
-- **Модуль** = `modules/{home,darwin,nixos}/<name>/default.nix`, обёрнут в `myLib.mkModule config "<name>" { … }`: объявляет `my.<name>.enable`, а тело (пакеты + `nixDotbot.links` вида `"~/.config/x" = "modules/home/x/config"`, glob — `{ path = "...**"; glob = true; }`) активно только при `my.<name>.enable = true`. Импорт инертен; включает модуль манифест хоста `hosts/<host>/manifest.nix` (`myLib.enableList [ … ]`). Опция линков всё ещё называется `nixDotbot.links` (переименование в `nix-link` не сделано).
+- **Модуль** = `modules/{home,darwin,nixos}/<name>/default.nix`, обёрнут в `myLib.mkModule config "<name>" { … }`: объявляет `my.<name>.enable`, а тело (пакеты + `nixLink.links` вида `"~/.config/x" = "modules/home/x/config"`, glob — `{ path = "...**"; glob = true; }`) активно только при `my.<name>.enable = true`. Импорт инертен; включает модуль манифест хоста `hosts/<host>/manifest.nix` (`myLib.enableList [ … ]`). Опция линков — `nixLink.links` (модуль `lib/nix-link.nix`).
 - **Симлинки живые и двусторонние:** настоящий файл лежит в репо, путь в системе (`~/.config/<x>`) — симлинк на него. Правишь конфиг инструмента → правишь файл репозитория, и наоборот.
 - **Применить изменения:** `mise run dot:rebuild` (= `git add -A && sudo darwin-rebuild switch --impure --flake .#lasthaze-mbp`). Два неочевидных момента: (1) флейк видит только **git-tracked** файлы — новый файл без `git add` не подхватится (для этого в задаче есть `git add -A`); (2) `--impure` **обязателен** — иначе sops-секреты молча не рендерятся (гейт по наличию age-ключа на диске).
 - **Секреты:** `lib/sops-templates` рендерит `*.tmpl` → файл, подставляя `${VAR}` из sops-зашифрованного `secrets.yaml` (age). Декларируется через опцию `sopsTemplates.render`.
@@ -12,9 +12,9 @@
 
 ## Правка симлинкнутых конфигов
 
-Записи `nixDotbot.links` в `modules/home/*/default.nix` — живые симлинки: **оригинал в репо, путь в системе — симлинк на него** (резолвится через `readlink -f`). Правка содержимого уже слинкованного файла видна сразу.
+Записи `nixLink.links` в `modules/home/*/default.nix` — живые симлинки: **оригинал в репо, путь в системе — симлинк на него** (резолвится через `readlink -f`). Правка содержимого уже слинкованного файла видна сразу.
 
-Перематериализация нужна **только** при изменении самой `nixDotbot.links` или при добавлении файла под glob-link:
+Перематериализация нужна **только** при изменении самой `nixLink.links` или при добавлении файла под glob-link:
 
 - **Folder-link** (`"~/.config/x" = "modules/home/x/config"`) — симлинк на **саму папку**: добавление/удаление файлов внутри видно сразу.
 - **Glob-link** (`{ path = "...**"; glob = true; }`) — папка реальная, внутри пофайловые симлинки с момента сборки → **новый файл не слинкуется до перематериализации**.

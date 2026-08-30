@@ -2,10 +2,11 @@
   pkgs-unstable ? pkgs,
   pkgs,
   ...
-}: let
+}:
+let
   mkMiseCli = import ../../lib/mkMiseCli.nix {
     inherit pkgs;
-    mise = pkgs-unstable.mise;
+    inherit (pkgs-unstable) mise;
   };
 
   dotCli = mkMiseCli {
@@ -18,7 +19,8 @@
       }
     ];
   };
-in {
+in
+{
   programs.mise = {
     enable = true;
     package = pkgs-unstable.mise;
@@ -27,7 +29,7 @@ in {
     enableZshIntegration = true;
   };
 
-  home.packages = [dotCli];
+  home.packages = [ dotCli ];
 
   programs.fish.functions.dot = {
     description = "Dotfiles management (fish UX wrapper over `dot` binary)";

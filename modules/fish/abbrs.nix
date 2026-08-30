@@ -1,4 +1,4 @@
-{...}: {
+_: {
   programs.fish.shellAbbrs = {
     # brew
     b = "brew";

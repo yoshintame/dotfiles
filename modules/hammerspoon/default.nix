@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   nixDotbot.links = {
     "~/.hammerspoon/" = {
       path = "modules/hammerspoon/config/**";

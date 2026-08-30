@@ -1,20 +1,31 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   username = "yoshintame";
   keyDir = "/home/${username}/.config/sops/age";
   keyPath = "${keyDir}/keys.txt";
   hostKey = "/etc/ssh/ssh_host_ed25519_key";
-in {
+in
+{
   systemd.services.sops-age-key-bootstrap = {
     description = "Derive user-level age key from SSH host key for sops-templates (Variant A)";
-    wantedBy = ["multi-user.target"];
-    after = ["sshd.service" "local-fs.target"];
-    requires = ["sshd.service"];
+    wantedBy = [ "multi-user.target" ];
+    after = [
+      "sshd.service"
+      "local-fs.target"
+    ];
+    requires = [ "sshd.service" ];
 
     unitConfig = {
-      ConditionPathExists = ["!${keyPath}" hostKey];
+      ConditionPathExists = [
+        "!${keyPath}"
+        hostKey
+      ];
     };
 
-    path = [pkgs.ssh-to-age pkgs.coreutils];
+    path = [
+      pkgs.ssh-to-age
+      pkgs.coreutils
+    ];
 
     serviceConfig = {
       Type = "oneshot";

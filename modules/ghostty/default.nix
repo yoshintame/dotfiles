@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   nixDotbot.links = {
     "~/.config/ghostty" = "modules/ghostty/config";
   };

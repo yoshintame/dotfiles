@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   homeDir = "/Users/yoshintame";
 in
@@ -53,7 +53,7 @@ in
       minimize-to-application = true;
       mouse-over-hilite-stack = true;
       mru-spaces = false;
-      persistent-apps = [];
+      persistent-apps = [ ];
       show-process-indicators = true;
       show-recents = false;
       showhidden = true;
@@ -170,7 +170,7 @@ in
         NewWindowBehavior = 0;
         OpenNewTabsInFront = false;
         PreloadTopHit = false;
-        ProxiesInBookmarksBar = [];
+        ProxiesInBookmarksBar = [ ];
         ReadingListSaveArticlesOfflineAutomatically = false;
         SendDoNotTrackHTTPHeader = true;
         ShowFavoritesBar = false;
@@ -216,7 +216,7 @@ in
       "com.apple.Terminal" = {
         SecureKeyboardEntry = true;
         ShowLineMarks = 0;
-        StringEncodings = [4];
+        StringEncodings = [ 4 ];
       };
 
       "com.apple.TimeMachine" = {
@@ -323,34 +323,70 @@ in
 
       "com.apple.symbolichotkeys" = {
         AppleSymbolicHotKeys = {
-          "21" = { enabled = false; };
-          "28" = { enabled = false; };
-          "29" = { enabled = false; };
-          "30" = { enabled = false; };
-          "31" = { enabled = false; };
-          "52" = { enabled = false; };
-          "59" = { enabled = false; };
+          "21" = {
+            enabled = false;
+          };
+          "28" = {
+            enabled = false;
+          };
+          "29" = {
+            enabled = false;
+          };
+          "30" = {
+            enabled = false;
+          };
+          "31" = {
+            enabled = false;
+          };
+          "52" = {
+            enabled = false;
+          };
+          "59" = {
+            enabled = false;
+          };
           "60" = {
             enabled = true;
             value = {
               type = "standard";
-              parameters = [32 49 1048576];
+              parameters = [
+                32
+                49
+                1048576
+              ];
             };
           };
           "61" = {
             enabled = false;
             value = {
               type = "standard";
-              parameters = [32 49 786432];
+              parameters = [
+                32
+                49
+                786432
+              ];
             };
           };
-          "64" = { enabled = false; };
-          "65" = { enabled = false; };
-          "79" = { enabled = false; };
-          "80" = { enabled = false; };
-          "81" = { enabled = false; };
-          "82" = { enabled = false; };
-          "184" = { enabled = false; };
+          "64" = {
+            enabled = false;
+          };
+          "65" = {
+            enabled = false;
+          };
+          "79" = {
+            enabled = false;
+          };
+          "80" = {
+            enabled = false;
+          };
+          "81" = {
+            enabled = false;
+          };
+          "82" = {
+            enabled = false;
+          };
+          "184" = {
+            enabled = false;
+          };
         };
       };
 
@@ -379,7 +415,10 @@ in
       };
 
       NSGlobalDomain = {
-        AppleLanguages = ["en-RU" "ru-RU"];
+        AppleLanguages = [
+          "en-RU"
+          "ru-RU"
+        ];
         AppleLocale = "en_RU";
         QLPanelAnimationDuration = 0;
         TSMLanguageIndicatorEnabled = false;

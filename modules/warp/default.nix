@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   nixDotbot.links = {
     "~/.warp/" = {
       path = "modules/warp/config/**";

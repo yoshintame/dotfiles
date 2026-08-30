@@ -2,7 +2,8 @@
   pkgs,
   pkgs-unstable ? pkgs,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     pkgs-unstable.yazi
 

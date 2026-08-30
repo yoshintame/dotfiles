@@ -1,10 +1,13 @@
-{...}: {
+_: {
   programs.fzf = {
     enable = true;
     enableFishIntegration = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
-    defaultOptions = ["--multi" "--layout=reverse"];
+    defaultOptions = [
+      "--multi"
+      "--layout=reverse"
+    ];
     colors = {
       "bg+" = "#313244";
       "spinner" = "#f5e0dc";

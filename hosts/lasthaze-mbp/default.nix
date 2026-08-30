@@ -1,9 +1,9 @@
 {
   pkgs,
-  inputs,
   lib,
   ...
-}: let
+}:
+let
   username = "yoshintame";
   homeDir = "/Users/${username}";
   sharedEnv = {
@@ -41,26 +41,34 @@
     "/usr/sbin"
     "/sbin"
   ];
-  fullEnv =
-    sharedEnv
-    // {
-      PATH = builtins.concatStringsSep ":" sharedPath;
-    };
+  fullEnv = sharedEnv // {
+    PATH = builtins.concatStringsSep ":" sharedPath;
+  };
 
-in {
-  imports = [./macos-defaults.nix];
+in
+{
+  imports = [ ./macos-defaults.nix ];
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-  nix.settings.trusted-users = ["@admin" username];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  nix.settings.trusted-users = [
+    "@admin"
+    username
+  ];
   nix.channel.enable = false;
 
   nix.linux-builder = {
     enable = true;
     ephemeral = true;
     maxJobs = 4;
-    systems = ["aarch64-linux" "x86_64-linux"];
+    systems = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     config = {
-      boot.binfmt.emulatedSystems = ["x86_64-linux"];
+      boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
       virtualisation = {
         cores = 4;
         darwin-builder = {
@@ -114,24 +122,22 @@ in {
       cleanup = "uninstall";
       autoUpdate = false;
       upgrade = false;
-      extraFlags = ["--force-cleanup"];
+      extraFlags = [ "--force-cleanup" ];
     };
     global.brewfile = false;
     extraConfig = builtins.readFile ./packages/Brewfile;
   };
 
-  environment.variables =
-    sharedEnv
-    // {
-      HOMEBREW_PREFIX = "/opt/homebrew";
-      HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
-      HOMEBREW_REPOSITORY = "/opt/homebrew";
-      HOMEBREW_NO_ANALYTICS = "1";
-      HOMEBREW_NO_ENV_HINTS = "1";
-      HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
-      HOMEBREW_BUNDLE_DUMP_NO_GO = "1";
-      HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
-    };
+  environment.variables = sharedEnv // {
+    HOMEBREW_PREFIX = "/opt/homebrew";
+    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+    HOMEBREW_REPOSITORY = "/opt/homebrew";
+    HOMEBREW_NO_ANALYTICS = "1";
+    HOMEBREW_NO_ENV_HINTS = "1";
+    HOMEBREW_BUNDLE_FILE = "${homeDir}/.config/packages/Brewfile";
+    HOMEBREW_BUNDLE_DUMP_NO_GO = "1";
+    HOMEBREW_BUNDLE_DUMP_NO_NPM = "1";
+  };
 
   launchd.user.envVariables = fullEnv;
 
@@ -142,9 +148,7 @@ in {
         "/bin/sh"
         "-c"
         (builtins.concatStringsSep " ; " (
-          lib.mapAttrsToList
-          (name: value: "launchctl setenv ${name} ${lib.escapeShellArg value}")
-          fullEnv
+          lib.mapAttrsToList (name: value: "launchctl setenv ${name} ${lib.escapeShellArg value}") fullEnv
         ))
       ];
       RunAtLoad = true;
@@ -159,7 +163,7 @@ in {
         "${pkgs.python3}/bin/python3"
         "${homeDir}/.local/bin/claude-code-patch"
       ];
-      WatchPaths = ["${homeDir}/.vscode/extensions"];
+      WatchPaths = [ "${homeDir}/.vscode/extensions" ];
       RunAtLoad = true;
       StandardOutPath = "/tmp/claude-code-patch.log";
       StandardErrorPath = "/tmp/claude-code-patch.err";
@@ -171,93 +175,97 @@ in {
     useUserPackages = true;
     backupFileExtension = "bkp";
 
-    users.${username} = {
-      pkgs,
-      flakeRoot,
-      ...
-    }: {
-      imports = [
-        ./file-associations
-        ../../modules/git
-        ../../modules/fish
-        ../../modules/gitui
-        ../../modules/kitty
-        ../../modules/lazygit
-        ../../modules/tmux
-        ../../modules/vscode
-        ../../modules/wezterm
-        ../../modules/warp
-        ../../modules/yazi
-        ../../modules/hammerspoon
-        ../../modules/ghostty
-        ../../modules/karabiner
-        ../../modules/aerospace
-        ../../modules/atuin
-        ../../modules/bat
-        ../../modules/starship
-        ../../modules/zoxide
-        ../../modules/fzf
-        ../../modules/btop
-        ../../modules/nvim
-        ../../modules/mise
-        ../../modules/op
-        ../../modules/resticprofile
-        ../../modules/rclone
-        ../../modules/btt-gestures
-        ../../modules/claude
-        ../../modules/claude-code-patch
-        ../../modules/codex
-        ../../modules/serena
-        ../../modules/iina
-        ../../modules/worktrunk
-      ];
+    users.${username} =
+      {
+        flakeRoot,
+        ...
+      }:
+      {
+        imports = [
+          ./file-associations
+          ../../modules/git
+          ../../modules/fish
+          ../../modules/gitui
+          ../../modules/kitty
+          ../../modules/lazygit
+          ../../modules/tmux
+          ../../modules/vscode
+          ../../modules/wezterm
+          ../../modules/warp
+          ../../modules/yazi
+          ../../modules/hammerspoon
+          ../../modules/ghostty
+          ../../modules/karabiner
+          ../../modules/aerospace
+          ../../modules/atuin
+          ../../modules/bat
+          ../../modules/starship
+          ../../modules/zoxide
+          ../../modules/fzf
+          ../../modules/btop
+          ../../modules/nvim
+          ../../modules/mise
+          ../../modules/op
+          ../../modules/resticprofile
+          ../../modules/rclone
+          ../../modules/btt-gestures
+          ../../modules/claude
+          ../../modules/claude-code-patch
+          ../../modules/codex
+          ../../modules/serena
+          ../../modules/iina
+          ../../modules/worktrunk
+        ];
 
-      programs.bash.enable = true;
-      programs.zsh.enable = true;
-      programs.zsh.envExtra = ''
-        autoload -Uz add-zsh-hook
-        _vtb_tz() {
-          case "$PWD" in
-            "$HOME"/Development/work/vtb/*) export TZ=Europe/Moscow ;;
-            *) unset TZ ;;
-          esac
-        }
-        add-zsh-hook chpwd _vtb_tz
-        _vtb_tz
-      '';
+        programs.bash.enable = true;
+        programs.zsh.enable = true;
+        programs.zsh.envExtra = ''
+          autoload -Uz add-zsh-hook
+          _vtb_tz() {
+            case "$PWD" in
+              "$HOME"/Development/work/vtb/*) export TZ=Europe/Moscow ;;
+              *) unset TZ ;;
+            esac
+          }
+          add-zsh-hook chpwd _vtb_tz
+          _vtb_tz
+        '';
 
-      home.sessionPath = sharedPath;
+        home.sessionPath = sharedPath;
 
-      home.sessionVariables = sharedEnv;
+        home.sessionVariables = sharedEnv;
 
-      home.stateVersion = "25.05";
-      home.username = username;
-      home.homeDirectory = homeDir;
+        home.stateVersion = "25.05";
+        home.username = username;
+        home.homeDirectory = homeDir;
 
-      targets.darwin.currentHostDefaults."com.apple.ImageCapture" = {
-        disableHotPlug = true;
-      };
+        targets.darwin.currentHostDefaults."com.apple.ImageCapture" = {
+          disableHotPlug = true;
+        };
 
-      nixDotbot = {
-        enable = true;
-        dotfilesDir = flakeRoot;
-        defaults = {
-          link = {
-            relink = true;
-            create = true;
-            force = true;
+        nixDotbot = {
+          enable = true;
+          dotfilesDir = flakeRoot;
+          defaults = {
+            link = {
+              relink = true;
+              create = true;
+              force = true;
+            };
+            clean = {
+              recursive = true;
+            };
           };
-          clean = {
-            recursive = true;
+          clean = [
+            "~/.dotfiles"
+            "~/.config"
+          ];
+
+          links = {
+            "~/.config/packages" = "hosts/lasthaze-mbp/packages";
+            "~/.cache/.bun/install/global/package.json" = "hosts/lasthaze-mbp/packages/package.json";
           };
         };
-        clean = ["~/.dotfiles" "~/.config"];
-
-        links = {
-          "~/.config/packages" = "hosts/lasthaze-mbp/packages";
-          "~/.cache/.bun/install/global/package.json" = "hosts/lasthaze-mbp/packages/package.json";
-        };
       };
-    };
   };
 }

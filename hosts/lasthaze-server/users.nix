@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   username = "yoshintame";
 
   authorizedKeys = [
@@ -6,14 +7,18 @@
     # На MBP получить через: cat ~/.ssh/id_ed25519.pub
     # либо через 1Password SSH Agent: op read 'op://Private/<ssh-key>/public key'
   ];
-in {
+in
+{
   users.mutableUsers = false;
   users.allowNoPasswordLogin = true;
 
   users.users.${username} = {
     isNormalUser = true;
     description = "Mikhail Ivanov";
-    extraGroups = ["wheel" "networkmanager"];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = authorizedKeys;
 

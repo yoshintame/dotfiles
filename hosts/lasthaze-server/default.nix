@@ -1,11 +1,12 @@
 {
   pkgs,
-  flakeRoot,
   ...
-}: let
+}:
+let
   username = "yoshintame";
   homeDir = "/home/${username}";
-in {
+in
+{
   imports = [
     ./hardware-configuration.nix
     ./boot.nix
@@ -15,9 +16,15 @@ in {
   ];
 
   nix.settings = {
-    experimental-features = ["nix-command" "flakes"];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     auto-optimise-store = true;
-    trusted-users = ["root" username];
+    trusted-users = [
+      "root"
+      username
+    ];
   };
   nix.gc = {
     automatic = true;
@@ -40,48 +47,52 @@ in {
     git
   ];
 
-  home-manager.users.${username} = {
-    pkgs,
-    flakeRoot,
-    ...
-  }: {
-    imports = [
-      ../../modules/git
-      ../../modules/fish
-      ../../modules/gitui
-      ../../modules/lazygit
-      ../../modules/tmux
-      ../../modules/yazi
-      ../../modules/atuin
-      ../../modules/bat
-      ../../modules/starship
-      ../../modules/btop
-      ../../modules/nvim
-      ../../modules/mise
-      ../../modules/fzf
-      ../../modules/zoxide
-    ];
+  home-manager.users.${username} =
+    {
+      flakeRoot,
+      ...
+    }:
+    {
+      imports = [
+        ../../modules/git
+        ../../modules/fish
+        ../../modules/gitui
+        ../../modules/lazygit
+        ../../modules/tmux
+        ../../modules/yazi
+        ../../modules/atuin
+        ../../modules/bat
+        ../../modules/starship
+        ../../modules/btop
+        ../../modules/nvim
+        ../../modules/mise
+        ../../modules/fzf
+        ../../modules/zoxide
+      ];
 
-    programs.bash.enable = true;
+      programs.bash.enable = true;
 
-    home.stateVersion = "25.05";
-    home.username = username;
-    home.homeDirectory = homeDir;
+      home.stateVersion = "25.05";
+      home.username = username;
+      home.homeDirectory = homeDir;
 
-    nixDotbot = {
-      enable = true;
-      dotfilesDir = flakeRoot;
-      defaults = {
-        link = {
-          relink = true;
-          create = true;
-          force = true;
+      nixDotbot = {
+        enable = true;
+        dotfilesDir = flakeRoot;
+        defaults = {
+          link = {
+            relink = true;
+            create = true;
+            force = true;
+          };
+          clean = {
+            recursive = true;
+          };
         };
-        clean = {
-          recursive = true;
-        };
+        clean = [
+          "~/.dotfiles"
+          "~/.config"
+        ];
       };
-      clean = ["~/.dotfiles" "~/.config"];
     };
-  };
 }

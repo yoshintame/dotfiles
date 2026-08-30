@@ -1,9 +1,12 @@
-{pkgs, ...}: {
+_: {
   programs.zoxide = {
     enable = true;
     enableFishIntegration = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
-    options = ["--cmd" "j"];
+    options = [
+      "--cmd"
+      "j"
+    ];
   };
 }

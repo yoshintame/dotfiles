@@ -1,18 +1,18 @@
 {
   pkgs-unstable ? pkgs,
   pkgs,
-  lib,
-  flakeRoot,
   ...
-}: let
+}:
+let
   mkMiseCli = import ../../lib/mkMiseCli.nix {
     inherit pkgs;
-    mise = pkgs-unstable.mise;
+    inherit (pkgs-unstable) mise;
   };
 
-  rpCli = mkMiseCli {name = "rp";};
-in {
-  home.packages = [rpCli];
+  rpCli = mkMiseCli { name = "rp"; };
+in
+{
+  home.packages = [ rpCli ];
 
   nixDotbot.links = {
     "~/.config/resticprofile/logrotate.conf" = "modules/resticprofile/config/logrotate.conf";

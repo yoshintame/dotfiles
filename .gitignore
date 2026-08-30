@@ -11,6 +11,9 @@ result-*
 # Ignore automatically generated direnv output
 .direnv
 
+# git-hooks.nix installs this into the working tree on devShell entry
+.pre-commit-config.yaml
+
 # Claude permission analyzer backups
 modules/claude/config/settings.backup-*.json
 

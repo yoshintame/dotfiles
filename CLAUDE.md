@@ -28,6 +28,15 @@
 
 **Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/claude/` и `modules/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится после `mise run dot:link` (без sudo и `git add`); совсем быстро для одного файла — `ln -s "$DOTFILES/modules/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
 
+## Гейты качества (flake-parts)
+
+Флейк собран на **flake-parts + easy-hosts**; хосты перечислены таблицей `easy-hosts.hosts` в `flake.nix` (`lasthaze-mbp` aarch64/darwin, `lasthaze-server` x86_64/nixos). Общая home-manager-обвязка (`extraSpecialArgs` `flakeRoot`/`pkgs-unstable`, `sharedModules` nix-link/sops/sops-templates) — в `modules/home-manager.nix`; per-система glue гейтов — в `parts/dev.nix`. Поверх — слой гейтов:
+
+- **`just`** — дискаверабельный вход (`just --list`): `just check` (= `nix flake check --impure`), `just fmt` (= `nix fmt`), `just rebuild` / `just link` (обёртки над `dot:*`), `just update`.
+- **Форматирование — только treefmt** (`nixfmt-rfc-style` + `deadnix` + `statix`), не руками: `nix fmt` / `just fmt`. Сходится за два прохода (deadnix `{ ... }:` → `_:` + nixfmt). Тот же набор — pre-commit-хуком (git-hooks.nix) и как `checks.treefmt`.
+- **`nix flake check --impure`** — единый гейт: treefmt, pre-commit, явный eval darwin- и nixos-toplevel (проверки-обёртки над `.drvPath` через `builtins.unsafeDiscardStringContext`, чтобы форсить eval без сборки). На darwin `x86_64-linux`-проверки пропускаются («omitted incompatible systems») — это норма, linux-builder не нужен.
+- **devShell** через `.envrc` (`use flake`, direnv) или `nix develop`: `nixd`, `just`, `nixfmt-rfc-style`.
+
 ## Скрипты (bun/TS)
 
 Скрипты репо (`packages/*`, `modules/*/config/bin/`, скилловые `scripts/`) пишу и поддерживаю я один, и они уже требуют `bun` — «запуск где угодно без зависимостей» неприменим изначально. **Не жертвуй читаемостью ради zero-dep и не переизобретай базовое в каждом скрипте** — внешние библиотеки бери свободно: CLI-аргументы — `citty` (`defineCommand`/`runMain`), shell-операции — `dax-sh` (`$`). Обратное тоже верно: не тащи либу, которая в конкретном скрипте не нужна (напр. `dax-sh` в скрипт без шелла — мёртвый груз).

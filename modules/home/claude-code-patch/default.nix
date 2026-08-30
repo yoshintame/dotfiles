@@ -5,7 +5,7 @@
   ...
 }:
 myLib.mkModule config "claude-code-patch" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.local/bin/claude-code-patch" = "modules/home/claude-code-patch/config/patch.py";
   };
 

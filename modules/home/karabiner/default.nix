@@ -1,6 +1,6 @@
 { config, myLib, ... }:
 myLib.mkModule config "karabiner" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/karabiner/karabiner.json" = "modules/home/karabiner/config/build/karabiner.json";
   };
 }

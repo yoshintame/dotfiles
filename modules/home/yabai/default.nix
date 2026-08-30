@@ -1,6 +1,6 @@
 { config, myLib, ... }:
 myLib.mkModule config "yabai" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/yabai/yabairc" = "modules/home/yabai/config/yabairc";
   };
 }

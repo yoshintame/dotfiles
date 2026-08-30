@@ -1,6 +1,6 @@
 { config, myLib, ... }:
 myLib.mkModule config "ghostty" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/ghostty" = "modules/home/ghostty/config";
   };
 }

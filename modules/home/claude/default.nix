@@ -9,7 +9,7 @@ myLib.mkModule config "claude" {
     ccr = "bun ~/.claude/skills/reset-sessions/scripts/reset-sessions.ts --all";
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.claude/settings.json" = "modules/home/claude/config/settings.json";
     "~/.claude/CLAUDE.md" = "modules/home/agents-shared/config/AGENTS.md";
     "~/.claude/hooks/" = {

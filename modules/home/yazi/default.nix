@@ -38,7 +38,7 @@ myLib.mkModule config "yazi" {
     # clipboard
   ];
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/yazi/" = {
       path = "modules/home/yazi/config/**";
       glob = true;

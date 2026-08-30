@@ -21,7 +21,7 @@ in
     home.username = username;
     home.homeDirectory = homeDir;
 
-    nixDotbot = {
+    nixLink = {
       enable = true;
       dotfilesDir = flakeRoot;
       defaults = {

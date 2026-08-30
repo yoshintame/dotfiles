@@ -88,7 +88,7 @@
         disableHotPlug = true;
       };
 
-      nixDotbot = {
+      nixLink = {
         enable = true;
         dotfilesDir = flakeRoot;
         defaults = {

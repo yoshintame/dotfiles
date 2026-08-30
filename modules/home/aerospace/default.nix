@@ -1,6 +1,6 @@
 { config, myLib, ... }:
 myLib.mkModule config "aerospace" {
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/aerospace" = "modules/home/aerospace/config";
   };
 }

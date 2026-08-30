@@ -13,7 +13,7 @@ myLib.mkModule config "bat" {
     cat = "bat";
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/bat" = "modules/home/bat/config";
   };
 }

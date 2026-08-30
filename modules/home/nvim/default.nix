@@ -9,7 +9,7 @@ myLib.mkModule config "nvim" {
     vim = "nvim";
   };
 
-  nixDotbot.links = {
+  nixLink.links = {
     "~/.config/nvim/" = {
       path = "modules/home/nvim/config/**";
       glob = true;

@@ -21,13 +21,48 @@
     sharedModules = [
       ../lib/nix-link.nix
       inputs.sops-nix.homeManagerModules.sops
-      ./sops-templates
+      ../lib/sops-templates
       (
         { config, lib, ... }:
         {
           sops.age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
         }
       )
+
+      ./home/aerospace
+      ./home/atuin
+      ./home/bat
+      ./home/btop
+      ./home/btt-gestures
+      ./home/claude
+      ./home/claude-code-patch
+      ./home/codex
+      ./home/file-associations
+      ./home/fish
+      ./home/fzf
+      ./home/ghostty
+      ./home/git
+      ./home/gitui
+      ./home/hammerspoon
+      ./home/iina
+      ./home/karabiner
+      ./home/kitty
+      ./home/lazygit
+      ./home/mise
+      ./home/nvim
+      ./home/op
+      ./home/rclone
+      ./home/resticprofile
+      ./home/serena
+      ./home/starship
+      ./home/tmux
+      ./home/vscode
+      ./home/warp
+      ./home/wezterm
+      ./home/worktrunk
+      ./home/yabai
+      ./home/yazi
+      ./home/zoxide
     ];
   };
 }

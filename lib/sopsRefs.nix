@@ -1,5 +1,5 @@
-{ lib, config }:
-file: mapping: {
+{ lib }:
+config: file: mapping: {
   secrets = lib.genAttrs (lib.attrValues mapping) (_: {
     sopsFile = file;
   });

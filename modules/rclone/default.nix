@@ -1,21 +1,17 @@
 {
   config,
-  lib,
+  sopsRefs,
   ...
 }:
 let
-  sopsRefs = import ../../lib/sopsRefs.nix { inherit lib config; };
-  gdrive = sopsRefs ./secrets.yaml {
+  gdrive = sopsRefs config ./secrets.yaml {
     token = "RCLONE_GDRIVE_TOKEN";
     client_id = "RCLONE_GDRIVE_CLIENT_ID";
     client_secret = "RCLONE_GDRIVE_CLIENT_SECRET";
   };
 in
 {
-  sops = {
-    age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-    inherit (gdrive) secrets;
-  };
+  sops.secrets = gdrive.secrets;
 
   # Own OAuth client (Desktop app) created in Google Cloud Console.
   # rclone-shipped defaults differ between distributions (brew vs nix vs

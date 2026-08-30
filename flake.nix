@@ -34,6 +34,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     homelab = {
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -118,7 +123,10 @@
             class = "nixos";
             path = ./hosts/lasthaze-homelab;
             specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
-            modules = [ inputs.homelab.nixosModules.default ];
+            modules = [
+              inputs.homelab.nixosModules.default
+              inputs.disko.nixosModules.disko
+            ];
           };
         };
       };

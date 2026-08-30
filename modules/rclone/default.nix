@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   sops = {
     age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     secrets.RCLONE_GDRIVE_TOKEN.sopsFile = ./secrets.yaml;

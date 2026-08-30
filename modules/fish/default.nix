@@ -1,4 +1,5 @@
-{pkgs, lib, ...}: {
+{ pkgs, lib, ... }:
+{
   imports = [
     ./aliases.nix
     ./abbrs.nix

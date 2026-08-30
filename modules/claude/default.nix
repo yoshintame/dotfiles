@@ -1,4 +1,4 @@
-{...}: {
+_: {
   nixDotbot.links = {
     "~/.claude/settings.json" = "modules/claude/config/settings.json";
     "~/.claude/CLAUDE.md" = "modules/agents-shared/config/AGENTS.md";

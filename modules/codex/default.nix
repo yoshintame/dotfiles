@@ -1,4 +1,4 @@
-{...}: {
+_: {
   nixDotbot.links = {
     "~/.codex/AGENTS.md" = "modules/agents-shared/config/AGENTS.md";
     "~/.codex/config.toml" = "modules/codex/config/config.toml";

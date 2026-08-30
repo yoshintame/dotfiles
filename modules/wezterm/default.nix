@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   nixDotbot.links = {
     "~/.config/wezterm" = "modules/wezterm/config";
   };

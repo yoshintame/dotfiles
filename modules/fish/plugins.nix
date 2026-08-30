@@ -1,10 +1,26 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.fish.plugins = [
-    { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
-    { name = "sponge"; src = pkgs.fishPlugins.sponge.src; }
-    { name = "puffer-fish"; src = pkgs.fishPlugins.puffer.src; }
-    { name = "plugin-git"; src = pkgs.fishPlugins.plugin-git.src; }
-    { name = "grc"; src = pkgs.fishPlugins.grc.src; }
+    {
+      name = "autopair";
+      inherit (pkgs.fishPlugins.autopair) src;
+    }
+    {
+      name = "sponge";
+      inherit (pkgs.fishPlugins.sponge) src;
+    }
+    {
+      name = "puffer-fish";
+      inherit (pkgs.fishPlugins.puffer) src;
+    }
+    {
+      name = "plugin-git";
+      inherit (pkgs.fishPlugins.plugin-git) src;
+    }
+    {
+      name = "grc";
+      inherit (pkgs.fishPlugins.grc) src;
+    }
     {
       name = "plugin-thefuck";
       src = pkgs.fetchFromGitHub {

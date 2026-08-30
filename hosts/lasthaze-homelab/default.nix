@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ./disko.nix
     ./manifest.nix
   ];
 

@@ -2,21 +2,21 @@
 
 ## Архитектура (кратко)
 
-Декларативный конфиг macOS/Linux в три слоя: **Nix** (nix-darwin + home-manager, пакеты и системные настройки) + **nix-dotbot** (живые симлинки конфигов) + **sops-templates** (секреты). Реально активен только хост `lasthaze-mbp` (aarch64-darwin); прочие хосты в README — планы.
+Декларативный конфиг macOS/Linux в три слоя: **Nix** (nix-darwin + home-manager, пакеты и системные настройки) + **nix-link** (нативные живые симлинки конфигов, `lib/nix-link.nix`) + **sops-templates** (секреты). Реально активен только хост `lasthaze-mbp` (aarch64-darwin); прочие хосты в README — планы.
 
-- **Модуль** = `modules/<name>/default.nix`: ставит пакеты И декларирует `nixDotbot.links` (`"~/.config/x" = "modules/x/config"`; glob — через `{ path = "...**"; glob = true; }`). Модуль действует, только если он импортирован в `hosts/lasthaze-mbp/default.nix`.
+- **Модуль** = `modules/{home,darwin,nixos}/<name>/default.nix`, обёрнут в `myLib.mkModule config "<name>" { … }`: объявляет `my.<name>.enable`, а тело (пакеты + `nixDotbot.links` вида `"~/.config/x" = "modules/home/x/config"`, glob — `{ path = "...**"; glob = true; }`) активно только при `my.<name>.enable = true`. Импорт инертен; включает модуль манифест хоста `hosts/<host>/manifest.nix` (`myLib.enableList [ … ]`). Опция линков всё ещё называется `nixDotbot.links` (переименование в `nix-link` не сделано).
 - **Симлинки живые и двусторонние:** настоящий файл лежит в репо, путь в системе (`~/.config/<x>`) — симлинк на него. Правишь конфиг инструмента → правишь файл репозитория, и наоборот.
 - **Применить изменения:** `mise run dot:rebuild` (= `git add -A && sudo darwin-rebuild switch --impure --flake .#lasthaze-mbp`). Два неочевидных момента: (1) флейк видит только **git-tracked** файлы — новый файл без `git add` не подхватится (для этого в задаче есть `git add -A`); (2) `--impure` **обязателен** — иначе sops-секреты молча не рендерятся (гейт по наличию age-ключа на диске).
-- **Секреты:** `modules/sops-templates` рендерит `*.tmpl` → файл, подставляя `${VAR}` из sops-зашифрованного `secrets.yaml` (age). Декларируется через опцию `sopsTemplates.render`.
-- **Прочее:** `packages/` — bun/TS-тулинг (proxy-bindings, btt-gestures, dump-packages), запуск через `dot:*` mise-задачи; `lib/` — Nix-хелперы; `archive/` — старое; karabiner-config, vscode-тема и dotbot — git-сабмодули.
+- **Секреты:** `lib/sops-templates` рендерит `*.tmpl` → файл, подставляя `${VAR}` из sops-зашифрованного `secrets.yaml` (age). Декларируется через опцию `sopsTemplates.render`.
+- **Прочее:** `packages/` — bun/TS-тулинг (proxy-bindings, btt-gestures, dump-packages), запуск через `dot:*` mise-задачи; `lib/` — Nix-хелперы (`myLib`/`mk-module`, `sopsRefs`) и инфраструктурные HM-модули (nix-link, sops-templates); `archive/` — старое; karabiner-config (`modules/home/karabiner/config`), vscode-тема (`modules/home/vscode/theme/…`) и dotbot (vestigial) — git-сабмодули.
 
 ## Правка симлинкнутых конфигов
 
-Записи `nixDotbot.links` в `modules/*/default.nix` — живые симлинки: **оригинал в репо, путь в системе — симлинк на него** (резолвится через `readlink -f`). Правка содержимого уже слинкованного файла видна сразу.
+Записи `nixDotbot.links` в `modules/home/*/default.nix` — живые симлинки: **оригинал в репо, путь в системе — симлинк на него** (резолвится через `readlink -f`). Правка содержимого уже слинкованного файла видна сразу.
 
 Перематериализация нужна **только** при изменении самой `nixDotbot.links` или при добавлении файла под glob-link:
 
-- **Folder-link** (`"~/.config/x" = "modules/x/config"`) — симлинк на **саму папку**: добавление/удаление файлов внутри видно сразу.
+- **Folder-link** (`"~/.config/x" = "modules/home/x/config"`) — симлинк на **саму папку**: добавление/удаление файлов внутри видно сразу.
 - **Glob-link** (`{ path = "...**"; glob = true; }`) — папка реальная, внутри пофайловые симлинки с момента сборки → **новый файл не слинкуется до перематериализации**.
 
 Раскладку теперь делает нативный модуль `lib/nix-link.nix` (`home.file` + `mkOutOfStoreSymlink`), не dotbot. Перематериализовать:
@@ -26,11 +26,11 @@
 
 Исключение — новый **Nix-код** (`*.nix`): флейк видит только git-tracked, его надо `git add` перед любой из команд.
 
-**Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/claude/` и `modules/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится после `mise run dot:link` (без sudo и `git add`); совсем быстро для одного файла — `ln -s "$DOTFILES/modules/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
+**Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/home/claude/` и `modules/home/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится после `mise run dot:link` (без sudo и `git add`); совсем быстро для одного файла — `ln -s "$DOTFILES/modules/home/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
 
 ## Гейты качества (flake-parts)
 
-Флейк собран на **flake-parts + easy-hosts**; хосты перечислены таблицей `easy-hosts.hosts` в `flake.nix` (`lasthaze-mbp` aarch64/darwin, `lasthaze-server` x86_64/nixos). Общая home-manager-обвязка (`extraSpecialArgs` `flakeRoot`/`pkgs-unstable`, `sharedModules` nix-link/sops/sops-templates) — в `modules/home-manager.nix`; per-система glue гейтов — в `parts/dev.nix`. Поверх — слой гейтов:
+Флейк собран на **flake-parts + easy-hosts**; хосты перечислены таблицей `easy-hosts.hosts` в `flake.nix` (`lasthaze-mbp` aarch64/darwin, `lasthaze-homelab` x86_64/nixos). Общая home-manager-обвязка (`extraSpecialArgs` `flakeRoot`/`pkgs-unstable`/`myLib`/`sopsRefs`, `sharedModules` nix-link/sops/sops-templates + все тул-модули `modules/home/*`) — в `modules/home-manager.nix`; per-система glue гейтов — в `parts/dev.nix`. Поверх — слой гейтов:
 
 - **`just`** — дискаверабельный вход (`just --list`): `just check` (= `nix flake check --impure`), `just fmt` (= `nix fmt`), `just rebuild` / `just link` (обёртки над `dot:*`), `just update`.
 - **Форматирование — только treefmt** (`nixfmt-rfc-style` + `deadnix` + `statix`), не руками: `nix fmt` / `just fmt`. Сходится за два прохода (deadnix `{ ... }:` → `_:` + nixfmt). Тот же набор — pre-commit-хуком (git-hooks.nix) и как `checks.treefmt`.
@@ -50,6 +50,6 @@
 Vault: `/Users/yoshintame/Documents/obsidian/yoshintame/`
 
 - Точка входа (area): `areas/dotfiles.md`
-- Проекты: `projects/dotfiles/` (а также `projects/dotfiles-architecture/`, `projects/dotfiles-target-architecture.md`)
+- Проект: `projects/dotfiles-architecture/` — спеки в `implementation-spec/` (существующее состояние — `repo-architecture.md`), разборы в `analysis/`, задачи в `tasks/`
 
 Нужно что-то задокументировать по dotfiles — добавляй или обновляй заметку в vault (через skill `obsidian-vault`), а не файл в этом репозитории.

@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   hostFacts,
   myLib,
@@ -26,20 +25,6 @@ myLib.mkModule config "session-env" {
       ];
       RunAtLoad = true;
       StandardErrorPath = "/tmp/session-env.err";
-    };
-  };
-
-  launchd.user.agents.claude-code-patch = {
-    serviceConfig = {
-      Label = "com.yoshintame.claude-code-patch";
-      ProgramArguments = [
-        "${pkgs.python3}/bin/python3"
-        "${hostFacts.homeDir}/.local/bin/claude-code-patch"
-      ];
-      WatchPaths = [ "${hostFacts.homeDir}/.vscode/extensions" ];
-      RunAtLoad = true;
-      StandardOutPath = "/tmp/claude-code-patch.log";
-      StandardErrorPath = "/tmp/claude-code-patch.err";
     };
   };
 }

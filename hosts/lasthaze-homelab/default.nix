@@ -7,6 +7,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ./deploy.nix
     ./manifest.nix
   ];
 

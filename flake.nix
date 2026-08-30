@@ -122,7 +122,7 @@
             arch = "x86_64";
             class = "nixos";
             path = ./hosts/lasthaze-homelab;
-            specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
+            specialArgs.flakeRoot = "/var/lib/homelab-deploy/dotfiles";
             modules = [
               inputs.homelab.nixosModules.default
               inputs.disko.nixosModules.disko

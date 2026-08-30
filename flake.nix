@@ -33,6 +33,11 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    homelab = {
+      url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -60,6 +65,7 @@
           ./modules/nixos/base
           ./modules/nixos/ssh
           ./modules/nixos/users
+          ./modules/nixos/tailscale
           ./modules/nixos/sops-age-key
         ];
       };
@@ -112,6 +118,7 @@
             class = "nixos";
             path = ./hosts/lasthaze-homelab;
             specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
+            modules = [ inputs.homelab.nixosModules.default ];
           };
         };
       };

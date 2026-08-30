@@ -8,9 +8,7 @@ let
   username = "yoshintame";
 
   authorizedKeys = [
-    # TODO: вставить публичный SSH-ключ MBP до реального деплоя.
-    # На MBP получить через: cat ~/.ssh/id_ed25519.pub
-    # либо через 1Password SSH Agent: op read 'op://Private/<ssh-key>/public key'
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev yoshintame-mbp"
   ];
 in
 myLib.mkModule config "users" {

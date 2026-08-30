@@ -4,6 +4,7 @@
     "base"
     "ssh"
     "users"
+    "tailscale"
     "sops-age-key"
   ];
 

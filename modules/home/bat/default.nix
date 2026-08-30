@@ -9,6 +9,10 @@ myLib.mkModule config "bat" {
     pkgs.bat
   ];
 
+  home.shellAliases = {
+    cat = "bat";
+  };
+
   nixDotbot.links = {
     "~/.config/bat" = "modules/home/bat/config";
   };

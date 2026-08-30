@@ -9,6 +9,10 @@ myLib.mkModule config "lazygit" {
     pkgs.lazygit
   ];
 
+  home.shellAliases = {
+    lg = "lazygit";
+  };
+
   nixDotbot.links = {
     "~/.config/lazygit" = "modules/home/lazygit/config";
   };

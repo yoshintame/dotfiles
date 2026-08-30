@@ -24,4 +24,8 @@ myLib.mkModule config "fzf" {
       "selected-bg" = "#45475a";
     };
   };
+
+  home.shellAliases = {
+    fc = "fzf";
+  };
 }

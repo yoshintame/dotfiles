@@ -2,6 +2,7 @@
   pkgs-unstable ? pkgs,
   pkgs,
   config,
+  lib,
   myLib,
   ...
 }:
@@ -42,6 +43,20 @@ myLib.mkModule config "mise" {
       end
       command dot $argv
     '';
+  };
+
+  programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable {
+    de = "dot edit";
+    dg = "dot go";
+    dl = "dot link";
+    dco = "dot config";
+    dr = "dot rebuild";
+    dpb = "dot proxy-bindings";
+    dbg = "dot btt-gestures";
+    ddp = "dot dump-packages";
+    dbak = "dot bootstrap-age-key";
+    dbs = "dot bootstrap-ssh";
+    dsb = "dot sops-bootstrap";
   };
 
   nixDotbot.links = {

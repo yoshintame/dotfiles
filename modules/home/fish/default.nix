@@ -31,20 +31,28 @@ myLib.mkModule config "fish" {
         '';
       };
     };
-    shellAbbrs = import ./abbrs.nix;
     plugins = import ./plugins.nix { inherit pkgs; };
   };
 
-  home.shellAliases = import ./aliases.nix;
+  home.shellAliases = {
+    md = "mkdir -p";
+    ml = "ln -s";
+    o = "open";
+    oa = "open -a";
+    oo = "open .";
+    ip = "dig +short myip.opendns.com @resolver1.opendns.com";
+    localip = "ipconfig getifaddr en0";
+    whichis = "type -a --path";
+    sp = "speedtest";
+    cl = "clear";
+    aliasessh = "manssh list";
+  };
 
   home.packages = with pkgs; [
     grc
     thefuck
-    eza
-    bat
     fd
     ripgrep
-    gtrash
   ];
 
   nixDotbot.links = {

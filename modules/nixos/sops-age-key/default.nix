@@ -6,7 +6,8 @@
 }:
 let
   username = "yoshintame";
-  keyDir = "/home/${username}/.config/sops/age";
+  configDir = "/home/${username}/.config";
+  keyDir = "${configDir}/sops/age";
   keyPath = "${keyDir}/keys.txt";
   hostKey = "/etc/ssh/ssh_host_ed25519_key";
 in
@@ -38,6 +39,7 @@ myLib.mkModule config "sops-age-key" {
     };
 
     script = ''
+      install -d -m 0755 -o ${username} -g users ${configDir} ${configDir}/sops
       install -d -m 0700 -o ${username} -g users ${keyDir}
       ssh-to-age -private-key -i ${hostKey} > ${keyPath}.tmp
       chown ${username}:users ${keyPath}.tmp

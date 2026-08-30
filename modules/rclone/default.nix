@@ -3,12 +3,18 @@
   lib,
   ...
 }:
+let
+  sopsRefs = import ../../lib/sopsRefs.nix { inherit lib config; };
+  gdrive = sopsRefs ./secrets.yaml {
+    token = "RCLONE_GDRIVE_TOKEN";
+    client_id = "RCLONE_GDRIVE_CLIENT_ID";
+    client_secret = "RCLONE_GDRIVE_CLIENT_SECRET";
+  };
+in
 {
   sops = {
     age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-    secrets.RCLONE_GDRIVE_TOKEN.sopsFile = ./secrets.yaml;
-    secrets.RCLONE_GDRIVE_CLIENT_ID.sopsFile = ./secrets.yaml;
-    secrets.RCLONE_GDRIVE_CLIENT_SECRET.sopsFile = ./secrets.yaml;
+    inherit (gdrive) secrets;
   };
 
   # Own OAuth client (Desktop app) created in Google Cloud Console.
@@ -22,11 +28,7 @@
         type = "drive";
         scope = "drive";
       };
-      secrets = {
-        token = config.sops.secrets.RCLONE_GDRIVE_TOKEN.path;
-        client_id = config.sops.secrets.RCLONE_GDRIVE_CLIENT_ID.path;
-        client_secret = config.sops.secrets.RCLONE_GDRIVE_CLIENT_SECRET.path;
-      };
+      secrets = gdrive.paths;
     };
   };
 }

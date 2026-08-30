@@ -1,9 +1,4 @@
-{
-  flakeRoot,
-  pkgs,
-  config,
-  ...
-}:
+{ flakeRoot, ... }:
 let
   username = "yoshintame";
   homeDir = "/home/${username}";
@@ -24,25 +19,12 @@ in
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   homelab.services = {
-    actual.enable = true;
+    actual = {
+      enable = true;
+      tailnet = true;
+    };
     archivebox.enable = false;
     paperless.enable = false;
-  };
-
-  systemd.services.actual-tailscale-serve = {
-    description = "Expose Actual over the tailnet (tailscale serve, HTTP)";
-    after = [
-      "tailscaled.service"
-      "arion-homelab.service"
-    ];
-    wants = [ "tailscaled.service" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --bg --https=443 http://127.0.0.1:${toString config.homelab.services.actual.port}";
-      ExecStop = "${pkgs.tailscale}/bin/tailscale serve --https=443 off";
-    };
   };
 
   home-manager.users.${username} = {

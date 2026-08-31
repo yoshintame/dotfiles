@@ -49,11 +49,7 @@ in
   homelab.infra.adguard.enable = true;
 
   homelab.services = {
-    actual = {
-      enable = true;
-      tailnet = true;
-      tailnetPort = 8443;
-    };
+    actual.enable = true;
     archivebox.enable = false;
     paperless.enable = false;
   };

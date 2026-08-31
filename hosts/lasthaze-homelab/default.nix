@@ -26,6 +26,7 @@ in
 
   homelab.infra.traefik.enable = true;
   homelab.infra.authelia.enable = true;
+  homelab.infra.cloudflared.enable = true;
 
   homelab.services = {
     actual = {

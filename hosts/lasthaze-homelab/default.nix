@@ -1,4 +1,4 @@
-{ flakeRoot, ... }:
+{ flakeRoot, pkgs, ... }:
 let
   username = "yoshintame";
   homeDir = "/home/${username}";
@@ -14,7 +14,18 @@ in
   networking.hostName = "lasthaze-homelab";
   networking.networkmanager.enable = true;
   networking.useNetworkd = false;
-  networking.interfaces.enp2s0.wakeOnLan.enable = true;
+
+  systemd.services.wake-on-lan-enp2s0 = {
+    description = "Arm Wake-on-LAN (magic packet) on enp2s0";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -s enp2s0 wol g";
+    };
+  };
 
   networking.firewall.interfaces = {
     tailscale0 = {

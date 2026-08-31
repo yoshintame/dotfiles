@@ -16,8 +16,20 @@ in
   networking.useNetworkd = false;
 
   networking.firewall.interfaces = {
-    tailscale0.allowedTCPPorts = [ 22 ];
-    enp2s0.allowedTCPPorts = [ 22 ];
+    tailscale0 = {
+      allowedTCPPorts = [
+        22
+        53
+      ];
+      allowedUDPPorts = [ 53 ];
+    };
+    enp2s0 = {
+      allowedTCPPorts = [
+        22
+        53
+      ];
+      allowedUDPPorts = [ 53 ];
+    };
   };
 
   system.stateVersion = "25.05";
@@ -27,6 +39,7 @@ in
   homelab.infra.traefik.enable = true;
   homelab.infra.authelia.enable = true;
   homelab.infra.cloudflared.enable = true;
+  homelab.infra.adguard.enable = true;
 
   homelab.services = {
     actual = {

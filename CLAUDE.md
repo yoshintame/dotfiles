@@ -8,7 +8,7 @@
 - **Симлинки живые и двусторонние:** настоящий файл лежит в репо, путь в системе (`~/.config/<x>`) — симлинк на него. Правишь конфиг инструмента → правишь файл репозитория, и наоборот.
 - **Применить изменения:** `mise run dot:rebuild` (= `git add -A && sudo darwin-rebuild switch --impure --flake .#lasthaze-mbp`). Два неочевидных момента: (1) флейк видит только **git-tracked** файлы — новый файл без `git add` не подхватится (для этого в задаче есть `git add -A`); (2) `--impure` **обязателен** — иначе sops-секреты молча не рендерятся (гейт по наличию age-ключа на диске).
 - **Секреты:** `lib/sops-templates` рендерит `*.tmpl` → файл, подставляя `${VAR}` из sops-зашифрованного `secrets.yaml` (age). Декларируется через опцию `sopsTemplates.render`.
-- **Прочее:** `packages/` — bun/TS-тулинг (proxy-bindings, btt-gestures, dump-packages), запуск через `dot:*` mise-задачи; `lib/` — Nix-хелперы (`myLib`/`mk-module`, `sopsRefs`) и инфраструктурные HM-модули (nix-link, sops-templates); `archive/` — старое; karabiner-config (`modules/home/karabiner/config`), vscode-тема (`modules/home/vscode/theme/…`) и dotbot (vestigial) — git-сабмодули.
+- **Прочее:** `packages/` — bun/TS-тулинг (proxy-bindings, btt-gestures, dump-packages), запуск через `dot:*` mise-задачи; `lib/` — Nix-хелперы (`myLib`/`mk-module`, `sopsRefs`) и инфраструктурные HM-модули (nix-link, sops-templates); `modules/shared/` — cross-scope конфиг-реестры под codegen (не тул-модули; `proxy-bindings.yaml`); `archive/` — старое; karabiner-config (`modules/home/karabiner/config`), vscode-тема (`modules/home/vscode/theme/…`) и dotbot (vestigial) — git-сабмодули.
 
 ## Правка симлинкнутых конфигов
 

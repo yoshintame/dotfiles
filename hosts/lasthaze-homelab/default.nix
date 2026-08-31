@@ -24,10 +24,13 @@ in
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
+  homelab.infra.traefik.enable = true;
+
   homelab.services = {
     actual = {
       enable = true;
       tailnet = true;
+      tailnetPort = 8443;
     };
     archivebox.enable = false;
     paperless.enable = false;

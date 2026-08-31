@@ -14,6 +14,7 @@ in
   networking.hostName = "lasthaze-homelab";
   networking.networkmanager.enable = true;
   networking.useNetworkd = false;
+  networking.interfaces.enp2s0.wakeOnLan.enable = true;
 
   networking.firewall.interfaces = {
     tailscale0 = {

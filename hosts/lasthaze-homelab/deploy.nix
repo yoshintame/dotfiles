@@ -89,7 +89,7 @@ in
 
   security.sudo.extraRules = [
     {
-      users = [ username ];
+      groups = [ "wheel" ];
       commands = [
         {
           command = "/run/current-system/sw/bin/systemctl start homelab-deploy.service";

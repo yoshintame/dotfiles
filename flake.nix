@@ -39,6 +39,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    srvos = {
+      url = "github:nix-community/srvos/7c93b611d175a62f3ce57fbda976c29261525a15";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     homelab = {
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -126,6 +131,7 @@
             modules = [
               inputs.homelab.nixosModules.default
               inputs.disko.nixosModules.disko
+              inputs.srvos.nixosModules.server
             ];
           };
         };

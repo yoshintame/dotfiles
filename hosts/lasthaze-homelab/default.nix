@@ -22,7 +22,7 @@ in
         53
         80
         443
-        3000
+        3001
       ];
       allowedUDPPorts = [ 53 ];
     };
@@ -47,6 +47,7 @@ in
   homelab.infra.authelia.enable = true;
   homelab.infra.cloudflared.enable = true;
   homelab.infra.adguard.enable = true;
+  homelab.monitoring.enable = true;
 
   homelab.services = {
     actual.enable = true;

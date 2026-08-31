@@ -20,6 +20,8 @@ in
       allowedTCPPorts = [
         22
         53
+        80
+        443
         3000
       ];
       allowedUDPPorts = [ 53 ];
@@ -28,10 +30,14 @@ in
       allowedTCPPorts = [
         22
         53
+        80
+        443
       ];
       allowedUDPPorts = [ 53 ];
     };
   };
+
+  services.tailscale.extraSetFlags = [ "--advertise-routes=192.168.1.48/32" ];
 
   system.stateVersion = "25.05";
 

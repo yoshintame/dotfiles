@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   myLib,
   ...
 }:
@@ -45,4 +46,10 @@ myLib.mkModule config "base" {
   ];
 
   boot.tmp.cleanOnBoot = true;
+
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.all.rp_filter" = lib.mkDefault 2;
+    "net.ipv4.conf.default.rp_filter" = lib.mkDefault 2;
+    "net.ipv4.tcp_syncookies" = lib.mkDefault 1;
+  };
 }

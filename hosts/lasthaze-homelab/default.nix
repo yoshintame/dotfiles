@@ -13,6 +13,12 @@ in
 
   networking.hostName = "lasthaze-homelab";
   networking.networkmanager.enable = true;
+  networking.useNetworkd = false;
+
+  networking.firewall.interfaces = {
+    tailscale0.allowedTCPPorts = [ 22 ];
+    enp2s0.allowedTCPPorts = [ 22 ];
+  };
 
   system.stateVersion = "25.05";
 

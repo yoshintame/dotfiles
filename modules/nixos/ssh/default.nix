@@ -1,13 +1,10 @@
 { config, myLib, ... }:
 myLib.mkModule config "ssh" {
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 22 ];
-  };
+  networking.firewall.enable = true;
 
   services.openssh = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = "prohibit-password";

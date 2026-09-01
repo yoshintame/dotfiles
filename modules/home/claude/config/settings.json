@@ -404,7 +404,7 @@
       "mcp__grafana-monitor__query_loki_stats",
       "mcp__grafana-monitor__query_loki_logs",
       "Bash(gh auth *)",
-      "Bash(fish -n /Users/yoshintame/.dotfiles/modules/fish/config/functions/killport.fish)",
+      "Bash(fish -n /Users/yoshintame/.dotfiles/modules/home/fish/config/functions/killport.fish)",
       "Bash(fish -c 'killport 59999; echo \"rc=$status\"; killport abc; echo \"rc=$status\"; killport; echo \"rc=$status\"')",
       "Bash(cd /Users/yoshintame/Development/work/vtb/repos/nook *)",
       "Read(//Users/yoshintame/**)",

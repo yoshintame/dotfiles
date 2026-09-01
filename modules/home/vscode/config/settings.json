@@ -8,7 +8,7 @@
   },
   "custom-ui-style.font.sansSerif": "Cascadia Code, -apple-system",
   "custom-ui-style.external.imports": [
-    "file:///Users/yoshintame/.dotfiles/modules/vscode/config/styles.css",
+    "file:///Users/yoshintame/.dotfiles/modules/home/vscode/config/styles.css",
   ],
   "editor.fontFamily": "FiraCode Nerd Font",
   "editor.fontLigatures": false,

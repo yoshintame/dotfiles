@@ -26,13 +26,13 @@ function brew --wraps='command brew' --description 'Wrapper for the brew command
                     command brew bundle install --cleanup --file=~/.config/packages/Brewfile $flags
                 else
                     command brew install $args[2..-1]
-                    /bin/sh ~/.dotfiles/modules/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile
+                    /bin/sh ~/.dotfiles/modules/home/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile
                 end
             case 'remove'
                 command brew remove $args[2..-1]
-                /bin/sh ~/.dotfiles/modules/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile
+                /bin/sh ~/.dotfiles/modules/home/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile
             case 'dump'
-                /bin/sh ~/.dotfiles/modules/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile
+                /bin/sh ~/.dotfiles/modules/home/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile
             case 'list'
                 switch $flags
                     case '-o'

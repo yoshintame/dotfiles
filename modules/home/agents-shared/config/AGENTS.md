@@ -17,6 +17,12 @@
 - *NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.*
 - *NEVER touch existing comments written by others peoples: do not delete, rewrite, translate, or "improve" them, even when refactoring the code around them. Move a comment only when the code it belongs to moves.*
 
+## Git
+
+- *Свои изменения коммить самостоятельно через `/git-commit` (skill `git-commit`), не дожидаясь просьбы пользователя. Это переопределяет дефолт харнеса «коммитить только по просьбе». Коммить законченную единицу работы, а не каждую промежуточную правку.*
+- *Стейдж только те файлы, которые затронул сам: рабочее дерево часто грязное с несвязанными изменениями — не подметай их в свой коммит. `git add -A` / `git add .` в таком дереве не используй.*
+- *Не пушь — push остаётся за пользователем. Ветку сам не создавай: коммить в текущую, если не просили иначе.*
+
 ## File references
 
 - *When linking to a file in a response, always use markdown link syntax with the file's **absolute path** as the target, without the `file://` scheme: `[name](/Users/.../file.ts)`. VSCode Claude Code extension renders bare absolute paths as clickable links; `file://` URIs and relative paths to files outside the open workspace do not open.*

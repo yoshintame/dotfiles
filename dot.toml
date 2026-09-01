@@ -42,9 +42,8 @@ nix build --impure --out-link "$out" \
 
 ["dot:proxy-bindings"]
 description = "Generate proxy-binding files from YAML config"
-dir = "~/.dotfiles/modules/proxy-bindings"
-raw = true
-run = 'bun run ~/.dotfiles/packages/proxy-bindings/src/cli.ts generate "$@"'
+dir = "{{env.DOTFILES}}"
+run = 'bun run packages/proxy-bindings/src/cli.ts generate -c modules/shared/proxy-bindings.yaml "$@"'
 
 ["dot:btt-gestures"]
 description = "Sync trackpad gestures from YAML to BetterTouchTool via REST API"

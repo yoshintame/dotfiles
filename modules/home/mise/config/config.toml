@@ -23,7 +23,7 @@ trusted_config_paths = ["~/Development/work"]
 description = "Вернуть дефолтную модель Claude Code на claude-opus-4-8[1m] (откат перезаписи нативным пикером расширения)"
 run = '''
 set -e
-f="$HOME/.dotfiles/modules/claude/config/settings.json"
+f="$HOME/.dotfiles/modules/home/claude/config/settings.json"
 tmp="$(mktemp)"
 jq '.model = "claude-opus-4-8[1m]"' "$f" > "$tmp"
 cat "$tmp" > "$f"

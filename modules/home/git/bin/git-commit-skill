@@ -9,7 +9,7 @@
 #   git-commit-skill v6        # switch to atomic-wrappers workflow
 set -euo pipefail
 
-SKILL_DIR="$HOME/.dotfiles/modules/agents-shared/config/skills/git-commit"
+SKILL_DIR="$HOME/.dotfiles/modules/home/agents-shared/config/skills/git-commit"
 SCRIPTS_DIR="$SKILL_DIR/scripts"
 SKILL_LINK="$SKILL_DIR/SKILL.md"
 CTX_LINK="$SCRIPTS_DIR/gather-context.sh"

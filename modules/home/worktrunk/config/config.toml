@@ -12,7 +12,7 @@ land = "git -C {{ primary_worktree_path }} merge --no-ff {{ branch }}"
 "dev:local" = "PORT={% if branch == 'main' %}4003{% else %}{{ branch | hash_port }}{% endif %} bun run dev:local"
 
 [[pre-start]]
-setup = "$HOME/.dotfiles/modules/worktrunk/config/hooks/pre-start.sh {{ primary_worktree_path }} {{ worktree_path }}"
+setup = "$HOME/.dotfiles/modules/home/worktrunk/config/hooks/pre-start.sh {{ primary_worktree_path }} {{ worktree_path }}"
 
 [[post-start]]
-install = "$HOME/.dotfiles/modules/worktrunk/config/hooks/post-start.sh {{ worktree_path }}"
+install = "$HOME/.dotfiles/modules/home/worktrunk/config/hooks/post-start.sh {{ worktree_path }}"

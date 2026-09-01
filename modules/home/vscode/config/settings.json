@@ -196,7 +196,7 @@
   "git.allowNoVerifyCommit": true,
   "git.confirmNoVerifyCommit": false,
   "git.enableSmartCommit": true,
-  "git.autofetch": true,
+  "git.autofetch": false,
   "gitlens.plusFeatures.enabled": false,
   "gitlens.advanced.messages": {
     "suppressGitDisabledWarning": true,

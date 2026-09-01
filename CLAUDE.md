@@ -28,6 +28,17 @@
 
 **Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/home/claude/` и `modules/home/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится после `mise run dot:link` (без sudo и `git add`); совсем быстро для одного файла — `ln -s "$DOTFILES/modules/home/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
 
+## Коммит-дисциплина (три независимых репозитория)
+
+Глобальное правило (коммить свои правки сам через `/git-commit`, стейджа только затронутые файлы, без push) здесь осложнено тем, что в игре **три независимых git-репо** — забыл любой, и работа «теряется» (флейк не увидит / gitlink устареет):
+
+- **Основной** — `~/.dotfiles` (`master`). Обычный кейс.
+- **Сабмодули со своим репо** — `modules/home/karabiner/config` и `modules/home/vscode/theme/true-vibrant-vscode-theme`. Правка **внутри** сабмодуля коммитится в самом сабмодуле, после чего в основном репо надо **забампить gitlink** (`git -C ~/.dotfiles add <путь-сабмодуля>` + коммит), иначе флейк продолжит пинить старый коммит сабмодуля.
+  - *Karabiner:* правишь `.ts` → билд генерит `build/karabiner.json` (tracked-артефакт, который флейк читает через gitlink, см. `modules/home/karabiner/default.nix`). Коммить и `.ts`, и пересобранный `build/karabiner.json` в сабмодуле, затем бампни gitlink.
+- **Vault** — отдельный репо `~/Documents/obsidian/yoshintame`. Документация по dotfiles живёт там (см. «Документация»); коммить её в vault, а не в dotfiles.
+
+«Стейдж только затронутые файлы» из глобального правила здесь читается как «в тех репо, которые затронул»: пройдись по всем трём, где были правки, и закоммить каждый.
+
 ## Гейты качества (flake-parts)
 
 Флейк собран на **flake-parts + easy-hosts**; хосты перечислены таблицей `easy-hosts.hosts` в `flake.nix` (`lasthaze-mbp` aarch64/darwin, `lasthaze-homelab` x86_64/nixos). Общая home-manager-обвязка (`extraSpecialArgs` `flakeRoot`/`pkgs-unstable`/`myLib`/`sopsRefs`, `sharedModules` nix-link/sops/sops-templates + все тул-модули `modules/home/*`) — в `modules/home-manager.nix`; per-система glue гейтов — в `parts/dev.nix`. Поверх — слой гейтов:

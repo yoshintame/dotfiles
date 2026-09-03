@@ -227,6 +227,10 @@
       "Bash(sleep *)",
       "Bash(sort *)",
       "Bash(ssh-add -l)",
+      "Bash(ssh *root@lasthaze-homelab.alpine-ulmer.ts.net*)",
+      "Bash(ssh *root@100.123.237.27*)",
+      "Bash(ssh *root@192.168.1.48*)",
+      "Bash(tailscale ssh lasthaze-homelab:*)",
       "Bash(stat *)",
       "Bash(sudo launchctl list)",
       "Bash(sysctl *)",
@@ -423,7 +427,6 @@
       "Write(//Users/yoshintame/.claude/projects/**/memory/**)"
     ],
     "ask": [
-      "Bash(ssh:*)",
       "Bash(scp:*)",
       "Bash(sftp:*)",
       "Bash(rsync:*)",
@@ -461,7 +464,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\""
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
           }
         ]
       }
@@ -472,7 +475,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --completed"
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --completed"
           }
         ]
       }
@@ -483,7 +486,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --dismiss"
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --dismiss"
           }
         ]
       },
@@ -494,17 +497,6 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/session-title.sh",
             "timeout": 15
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.0.13/scripts/claude-hook.js\" --tooldone"
           }
         ]
       }
@@ -540,6 +532,15 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
+          }
+        ],
+        "matcher": "AskUserQuestion|ExitPlanMode"
       }
     ],
     "WorktreeCreate": [
@@ -564,6 +565,49 @@
             "timeout": 30
           }
         ]
+      }
+    ],
+    "Elicitation": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
+          }
+        ],
+        "matcher": ".*"
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --failed"
+          }
+        ],
+        "matcher": ".*"
+      }
+    ],
+    "PostToolBatch": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --tooldone"
+          }
+        ]
+      }
+    ],
+    "ElicitationResult": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --tooldone"
+          }
+        ],
+        "matcher": ".*"
       }
     ]
   },
@@ -673,5 +717,5 @@
       ]
     }
   },
-  "model": "claude-opus-4-8[1m]"
+  "model": "claude-fable-5-1[1m]"
 }

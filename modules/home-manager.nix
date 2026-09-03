@@ -64,6 +64,7 @@
       ./home/rclone
       ./home/resticprofile
       ./home/serena
+      ./home/session-reaper
       ./home/starship
       ./home/tig
       ./home/tmux

@@ -17,6 +17,7 @@
     "bun"
     "claude"
     "claude-code-patch"
+    "claude-rc"
     "codex"
     "docker"
     "eza"

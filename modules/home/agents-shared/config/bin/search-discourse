@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+import argparse
+import html
+import json
+import re
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+
+TIMEOUT = 15
+
+INSTANCES = {
+    "rust": "users.rust-lang.org",
+    "pytorch": "discuss.pytorch.org",
+    "obsidian": "forum.obsidian.md",
+    "hass": "community.home-assistant.io",
+    "homeassistant": "community.home-assistant.io",
+    "swift": "forums.swift.org",
+    "elixir": "elixirforum.com",
+    "docker": "forums.docker.com",
+    "meta": "meta.discourse.org",
+    "leaflet": "leafletjs.com",
+}
+
+
+def _resolve_host(name):
+    name = (name or "").strip()
+    if name in INSTANCES:
+        return INSTANCES[name]
+    return re.sub(r"^https?://", "", name).strip("/")
+
+
+def _get(url):
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (research-cli; personal use)",
+        "Accept": "application/json",
+    })
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        ct = r.headers.get("Content-Type", "")
+        raw = r.read()
+    if "json" not in ct:
+        raise RuntimeError("non-JSON response")
+    return json.loads(raw)
+
+
+def _strip_html(s):
+    s = re.sub(r"<[^>]+>", " ", s or "")
+    return re.sub(r"\s+", " ", html.unescape(s)).strip()
+
+
+def latest(instance, limit=20):
+    host = _resolve_host(instance)
+    data = _get(f"https://{host}/latest.json")
+    topics = data.get("topic_list", {}).get("topics", [])
+    out = []
+    for t in topics[:limit]:
+        out.append({
+            "title": t.get("title", ""),
+            "url": f"https://{host}/t/{t.get('slug')}/{t.get('id')}",
+            "posts_count": t.get("posts_count"),
+            "reply_count": t.get("reply_count"),
+            "views": t.get("views"),
+            "created_at": t.get("created_at"),
+            "last_posted_at": t.get("last_posted_at"),
+        })
+    return out
+
+
+def fetch(url, max_posts=20):
+    parsed = urllib.parse.urlparse(url if "://" in url else "https://" + url)
+    host = parsed.netloc
+    m = re.search(r"/t/(?:[^/]+/)?(\d+)", parsed.path)
+    if not host or not m:
+        raise ValueError(f"Cannot parse a Discourse topic URL: {url}")
+    topic_id = m.group(1)
+    data = _get(f"https://{host}/t/{topic_id}.json")
+    posts = data.get("post_stream", {}).get("posts", [])[:max_posts]
+    return {
+        "title": data.get("title", ""),
+        "url": f"https://{host}/t/{data.get('slug')}/{topic_id}",
+        "posts_count": data.get("posts_count"),
+        "posts": [{
+            "username": p.get("username"),
+            "post_number": p.get("post_number"),
+            "score": p.get("score"),
+            "created_at": p.get("created_at"),
+            "body": _strip_html(p.get("cooked", "")),
+        } for p in posts],
+    }
+
+
+def print_latest_md(results):
+    if not results:
+        print("No topics.")
+        return
+    for r in results:
+        pc = r["posts_count"] if r["posts_count"] is not None else "?"
+        views = r["views"] if r["views"] is not None else "?"
+        print(f"[{pc} posts | {views} views] {r['title']}")
+        print(f"  {r['url']}")
+        print()
+
+
+def print_fetch_md(result):
+    print(f"# {result['title']}")
+    print(f"{result['url']} · {result['posts_count'] if result['posts_count'] is not None else '?'} posts\n")
+    for p in result["posts"]:
+        marker = "OP" if p.get("post_number") == 1 else f"#{p.get('post_number')}"
+        print(f"[{marker}] {p.get('username')}:")
+        print(f"  {p['body'][:800]}")
+        print()
+
+
+def main():
+    p = argparse.ArgumentParser(
+        description="Discourse forum reader. Robots-compliant: uses /latest.json and "
+                    "/t/<id>.json only (their robots.txt disallows /search). Discover "
+                    "threads with WebSearch 'site:host query', then fetch them here.")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    lp = sub.add_parser("latest", help="List recent topics from an instance (trend monitoring)")
+    lp.add_argument("instance", help="Alias (rust, pytorch, obsidian, hass, ...) or host (forum.example.com)")
+    lp.add_argument("--limit", type=int, default=20)
+    lp.add_argument("--json", action="store_true")
+
+    fp = sub.add_parser("fetch", help="Fetch a topic thread with its posts")
+    fp.add_argument("url", help="Topic URL, e.g. https://users.rust-lang.org/t/slug/12345")
+    fp.add_argument("--limit", type=int, default=20, dest="max_posts",
+                    help="Max posts to return from the thread")
+    fp.add_argument("--json", action="store_true")
+
+    sub.add_parser("instances", help="List known instance aliases")
+
+    args = p.parse_args()
+
+    try:
+        if args.cmd == "latest":
+            results = latest(args.instance, limit=args.limit)
+            if args.json:
+                print(json.dumps(results, indent=2, ensure_ascii=False))
+            else:
+                print_latest_md(results)
+        elif args.cmd == "fetch":
+            result = fetch(args.url, max_posts=args.max_posts)
+            if args.json:
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+            else:
+                print_fetch_md(result)
+        elif args.cmd == "instances":
+            for alias, host in sorted(INSTANCES.items()):
+                print(f"{alias:16} {host}")
+    except urllib.error.HTTPError as e:
+        print(f"HTTP Error {e.code}: {e.reason}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

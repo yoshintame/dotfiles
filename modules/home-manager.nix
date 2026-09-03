@@ -36,6 +36,7 @@
       ./home/btop
       ./home/btt-gestures
       ./home/bun
+      ./home/cc-trace
       ./home/claude
       ./home/claude-code-patch
       ./home/claude-rc

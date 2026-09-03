@@ -15,6 +15,7 @@
     "btop"
     "btt-gestures"
     "bun"
+    "cc-trace"
     "claude"
     "claude-code-patch"
     "claude-rc"

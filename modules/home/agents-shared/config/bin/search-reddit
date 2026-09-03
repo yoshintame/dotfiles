@@ -16,9 +16,17 @@ Usage:
   search-reddit search <query> [--sub SUB] [--sort relevance|top|new|comments|hot]
                 [--time hour|day|week|month|year|all] [--limit N] [--json]
   search-reddit fetch <url> [--json]
+  search-reddit arctic <sub> [--after YYYY-MM-DD] [--before YYYY-MM-DD]
+                [--sort desc|asc] [--limit N] [--json]
 
 Defaults: --sort relevance, --time all. Use --sort top for "best of subreddit"
 regardless of query relevance, --time year for fresh/trending topics only.
+
+`arctic` lists a subreddit chronologically from the Arctic Shift archive
+(no auth, coverage since 2008). Score-blind and OAuth-free: it reaches the
+low-score/date-windowed layer the ranked search buries, and works when the
+Android-token path is throttled. Full-text search on Arctic times out, so this
+is listing-only (subreddit + date window), not a query channel.
 """
 import argparse
 import base64
@@ -33,12 +41,13 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from time import time as _now
+from time import sleep, time as _now
 
 CLIENT_ID = "ohXpoqrZYub1kg"
 TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
 OAUTH_BASE = "https://oauth.reddit.com"
 WWW_BASE = "https://www.reddit.com"
+ARCTIC_BASE = "https://arctic-shift.photon-reddit.com/api"
 TOKEN_CACHE = os.path.join(
     os.environ.get("XDG_CACHE_HOME", os.path.expanduser("~/.cache")),
     "search-reddit", "token.json",
@@ -121,6 +130,13 @@ def _oauth_get(url, _state={}, _retry=True):
         raise
 
 
+def _norm_sub(sub):
+    sub = (sub or "").strip()
+    if sub.lower().startswith("r/"):
+        sub = sub[2:]
+    return sub.strip("/")
+
+
 _LUCENE_CHARS = set('+-":()')
 
 
@@ -151,7 +167,7 @@ def _post_dict(d):
 def _search_oauth(query, sub, sort, time_range, limit, strict):
     q = urllib.parse.quote_plus(_strict_and(query) if strict else query)
     if sub:
-        sub = sub.lstrip("r/").strip()
+        sub = _norm_sub(sub)
         url = (f"{OAUTH_BASE}/r/{sub}/search?q={q}&restrict_sr=on"
                f"&sort={sort}&t={time_range}&limit={limit}&raw_json=1")
     else:
@@ -174,7 +190,7 @@ def _json_get(url):
 def _search_json(query, sub, sort, time_range, limit, strict):
     q = urllib.parse.quote_plus(_strict_and(query) if strict else query)
     if sub:
-        sub = sub.lstrip("r/").strip()
+        sub = _norm_sub(sub)
         url = (f"{WWW_BASE}/r/{sub}/search.json?q={q}&restrict_sr=on"
                f"&sort={sort}&t={time_range}&limit={limit}&raw_json=1")
     else:
@@ -198,7 +214,7 @@ def _rss(url):
 def _search_rss(query, sub, sort, time_range, limit, strict):
     q = urllib.parse.quote_plus(_strict_and(query) if strict else query)
     if sub:
-        sub = sub.lstrip("r/").strip()
+        sub = _norm_sub(sub)
         url = (f"{WWW_BASE}/r/{sub}/search.rss?q={q}&restrict_sr=on"
                f"&sort={sort}&t={time_range}&limit={limit}")
     else:
@@ -230,6 +246,34 @@ def search(query, sub=None, sort="relevance", time_range="all", limit=20, strict
         except (urllib.error.URLError, RuntimeError, ValueError, KeyError):
             continue
     return _search_rss(*args)
+
+
+def _arctic_get(url, _tries=3):
+    for attempt in range(_tries):
+        req = urllib.request.Request(url, headers={"User-Agent": _user_agent()})
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+                payload = json.loads(r.read())
+            if payload.get("error"):
+                raise RuntimeError(payload["error"])
+            return payload.get("data") or []
+        except (urllib.error.HTTPError, urllib.error.URLError):
+            if attempt == _tries - 1:
+                raise
+            sleep(1.5 * (attempt + 1))
+
+
+def arctic(sub, after=None, before=None, sort="desc", limit=25):
+    if not sub:
+        raise ValueError("arctic requires a subreddit")
+    sub = _norm_sub(sub)
+    params = {"subreddit": sub, "sort": sort, "limit": str(limit)}
+    if after:
+        params["after"] = after
+    if before:
+        params["before"] = before
+    url = f"{ARCTIC_BASE}/posts/search?{urllib.parse.urlencode(params)}"
+    return [_post_dict(p) for p in _arctic_get(url)]
 
 
 def _extract_comments(items, depth=0, max_depth=2, max_per_level=10):
@@ -382,6 +426,15 @@ def main():
     fp.add_argument("url")
     fp.add_argument("--json", action="store_true")
 
+    ap = sub.add_parser("arctic", help="List a subreddit chronologically via the Arctic Shift archive (no auth)")
+    ap.add_argument("subreddit", help="Subreddit name (e.g. rust, ClaudeAI)")
+    ap.add_argument("--after", help="Only posts on/after this date (YYYY-MM-DD)")
+    ap.add_argument("--before", help="Only posts before this date (YYYY-MM-DD)")
+    ap.add_argument("--sort", default="desc", choices=["desc", "asc"],
+                    help="desc = newest first (default), asc = oldest first")
+    ap.add_argument("--limit", type=int, default=25)
+    ap.add_argument("--json", action="store_true")
+
     args = p.parse_args()
 
     try:
@@ -399,6 +452,13 @@ def main():
                 print(json.dumps(result, indent=2, ensure_ascii=False))
             else:
                 print_fetch_md(result)
+        elif args.cmd == "arctic":
+            results = arctic(args.subreddit, after=args.after, before=args.before,
+                             sort=args.sort, limit=args.limit)
+            if args.json:
+                print(json.dumps(results, indent=2, ensure_ascii=False))
+            else:
+                print_search_md(results)
     except urllib.error.HTTPError as e:
         print(f"HTTP Error {e.code}: {e.reason}", file=sys.stderr)
         sys.exit(1)

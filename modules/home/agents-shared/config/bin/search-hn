@@ -10,8 +10,12 @@ Rate limit: 10k req/hour per IP.
 
 Usage:
   search-hn.py search <query> [--tags story|show_hn|ask_hn|comment]
-                [--min-points N] [--limit N] [--by-date] [--json]
+                [--min-points N] [--max-points N] [--limit N] [--by-date] [--json]
   search-hn.py fetch <id> [--json]
+
+--max-points is the inverse of --min-points (numericFilters points<N): it opens
+the low-score layer where new-tool announcements live, which points>N filters
+out by design.
 """
 import argparse
 import html
@@ -37,27 +41,33 @@ def _unescape(s):
 
 def clean_hit(h):
     """Strip highlight/noise fields. Inspired by AnkamAndy/hn-pulse."""
+    body = h.get("story_text") or h.get("comment_text") or ""
     return {
         "id": h.get("objectID"),
         "title": _unescape(h.get("title") or h.get("story_title") or ""),
         "url": h.get("url") or f"https://news.ycombinator.com/item?id={h.get('objectID')}",
-        "points": h.get("points", 0),
-        "num_comments": h.get("num_comments", 0),
+        "points": h.get("points") or 0,
+        "num_comments": h.get("num_comments") or 0,
         "author": h.get("author"),
         "created_at": h.get("created_at"),
         "tags": h.get("_tags", []),
-        "story_text": _unescape((h.get("story_text") or "")[:300]) if h.get("story_text") else "",
+        "story_text": _unescape(body[:300]) if body else "",
     }
 
 
-def search(query, tags="story", min_points=None, limit=20, by_date=False):
+def search(query, tags="story", min_points=None, max_points=None, limit=20, by_date=False):
     params = {
         "query": query,
         "tags": tags,
         "hitsPerPage": str(limit),
     }
+    filters = []
     if min_points is not None:
-        params["numericFilters"] = f"points>{min_points}"
+        filters.append(f"points>{min_points}")
+    if max_points is not None:
+        filters.append(f"points<{max_points}")
+    if filters:
+        params["numericFilters"] = ",".join(filters)
     endpoint = "/search_by_date" if by_date else "/search"
     url = f"{API_BASE}{endpoint}?{urllib.parse.urlencode(params)}"
     data = _get(url)
@@ -147,6 +157,8 @@ def main():
     sp.add_argument("--tags", default="story",
                     help="story | show_hn | ask_hn | comment (comma-separated)")
     sp.add_argument("--min-points", type=int, default=None)
+    sp.add_argument("--max-points", type=int, default=None,
+                    help="Inverse of --min-points (points<N): surfaces low-score announcements")
     sp.add_argument("--limit", type=int, default=20)
     sp.add_argument("--by-date", action="store_true",
                     help="Sort chronologically instead of by relevance")
@@ -161,7 +173,7 @@ def main():
     try:
         if args.cmd == "search":
             results = search(args.query, tags=args.tags, min_points=args.min_points,
-                             limit=args.limit, by_date=args.by_date)
+                             max_points=args.max_points, limit=args.limit, by_date=args.by_date)
             if args.json:
                 print(json.dumps(results, indent=2, ensure_ascii=False))
             else:

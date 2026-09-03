@@ -80,5 +80,6 @@ myLib.mkModule config "claude" {
     "~/.local/bin/search-reddit" = "modules/home/agents-shared/config/bin/search-reddit";
     "~/.local/bin/search-hn" = "modules/home/agents-shared/config/bin/search-hn";
     "~/.local/bin/search-github" = "modules/home/agents-shared/config/bin/search-github";
+    "~/.local/bin/search-discourse" = "modules/home/agents-shared/config/bin/search-discourse";
   };
 }

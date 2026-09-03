@@ -452,6 +452,63 @@ describe("git-commit-atomic e2e", () => {
     expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("chore: hook bypass");
   });
 
+  test("--no-edit runs pre-commit hooks and commits without opening an editor", () => {
+    const repo = makeRepo("atomic-no-edit-hooks");
+    const hookRan = join(repo, "hook-ran");
+    const hook = join(repo, ".git", "hooks", "pre-commit");
+    writeFileSync(hook, `#!/bin/sh\ntouch "${hookRan}"\nexit 0\n`);
+    chmodSync(hook, 0o755);
+    const editorCalled = join(repo, "editor-was-called");
+    const editor = writeFakeEditor(repo, `touch "${editorCalled}"`);
+    runGit(repo, ["config", "core.editor", editor]);
+
+    writeRepoFile(repo, "x.txt", "x\n");
+    runAtomic(repo, "feat: no-edit", ["x.txt"], [], { extraArgs: ["--no-edit"] });
+
+    expect(runGit(repo, ["log", "-1", "--pretty=%s"])).toBe("feat: no-edit");
+    expect(runGit(repo, ["show", "HEAD:x.txt"])).toBe("x");
+    expect(existsSync(hookRan)).toBe(true);
+    expect(existsSync(editorCalled)).toBe(false);
+  });
+
+  test("--no-edit aborts the commit when a pre-commit hook fails", () => {
+    const repo = makeRepo("atomic-no-edit-hook-fail");
+    const hook = join(repo, ".git", "hooks", "pre-commit");
+    writeFileSync(hook, "#!/bin/sh\nexit 1\n");
+    chmodSync(hook, 0o755);
+
+    writeRepoFile(repo, "x.txt", "x\n");
+    let threw = false;
+    try {
+      runAtomic(repo, "feat: should be blocked", ["x.txt"], [], {
+        extraArgs: ["--no-edit"],
+      });
+    } catch {
+      threw = true;
+    }
+    expect(threw).toBe(true);
+    expect(runGit(repo, ["log", "--oneline"]).split("\n")).toHaveLength(1);
+  });
+
+  test("--auto and --no-edit are mutually exclusive", () => {
+    const repo = makeRepo("atomic-mutually-exclusive");
+    writeRepoFile(repo, "x.txt", "x\n");
+
+    let threw = false;
+    try {
+      runAtomic(repo, "feat: nope", ["x.txt"], [], {
+        auto: true,
+        extraArgs: ["--no-edit"],
+      });
+    } catch (err) {
+      threw = true;
+      const stderr = (err as { stderr?: Buffer | string }).stderr?.toString() ?? "";
+      expect(stderr).toContain("mutually exclusive");
+    }
+    expect(threw).toBe(true);
+    expect(runGit(repo, ["log", "--oneline"]).split("\n")).toHaveLength(1);
+  });
+
   test("--author overrides commit author", () => {
     const repo = makeRepo("atomic-author");
     writeRepoFile(repo, "x.txt", "x\n");

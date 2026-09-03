@@ -1,20 +1,32 @@
 #!/usr/bin/env bash
-# git-commit-atomic: stage files and apply patches into one commit, with two
+# git-commit-atomic: stage files and apply patches into one commit, with three
 # execution modes:
 #
-#   default (no --auto)   delegate to `git commit -e` so the user's real
+#   default (no flag)     delegate to `git commit -e` so the user's real
 #                         editor opens for message review (same approach as
 #                         the legacy git-commit-edit wrapper). git native
 #                         flow runs pre-commit / commit-msg / post-commit
-#                         hooks. Race-safety: .git/index.lock (git native);
-#                         no CAS against HEAD movement.
+#                         hooks; commit signed via commit.gpgsign. Race-safety:
+#                         .git/index.lock (git native); no CAS against HEAD
+#                         movement. Interactive — reached via `/git-commit
+#                         manual`.
+#
+#   --no-edit             like default but `git commit -m` (no editor): the
+#                         message is used verbatim and the flow is
+#                         non-interactive. Hooks still run. Unsigned by default
+#                         (commit.gpgsign forced off; signing deferred to push
+#                         via `git sp`) unless -S is passed. Race-safety:
+#                         .git/index.lock. For a solo worktree that wants hooks
+#                         without an editor prompt.
 #
 #   --auto                build the commit on top of HEAD in an ephemeral
 #                         GIT_INDEX_FILE under $GIT_DIR, then advance HEAD
 #                         via atomic compare-and-swap (commit-tree +
 #                         update-ref HEAD <new> <expected>). On lost CAS
 #                         retry with the new HEAD snapshot. Hooks are NOT
-#                         run (plumbing flow).
+#                         run (plumbing flow); unsigned.
+#
+#   --auto and --no-edit are mutually exclusive.
 #
 # Usage:
 #   git-commit-atomic [flags] <message> [<file>...] [-- <patch>...]
@@ -33,6 +45,8 @@
 #                                   subcommand-token-merge regenerate failure
 #                                   mode (kitten/feat-base-ui-combobox class).
 #   --auto                          take the CAS path; skip editor preview
+#   --no-edit                       hooks-but-no-editor path (`git commit -m`);
+#                                   non-interactive, unsigned by default
 #   -s, --signoff                   append Signed-off-by trailer
 #   -S, --gpg-sign[=<keyid>]        GPG-sign the commit
 #   -n, --no-verify                 in --auto: no-op (no hooks anyway)
@@ -54,6 +68,7 @@ USAGE
 }
 
 AUTO=0
+NO_EDIT=0
 SIGNOFF=0
 GPG_SIGN=()
 ALLOW_EMPTY_MSG=0
@@ -68,6 +83,7 @@ while [ $# -gt 0 ]; do
         --repo) REPO="${2:-}"; shift 2 ;;
         --repo=*) REPO="${1#--repo=}"; shift ;;
         --auto) AUTO=1; shift ;;
+        --no-edit) NO_EDIT=1; shift ;;
         -s|--signoff) SIGNOFF=1; shift ;;
         -S) GPG_SIGN=(-S); shift ;;
         -S*) GPG_SIGN=("$1"); shift ;;
@@ -83,6 +99,11 @@ while [ $# -gt 0 ]; do
         *) break ;;
     esac
 done
+
+if [ "$AUTO" -eq 1 ] && [ "$NO_EDIT" -eq 1 ]; then
+    echo "git-commit-atomic: --auto and --no-edit are mutually exclusive" >&2
+    exit 2
+fi
 
 if [ -n "$REPO" ]; then
     cd "$REPO" || { echo "git-commit-atomic: cannot chdir to $REPO" >&2; exit 1; }
@@ -144,17 +165,10 @@ ERR=$(mktemp "${TMPDIR:-/tmp}/gca.XXXXXX")
 trap 'rm -f "$ERR"' EXIT
 
 if [ "$AUTO" -eq 0 ]; then
-    # Editor mode: delegate to `git commit -e`. Mirrors the proven
-    # git-commit-edit pattern: real editor resolved from core.editor /
-    # $VISUAL / $EDITOR, then GIT_EDITOR overridden so git itself launches it
-    # (correct subprocess + TTY handling instead of our own eval).
-    EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
-    EDITOR_CMD="${EDITOR_CMD:-${VISUAL:-${EDITOR:-}}}"
-    if [ -z "$EDITOR_CMD" ]; then
-        echo "git-commit-atomic: no editor configured. Set core.editor / \$VISUAL / \$EDITOR, or pass --auto." >&2
-        exit 1
-    fi
-
+    # Non-plumbing path: a real `git commit`, so pre-commit / commit-msg /
+    # post-commit hooks fire. Shared-index staging is identical for both
+    # sub-modes below; only the final `git commit` differs.
+    #
     # Reset shared index to HEAD so unrelated staged entries from other
     # sessions / manual `git add`s don't leak into this commit. Mirrors
     # v5 commit-edit's "shared staging is disposable" stance.
@@ -178,6 +192,28 @@ if [ "$AUTO" -eq 0 ]; then
     [ ${#GPG_SIGN[@]} -gt 0 ] && extras+=("${GPG_SIGN[@]}")
     [ "$ALLOW_EMPTY_MSG" -eq 1 ] && extras+=(--allow-empty-message)
     [ "$NO_VERIFY" -eq 1 ] && extras+=(--no-verify)
+
+    if [ "$NO_EDIT" -eq 1 ]; then
+        # No editor: message used verbatim, non-interactive. Force signing
+        # off (unless an explicit -S was passed) so no Touch ID / 1Password
+        # prompt can block the flow; signing is deferred to push via `git
+        # sp`, same stance as --auto.
+        gpgoff=()
+        [ ${#GPG_SIGN[@]} -eq 0 ] && gpgoff=(-c commit.gpgsign=false)
+        git ${gpgoff[@]+"${gpgoff[@]}"} commit -m "$MSG" ${extras[@]+"${extras[@]}"}
+        exit $?
+    fi
+
+    # Editor mode: delegate to `git commit -e`. Mirrors the proven
+    # git-commit-edit pattern: real editor resolved from core.editor /
+    # $VISUAL / $EDITOR, then GIT_EDITOR overridden so git itself launches it
+    # (correct subprocess + TTY handling instead of our own eval).
+    EDITOR_CMD=$(git config --get core.editor 2>/dev/null || echo "")
+    EDITOR_CMD="${EDITOR_CMD:-${VISUAL:-${EDITOR:-}}}"
+    if [ -z "$EDITOR_CMD" ]; then
+        echo "git-commit-atomic: no editor configured. Set core.editor / \$VISUAL / \$EDITOR, or pass --auto / --no-edit." >&2
+        exit 1
+    fi
 
     GIT_EDITOR="$EDITOR_CMD" git commit -e -m "$MSG" ${extras[@]+"${extras[@]}"}
     exit $?

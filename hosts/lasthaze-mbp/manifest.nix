@@ -43,6 +43,7 @@
     "rclone"
     "resticprofile"
     "serena"
+    "session-reaper"
     "starship"
     "tig"
     "tmux"

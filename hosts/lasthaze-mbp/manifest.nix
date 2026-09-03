@@ -51,6 +51,7 @@
     "wezterm"
     "worktrunk"
     "yazi"
+    "zed"
     "zoxide"
   ];
 }

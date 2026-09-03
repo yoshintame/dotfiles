@@ -73,6 +73,7 @@
       ./home/worktrunk
       ./home/yabai
       ./home/yazi
+      ./home/zed
       ./home/zoxide
     ];
   };

@@ -2,7 +2,8 @@ ipc = require("hs.ipc")
 ipc.cliInstall()
 
 hs.loadSpoon("ReloadConfiguration")
-spoon.ReloadConfiguration.watch_paths = { os.getenv("HOME") .. "/.dotfiles/modules/hammerspoon" }
+local resolvedInit = hs.fs.pathToAbsolute(hs.configdir .. "/init.lua")
+spoon.ReloadConfiguration.watch_paths = { resolvedInit and resolvedInit:match("^(.*)/") or hs.configdir }
 spoon.ReloadConfiguration:start()
 
 local ok, err = pcall(dofile, hs.configdir .. "/main.lua")

@@ -67,6 +67,8 @@ local code = spoon.LeaderFlow.actions.code
 local launch = spoon.LeaderFlow.actions.launch
 local reload = spoon.LeaderFlow.actions.reload
 
+local function dotmod(name) return code("~/.dotfiles/modules/home/" .. name .. "/config") end
+
 local function hardCloseFront()
     local app = hs.application.frontmostApplication()
     if app then app:kill9() end
@@ -123,6 +125,25 @@ local function restartAll()
         end)
     end
     hs.alert.show("♻︎ Restarting tool stack…")
+end
+
+local function resetClaudeSessions()
+    local home = os.getenv("HOME")
+    local bun = home .. "/.local/share/mise/shims/bun"
+    local script = home .. "/.claude/skills/reset-sessions/scripts/reset-sessions.ts"
+    hs.alert.show("♻︎ Resetting Claude Code sessions…")
+    local task = hs.task.new(bun, function(exitCode, stdOut)
+        local summary = stdOut and (stdOut:match("Убито:[^\n]*") or stdOut:match("Нечего убивать[^\n]*"))
+        if exitCode == 0 and summary then
+            hs.alert.show("✅ " .. summary)
+        elseif exitCode == 0 then
+            hs.alert.show("✅ Claude Code sessions reset")
+        else
+            hs.alert.show("⚠️ reset-sessions failed (exit " .. tostring(exitCode) .. ")")
+        end
+    end, { script, "--all" })
+    task:setEnvironment({ HOME = home, PATH = "/usr/bin:/bin:/usr/sbin:/sbin" })
+    task:start()
 end
 
 local function osa(script)
@@ -355,11 +376,11 @@ spoon.LeaderFlow:setup({
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
             { "d", "VSCode Windows", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D") },
 
-            { "c", "CRM", code("~/Development/work/senat-exchange/crm-frontend") },
+            { "c", "CRM", code("~/Development/work/senate/senate@crm-frontend") },
             { "f", "dotfiles", code("~/.dotfiles") },
-            { "k", "karabiner", code("~/.dotfiles/modules/karabiner/config") },
-            { "h", "hammerspoon", code("~/.dotfiles/modules/hammerspoon/config") },
-            { "v", "vscode", code("~/.dotfiles/modules/vscode/config") },
+            { "k", "karabiner", dotmod("karabiner") },
+            { "h", "hammerspoon", dotmod("hammerspoon") },
+            { "v", "vscode", dotmod("vscode") },
             { "s", "obsidian/yoshintame", code("~/Documents/obsidian/yoshintame") },
         }},
 
@@ -403,6 +424,7 @@ spoon.LeaderFlow:setup({
             { "p", "Color Picker", restartApp("io.sipapp.Sip-setapp") },
             { "h", "Hammerspoon", reload() },
             { "a", "All", restartAll },
+            { "d", "Reset CC Sessions", resetClaudeSessions },
         }},
 
         { "h", "[hammerspoon]", {

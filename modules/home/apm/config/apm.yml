@@ -3,5 +3,6 @@ version: 1.0.0
 targets: [claude, codex]
 dependencies:
   apm:
-    - /Users/yoshintame/Development/personal/agent-skills
+    - git: git@github.com:yoshintame/agent-skills.git
+      ref: ^1.0.0
   mcp: []

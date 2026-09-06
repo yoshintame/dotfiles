@@ -44,15 +44,7 @@ nix build --impure --out-link "$out" \
 description = "Run APM in global scope, persist its lock, and restore nix links"
 dir = "~/.apm"
 raw = true
-usage = 'arg "<args>" var=#true double_dash="automatic"'
-run = '''
-set -euo pipefail
-
-eval "apm $usage_args"
-cp "$HOME/.apm/apm.lock.yaml" "{{env.DOTFILES}}/modules/home/apm/config/apm.lock.yaml"
-rm "$HOME/.apm/apm.lock.yaml"
-mise run dot:link
-'''
+run = 'bun run "{{env.DOTFILES}}/packages/apm-global/src/run.ts" "$@"'
 
 ["dot:proxy-bindings"]
 description = "Generate proxy-binding files from YAML config"

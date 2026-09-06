@@ -70,6 +70,35 @@
         "type": "github"
       }
     },
+    "edge": {
+      "inputs": {
+        "disko": [
+          "disko"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "sops-nix": [
+          "sops-nix"
+        ],
+        "srvos": [
+          "srvos"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788492511,
+        "narHash": "sha256-tbh5sOjFLbgDXtiwYEZLigmY9WqZOUA+mR993/zznqE=",
+        "ref": "refs/heads/main",
+        "rev": "956daf99919b674583f5413b5054eddc4e93d7bb",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@github.com/yoshintame/lasthaze-edge"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/yoshintame/lasthaze-edge"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -401,6 +430,7 @@
       "inputs": {
         "disko": "disko",
         "easy-hosts": "easy-hosts",
+        "edge": "edge",
         "flake-parts": "flake-parts",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",

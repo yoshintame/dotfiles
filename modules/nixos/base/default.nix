@@ -36,9 +36,9 @@ myLib.mkModule config "base" {
     git
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 3;
+  boot.loader.systemd-boot.enable = lib.mkDefault true;
+  boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
+  boot.loader.timeout = lib.mkDefault 3;
 
   boot.kernelParams = [
     "quiet"

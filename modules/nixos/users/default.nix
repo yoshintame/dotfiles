@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   myLib,
   ...
 }:
@@ -20,8 +21,8 @@ myLib.mkModule config "users" {
     description = "Mikhail Ivanov";
     extraGroups = [
       "wheel"
-      "networkmanager"
-    ];
+    ]
+    ++ lib.optional config.networking.networkmanager.enable "networkmanager";
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = authorizedKeys;
 

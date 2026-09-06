@@ -1,7 +1,12 @@
-{ config, myLib, ... }:
+{
+  config,
+  lib,
+  myLib,
+  ...
+}:
 myLib.mkModule config "tailscale" {
   services.tailscale = {
     enable = true;
-    useRoutingFeatures = "both";
+    useRoutingFeatures = lib.mkDefault "both";
   };
 }

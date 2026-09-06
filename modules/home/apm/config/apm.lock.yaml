@@ -4,9 +4,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 10dbba7406ce38b6b35ae0a65a070288dc0056b0
-  resolved_ref: v1.0.0
-  version: 1.0.0
+  resolved_commit: 6dd55b218e25bb8d36b39c8f16e5ea3d79ea9e1b
+  resolved_ref: v1.0.1
+  version: 1.0.1
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -338,10 +338,10 @@ dependencies:
     .agents/skills/git-ref/SKILL.md: sha256:7e53098d855f2c0f2cfe1dd9434a8888c644823fc2eb903b8eaee63ef46605d8
     .agents/skills/git-ref/scripts/compare-link.sh: sha256:4710319350aaffc54528a1a15aea416e34f839727650d17628d3483116c445f6
     .agents/skills/handoff-create-independent-deep-research/SKILL.md: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
-    .agents/skills/handoff-create/SKILL.md: sha256:f11df7a4e4e4a8cfcb33b45a7eec3c90fd459a7be8a99d713fe7301d1731ae27
-    .agents/skills/handoff-create/scripts/handoff-create.ts: sha256:228b7818c97374afff758087846fb62d770d5a01dd73034eca1925e006f3f58e
-    .agents/skills/handoff-pickup/SKILL.md: sha256:21aac0c62f98d10572721f3f593222e80a2698c8b31106507e3797add54b0349
-    .agents/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:2fb0a2e6dee2e18481285a97fc0278c09f0ea401538dc91bf1aaca81aaaec71f
+    .agents/skills/handoff-create/SKILL.md: sha256:ce400fdc6c3bfb64f5c8327657417e2fe5f51e525b1f4749064758abedac3091
+    .agents/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
+    .agents/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
+    .agents/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
     .agents/skills/homelab-deploy/SKILL.md: sha256:dfa7c35ce938005b7de8ebe90beebe0c9724653c276f4a0af55b37be4d0537f6
     .agents/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
     .agents/skills/keyswitcher-update/SKILL.md: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
@@ -435,10 +435,10 @@ dependencies:
     .claude/skills/git-ref/SKILL.md: sha256:7e53098d855f2c0f2cfe1dd9434a8888c644823fc2eb903b8eaee63ef46605d8
     .claude/skills/git-ref/scripts/compare-link.sh: sha256:4710319350aaffc54528a1a15aea416e34f839727650d17628d3483116c445f6
     .claude/skills/handoff-create-independent-deep-research/SKILL.md: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
-    .claude/skills/handoff-create/SKILL.md: sha256:f11df7a4e4e4a8cfcb33b45a7eec3c90fd459a7be8a99d713fe7301d1731ae27
-    .claude/skills/handoff-create/scripts/handoff-create.ts: sha256:228b7818c97374afff758087846fb62d770d5a01dd73034eca1925e006f3f58e
-    .claude/skills/handoff-pickup/SKILL.md: sha256:21aac0c62f98d10572721f3f593222e80a2698c8b31106507e3797add54b0349
-    .claude/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:2fb0a2e6dee2e18481285a97fc0278c09f0ea401538dc91bf1aaca81aaaec71f
+    .claude/skills/handoff-create/SKILL.md: sha256:ce400fdc6c3bfb64f5c8327657417e2fe5f51e525b1f4749064758abedac3091
+    .claude/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
+    .claude/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
+    .claude/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
     .claude/skills/homelab-deploy/SKILL.md: sha256:dfa7c35ce938005b7de8ebe90beebe0c9724653c276f4a0af55b37be4d0537f6
     .claude/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
     .claude/skills/keyswitcher-update/SKILL.md: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
@@ -488,10 +488,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:d495ff19f6b398a4d5c26ad04afe338aece3902194dfb7ec2e3362f536a4e7c6
+  content_hash: sha256:d079ad1c1661fbd4e7adb1e291adedae9a10a132f27d02f0098113c7dbd71ccd
   constraint: ^1.0.0
-  resolved_tag: v1.0.0
-  resolved_at: '2026-09-06T10:57:18+00:00'
+  resolved_tag: v1.0.1
+  resolved_at: '2026-09-06T12:53:17+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -1069,7 +1069,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:f11df7a4e4e4a8cfcb33b45a7eec3c90fd459a7be8a99d713fe7301d1731ae27
+  content_hash: sha256:ce400fdc6c3bfb64f5c8327657417e2fe5f51e525b1f4749064758abedac3091
 - kind: project-relative
   target: claude
   value: .claude/skills/handoff-create/scripts/handoff-create.ts
@@ -1078,7 +1078,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:228b7818c97374afff758087846fb62d770d5a01dd73034eca1925e006f3f58e
+  content_hash: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
 - kind: project-relative
   target: claude
   value: .claude/skills/handoff-pickup
@@ -1096,7 +1096,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:21aac0c62f98d10572721f3f593222e80a2698c8b31106507e3797add54b0349
+  content_hash: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
 - kind: project-relative
   target: claude
   value: .claude/skills/handoff-pickup/scripts/handoff-pickup.ts
@@ -1105,7 +1105,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:2fb0a2e6dee2e18481285a97fc0278c09f0ea401538dc91bf1aaca81aaaec71f
+  content_hash: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
 - kind: project-relative
   target: claude
   value: .claude/skills/homelab-deploy
@@ -2347,7 +2347,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:f11df7a4e4e4a8cfcb33b45a7eec3c90fd459a7be8a99d713fe7301d1731ae27
+  content_hash: sha256:ce400fdc6c3bfb64f5c8327657417e2fe5f51e525b1f4749064758abedac3091
 - kind: project-relative
   target: codex
   value: .agents/skills/handoff-create/scripts/handoff-create.ts
@@ -2356,7 +2356,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:228b7818c97374afff758087846fb62d770d5a01dd73034eca1925e006f3f58e
+  content_hash: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
 - kind: project-relative
   target: codex
   value: .agents/skills/handoff-pickup
@@ -2374,7 +2374,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:21aac0c62f98d10572721f3f593222e80a2698c8b31106507e3797add54b0349
+  content_hash: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
 - kind: project-relative
   target: codex
   value: .agents/skills/handoff-pickup/scripts/handoff-pickup.ts
@@ -2383,7 +2383,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:2fb0a2e6dee2e18481285a97fc0278c09f0ea401538dc91bf1aaca81aaaec71f
+  content_hash: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
 - kind: project-relative
   target: codex
   value: .agents/skills/homelab-deploy

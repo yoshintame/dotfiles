@@ -30,6 +30,8 @@
 
 Скиллы Claude Code и Codex доставляет APM, а не Nix/nix-link. Глобальный manifest и lock живут в `modules/home/apm/config/`; project-зависимости — в `apm.yml` и `apm.lock.yaml` корня соответствующего репозитория. В dotfiles project manifest подключает ровно `lasthaze-edge-ops` и `lasthaze-edge-decoy-site` из versioned-пакета `lasthaze-edge` и разворачивает их в `.claude/skills/` и `.agents/skills/`.
 
+Для любых запросов пользователя, связанных с прокси, используй `lasthaze-edge-ops` или `lasthaze-edge-decoy-site` по контексту.
+
 Восстановить project deployment: `apm install --frozen`; проверить: `apm audit --ci --no-policy`. Каталоги `.claude/skills/`, `.agents/skills/` и `apm_modules/` сгенерированы и в Git не попадают. Глобальные mutating-команды запускаются через `mise run dot:apm`, чтобы сохранить lock в dotfiles и восстановить Home Manager-ссылку.
 
 ## Коммит-дисциплина (три независимых репозитория)

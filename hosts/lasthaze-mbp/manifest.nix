@@ -9,6 +9,7 @@
 
   home-manager.users.yoshintame.my = myLib.enableList [
     "aerospace"
+    "apm"
     "atuin"
     "bat"
     "brew"

@@ -26,7 +26,11 @@
 
 Исключение — новый **Nix-код** (`*.nix`): флейк видит только git-tracked, его надо `git add` перед любой из команд.
 
-**Частый кейс — Claude Code:** всё в `~/.claude/` симлинкнуто из `modules/home/claude/` и `modules/home/agents-shared/`. `~/.claude/skills/` — glob-link, поэтому правка скилла видна сразу, а **новый** скилл подхватится после `mise run dot:link` (без sudo и `git add`); совсем быстро для одного файла — `ln -s "$DOTFILES/modules/home/claude/config/skills/<name>/SKILL.md" ~/.claude/skills/<name>/SKILL.md`.
+## Скиллы через APM
+
+Скиллы Claude Code и Codex доставляет APM, а не Nix/nix-link. Глобальный manifest и lock живут в `modules/home/apm/config/`; project-зависимости — в `apm.yml` и `apm.lock.yaml` корня соответствующего репозитория. В dotfiles project manifest подключает ровно `lasthaze-edge-ops` и `lasthaze-edge-decoy-site` из versioned-пакета `lasthaze-edge` и разворачивает их в `.claude/skills/` и `.agents/skills/`.
+
+Восстановить project deployment: `apm install --frozen`; проверить: `apm audit --ci --no-policy`. Каталоги `.claude/skills/`, `.agents/skills/` и `apm_modules/` сгенерированы и в Git не попадают. Глобальные mutating-команды запускаются через `mise run dot:apm`, чтобы сохранить lock в dotfiles и восстановить Home Manager-ссылку.
 
 ## Гейты качества (flake-parts)
 

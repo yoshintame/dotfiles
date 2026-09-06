@@ -12,6 +12,13 @@
 - *The Bash tool runs a POSIX shell (zsh), not fish. Use POSIX syntax for every command you execute via the tool, e.g. `export NAME=value`.*
 - *The user's own interactive terminal is fish. ONLY when writing a command for the user to copy and run there, use fish syntax, e.g. `set -x NAME value` instead of `export NAME=value`. Default everywhere else is POSIX.*
 
+## Контекст инструментов
+
+- *Перед чтением файлов сужай область через `rg` / `rg --files`; открывай только найденные релевантные файлы.*
+- *Читай минимальные непересекающиеся диапазоны. Не перечитывай файл целиком после чанков и не запрашивай перекрывающиеся чанки без явной причины.*
+- *Для диагностических команд задавай консервативный лимит вывода инструмента (`max_output_tokens`, если доступен) и увеличивай его только по необходимости.*
+- *Если вывод оказался усечён, продолжай с точки усечения или уточни запрос; не повторяй уже полученную часть.*
+
 ## Code
 
 - *NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.*

@@ -1,8 +1,11 @@
-lockfile_version: '1'
+lockfile_version: '2'
 apm_version: 0.29.1
 dependencies:
-- repo_url: _local/agent-skills
+- repo_url: yoshintame/agent-skills
   name: agent-skills
+  host: github.com
+  resolved_commit: 10dbba7406ce38b6b35ae0a65a070288dc0056b0
+  resolved_ref: v1.0.0
   version: 1.0.0
   package_type: apm_package
   deployed_files:
@@ -351,7 +354,7 @@ dependencies:
     .agents/skills/maintenance-cleanup/SKILL.md: sha256:b4992b94b0dc071a105ea56817ad87e2d3c10b12862dc90bc521aeccdf2d88ee
     .agents/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
     .agents/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
-    .agents/skills/mobx-keystone/SKILL.md: sha256:a4732b5a6abe5f56bf8838841fbfcc53437fa21cc9cef9fdd9e8c2bf227e3ed2
+    .agents/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
     .agents/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
     .agents/skills/paused/SKILL.md: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
     .agents/skills/refactor/SKILL.md: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
@@ -373,7 +376,7 @@ dependencies:
     .agents/skills/session-status/scripts/session-status.ts: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
     .agents/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
     .agents/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
-    .agents/skills/tanstack-react-router/SKILL.md: sha256:570043b9fa88fbf1501ecaedce1b3befda105299045558d17cbaae05a88aa5b2
+    .agents/skills/tanstack-react-router/SKILL.md: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
     .agents/skills/test-discipline/SKILL.md: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
     .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
     .agents/skills/ts-react-style/SKILL.md: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
@@ -448,7 +451,7 @@ dependencies:
     .claude/skills/maintenance-cleanup/SKILL.md: sha256:b4992b94b0dc071a105ea56817ad87e2d3c10b12862dc90bc521aeccdf2d88ee
     .claude/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
     .claude/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
-    .claude/skills/mobx-keystone/SKILL.md: sha256:a4732b5a6abe5f56bf8838841fbfcc53437fa21cc9cef9fdd9e8c2bf227e3ed2
+    .claude/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
     .claude/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
     .claude/skills/paused/SKILL.md: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
     .claude/skills/refactor/SKILL.md: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
@@ -470,7 +473,7 @@ dependencies:
     .claude/skills/session-status/scripts/session-status.ts: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
     .claude/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
     .claude/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
-    .claude/skills/tanstack-react-router/SKILL.md: sha256:570043b9fa88fbf1501ecaedce1b3befda105299045558d17cbaae05a88aa5b2
+    .claude/skills/tanstack-react-router/SKILL.md: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
     .claude/skills/test-discipline/SKILL.md: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
     .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
     .claude/skills/ts-react-style/SKILL.md: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
@@ -485,8 +488,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  source: local
-  local_path: /Users/yoshintame/Development/personal/agent-skills
+  content_hash: sha256:d495ff19f6b398a4d5c26ad04afe338aece3902194dfb7ec2e3362f536a4e7c6
+  constraint: ^1.0.0
+  resolved_tag: v1.0.0
+  resolved_at: '2026-09-06T10:57:18+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -495,8 +500,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f401aa39109bfd3ef44856863e6983db4d60fceffcdcfaf25d8030e46a6ee76d
 - kind: project-relative
   target: claude
@@ -504,8 +509,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -513,8 +518,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:031a91f3e4072bb4ccc627d5c5271e208794b4f572929ade4599d28d9b45884d
 - kind: project-relative
   target: claude
@@ -522,8 +527,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -531,8 +536,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1604e8859fc020a6096d28ecdbf8592b5257d6db7421b5a35e248dcccc827a16
 - kind: project-relative
   target: claude
@@ -540,8 +545,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:13c60d04f88cef1dc7f13526cf8348751477290057b727d437c93a1b4054c059
 - kind: project-relative
   target: claude
@@ -549,8 +554,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -558,8 +563,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a765112cc9e60e52bea4d856a82aa273b06681d0ca6b88f1144ebc2045967b07
 - kind: project-relative
   target: claude
@@ -567,8 +572,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ba470ff11952a949ef94f927aef6f58ee15857d695155937cae896fd0e7f5639
 - kind: project-relative
   target: claude
@@ -576,8 +581,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -585,8 +590,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f13b235e1643b9b12397bce9320893b6b82565c4a9479d6cb4704927fc5804a2
 - kind: project-relative
   target: claude
@@ -594,8 +599,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -603,8 +608,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
 - kind: project-relative
   target: claude
@@ -612,8 +617,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -621,8 +626,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b97c33384ffb28dd1c45a5bd6ab7fa72b79722f96af2c604890487d8aaa57dd6
 - kind: project-relative
   target: claude
@@ -630,8 +635,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -639,8 +644,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:922035d3da12dd84857b7fa318d9280c75e11fc66b6f2fb6aff70bf468914c47
 - kind: project-relative
   target: claude
@@ -648,8 +653,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
 - kind: project-relative
   target: claude
@@ -657,8 +662,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -666,8 +671,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
 - kind: project-relative
   target: claude
@@ -675,8 +680,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
 - kind: project-relative
   target: claude
@@ -684,8 +689,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
 - kind: project-relative
   target: claude
@@ -693,8 +698,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
 - kind: project-relative
   target: claude
@@ -702,8 +707,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
 - kind: project-relative
   target: claude
@@ -711,8 +716,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -720,8 +725,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4a2f055d885e7a6f4a5f30f83dcfb08cb19110a2d3bf4299b52e71183b41c6c0
 - kind: project-relative
   target: claude
@@ -729,8 +734,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -738,8 +743,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:384d59c20dbfb9e64fe9469e25196d239099d1c9de5b0fcd7b39b3de1a246e31
 - kind: project-relative
   target: claude
@@ -747,8 +752,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1f55aa15a5d12679eed72ecc86516d70a99a7dae7f95dbf21121280cd461bc5c
 - kind: project-relative
   target: claude
@@ -756,8 +761,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:757289c3d7c2010b785cd0645f4df1c4d50f9729a89d8673d68c3695b7bc53d0
 - kind: project-relative
   target: claude
@@ -765,8 +770,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9adca13e50ea369be3277e9b1e226e3fc36ea5b267081a71a78560f6fada5b90
 - kind: project-relative
   target: claude
@@ -774,8 +779,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1938e4363c16ef3a0b301976a9398649c20992fca0afe5ed91e126e3c75706a7
 - kind: project-relative
   target: claude
@@ -783,8 +788,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:eb024bd49b896c8ceb88dc37145cb188e9d0ae7049214dae4631f20cd2d81a14
 - kind: project-relative
   target: claude
@@ -792,8 +797,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:570304281abe918f5b2c29d77044a0b2efff447de27313b2fa1ae2b6938dbdf4
 - kind: project-relative
   target: claude
@@ -801,8 +806,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:015708f5f18378f7e541a1b8dc791932dd3b178c4545abb5d3dd65231d4dd743
 - kind: project-relative
   target: claude
@@ -810,8 +815,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:0fe693d194bc9f0a73341539dc977a4c387439684cae6f0855831b4b2c7d030f
 - kind: project-relative
   target: claude
@@ -819,8 +824,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:eac4a1acfd96b12b5dca07933bf42d162b626da2e30a4831dd967303797efcdd
 - kind: project-relative
   target: claude
@@ -828,8 +833,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -837,8 +842,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:965efd96b9f36f069e1ffba08706738ededb69e204937b9b6eb40d1c9351054e
 - kind: project-relative
   target: claude
@@ -846,8 +851,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:60213ec3f45b738c180cc66cfe05b228335d47e7baf7a8eca944282ebff93f7e
 - kind: project-relative
   target: claude
@@ -855,8 +860,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a751f07080de402780c1a5c98597ec0323918b9a37910347e8815ab5727945fd
 - kind: project-relative
   target: claude
@@ -864,8 +869,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -873,8 +878,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f797f20dc93b14a7140a831c11c2055498cca6b6a409d31d71614d3127df8b3c
 - kind: project-relative
   target: claude
@@ -882,8 +887,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:47c48ddd8d412ce721b3e8abe4cd2f4d2cf43807a639811ecf4c83987fc80770
 - kind: project-relative
   target: claude
@@ -891,8 +896,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -900,8 +905,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ea84d45656b8dc4d8d9e083e6a9102ab505079642ac59f2bd15eb78f2f0f72a4
 - kind: project-relative
   target: claude
@@ -909,8 +914,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -918,8 +923,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4c4096d2d74cb738ab7ee262383459921df537b1334de1ffc723353afb327233
 - kind: project-relative
   target: claude
@@ -927,8 +932,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:59ed6e3ab85f4b8ab0d7eac36cbdd31f7019045b37f65852ed5d3cf23818d4a8
 - kind: project-relative
   target: claude
@@ -936,8 +941,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1760b1ab016f0109ee6add81cdc3f57847157f53a2d576ae442bb2a5e7330c8e
 - kind: project-relative
   target: claude
@@ -945,8 +950,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ddaaa1848e1f4385e6b05a326675729b64736c2591e0c4dfb1b44e7d720f91da
 - kind: project-relative
   target: claude
@@ -954,8 +959,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -963,8 +968,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:124ebf5e19c69060565591ebbfbbe1c82bd36a1f32514a122688c1fb4af70839
 - kind: project-relative
   target: claude
@@ -972,8 +977,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4cc5c7212e721ab5e8d50b7f88c5a8f26a66726e85788703c970a84747d81fe0
 - kind: project-relative
   target: claude
@@ -981,8 +986,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -990,8 +995,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:781afe7329ea0d02e336d5fb4315c92064a5fa6a0a0d989dad5b1c6f0c73e4ad
 - kind: project-relative
   target: claude
@@ -999,8 +1004,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:5084a571b338e79234b5376fb7f1ae3f639130b1513284102a040098335ac9ce
 - kind: project-relative
   target: claude
@@ -1008,8 +1013,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1017,8 +1022,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:7e53098d855f2c0f2cfe1dd9434a8888c644823fc2eb903b8eaee63ef46605d8
 - kind: project-relative
   target: claude
@@ -1026,8 +1031,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4710319350aaffc54528a1a15aea416e34f839727650d17628d3483116c445f6
 - kind: project-relative
   target: claude
@@ -1035,8 +1040,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1044,8 +1049,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1053,8 +1058,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
 - kind: project-relative
   target: claude
@@ -1062,8 +1067,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f11df7a4e4e4a8cfcb33b45a7eec3c90fd459a7be8a99d713fe7301d1731ae27
 - kind: project-relative
   target: claude
@@ -1071,8 +1076,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:228b7818c97374afff758087846fb62d770d5a01dd73034eca1925e006f3f58e
 - kind: project-relative
   target: claude
@@ -1080,8 +1085,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1089,8 +1094,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:21aac0c62f98d10572721f3f593222e80a2698c8b31106507e3797add54b0349
 - kind: project-relative
   target: claude
@@ -1098,8 +1103,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:2fb0a2e6dee2e18481285a97fc0278c09f0ea401538dc91bf1aaca81aaaec71f
 - kind: project-relative
   target: claude
@@ -1107,8 +1112,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1116,8 +1121,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:dfa7c35ce938005b7de8ebe90beebe0c9724653c276f4a0af55b37be4d0537f6
 - kind: project-relative
   target: claude
@@ -1125,8 +1130,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1134,8 +1139,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
 - kind: project-relative
   target: claude
@@ -1143,8 +1148,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1152,8 +1157,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
 - kind: project-relative
   target: claude
@@ -1161,8 +1166,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
 - kind: project-relative
   target: claude
@@ -1170,8 +1175,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b8894f811078a1b0c16acb7c635b661561befe078bcfdf50b06220c20d097a25
 - kind: project-relative
   target: claude
@@ -1179,8 +1184,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
 - kind: project-relative
   target: claude
@@ -1188,8 +1193,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
 - kind: project-relative
   target: claude
@@ -1197,8 +1202,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ebd1f2baa97c25d0fad275bb9e046543381c72658c09bfcfdd3560389916f17d
 - kind: project-relative
   target: claude
@@ -1206,8 +1211,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:6e7d2e791f599f0fc6bbdd2dbeb284a25290a149eaab3af964127ae8f0f3a2df
 - kind: project-relative
   target: claude
@@ -1215,8 +1220,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1224,8 +1229,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b4992b94b0dc071a105ea56817ad87e2d3c10b12862dc90bc521aeccdf2d88ee
 - kind: project-relative
   target: claude
@@ -1233,8 +1238,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
 - kind: project-relative
   target: claude
@@ -1242,8 +1247,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1251,8 +1256,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
 - kind: project-relative
   target: claude
@@ -1260,8 +1265,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1269,17 +1274,17 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
-  content_hash: sha256:a4732b5a6abe5f56bf8838841fbfcc53437fa21cc9cef9fdd9e8c2bf227e3ed2
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
 - kind: project-relative
   target: claude
   value: .claude/skills/obsidian-vault
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1287,8 +1292,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
 - kind: project-relative
   target: claude
@@ -1296,8 +1301,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1305,8 +1310,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
 - kind: project-relative
   target: claude
@@ -1314,8 +1319,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1323,8 +1328,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
 - kind: project-relative
   target: claude
@@ -1332,8 +1337,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
 - kind: project-relative
   target: claude
@@ -1341,8 +1346,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
 - kind: project-relative
   target: claude
@@ -1350,8 +1355,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
 - kind: project-relative
   target: claude
@@ -1359,8 +1364,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1368,8 +1373,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:11847cb6da0e5667b56e6f026818f9232856e88e1a9c05c645725b780eca3b81
 - kind: project-relative
   target: claude
@@ -1377,8 +1382,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c4394ef0f6ecbfcaaedb42be9457529bcfcea1d9bb6c02fc69183e163b1d2e71
 - kind: project-relative
   target: claude
@@ -1386,8 +1391,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1395,8 +1400,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
 - kind: project-relative
   target: claude
@@ -1404,8 +1409,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
 - kind: project-relative
   target: claude
@@ -1413,8 +1418,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
 - kind: project-relative
   target: claude
@@ -1422,8 +1427,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
 - kind: project-relative
   target: claude
@@ -1431,8 +1436,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1440,8 +1445,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1449,8 +1454,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:92c232aa09d83789d751d516ef1c980a692df498136a66480e43417b2a60fb4a
 - kind: project-relative
   target: claude
@@ -1458,8 +1463,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:5aac9a3dbd3993d400d7c20b83c4eda52f638d63580066055a5dacf13b372a14
 - kind: project-relative
   target: claude
@@ -1467,8 +1472,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
 - kind: project-relative
   target: claude
@@ -1476,8 +1481,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1485,8 +1490,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
 - kind: project-relative
   target: claude
@@ -1494,8 +1499,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
 - kind: project-relative
   target: claude
@@ -1503,8 +1508,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1512,8 +1517,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f3c75b76fcc5db296756d2f27ffbe0b9f381b649ef6e0a770d047db18f99af15
 - kind: project-relative
   target: claude
@@ -1521,8 +1526,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
 - kind: project-relative
   target: claude
@@ -1530,8 +1535,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1539,8 +1544,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
 - kind: project-relative
   target: claude
@@ -1548,8 +1553,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
 - kind: project-relative
   target: claude
@@ -1557,8 +1562,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1566,17 +1571,17 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
-  content_hash: sha256:570043b9fa88fbf1501ecaedce1b3befda105299045558d17cbaae05a88aa5b2
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
 - kind: project-relative
   target: claude
   value: .claude/skills/test-discipline
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1584,8 +1589,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
 - kind: project-relative
   target: claude
@@ -1593,8 +1598,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1602,8 +1607,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
 - kind: project-relative
   target: claude
@@ -1611,8 +1616,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1620,8 +1625,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
 - kind: project-relative
   target: claude
@@ -1629,8 +1634,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
 - kind: project-relative
   target: claude
@@ -1638,8 +1643,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
 - kind: project-relative
   target: claude
@@ -1647,8 +1652,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1656,8 +1661,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
 - kind: project-relative
   target: claude
@@ -1665,8 +1670,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1674,8 +1679,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1e6bccff86991ad7aa825df9da8abfcc6e9744a4b64be7c7d8e3a1fe6365c0a9
 - kind: project-relative
   target: claude
@@ -1683,8 +1688,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
 - kind: project-relative
   target: claude
@@ -1692,8 +1697,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1701,8 +1706,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a8f6828793e360a9870466e8c5081e31976894b68c6bdef0b21541ce2f524870
 - kind: project-relative
   target: claude
@@ -1710,8 +1715,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:583e655d5deebe9fbac0777f5a0252ec96fe01b384ea3c03bac1922edb4f5816
 - kind: project-relative
   target: claude
@@ -1719,8 +1724,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1728,8 +1733,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
 - kind: project-relative
   target: claude
@@ -1737,8 +1742,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1746,8 +1751,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
 - kind: project-relative
   target: claude
@@ -1755,8 +1760,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: claude
@@ -1764,8 +1769,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
 - kind: project-relative
   target: claude
@@ -1773,8 +1778,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
 - kind: project-relative
   target: codex
@@ -1782,8 +1787,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1791,8 +1796,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:031a91f3e4072bb4ccc627d5c5271e208794b4f572929ade4599d28d9b45884d
 - kind: project-relative
   target: codex
@@ -1800,8 +1805,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1809,8 +1814,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1604e8859fc020a6096d28ecdbf8592b5257d6db7421b5a35e248dcccc827a16
 - kind: project-relative
   target: codex
@@ -1818,8 +1823,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:13c60d04f88cef1dc7f13526cf8348751477290057b727d437c93a1b4054c059
 - kind: project-relative
   target: codex
@@ -1827,8 +1832,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1836,8 +1841,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a765112cc9e60e52bea4d856a82aa273b06681d0ca6b88f1144ebc2045967b07
 - kind: project-relative
   target: codex
@@ -1845,8 +1850,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ba470ff11952a949ef94f927aef6f58ee15857d695155937cae896fd0e7f5639
 - kind: project-relative
   target: codex
@@ -1854,8 +1859,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1863,8 +1868,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f13b235e1643b9b12397bce9320893b6b82565c4a9479d6cb4704927fc5804a2
 - kind: project-relative
   target: codex
@@ -1872,8 +1877,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1881,8 +1886,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
 - kind: project-relative
   target: codex
@@ -1890,8 +1895,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1899,8 +1904,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b97c33384ffb28dd1c45a5bd6ab7fa72b79722f96af2c604890487d8aaa57dd6
 - kind: project-relative
   target: codex
@@ -1908,8 +1913,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1917,8 +1922,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:922035d3da12dd84857b7fa318d9280c75e11fc66b6f2fb6aff70bf468914c47
 - kind: project-relative
   target: codex
@@ -1926,8 +1931,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
 - kind: project-relative
   target: codex
@@ -1935,8 +1940,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1944,8 +1949,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
 - kind: project-relative
   target: codex
@@ -1953,8 +1958,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
 - kind: project-relative
   target: codex
@@ -1962,8 +1967,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
 - kind: project-relative
   target: codex
@@ -1971,8 +1976,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
 - kind: project-relative
   target: codex
@@ -1980,8 +1985,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
 - kind: project-relative
   target: codex
@@ -1989,8 +1994,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -1998,8 +2003,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4a2f055d885e7a6f4a5f30f83dcfb08cb19110a2d3bf4299b52e71183b41c6c0
 - kind: project-relative
   target: codex
@@ -2007,8 +2012,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2016,8 +2021,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:384d59c20dbfb9e64fe9469e25196d239099d1c9de5b0fcd7b39b3de1a246e31
 - kind: project-relative
   target: codex
@@ -2025,8 +2030,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1f55aa15a5d12679eed72ecc86516d70a99a7dae7f95dbf21121280cd461bc5c
 - kind: project-relative
   target: codex
@@ -2034,8 +2039,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:757289c3d7c2010b785cd0645f4df1c4d50f9729a89d8673d68c3695b7bc53d0
 - kind: project-relative
   target: codex
@@ -2043,8 +2048,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9adca13e50ea369be3277e9b1e226e3fc36ea5b267081a71a78560f6fada5b90
 - kind: project-relative
   target: codex
@@ -2052,8 +2057,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1938e4363c16ef3a0b301976a9398649c20992fca0afe5ed91e126e3c75706a7
 - kind: project-relative
   target: codex
@@ -2061,8 +2066,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:eb024bd49b896c8ceb88dc37145cb188e9d0ae7049214dae4631f20cd2d81a14
 - kind: project-relative
   target: codex
@@ -2070,8 +2075,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:570304281abe918f5b2c29d77044a0b2efff447de27313b2fa1ae2b6938dbdf4
 - kind: project-relative
   target: codex
@@ -2079,8 +2084,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:015708f5f18378f7e541a1b8dc791932dd3b178c4545abb5d3dd65231d4dd743
 - kind: project-relative
   target: codex
@@ -2088,8 +2093,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:0fe693d194bc9f0a73341539dc977a4c387439684cae6f0855831b4b2c7d030f
 - kind: project-relative
   target: codex
@@ -2097,8 +2102,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:eac4a1acfd96b12b5dca07933bf42d162b626da2e30a4831dd967303797efcdd
 - kind: project-relative
   target: codex
@@ -2106,8 +2111,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2115,8 +2120,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:965efd96b9f36f069e1ffba08706738ededb69e204937b9b6eb40d1c9351054e
 - kind: project-relative
   target: codex
@@ -2124,8 +2129,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:60213ec3f45b738c180cc66cfe05b228335d47e7baf7a8eca944282ebff93f7e
 - kind: project-relative
   target: codex
@@ -2133,8 +2138,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a751f07080de402780c1a5c98597ec0323918b9a37910347e8815ab5727945fd
 - kind: project-relative
   target: codex
@@ -2142,8 +2147,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2151,8 +2156,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f797f20dc93b14a7140a831c11c2055498cca6b6a409d31d71614d3127df8b3c
 - kind: project-relative
   target: codex
@@ -2160,8 +2165,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:47c48ddd8d412ce721b3e8abe4cd2f4d2cf43807a639811ecf4c83987fc80770
 - kind: project-relative
   target: codex
@@ -2169,8 +2174,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2178,8 +2183,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ea84d45656b8dc4d8d9e083e6a9102ab505079642ac59f2bd15eb78f2f0f72a4
 - kind: project-relative
   target: codex
@@ -2187,8 +2192,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2196,8 +2201,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4c4096d2d74cb738ab7ee262383459921df537b1334de1ffc723353afb327233
 - kind: project-relative
   target: codex
@@ -2205,8 +2210,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:59ed6e3ab85f4b8ab0d7eac36cbdd31f7019045b37f65852ed5d3cf23818d4a8
 - kind: project-relative
   target: codex
@@ -2214,8 +2219,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1760b1ab016f0109ee6add81cdc3f57847157f53a2d576ae442bb2a5e7330c8e
 - kind: project-relative
   target: codex
@@ -2223,8 +2228,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ddaaa1848e1f4385e6b05a326675729b64736c2591e0c4dfb1b44e7d720f91da
 - kind: project-relative
   target: codex
@@ -2232,8 +2237,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2241,8 +2246,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:124ebf5e19c69060565591ebbfbbe1c82bd36a1f32514a122688c1fb4af70839
 - kind: project-relative
   target: codex
@@ -2250,8 +2255,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4cc5c7212e721ab5e8d50b7f88c5a8f26a66726e85788703c970a84747d81fe0
 - kind: project-relative
   target: codex
@@ -2259,8 +2264,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2268,8 +2273,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:781afe7329ea0d02e336d5fb4315c92064a5fa6a0a0d989dad5b1c6f0c73e4ad
 - kind: project-relative
   target: codex
@@ -2277,8 +2282,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:5084a571b338e79234b5376fb7f1ae3f639130b1513284102a040098335ac9ce
 - kind: project-relative
   target: codex
@@ -2286,8 +2291,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2295,8 +2300,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:7e53098d855f2c0f2cfe1dd9434a8888c644823fc2eb903b8eaee63ef46605d8
 - kind: project-relative
   target: codex
@@ -2304,8 +2309,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4710319350aaffc54528a1a15aea416e34f839727650d17628d3483116c445f6
 - kind: project-relative
   target: codex
@@ -2313,8 +2318,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2322,8 +2327,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2331,8 +2336,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
 - kind: project-relative
   target: codex
@@ -2340,8 +2345,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f11df7a4e4e4a8cfcb33b45a7eec3c90fd459a7be8a99d713fe7301d1731ae27
 - kind: project-relative
   target: codex
@@ -2349,8 +2354,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:228b7818c97374afff758087846fb62d770d5a01dd73034eca1925e006f3f58e
 - kind: project-relative
   target: codex
@@ -2358,8 +2363,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2367,8 +2372,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:21aac0c62f98d10572721f3f593222e80a2698c8b31106507e3797add54b0349
 - kind: project-relative
   target: codex
@@ -2376,8 +2381,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:2fb0a2e6dee2e18481285a97fc0278c09f0ea401538dc91bf1aaca81aaaec71f
 - kind: project-relative
   target: codex
@@ -2385,8 +2390,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2394,8 +2399,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:dfa7c35ce938005b7de8ebe90beebe0c9724653c276f4a0af55b37be4d0537f6
 - kind: project-relative
   target: codex
@@ -2403,8 +2408,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2412,8 +2417,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
 - kind: project-relative
   target: codex
@@ -2421,8 +2426,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2430,8 +2435,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
 - kind: project-relative
   target: codex
@@ -2439,8 +2444,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
 - kind: project-relative
   target: codex
@@ -2448,8 +2453,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b8894f811078a1b0c16acb7c635b661561befe078bcfdf50b06220c20d097a25
 - kind: project-relative
   target: codex
@@ -2457,8 +2462,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
 - kind: project-relative
   target: codex
@@ -2466,8 +2471,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
 - kind: project-relative
   target: codex
@@ -2475,8 +2480,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ebd1f2baa97c25d0fad275bb9e046543381c72658c09bfcfdd3560389916f17d
 - kind: project-relative
   target: codex
@@ -2484,8 +2489,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:6e7d2e791f599f0fc6bbdd2dbeb284a25290a149eaab3af964127ae8f0f3a2df
 - kind: project-relative
   target: codex
@@ -2493,8 +2498,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2502,8 +2507,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b4992b94b0dc071a105ea56817ad87e2d3c10b12862dc90bc521aeccdf2d88ee
 - kind: project-relative
   target: codex
@@ -2511,8 +2516,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
 - kind: project-relative
   target: codex
@@ -2520,8 +2525,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2529,8 +2534,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
 - kind: project-relative
   target: codex
@@ -2538,8 +2543,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2547,17 +2552,17 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
-  content_hash: sha256:a4732b5a6abe5f56bf8838841fbfcc53437fa21cc9cef9fdd9e8c2bf227e3ed2
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
 - kind: project-relative
   target: codex
   value: .agents/skills/obsidian-vault
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2565,8 +2570,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
 - kind: project-relative
   target: codex
@@ -2574,8 +2579,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2583,8 +2588,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
 - kind: project-relative
   target: codex
@@ -2592,8 +2597,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2601,8 +2606,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
 - kind: project-relative
   target: codex
@@ -2610,8 +2615,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
 - kind: project-relative
   target: codex
@@ -2619,8 +2624,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
 - kind: project-relative
   target: codex
@@ -2628,8 +2633,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
 - kind: project-relative
   target: codex
@@ -2637,8 +2642,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2646,8 +2651,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:11847cb6da0e5667b56e6f026818f9232856e88e1a9c05c645725b780eca3b81
 - kind: project-relative
   target: codex
@@ -2655,8 +2660,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c4394ef0f6ecbfcaaedb42be9457529bcfcea1d9bb6c02fc69183e163b1d2e71
 - kind: project-relative
   target: codex
@@ -2664,8 +2669,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2673,8 +2678,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
 - kind: project-relative
   target: codex
@@ -2682,8 +2687,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
 - kind: project-relative
   target: codex
@@ -2691,8 +2696,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
 - kind: project-relative
   target: codex
@@ -2700,8 +2705,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
 - kind: project-relative
   target: codex
@@ -2709,8 +2714,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2718,8 +2723,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2727,8 +2732,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:92c232aa09d83789d751d516ef1c980a692df498136a66480e43417b2a60fb4a
 - kind: project-relative
   target: codex
@@ -2736,8 +2741,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:5aac9a3dbd3993d400d7c20b83c4eda52f638d63580066055a5dacf13b372a14
 - kind: project-relative
   target: codex
@@ -2745,8 +2750,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
 - kind: project-relative
   target: codex
@@ -2754,8 +2759,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2763,8 +2768,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
 - kind: project-relative
   target: codex
@@ -2772,8 +2777,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
 - kind: project-relative
   target: codex
@@ -2781,8 +2786,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2790,8 +2795,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:f3c75b76fcc5db296756d2f27ffbe0b9f381b649ef6e0a770d047db18f99af15
 - kind: project-relative
   target: codex
@@ -2799,8 +2804,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
 - kind: project-relative
   target: codex
@@ -2808,8 +2813,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2817,8 +2822,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
 - kind: project-relative
   target: codex
@@ -2826,8 +2831,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
 - kind: project-relative
   target: codex
@@ -2835,8 +2840,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2844,17 +2849,17 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
-  content_hash: sha256:570043b9fa88fbf1501ecaedce1b3befda105299045558d17cbaae05a88aa5b2
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
 - kind: project-relative
   target: codex
   value: .agents/skills/test-discipline
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2862,8 +2867,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
 - kind: project-relative
   target: codex
@@ -2871,8 +2876,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2880,8 +2885,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
 - kind: project-relative
   target: codex
@@ -2889,8 +2894,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2898,8 +2903,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
 - kind: project-relative
   target: codex
@@ -2907,8 +2912,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
 - kind: project-relative
   target: codex
@@ -2916,8 +2921,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
 - kind: project-relative
   target: codex
@@ -2925,8 +2930,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2934,8 +2939,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
 - kind: project-relative
   target: codex
@@ -2943,8 +2948,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2952,8 +2957,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:1e6bccff86991ad7aa825df9da8abfcc6e9744a4b64be7c7d8e3a1fe6365c0a9
 - kind: project-relative
   target: codex
@@ -2961,8 +2966,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
 - kind: project-relative
   target: codex
@@ -2970,8 +2975,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -2979,8 +2984,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:a8f6828793e360a9870466e8c5081e31976894b68c6bdef0b21541ce2f524870
 - kind: project-relative
   target: codex
@@ -2988,8 +2993,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:583e655d5deebe9fbac0777f5a0252ec96fe01b384ea3c03bac1922edb4f5816
 - kind: project-relative
   target: codex
@@ -2997,8 +3002,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -3006,8 +3011,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
 - kind: project-relative
   target: codex
@@ -3015,8 +3020,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -3024,8 +3029,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
 - kind: project-relative
   target: codex
@@ -3033,8 +3038,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
   target: codex
@@ -3042,8 +3047,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
 - kind: project-relative
   target: codex
@@ -3051,6 +3056,6 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - /Users/yoshintame/Development/personal/agent-skills
-  active_owner: /Users/yoshintame/Development/personal/agent-skills
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
   content_hash: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98

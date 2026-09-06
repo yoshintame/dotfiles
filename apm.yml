@@ -1,0 +1,12 @@
+name: dotfiles
+version: 0.0.0
+targets: [claude, codex]
+includes: auto
+dependencies:
+  apm:
+    - git: git@github.com:yoshintame/lasthaze-edge.git
+      ref: ^1.0.0
+      skills:
+        - lasthaze-edge-ops
+        - lasthaze-edge-decoy-site
+  mcp: []

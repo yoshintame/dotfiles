@@ -24,7 +24,7 @@ node_modules
 
 /.agents/skills/
 /.claude/skills/
-/apm_modules/
+apm_modules/
 
 # Python bytecode cache (analyze-permissions script)
 __pycache__/

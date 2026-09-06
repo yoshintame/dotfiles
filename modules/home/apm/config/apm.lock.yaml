@@ -4,9 +4,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 6dd55b218e25bb8d36b39c8f16e5ea3d79ea9e1b
-  resolved_ref: v1.0.1
-  version: 1.0.1
+  resolved_commit: 602a85313bf2098dabddbedc8ec7f4ea5923f9ac
+  resolved_ref: v1.1.0
+  version: 1.1.0
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -97,6 +97,10 @@ dependencies:
   - .agents/skills/mobx-keystone/SKILL.md
   - .agents/skills/obsidian-vault
   - .agents/skills/obsidian-vault/SKILL.md
+  - .agents/skills/paseo-import
+  - .agents/skills/paseo-import/SKILL.md
+  - .agents/skills/paseo-import/scripts/deferred-import.ts
+  - .agents/skills/paseo-import/scripts/import-current-session.ts
   - .agents/skills/paused
   - .agents/skills/paused/SKILL.md
   - .agents/skills/refactor
@@ -123,6 +127,8 @@ dependencies:
   - .agents/skills/session-status
   - .agents/skills/session-status/SKILL.md
   - .agents/skills/session-status/scripts/session-status.ts
+  - .agents/skills/skill-dev
+  - .agents/skills/skill-dev/SKILL.md
   - .agents/skills/state-reconstruction
   - .agents/skills/state-reconstruction/SKILL.md
   - .agents/skills/state-reconstruction/scripts/region-sessions.ts
@@ -240,6 +246,10 @@ dependencies:
   - .claude/skills/mobx-keystone/SKILL.md
   - .claude/skills/obsidian-vault
   - .claude/skills/obsidian-vault/SKILL.md
+  - .claude/skills/paseo-import
+  - .claude/skills/paseo-import/SKILL.md
+  - .claude/skills/paseo-import/scripts/deferred-import.ts
+  - .claude/skills/paseo-import/scripts/import-current-session.ts
   - .claude/skills/paused
   - .claude/skills/paused/SKILL.md
   - .claude/skills/refactor
@@ -266,6 +276,8 @@ dependencies:
   - .claude/skills/session-status
   - .claude/skills/session-status/SKILL.md
   - .claude/skills/session-status/scripts/session-status.ts
+  - .claude/skills/skill-dev
+  - .claude/skills/skill-dev/SKILL.md
   - .claude/skills/state-reconstruction
   - .claude/skills/state-reconstruction/SKILL.md
   - .claude/skills/state-reconstruction/scripts/region-sessions.ts
@@ -303,7 +315,7 @@ dependencies:
     .agents/skills/brew-cask/SKILL.md: sha256:f13b235e1643b9b12397bce9320893b6b82565c4a9479d6cb4704927fc5804a2
     .agents/skills/cc-fork-recover/SKILL.md: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
     .agents/skills/cc-model-reset/SKILL.md: sha256:b97c33384ffb28dd1c45a5bd6ab7fa72b79722f96af2c604890487d8aaa57dd6
-    .agents/skills/create-skill/SKILL.md: sha256:922035d3da12dd84857b7fa318d9280c75e11fc66b6f2fb6aff70bf468914c47
+    .agents/skills/create-skill/SKILL.md: sha256:64b3d966fc342fbb11e29449ba498306d2c81a3f25a8b86560f729114cc0771e
     .agents/skills/create-skill/scripts/slop-lint.ts: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
     .agents/skills/deep-research/SKILL.md: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
     .agents/skills/deep-research/references/choice.md: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
@@ -356,6 +368,9 @@ dependencies:
     .agents/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
     .agents/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
     .agents/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
+    .agents/skills/paseo-import/SKILL.md: sha256:90b6491b9158c77fc0c8ac9e7f601e0034834b3d6a97e518889064c71f776632
+    .agents/skills/paseo-import/scripts/deferred-import.ts: sha256:868f258276c0d2cd3384a605a7afe903c48155aefbdc9d4c1b9e878e47e77961
+    .agents/skills/paseo-import/scripts/import-current-session.ts: sha256:3c498d25c9edba6babc0c9db91ac078a6268139550ab3332a61977b47b454a6a
     .agents/skills/paused/SKILL.md: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
     .agents/skills/refactor/SKILL.md: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
     .agents/skills/refactor/references/duplicated-services.md: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
@@ -374,6 +389,7 @@ dependencies:
     .agents/skills/session-link/scripts/link-session-to.ts: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
     .agents/skills/session-status/SKILL.md: sha256:f3c75b76fcc5db296756d2f27ffbe0b9f381b649ef6e0a770d047db18f99af15
     .agents/skills/session-status/scripts/session-status.ts: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
+    .agents/skills/skill-dev/SKILL.md: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
     .agents/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
     .agents/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
     .agents/skills/tanstack-react-router/SKILL.md: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
@@ -400,7 +416,7 @@ dependencies:
     .claude/skills/brew-cask/SKILL.md: sha256:f13b235e1643b9b12397bce9320893b6b82565c4a9479d6cb4704927fc5804a2
     .claude/skills/cc-fork-recover/SKILL.md: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
     .claude/skills/cc-model-reset/SKILL.md: sha256:b97c33384ffb28dd1c45a5bd6ab7fa72b79722f96af2c604890487d8aaa57dd6
-    .claude/skills/create-skill/SKILL.md: sha256:922035d3da12dd84857b7fa318d9280c75e11fc66b6f2fb6aff70bf468914c47
+    .claude/skills/create-skill/SKILL.md: sha256:64b3d966fc342fbb11e29449ba498306d2c81a3f25a8b86560f729114cc0771e
     .claude/skills/create-skill/scripts/slop-lint.ts: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
     .claude/skills/deep-research/SKILL.md: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
     .claude/skills/deep-research/references/choice.md: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
@@ -453,6 +469,9 @@ dependencies:
     .claude/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
     .claude/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
     .claude/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
+    .claude/skills/paseo-import/SKILL.md: sha256:90b6491b9158c77fc0c8ac9e7f601e0034834b3d6a97e518889064c71f776632
+    .claude/skills/paseo-import/scripts/deferred-import.ts: sha256:868f258276c0d2cd3384a605a7afe903c48155aefbdc9d4c1b9e878e47e77961
+    .claude/skills/paseo-import/scripts/import-current-session.ts: sha256:3c498d25c9edba6babc0c9db91ac078a6268139550ab3332a61977b47b454a6a
     .claude/skills/paused/SKILL.md: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
     .claude/skills/refactor/SKILL.md: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
     .claude/skills/refactor/references/duplicated-services.md: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
@@ -471,6 +490,7 @@ dependencies:
     .claude/skills/session-link/scripts/link-session-to.ts: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
     .claude/skills/session-status/SKILL.md: sha256:f3c75b76fcc5db296756d2f27ffbe0b9f381b649ef6e0a770d047db18f99af15
     .claude/skills/session-status/scripts/session-status.ts: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
+    .claude/skills/skill-dev/SKILL.md: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
     .claude/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
     .claude/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
     .claude/skills/tanstack-react-router/SKILL.md: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
@@ -488,10 +508,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:d079ad1c1661fbd4e7adb1e291adedae9a10a132f27d02f0098113c7dbd71ccd
+  content_hash: sha256:83fd02b02b40ae98dff3a4ae6815cd5b01b097392954c102727944e2a4538a53
   constraint: ^1.0.0
-  resolved_tag: v1.0.1
-  resolved_at: '2026-09-06T12:53:17+00:00'
+  resolved_tag: v1.1.0
+  resolved_at: '2026-09-06T17:59:45+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -646,7 +666,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:922035d3da12dd84857b7fa318d9280c75e11fc66b6f2fb6aff70bf468914c47
+  content_hash: sha256:64b3d966fc342fbb11e29449ba498306d2c81a3f25a8b86560f729114cc0771e
 - kind: project-relative
   target: claude
   value: .claude/skills/create-skill/scripts/slop-lint.ts
@@ -1297,6 +1317,42 @@ deployments:
   content_hash: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
 - kind: project-relative
   target: claude
+  value: .claude/skills/paseo-import
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/paseo-import/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:90b6491b9158c77fc0c8ac9e7f601e0034834b3d6a97e518889064c71f776632
+- kind: project-relative
+  target: claude
+  value: .claude/skills/paseo-import/scripts/deferred-import.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:868f258276c0d2cd3384a605a7afe903c48155aefbdc9d4c1b9e878e47e77961
+- kind: project-relative
+  target: claude
+  value: .claude/skills/paseo-import/scripts/import-current-session.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:3c498d25c9edba6babc0c9db91ac078a6268139550ab3332a61977b47b454a6a
+- kind: project-relative
+  target: claude
   value: .claude/skills/paused
   runtime: null
   scope: project
@@ -1529,6 +1585,24 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/skill-dev
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/skill-dev/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
 - kind: project-relative
   target: claude
   value: .claude/skills/state-reconstruction
@@ -1924,7 +1998,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:922035d3da12dd84857b7fa318d9280c75e11fc66b6f2fb6aff70bf468914c47
+  content_hash: sha256:64b3d966fc342fbb11e29449ba498306d2c81a3f25a8b86560f729114cc0771e
 - kind: project-relative
   target: codex
   value: .agents/skills/create-skill/scripts/slop-lint.ts
@@ -2575,6 +2649,42 @@ deployments:
   content_hash: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
 - kind: project-relative
   target: codex
+  value: .agents/skills/paseo-import
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/paseo-import/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:90b6491b9158c77fc0c8ac9e7f601e0034834b3d6a97e518889064c71f776632
+- kind: project-relative
+  target: codex
+  value: .agents/skills/paseo-import/scripts/deferred-import.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:868f258276c0d2cd3384a605a7afe903c48155aefbdc9d4c1b9e878e47e77961
+- kind: project-relative
+  target: codex
+  value: .agents/skills/paseo-import/scripts/import-current-session.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:3c498d25c9edba6babc0c9db91ac078a6268139550ab3332a61977b47b454a6a
+- kind: project-relative
+  target: codex
   value: .agents/skills/paused
   runtime: null
   scope: project
@@ -2807,6 +2917,24 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
+- kind: project-relative
+  target: codex
+  value: .agents/skills/skill-dev
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/skill-dev/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
 - kind: project-relative
   target: codex
   value: .agents/skills/state-reconstruction

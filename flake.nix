@@ -48,6 +48,14 @@
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    edge = {
+      url = "git+ssh://git@github.com/yoshintame/lasthaze-edge";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.disko.follows = "disko";
+      inputs.sops-nix.follows = "sops-nix";
+      inputs.srvos.follows = "srvos";
+    };
   };
 
   outputs =
@@ -77,6 +85,7 @@
           ./modules/nixos/users
           ./modules/nixos/tailscale
           ./modules/nixos/sops-age-key
+          ./modules/nixos/sysctl-hardening
         ];
       };
     in
@@ -86,6 +95,7 @@
         treefmt-nix.flakeModule
         git-hooks.flakeModule
         ./parts/dev.nix
+        ./parts/edge.nix
       ];
 
       systems = [
@@ -132,6 +142,19 @@
               inputs.homelab.nixosModules.default
               inputs.disko.nixosModules.disko
               inputs.srvos.nixosModules.server
+            ];
+          };
+
+          lasthaze-edge = {
+            arch = "x86_64";
+            class = "nixos";
+            path = ./hosts/lasthaze-edge;
+            specialArgs.flakeRoot = "/var/lib/edge-deploy/dotfiles";
+            modules = [
+              inputs.edge.nixosModules.proxy
+              inputs.disko.nixosModules.disko
+              inputs.srvos.nixosModules.server
+              inputs.sops-nix.nixosModules.sops
             ];
           };
         };

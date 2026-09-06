@@ -22,6 +22,10 @@ modules/home/claude/config/settings.backup-*.json
 
 node_modules
 
+/.agents/skills/
+/.claude/skills/
+/apm_modules/
+
 # Python bytecode cache (analyze-permissions script)
 __pycache__/
 *.pyc

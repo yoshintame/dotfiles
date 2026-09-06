@@ -5,6 +5,7 @@ includes = [
 ]
 
 [tools]
+"pipx:apm-cli" = "0.29.1"
 bun = "latest"
 go = "latest"
 node = "lts"

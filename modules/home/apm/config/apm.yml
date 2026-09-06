@@ -1,0 +1,7 @@
+name: yoshintame-global
+version: 1.0.0
+targets: [claude, codex]
+dependencies:
+  apm:
+    - /Users/yoshintame/Development/personal/agent-skills
+  mcp: []

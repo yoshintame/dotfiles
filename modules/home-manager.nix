@@ -30,6 +30,7 @@
       )
 
       ./home/aerospace
+      ./home/apm
       ./home/atuin
       ./home/bat
       ./home/brew

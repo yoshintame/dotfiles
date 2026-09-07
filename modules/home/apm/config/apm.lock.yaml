@@ -1,6 +1,130 @@
 lockfile_version: '2'
 apm_version: 0.29.1
 dependencies:
+- repo_url: senate-exchange/ai-skills
+  name: senate-skills
+  host: github.com
+  resolved_commit: 4686e3a1ec7d27ea11f8a2097e84ec8001d88b20
+  resolved_ref: v1.1.0
+  version: 1.1.0
+  package_type: skill_bundle
+  deployed_files:
+  - .agents/skills/senate-backlog-outline
+  - .agents/skills/senate-backlog-outline/SKILL.md
+  - .agents/skills/senate-business-docs
+  - .agents/skills/senate-business-docs/SKILL.md
+  - .agents/skills/senate-code-to-jira-task
+  - .agents/skills/senate-code-to-jira-task/SKILL.md
+  - .agents/skills/senate-docs-audit
+  - .agents/skills/senate-docs-audit/SKILL.md
+  - .agents/skills/senate-docs-audit/scripts/inventory.ts
+  - .agents/skills/senate-docs-to-jira-tasks
+  - .agents/skills/senate-docs-to-jira-tasks/SKILL.md
+  - .agents/skills/senate-i18n
+  - .agents/skills/senate-i18n/SKILL.md
+  - .agents/skills/senate-infra
+  - .agents/skills/senate-infra/SKILL.md
+  - .agents/skills/senate-infra/scripts/discover-hosts.ts
+  - .agents/skills/senate-infra/scripts/onboardix-psql.sh
+  - .agents/skills/senate-infra/scripts/replica-psql.sh
+  - .agents/skills/senate-inline-docs
+  - .agents/skills/senate-inline-docs/SKILL.md
+  - .agents/skills/senate-jira
+  - .agents/skills/senate-jira/JIRA_MEDIA.md
+  - .agents/skills/senate-jira/SKILL.md
+  - .agents/skills/senate-prod-db-ops
+  - .agents/skills/senate-prod-db-ops/SKILL.md
+  - .agents/skills/senate-prod-db-ops/scripts/delete-test-client.sql
+  - .agents/skills/senate-prod-db-ops/scripts/diag-client-partner.sql
+  - .agents/skills/senate-prod-db-ops/scripts/fk-explore.sql
+  - .agents/skills/senate-release-note
+  - .agents/skills/senate-release-note/SKILL.md
+  - .agents/skills/senate-update-docs-from-changes
+  - .agents/skills/senate-update-docs-from-changes/SKILL.md
+  - .agents/skills/senate-vault
+  - .agents/skills/senate-vault/SKILL.md
+  - .claude/skills/senate-backlog-outline
+  - .claude/skills/senate-backlog-outline/SKILL.md
+  - .claude/skills/senate-business-docs
+  - .claude/skills/senate-business-docs/SKILL.md
+  - .claude/skills/senate-code-to-jira-task
+  - .claude/skills/senate-code-to-jira-task/SKILL.md
+  - .claude/skills/senate-docs-audit
+  - .claude/skills/senate-docs-audit/SKILL.md
+  - .claude/skills/senate-docs-audit/scripts/inventory.ts
+  - .claude/skills/senate-docs-to-jira-tasks
+  - .claude/skills/senate-docs-to-jira-tasks/SKILL.md
+  - .claude/skills/senate-i18n
+  - .claude/skills/senate-i18n/SKILL.md
+  - .claude/skills/senate-infra
+  - .claude/skills/senate-infra/SKILL.md
+  - .claude/skills/senate-infra/scripts/discover-hosts.ts
+  - .claude/skills/senate-infra/scripts/onboardix-psql.sh
+  - .claude/skills/senate-infra/scripts/replica-psql.sh
+  - .claude/skills/senate-inline-docs
+  - .claude/skills/senate-inline-docs/SKILL.md
+  - .claude/skills/senate-jira
+  - .claude/skills/senate-jira/JIRA_MEDIA.md
+  - .claude/skills/senate-jira/SKILL.md
+  - .claude/skills/senate-prod-db-ops
+  - .claude/skills/senate-prod-db-ops/SKILL.md
+  - .claude/skills/senate-prod-db-ops/scripts/delete-test-client.sql
+  - .claude/skills/senate-prod-db-ops/scripts/diag-client-partner.sql
+  - .claude/skills/senate-prod-db-ops/scripts/fk-explore.sql
+  - .claude/skills/senate-release-note
+  - .claude/skills/senate-release-note/SKILL.md
+  - .claude/skills/senate-update-docs-from-changes
+  - .claude/skills/senate-update-docs-from-changes/SKILL.md
+  - .claude/skills/senate-vault
+  - .claude/skills/senate-vault/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/senate-backlog-outline/SKILL.md: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
+    .agents/skills/senate-business-docs/SKILL.md: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
+    .agents/skills/senate-code-to-jira-task/SKILL.md: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
+    .agents/skills/senate-docs-audit/SKILL.md: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
+    .agents/skills/senate-docs-audit/scripts/inventory.ts: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
+    .agents/skills/senate-docs-to-jira-tasks/SKILL.md: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
+    .agents/skills/senate-i18n/SKILL.md: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
+    .agents/skills/senate-infra/SKILL.md: sha256:4021b8802077f79e81a03403a84e597f9f8a5c90ebd5cfd77da441a95415df81
+    .agents/skills/senate-infra/scripts/discover-hosts.ts: sha256:a27c6a380e64090321f0b5841b09c12baca6c4f8a0d2883ed3a5e83f17203d41
+    .agents/skills/senate-infra/scripts/onboardix-psql.sh: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
+    .agents/skills/senate-infra/scripts/replica-psql.sh: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
+    .agents/skills/senate-inline-docs/SKILL.md: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
+    .agents/skills/senate-jira/JIRA_MEDIA.md: sha256:619b738b6dcd67c0098e25c5ae91e703150fcd2bdf85bcfc5ed796af82ef8a86
+    .agents/skills/senate-jira/SKILL.md: sha256:7027c8168911346bde040fc63584d59050ed272e3a4e759e9bf0a765940a842c
+    .agents/skills/senate-prod-db-ops/SKILL.md: sha256:dc843fb8d01a01c697837abe206d4be7b792c80cec9ae1220dbc3a809dc8e4d8
+    .agents/skills/senate-prod-db-ops/scripts/delete-test-client.sql: sha256:b7716c5301fe26525fa5a4e4abe090082920a0a1ab4af4831f0c493c1975cf48
+    .agents/skills/senate-prod-db-ops/scripts/diag-client-partner.sql: sha256:ed5cf372fe732dcae5cc7e5e0a04edb5fd63400563e8b346192353a184fcbf6a
+    .agents/skills/senate-prod-db-ops/scripts/fk-explore.sql: sha256:80c6abde7a02b2231b7bf3c398b15b2dab1be8c0ef9447e2480cd554e4e28ad2
+    .agents/skills/senate-release-note/SKILL.md: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
+    .agents/skills/senate-update-docs-from-changes/SKILL.md: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
+    .agents/skills/senate-vault/SKILL.md: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
+    .claude/skills/senate-backlog-outline/SKILL.md: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
+    .claude/skills/senate-business-docs/SKILL.md: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
+    .claude/skills/senate-code-to-jira-task/SKILL.md: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
+    .claude/skills/senate-docs-audit/SKILL.md: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
+    .claude/skills/senate-docs-audit/scripts/inventory.ts: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
+    .claude/skills/senate-docs-to-jira-tasks/SKILL.md: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
+    .claude/skills/senate-i18n/SKILL.md: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
+    .claude/skills/senate-infra/SKILL.md: sha256:4021b8802077f79e81a03403a84e597f9f8a5c90ebd5cfd77da441a95415df81
+    .claude/skills/senate-infra/scripts/discover-hosts.ts: sha256:a27c6a380e64090321f0b5841b09c12baca6c4f8a0d2883ed3a5e83f17203d41
+    .claude/skills/senate-infra/scripts/onboardix-psql.sh: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
+    .claude/skills/senate-infra/scripts/replica-psql.sh: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
+    .claude/skills/senate-inline-docs/SKILL.md: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
+    .claude/skills/senate-jira/JIRA_MEDIA.md: sha256:619b738b6dcd67c0098e25c5ae91e703150fcd2bdf85bcfc5ed796af82ef8a86
+    .claude/skills/senate-jira/SKILL.md: sha256:7027c8168911346bde040fc63584d59050ed272e3a4e759e9bf0a765940a842c
+    .claude/skills/senate-prod-db-ops/SKILL.md: sha256:dc843fb8d01a01c697837abe206d4be7b792c80cec9ae1220dbc3a809dc8e4d8
+    .claude/skills/senate-prod-db-ops/scripts/delete-test-client.sql: sha256:b7716c5301fe26525fa5a4e4abe090082920a0a1ab4af4831f0c493c1975cf48
+    .claude/skills/senate-prod-db-ops/scripts/diag-client-partner.sql: sha256:ed5cf372fe732dcae5cc7e5e0a04edb5fd63400563e8b346192353a184fcbf6a
+    .claude/skills/senate-prod-db-ops/scripts/fk-explore.sql: sha256:80c6abde7a02b2231b7bf3c398b15b2dab1be8c0ef9447e2480cd554e4e28ad2
+    .claude/skills/senate-release-note/SKILL.md: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
+    .claude/skills/senate-update-docs-from-changes/SKILL.md: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
+    .claude/skills/senate-vault/SKILL.md: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
+  content_hash: sha256:5747054fdf494f67433a5e326688efd95561cb0932ef5f4cae167098b83a45a1
+  constraint: ^1.1.0
+  resolved_tag: v1.1.0
+  resolved_at: '2026-09-07T04:02:50+00:00'
+  declared_license: UNLICENSED
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
@@ -1533,6 +1657,312 @@ deployments:
   content_hash: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
 - kind: project-relative
   target: claude
+  value: .claude/skills/senate-backlog-outline
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-backlog-outline/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-business-docs
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-business-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-code-to-jira-task
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-code-to-jira-task/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-docs-audit
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-docs-audit/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-docs-audit/scripts/inventory.ts
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-docs-to-jira-tasks
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-docs-to-jira-tasks/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-i18n
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-i18n/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-infra
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-infra/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:4021b8802077f79e81a03403a84e597f9f8a5c90ebd5cfd77da441a95415df81
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-infra/scripts/discover-hosts.ts
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:a27c6a380e64090321f0b5841b09c12baca6c4f8a0d2883ed3a5e83f17203d41
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-infra/scripts/onboardix-psql.sh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-infra/scripts/replica-psql.sh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-inline-docs
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-inline-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-jira
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-jira/JIRA_MEDIA.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:619b738b6dcd67c0098e25c5ae91e703150fcd2bdf85bcfc5ed796af82ef8a86
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-jira/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:7027c8168911346bde040fc63584d59050ed272e3a4e759e9bf0a765940a842c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-prod-db-ops
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-prod-db-ops/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:dc843fb8d01a01c697837abe206d4be7b792c80cec9ae1220dbc3a809dc8e4d8
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-prod-db-ops/scripts/delete-test-client.sql
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:b7716c5301fe26525fa5a4e4abe090082920a0a1ab4af4831f0c493c1975cf48
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-prod-db-ops/scripts/diag-client-partner.sql
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:ed5cf372fe732dcae5cc7e5e0a04edb5fd63400563e8b346192353a184fcbf6a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-prod-db-ops/scripts/fk-explore.sql
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:80c6abde7a02b2231b7bf3c398b15b2dab1be8c0ef9447e2480cd554e4e28ad2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-release-note
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-release-note/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-update-docs-from-changes
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-update-docs-from-changes/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-vault
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-vault/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
+- kind: project-relative
+  target: claude
   value: .claude/skills/session-link
   runtime: null
   scope: project
@@ -2863,6 +3293,312 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-backlog-outline
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-backlog-outline/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-business-docs
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-business-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-code-to-jira-task
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-code-to-jira-task/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-docs-audit
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-docs-audit/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-docs-audit/scripts/inventory.ts
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-docs-to-jira-tasks
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-docs-to-jira-tasks/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-i18n
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-i18n/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-infra
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-infra/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:4021b8802077f79e81a03403a84e597f9f8a5c90ebd5cfd77da441a95415df81
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-infra/scripts/discover-hosts.ts
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:a27c6a380e64090321f0b5841b09c12baca6c4f8a0d2883ed3a5e83f17203d41
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-infra/scripts/onboardix-psql.sh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-infra/scripts/replica-psql.sh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-inline-docs
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-inline-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-jira
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-jira/JIRA_MEDIA.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:619b738b6dcd67c0098e25c5ae91e703150fcd2bdf85bcfc5ed796af82ef8a86
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-jira/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:7027c8168911346bde040fc63584d59050ed272e3a4e759e9bf0a765940a842c
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-prod-db-ops
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-prod-db-ops/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:dc843fb8d01a01c697837abe206d4be7b792c80cec9ae1220dbc3a809dc8e4d8
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-prod-db-ops/scripts/delete-test-client.sql
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:b7716c5301fe26525fa5a4e4abe090082920a0a1ab4af4831f0c493c1975cf48
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-prod-db-ops/scripts/diag-client-partner.sql
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:ed5cf372fe732dcae5cc7e5e0a04edb5fd63400563e8b346192353a184fcbf6a
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-prod-db-ops/scripts/fk-explore.sql
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:80c6abde7a02b2231b7bf3c398b15b2dab1be8c0ef9447e2480cd554e4e28ad2
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-release-note
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-release-note/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-update-docs-from-changes
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-update-docs-from-changes/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-vault
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/senate-vault/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
 - kind: project-relative
   target: codex
   value: .agents/skills/session-link

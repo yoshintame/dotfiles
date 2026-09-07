@@ -149,9 +149,14 @@
             arch = "x86_64";
             class = "nixos";
             path = ./hosts/lasthaze-edge;
-            specialArgs.flakeRoot = "/var/lib/edge-deploy/dotfiles";
+            specialArgs = {
+              flakeRoot = "/var/lib/edge-deploy/dotfiles";
+              gatusPackage = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.gatus;
+              nodes.homelab = inputs.self.nixosConfigurations.lasthaze-homelab.config;
+            };
             modules = [
               inputs.edge.nixosModules.proxy
+              inputs.homelab.nixosModules.sentinel
               inputs.disko.nixosModules.disko
               inputs.srvos.nixosModules.server
               inputs.sops-nix.nixosModules.sops

@@ -123,8 +123,13 @@
 [diff-so-fancy]
     markEmptyLines = false
 
+[url "https://github.com/"]
+    insteadOf     = git@github.com:
+
 [url "git@github.com:"]
-    insteadOf   = "gh:"
+    insteadOf     = "gh:"
+    pushInsteadOf = git@github.com:
+    pushInsteadOf = https://github.com/
 
 [include]
     path = ~/.gitconfig.local
@@ -291,4 +296,3 @@
     wa          = worktree add
     wr          = worktree remove
     wl          = worktree list
-

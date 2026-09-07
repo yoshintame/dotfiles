@@ -46,6 +46,7 @@
     secretsFile = ../../secrets/lasthaze-edge/edge.yaml;
     decoySiteFile = ../../secrets/lasthaze-edge/decoy-site.tar;
     decoy.mode = "self-steal";
+    routing.lastUpdated = "1788492511";
     observability = {
       enable = true;
       promRemoteWriteUrl = "http://lasthaze-homelab:9090/api/v1/write";

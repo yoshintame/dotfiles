@@ -86,11 +86,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788708953,
-        "narHash": "sha256-u5/ba7pR6ZfbaejnIAc7HtftZHVa8eKDzd9RNiHh+cY=",
+        "lastModified": 1788768465,
+        "narHash": "sha256-pTpK3zkecKXA5a+M8CEVKqtK4lNLFg2LnuWWW18AKbs=",
         "ref": "refs/heads/main",
-        "rev": "d42a49ed5f47f77b526f0b281ee08093cc149c13",
-        "revCount": 3,
+        "rev": "8cb5391f94f77578247c7e58d13a279f1995fad1",
+        "revCount": 4,
         "type": "git",
         "url": "ssh://git@github.com/yoshintame/lasthaze-edge"
       },

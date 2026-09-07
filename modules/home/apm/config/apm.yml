@@ -3,6 +3,8 @@ version: 1.0.0
 targets: [claude, codex]
 dependencies:
   apm:
-    - git: git@github.com:yoshintame/agent-skills.git
+    - git: https://github.com/yoshintame/agent-skills.git
       ref: ^1.0.0
+    - git: https://github.com/senate-exchange/ai-skills.git
+      ref: ^1.1.0
   mcp: []

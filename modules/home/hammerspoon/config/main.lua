@@ -168,6 +168,16 @@ end
 
 hs.hotkey.bind({ "alt" }, "E", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D"))
 
+function switchCurrentAppWindows()
+    local app = hs.application.frontmostApplication()
+    local bundleID = app and app:bundleID()
+    if not bundleID then return end
+    raycast(
+        "raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22"
+        .. bundleID .. "%22%7D"
+    )()
+end
+
 local floatMaximizePrevFrames = {}
 local function toggleFloatMaximize()
     local win = hs.window.focusedWindow()

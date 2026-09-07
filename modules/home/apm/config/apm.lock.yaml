@@ -128,9 +128,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 602a85313bf2098dabddbedc8ec7f4ea5923f9ac
-  resolved_ref: v1.1.0
-  version: 1.1.0
+  resolved_commit: cf7250bf5c1c2dd01681ac52548be559fb9aed1d
+  resolved_ref: v1.2.0
+  version: 1.2.0
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -235,6 +235,9 @@ dependencies:
   - .agents/skills/rename-session
   - .agents/skills/rename-session/SKILL.md
   - .agents/skills/rename-session/scripts/append-custom-title.ts
+  - .agents/skills/rename-workspace
+  - .agents/skills/rename-workspace/SKILL.md
+  - .agents/skills/rename-workspace/scripts/rename-workspace.ts
   - .agents/skills/reset-sessions
   - .agents/skills/reset-sessions/SKILL.md
   - .agents/skills/reset-sessions/scripts/lib.ts
@@ -384,6 +387,9 @@ dependencies:
   - .claude/skills/rename-session
   - .claude/skills/rename-session/SKILL.md
   - .claude/skills/rename-session/scripts/append-custom-title.ts
+  - .claude/skills/rename-workspace
+  - .claude/skills/rename-workspace/SKILL.md
+  - .claude/skills/rename-workspace/scripts/rename-workspace.ts
   - .claude/skills/reset-sessions
   - .claude/skills/reset-sessions/SKILL.md
   - .claude/skills/reset-sessions/scripts/lib.ts
@@ -500,8 +506,10 @@ dependencies:
     .agents/skills/refactor/references/duplicated-services.md: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
     .agents/skills/refactor/references/repeated-io.md: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
     .agents/skills/refactor/references/single-pass-classification.md: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
-    .agents/skills/rename-session/SKILL.md: sha256:11847cb6da0e5667b56e6f026818f9232856e88e1a9c05c645725b780eca3b81
-    .agents/skills/rename-session/scripts/append-custom-title.ts: sha256:c4394ef0f6ecbfcaaedb42be9457529bcfcea1d9bb6c02fc69183e163b1d2e71
+    .agents/skills/rename-session/SKILL.md: sha256:1b23d63893d4c7c1a68a04c7d275aabef4cf860145139dbfb4775f661d5f3c28
+    .agents/skills/rename-session/scripts/append-custom-title.ts: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
+    .agents/skills/rename-workspace/SKILL.md: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
+    .agents/skills/rename-workspace/scripts/rename-workspace.ts: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
     .agents/skills/reset-sessions/SKILL.md: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
     .agents/skills/reset-sessions/scripts/lib.ts: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
     .agents/skills/reset-sessions/scripts/reset-sessions.ts: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
@@ -601,8 +609,10 @@ dependencies:
     .claude/skills/refactor/references/duplicated-services.md: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
     .claude/skills/refactor/references/repeated-io.md: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
     .claude/skills/refactor/references/single-pass-classification.md: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
-    .claude/skills/rename-session/SKILL.md: sha256:11847cb6da0e5667b56e6f026818f9232856e88e1a9c05c645725b780eca3b81
-    .claude/skills/rename-session/scripts/append-custom-title.ts: sha256:c4394ef0f6ecbfcaaedb42be9457529bcfcea1d9bb6c02fc69183e163b1d2e71
+    .claude/skills/rename-session/SKILL.md: sha256:1b23d63893d4c7c1a68a04c7d275aabef4cf860145139dbfb4775f661d5f3c28
+    .claude/skills/rename-session/scripts/append-custom-title.ts: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
+    .claude/skills/rename-workspace/SKILL.md: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
+    .claude/skills/rename-workspace/scripts/rename-workspace.ts: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
     .claude/skills/reset-sessions/SKILL.md: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
     .claude/skills/reset-sessions/scripts/lib.ts: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
     .claude/skills/reset-sessions/scripts/reset-sessions.ts: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
@@ -632,10 +642,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:83fd02b02b40ae98dff3a4ae6815cd5b01b097392954c102727944e2a4538a53
+  content_hash: sha256:4c4cc8c95b0acddbe11ccdf53a4dad1600cf952bca92e51e39599e9523eccf34
   constraint: ^1.0.0
-  resolved_tag: v1.1.0
-  resolved_at: '2026-09-06T17:59:45+00:00'
+  resolved_tag: v1.2.0
+  resolved_at: '2026-09-07T06:12:49+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -1555,7 +1565,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:11847cb6da0e5667b56e6f026818f9232856e88e1a9c05c645725b780eca3b81
+  content_hash: sha256:1b23d63893d4c7c1a68a04c7d275aabef4cf860145139dbfb4775f661d5f3c28
 - kind: project-relative
   target: claude
   value: .claude/skills/rename-session/scripts/append-custom-title.ts
@@ -1564,7 +1574,34 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c4394ef0f6ecbfcaaedb42be9457529bcfcea1d9bb6c02fc69183e163b1d2e71
+  content_hash: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
+- kind: project-relative
+  target: claude
+  value: .claude/skills/rename-workspace
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/rename-workspace/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
+- kind: project-relative
+  target: claude
+  value: .claude/skills/rename-workspace/scripts/rename-workspace.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
 - kind: project-relative
   target: claude
   value: .claude/skills/reset-sessions
@@ -2286,7 +2323,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/actualize
   runtime: null
   scope: project
@@ -2295,7 +2332,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/actualize/SKILL.md
   runtime: null
   scope: project
@@ -2304,7 +2341,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:031a91f3e4072bb4ccc627d5c5271e208794b4f572929ade4599d28d9b45884d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ai-attack-audit
   runtime: null
   scope: project
@@ -2313,7 +2350,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ai-attack-audit/SKILL.md
   runtime: null
   scope: project
@@ -2322,7 +2359,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1604e8859fc020a6096d28ecdbf8592b5257d6db7421b5a35e248dcccc827a16
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ai-attack-audit/scripts/scan.ts
   runtime: null
   scope: project
@@ -2331,7 +2368,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:13c60d04f88cef1dc7f13526cf8348751477290057b727d437c93a1b4054c059
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-permissions
   runtime: null
   scope: project
@@ -2340,7 +2377,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-permissions/SKILL.md
   runtime: null
   scope: project
@@ -2349,7 +2386,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a765112cc9e60e52bea4d856a82aa273b06681d0ca6b88f1144ebc2045967b07
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-permissions/scripts/analyze-permissions.py
   runtime: null
   scope: project
@@ -2358,7 +2395,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ba470ff11952a949ef94f927aef6f58ee15857d695155937cae896fd0e7f5639
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/brew-cask
   runtime: null
   scope: project
@@ -2367,7 +2404,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/brew-cask/SKILL.md
   runtime: null
   scope: project
@@ -2376,7 +2413,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f13b235e1643b9b12397bce9320893b6b82565c4a9479d6cb4704927fc5804a2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-fork-recover
   runtime: null
   scope: project
@@ -2385,7 +2422,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-fork-recover/SKILL.md
   runtime: null
   scope: project
@@ -2394,7 +2431,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-model-reset
   runtime: null
   scope: project
@@ -2403,7 +2440,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-model-reset/SKILL.md
   runtime: null
   scope: project
@@ -2412,7 +2449,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b97c33384ffb28dd1c45a5bd6ab7fa72b79722f96af2c604890487d8aaa57dd6
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/create-skill
   runtime: null
   scope: project
@@ -2421,7 +2458,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/create-skill/SKILL.md
   runtime: null
   scope: project
@@ -2430,7 +2467,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:64b3d966fc342fbb11e29449ba498306d2c81a3f25a8b86560f729114cc0771e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/create-skill/scripts/slop-lint.ts
   runtime: null
   scope: project
@@ -2439,7 +2476,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research
   runtime: null
   scope: project
@@ -2448,7 +2485,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/SKILL.md
   runtime: null
   scope: project
@@ -2457,7 +2494,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/choice.md
   runtime: null
   scope: project
@@ -2466,7 +2503,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/corpus-market.md
   runtime: null
   scope: project
@@ -2475,7 +2512,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/corpus-software.md
   runtime: null
   scope: project
@@ -2484,7 +2521,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/evidence.md
   runtime: null
   scope: project
@@ -2493,7 +2530,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/done
   runtime: null
   scope: project
@@ -2502,7 +2539,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/done/SKILL.md
   runtime: null
   scope: project
@@ -2511,7 +2548,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4a2f055d885e7a6f4a5f30f83dcfb08cb19110a2d3bf4299b52e71183b41c6c0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts
   runtime: null
   scope: project
@@ -2520,7 +2557,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/SKILL.md
   runtime: null
   scope: project
@@ -2529,7 +2566,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:384d59c20dbfb9e64fe9469e25196d239099d1c9de5b0fcd7b39b3de1a246e31
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/concurrency-and-resources.md
   runtime: null
   scope: project
@@ -2538,7 +2575,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1f55aa15a5d12679eed72ecc86516d70a99a7dae7f95dbf21121280cd461bc5c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/config-and-logging.md
   runtime: null
   scope: project
@@ -2547,7 +2584,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:757289c3d7c2010b785cd0645f4df1c4d50f9729a89d8673d68c3695b7bc53d0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/effect-stdlib-first.md
   runtime: null
   scope: project
@@ -2556,7 +2593,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9adca13e50ea369be3277e9b1e226e3fc36ea5b267081a71a78560f6fada5b90
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/effect-stdlib-first.pdf
   runtime: null
   scope: project
@@ -2565,7 +2602,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1938e4363c16ef3a0b301976a9398649c20992fca0afe5ed91e126e3c75706a7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/errors.md
   runtime: null
   scope: project
@@ -2574,7 +2611,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:eb024bd49b896c8ceb88dc37145cb188e9d0ae7049214dae4631f20cd2d81a14
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/pattern-matching.md
   runtime: null
   scope: project
@@ -2583,7 +2620,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:570304281abe918f5b2c29d77044a0b2efff447de27313b2fa1ae2b6938dbdf4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/schema-and-boundaries.md
   runtime: null
   scope: project
@@ -2592,7 +2629,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:015708f5f18378f7e541a1b8dc791932dd3b178c4545abb5d3dd65231d4dd743
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/services-and-layers.md
   runtime: null
   scope: project
@@ -2601,7 +2638,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:0fe693d194bc9f0a73341539dc977a4c387439684cae6f0855831b4b2c7d030f
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/testing.md
   runtime: null
   scope: project
@@ -2610,7 +2647,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:eac4a1acfd96b12b5dca07933bf42d162b626da2e30a4831dd967303797efcdd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract
   runtime: null
   scope: project
@@ -2619,7 +2656,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract/SKILL.md
   runtime: null
   scope: project
@@ -2628,7 +2665,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:965efd96b9f36f069e1ffba08706738ededb69e204937b9b6eb40d1c9351054e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract/references/types.md
   runtime: null
   scope: project
@@ -2637,7 +2674,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:60213ec3f45b738c180cc66cfe05b228335d47e7baf7a8eca944282ebff93f7e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract/scripts/history-lint.ts
   runtime: null
   scope: project
@@ -2646,7 +2683,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a751f07080de402780c1a5c98597ec0323918b9a37910347e8815ab5727945fd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/fetch-reddit
   runtime: null
   scope: project
@@ -2655,7 +2692,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/fetch-reddit/SKILL.md
   runtime: null
   scope: project
@@ -2664,7 +2701,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f797f20dc93b14a7140a831c11c2055498cca6b6a409d31d71614d3127df8b3c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/fetch-reddit/scripts/fetch-reddit.py
   runtime: null
   scope: project
@@ -2673,7 +2710,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:47c48ddd8d412ce721b3e8abe4cd2f4d2cf43807a639811ecf4c83987fc80770
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-best
   runtime: null
   scope: project
@@ -2682,7 +2719,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-best/SKILL.md
   runtime: null
   scope: project
@@ -2691,7 +2728,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ea84d45656b8dc4d8d9e083e6a9102ab505079642ac59f2bd15eb78f2f0f72a4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session
   runtime: null
   scope: project
@@ -2700,7 +2737,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/SKILL.md
   runtime: null
   scope: project
@@ -2709,7 +2746,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4c4096d2d74cb738ab7ee262383459921df537b1334de1ffc723353afb327233
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/assets/cc.sql
   runtime: null
   scope: project
@@ -2718,7 +2755,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:59ed6e3ab85f4b8ab0d7eac36cbdd31f7019045b37f65852ed5d3cf23818d4a8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/scripts/open-session.ts
   runtime: null
   scope: project
@@ -2727,7 +2764,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1760b1ab016f0109ee6add81cdc3f57847157f53a2d576ae442bb2a5e7330c8e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/scripts/search.ts
   runtime: null
   scope: project
@@ -2736,7 +2773,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ddaaa1848e1f4385e6b05a326675729b64736c2591e0c4dfb1b44e7d720f91da
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-skills
   runtime: null
   scope: project
@@ -2745,7 +2782,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-skills/SKILL.md
   runtime: null
   scope: project
@@ -2754,7 +2791,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:124ebf5e19c69060565591ebbfbbe1c82bd36a1f32514a122688c1fb4af70839
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-skills/scripts/list-skills.ts
   runtime: null
   scope: project
@@ -2763,7 +2800,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4cc5c7212e721ab5e8d50b7f88c5a8f26a66726e85788703c970a84747d81fe0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-commit
   runtime: null
   scope: project
@@ -2772,7 +2809,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-commit/SKILL.md
   runtime: null
   scope: project
@@ -2781,7 +2818,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:781afe7329ea0d02e336d5fb4315c92064a5fa6a0a0d989dad5b1c6f0c73e4ad
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-commit/scripts/gather-context.sh
   runtime: null
   scope: project
@@ -2790,7 +2827,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5084a571b338e79234b5376fb7f1ae3f639130b1513284102a040098335ac9ce
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-ref
   runtime: null
   scope: project
@@ -2799,7 +2836,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-ref/SKILL.md
   runtime: null
   scope: project
@@ -2808,7 +2845,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:7e53098d855f2c0f2cfe1dd9434a8888c644823fc2eb903b8eaee63ef46605d8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-ref/scripts/compare-link.sh
   runtime: null
   scope: project
@@ -2817,7 +2854,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4710319350aaffc54528a1a15aea416e34f839727650d17628d3483116c445f6
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create
   runtime: null
   scope: project
@@ -2826,7 +2863,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create-independent-deep-research
   runtime: null
   scope: project
@@ -2835,7 +2872,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create-independent-deep-research/SKILL.md
   runtime: null
   scope: project
@@ -2844,7 +2881,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create/SKILL.md
   runtime: null
   scope: project
@@ -2853,7 +2890,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ce400fdc6c3bfb64f5c8327657417e2fe5f51e525b1f4749064758abedac3091
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create/scripts/handoff-create.ts
   runtime: null
   scope: project
@@ -2862,7 +2899,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-pickup
   runtime: null
   scope: project
@@ -2871,7 +2908,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-pickup/SKILL.md
   runtime: null
   scope: project
@@ -2880,7 +2917,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-pickup/scripts/handoff-pickup.ts
   runtime: null
   scope: project
@@ -2889,7 +2926,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-deploy
   runtime: null
   scope: project
@@ -2898,7 +2935,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-deploy/SKILL.md
   runtime: null
   scope: project
@@ -2907,7 +2944,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:dfa7c35ce938005b7de8ebe90beebe0c9724653c276f4a0af55b37be4d0537f6
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keybind
   runtime: null
   scope: project
@@ -2916,7 +2953,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keybind/SKILL.md
   runtime: null
   scope: project
@@ -2925,7 +2962,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update
   runtime: null
   scope: project
@@ -2934,7 +2971,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/SKILL.md
   runtime: null
   scope: project
@@ -2943,7 +2980,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/references/signing-cert.md
   runtime: null
   scope: project
@@ -2952,7 +2989,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/references/threat-model.md
   runtime: null
   scope: project
@@ -2961,7 +2998,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b8894f811078a1b0c16acb7c635b661561befe078bcfdf50b06220c20d097a25
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/build-verify-install.sh
   runtime: null
   scope: project
@@ -2970,7 +3007,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/check-update.sh
   runtime: null
   scope: project
@@ -2979,7 +3016,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/create-signing-cert.sh
   runtime: null
   scope: project
@@ -2988,7 +3025,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ebd1f2baa97c25d0fad275bb9e046543381c72658c09bfcfdd3560389916f17d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/prepare-diff.sh
   runtime: null
   scope: project
@@ -2997,7 +3034,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6e7d2e791f599f0fc6bbdd2dbeb284a25290a149eaab3af964127ae8f0f3a2df
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/maintenance-cleanup
   runtime: null
   scope: project
@@ -3006,7 +3043,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/maintenance-cleanup/SKILL.md
   runtime: null
   scope: project
@@ -3015,7 +3052,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b4992b94b0dc071a105ea56817ad87e2d3c10b12862dc90bc521aeccdf2d88ee
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/maintenance-cleanup/scripts/scan.ts
   runtime: null
   scope: project
@@ -3024,7 +3061,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/meeting-transcribe
   runtime: null
   scope: project
@@ -3033,7 +3070,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/meeting-transcribe/SKILL.md
   runtime: null
   scope: project
@@ -3042,7 +3079,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/mobx-keystone
   runtime: null
   scope: project
@@ -3051,7 +3088,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/mobx-keystone/SKILL.md
   runtime: null
   scope: project
@@ -3060,7 +3097,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/obsidian-vault
   runtime: null
   scope: project
@@ -3069,7 +3106,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/obsidian-vault/SKILL.md
   runtime: null
   scope: project
@@ -3078,7 +3115,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import
   runtime: null
   scope: project
@@ -3087,7 +3124,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import/SKILL.md
   runtime: null
   scope: project
@@ -3096,7 +3133,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:90b6491b9158c77fc0c8ac9e7f601e0034834b3d6a97e518889064c71f776632
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import/scripts/deferred-import.ts
   runtime: null
   scope: project
@@ -3105,7 +3142,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:868f258276c0d2cd3384a605a7afe903c48155aefbdc9d4c1b9e878e47e77961
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import/scripts/import-current-session.ts
   runtime: null
   scope: project
@@ -3114,7 +3151,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:3c498d25c9edba6babc0c9db91ac078a6268139550ab3332a61977b47b454a6a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paused
   runtime: null
   scope: project
@@ -3123,7 +3160,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paused/SKILL.md
   runtime: null
   scope: project
@@ -3132,7 +3169,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor
   runtime: null
   scope: project
@@ -3141,7 +3178,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/SKILL.md
   runtime: null
   scope: project
@@ -3150,7 +3187,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/references/duplicated-services.md
   runtime: null
   scope: project
@@ -3159,7 +3196,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/references/repeated-io.md
   runtime: null
   scope: project
@@ -3168,7 +3205,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/references/single-pass-classification.md
   runtime: null
   scope: project
@@ -3177,7 +3214,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-session
   runtime: null
   scope: project
@@ -3186,25 +3223,52 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-session/SKILL.md
   runtime: null
   scope: project
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:11847cb6da0e5667b56e6f026818f9232856e88e1a9c05c645725b780eca3b81
+  content_hash: sha256:1b23d63893d4c7c1a68a04c7d275aabef4cf860145139dbfb4775f661d5f3c28
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-session/scripts/append-custom-title.ts
   runtime: null
   scope: project
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c4394ef0f6ecbfcaaedb42be9457529bcfcea1d9bb6c02fc69183e163b1d2e71
+  content_hash: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
 - kind: project-relative
-  target: codex
+  target: legacy
+  value: .agents/skills/rename-workspace
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/rename-workspace/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/rename-workspace/scripts/rename-workspace.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
+- kind: project-relative
+  target: legacy
   value: .agents/skills/reset-sessions
   runtime: null
   scope: project
@@ -3213,7 +3277,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/SKILL.md
   runtime: null
   scope: project
@@ -3222,7 +3286,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/scripts/lib.ts
   runtime: null
   scope: project
@@ -3231,7 +3295,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/scripts/reset-sessions.ts
   runtime: null
   scope: project
@@ -3240,7 +3304,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/scripts/session-reaper.ts
   runtime: null
   scope: project
@@ -3249,7 +3313,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite
   runtime: null
   scope: project
@@ -3258,7 +3322,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite-audit
   runtime: null
   scope: project
@@ -3267,7 +3331,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite-audit/SKILL.md
   runtime: null
   scope: project
@@ -3276,7 +3340,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:92c232aa09d83789d751d516ef1c980a692df498136a66480e43417b2a60fb4a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite-audit/scripts/audit-map.ts
   runtime: null
   scope: project
@@ -3285,7 +3349,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5aac9a3dbd3993d400d7c20b83c4eda52f638d63580066055a5dacf13b372a14
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite/SKILL.md
   runtime: null
   scope: project
@@ -3294,7 +3358,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-backlog-outline
   runtime: null
   scope: project
@@ -3303,7 +3367,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-backlog-outline/SKILL.md
   runtime: null
   scope: project
@@ -3312,7 +3376,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-business-docs
   runtime: null
   scope: project
@@ -3321,7 +3385,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-business-docs/SKILL.md
   runtime: null
   scope: project
@@ -3330,7 +3394,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-code-to-jira-task
   runtime: null
   scope: project
@@ -3339,7 +3403,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-code-to-jira-task/SKILL.md
   runtime: null
   scope: project
@@ -3348,7 +3412,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-audit
   runtime: null
   scope: project
@@ -3357,7 +3421,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-audit/SKILL.md
   runtime: null
   scope: project
@@ -3366,7 +3430,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-audit/scripts/inventory.ts
   runtime: null
   scope: project
@@ -3375,7 +3439,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-to-jira-tasks
   runtime: null
   scope: project
@@ -3384,7 +3448,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-to-jira-tasks/SKILL.md
   runtime: null
   scope: project
@@ -3393,7 +3457,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-i18n
   runtime: null
   scope: project
@@ -3402,7 +3466,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-i18n/SKILL.md
   runtime: null
   scope: project
@@ -3411,7 +3475,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra
   runtime: null
   scope: project
@@ -3420,7 +3484,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/SKILL.md
   runtime: null
   scope: project
@@ -3429,7 +3493,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:4021b8802077f79e81a03403a84e597f9f8a5c90ebd5cfd77da441a95415df81
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/scripts/discover-hosts.ts
   runtime: null
   scope: project
@@ -3438,7 +3502,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:a27c6a380e64090321f0b5841b09c12baca6c4f8a0d2883ed3a5e83f17203d41
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/scripts/onboardix-psql.sh
   runtime: null
   scope: project
@@ -3447,7 +3511,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/scripts/replica-psql.sh
   runtime: null
   scope: project
@@ -3456,7 +3520,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-inline-docs
   runtime: null
   scope: project
@@ -3465,7 +3529,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-inline-docs/SKILL.md
   runtime: null
   scope: project
@@ -3474,7 +3538,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-jira
   runtime: null
   scope: project
@@ -3483,7 +3547,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-jira/JIRA_MEDIA.md
   runtime: null
   scope: project
@@ -3492,7 +3556,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:619b738b6dcd67c0098e25c5ae91e703150fcd2bdf85bcfc5ed796af82ef8a86
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-jira/SKILL.md
   runtime: null
   scope: project
@@ -3501,7 +3565,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:7027c8168911346bde040fc63584d59050ed272e3a4e759e9bf0a765940a842c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops
   runtime: null
   scope: project
@@ -3510,7 +3574,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/SKILL.md
   runtime: null
   scope: project
@@ -3519,7 +3583,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:dc843fb8d01a01c697837abe206d4be7b792c80cec9ae1220dbc3a809dc8e4d8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/scripts/delete-test-client.sql
   runtime: null
   scope: project
@@ -3528,7 +3592,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:b7716c5301fe26525fa5a4e4abe090082920a0a1ab4af4831f0c493c1975cf48
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/scripts/diag-client-partner.sql
   runtime: null
   scope: project
@@ -3537,7 +3601,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:ed5cf372fe732dcae5cc7e5e0a04edb5fd63400563e8b346192353a184fcbf6a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/scripts/fk-explore.sql
   runtime: null
   scope: project
@@ -3546,7 +3610,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:80c6abde7a02b2231b7bf3c398b15b2dab1be8c0ef9447e2480cd554e4e28ad2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-release-note
   runtime: null
   scope: project
@@ -3555,7 +3619,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-release-note/SKILL.md
   runtime: null
   scope: project
@@ -3564,7 +3628,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-update-docs-from-changes
   runtime: null
   scope: project
@@ -3573,7 +3637,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-update-docs-from-changes/SKILL.md
   runtime: null
   scope: project
@@ -3582,7 +3646,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-vault
   runtime: null
   scope: project
@@ -3591,7 +3655,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-vault/SKILL.md
   runtime: null
   scope: project
@@ -3600,7 +3664,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-link
   runtime: null
   scope: project
@@ -3609,7 +3673,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-link/SKILL.md
   runtime: null
   scope: project
@@ -3618,7 +3682,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-link/scripts/link-session-to.ts
   runtime: null
   scope: project
@@ -3627,7 +3691,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-status
   runtime: null
   scope: project
@@ -3636,7 +3700,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-status/SKILL.md
   runtime: null
   scope: project
@@ -3645,7 +3709,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f3c75b76fcc5db296756d2f27ffbe0b9f381b649ef6e0a770d047db18f99af15
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-status/scripts/session-status.ts
   runtime: null
   scope: project
@@ -3654,7 +3718,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/skill-dev
   runtime: null
   scope: project
@@ -3663,7 +3727,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/skill-dev/SKILL.md
   runtime: null
   scope: project
@@ -3672,7 +3736,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/state-reconstruction
   runtime: null
   scope: project
@@ -3681,7 +3745,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/state-reconstruction/SKILL.md
   runtime: null
   scope: project
@@ -3690,7 +3754,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/state-reconstruction/scripts/region-sessions.ts
   runtime: null
   scope: project
@@ -3699,7 +3763,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/tanstack-react-router
   runtime: null
   scope: project
@@ -3708,7 +3772,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/tanstack-react-router/SKILL.md
   runtime: null
   scope: project
@@ -3717,7 +3781,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/test-discipline
   runtime: null
   scope: project
@@ -3726,7 +3790,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/test-discipline/SKILL.md
   runtime: null
   scope: project
@@ -3735,7 +3799,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/thermo-nuclear-code-quality-review
   runtime: null
   scope: project
@@ -3744,7 +3808,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
   runtime: null
   scope: project
@@ -3753,7 +3817,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style
   runtime: null
   scope: project
@@ -3762,7 +3826,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style/SKILL.md
   runtime: null
   scope: project
@@ -3771,7 +3835,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style/references/react.md
   runtime: null
   scope: project
@@ -3780,7 +3844,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style/references/typescript.md
   runtime: null
   scope: project
@@ -3789,7 +3853,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vault-types
   runtime: null
   scope: project
@@ -3798,7 +3862,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vault-types/SKILL.md
   runtime: null
   scope: project
@@ -3807,7 +3871,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vscode-marketplace
   runtime: null
   scope: project
@@ -3816,7 +3880,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vscode-marketplace/SKILL.md
   runtime: null
   scope: project
@@ -3825,7 +3889,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1e6bccff86991ad7aa825df9da8abfcc6e9744a4b64be7c7d8e3a1fe6365c0a9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vscode-marketplace/vscode-marketplace.py
   runtime: null
   scope: project
@@ -3834,7 +3898,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/worktree-open
   runtime: null
   scope: project
@@ -3843,7 +3907,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/worktree-open/SKILL.md
   runtime: null
   scope: project
@@ -3852,7 +3916,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a8f6828793e360a9870466e8c5081e31976894b68c6bdef0b21541ce2f524870
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/worktree-open/scripts/link-and-open.ts
   runtime: null
   scope: project
@@ -3861,7 +3925,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:583e655d5deebe9fbac0777f5a0252ec96fe01b384ea3c03bac1922edb4f5816
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-land
   runtime: null
   scope: project
@@ -3870,7 +3934,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-land/SKILL.md
   runtime: null
   scope: project
@@ -3879,7 +3943,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-workflow
   runtime: null
   scope: project
@@ -3888,7 +3952,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-workflow/SKILL.md
   runtime: null
   scope: project
@@ -3897,7 +3961,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ccdf7968a3a601d4b9d3cf9d83e16e3801c7a7f195abf85537eb1d38ad9863c5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/youtube-summary
   runtime: null
   scope: project
@@ -3906,7 +3970,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/youtube-summary/SKILL.md
   runtime: null
   scope: project
@@ -3915,7 +3979,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/youtube-summary/scripts/yt-transcript
   runtime: null
   scope: project

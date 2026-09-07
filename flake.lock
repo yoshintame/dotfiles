@@ -86,11 +86,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788700687,
-        "narHash": "sha256-/7PSjQUwXsmXc2UNxCBthhE3p7qAXGAOhXlV81AOWaQ=",
+        "lastModified": 1788708953,
+        "narHash": "sha256-u5/ba7pR6ZfbaejnIAc7HtftZHVa8eKDzd9RNiHh+cY=",
         "ref": "refs/heads/main",
-        "rev": "ae149424f3828c5cdee63b38c9fb2c2eee0df925",
-        "revCount": 2,
+        "rev": "d42a49ed5f47f77b526f0b281ee08093cc149c13",
+        "revCount": 3,
         "type": "git",
         "url": "ssh://git@github.com/yoshintame/lasthaze-edge"
       },
@@ -282,11 +282,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1788117909,
-        "narHash": "sha256-3HtK3YndNcyFIxgygkRLN5hqON1MVMbOcfMIaMMlucg=",
+        "lastModified": 1788711433,
+        "narHash": "sha256-HnF11SSqki0TAADmRZ1eh5kFxXEu54t5tr24Ygyfxpk=",
         "ref": "refs/heads/main",
-        "rev": "9198da1c8199440d5b9cda1b88a1e720a9a17d40",
-        "revCount": 11,
+        "rev": "bc83a940082ab66f2c95e76fbb2359280026ab86",
+        "revCount": 41,
         "type": "git",
         "url": "ssh://git@github.com/yoshintame/lasthaze-homelab"
       },

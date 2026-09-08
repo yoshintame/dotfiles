@@ -44,6 +44,8 @@
       checks = {
         toplevel-lasthaze-homelab = evalToplevel "lasthaze-homelab" self.nixosConfigurations.lasthaze-homelab.config.system.build.toplevel;
         toplevel-lasthaze-edge = evalToplevel "lasthaze-edge" self.nixosConfigurations.lasthaze-edge.config.system.build.toplevel;
+        toplevel-lasthaze-ru = evalToplevel "lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.toplevel;
+        image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;
       }
       // lib.optionalAttrs (system == "aarch64-darwin") {
         toplevel-lasthaze-mbp = evalToplevel "lasthaze-mbp" self.darwinConfigurations.lasthaze-mbp.config.system.build.toplevel;

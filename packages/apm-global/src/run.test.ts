@@ -43,6 +43,7 @@ async function fixture(mode: 'success' | 'failure' | 'interrupt') {
 		join(bin, 'apm'),
 		[
 			'#!/bin/sh',
+			`printf '%s\\n' "$@" > "${join(root, 'apm-args')}"`,
 			'rm "$HOME/.apm/apm.lock.yaml"',
 			'printf "version: next\\n" > "$HOME/.apm/apm.lock.yaml"',
 			'rm "$HOME/.apm/apm.yml"',
@@ -89,6 +90,24 @@ async function runFixture(mode: 'success' | 'failure') {
 	}
 }
 
+async function runArgs(argv: string[]) {
+	const paths = await fixture('success')
+	const process = Bun.spawn(['bun', runner, ...argv], {
+		cwd: paths.root,
+		env: {
+			...Bun.env,
+			DOTFILES: paths.canonical.split('/modules/home/apm/config')[0],
+			HOME: paths.home,
+			PATH: `${paths.bin}:${Bun.env.PATH}`,
+		},
+		stderr: 'pipe',
+		stdout: 'pipe',
+	})
+	await process.exited
+	const recorded = await readFile(join(paths.root, 'apm-args'), 'utf8')
+	return recorded.split('\n').filter(Boolean)
+}
+
 async function expectRepaired(paths: Awaited<ReturnType<typeof fixture>>) {
 	expect(await readFile(join(paths.canonical, 'apm.yml'), 'utf8')).toBe(
 		'name: next\n',
@@ -121,6 +140,25 @@ describe('global APM wrapper', () => {
 		expect(stderr).toBe('')
 		expect(await process.exited).toBe(17)
 		await expectRepaired(paths)
+	})
+
+	test('forces --global on mutating commands that omit it', async () => {
+		expect(await runArgs(['install'])).toEqual(['install', '--global'])
+		expect(await runArgs(['update', 'yoshintame/agent-skills'])).toEqual([
+			'update',
+			'--global',
+			'yoshintame/agent-skills',
+		])
+	})
+
+	test('does not duplicate an explicit global flag', async () => {
+		expect(await runArgs(['install', '-g'])).toEqual(['install', '-g'])
+		expect(await runArgs(['update', '--global'])).toEqual(['update', '--global'])
+	})
+
+	test('leaves non-mutating commands untouched', async () => {
+		expect(await runArgs(['list'])).toEqual(['list'])
+		expect(await runArgs(['audit', '--ci'])).toEqual(['audit', '--ci'])
 	})
 
 	test('repairs links after interruption', async () => {

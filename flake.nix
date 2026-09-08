@@ -96,6 +96,7 @@
         git-hooks.flakeModule
         ./parts/dev.nix
         ./parts/edge.nix
+        ./parts/lasthaze-ru.nix
       ];
 
       systems = [
@@ -157,6 +158,18 @@
             modules = [
               inputs.edge.nixosModules.proxy
               inputs.homelab.nixosModules.sentinel
+              inputs.disko.nixosModules.disko
+              inputs.srvos.nixosModules.server
+              inputs.sops-nix.nixosModules.sops
+            ];
+          };
+
+          lasthaze-ru = {
+            arch = "x86_64";
+            class = "nixos";
+            path = ./hosts/lasthaze-ru;
+            specialArgs.flakeRoot = "/var/lib/lasthaze-ru-deploy/dotfiles";
+            modules = [
               inputs.disko.nixosModules.disko
               inputs.srvos.nixosModules.server
               inputs.sops-nix.nixosModules.sops

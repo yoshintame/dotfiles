@@ -2,6 +2,7 @@ keys:
   - &yoshintame age1eedzyp9gqp7qptesdq4yj2nmpxqc0smqgckmrlldn8qvuqrfds5suwkk2n
   - &homelab-host age1u83d9jdfe6xn2fkr0ek7raczg0r57qpqpnlpl8stt7pvfc893qeqtslaus
   - &edge-fleet age1ksn64glxe96r987cy6cq4ndwtwyfzlvewfhjhqrywpa20jt3ffmsks9h64
+  - &lasthaze-ru-image age17ayxgejn5nt79e80zw84kqs4csrapf85hn4lx0cuczd8wsgv2pws6u70n7
 
 creation_rules:
   - path_regex: secrets/homelab/.*\.yaml$
@@ -14,6 +15,11 @@ creation_rules:
       - age:
           - *yoshintame
           - *edge-fleet
+  - path_regex: secrets/lasthaze-ru/.*\.yaml$
+    key_groups:
+      - age:
+          - *yoshintame
+          - *lasthaze-ru-image
   - path_regex: secrets\.yaml$
     key_groups:
       - age:

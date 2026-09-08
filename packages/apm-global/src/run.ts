@@ -9,16 +9,30 @@ import {
 } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 
-const args = Bun.argv.slice(2)
+const rawArgs = Bun.argv.slice(2)
 const home = Bun.env.HOME
 const dotfiles = Bun.env.DOTFILES ?? resolve(import.meta.dir, '../../..')
 
-if (!home || !dotfiles || args.length === 0) {
+if (!home || !dotfiles || rawArgs.length === 0) {
 	console.error(
 		'Usage: run.ts <apm arguments...>; HOME and DOTFILES must be set',
 	)
 	process.exit(2)
 }
+
+const userScopedCommands = new Set(['install', 'update', 'uninstall', 'prune'])
+
+function withUserScope(input: string[]) {
+	const command = input.find((argument) => !argument.startsWith('-'))
+	if (!command || !userScopedCommands.has(command)) return input
+	if (input.some((argument) => argument === '-g' || argument === '--global')) {
+		return input
+	}
+	const index = input.indexOf(command)
+	return [...input.slice(0, index + 1), '--global', ...input.slice(index + 1)]
+}
+
+const args = withUserScope(rawArgs)
 
 const liveDirectory = join(home, '.apm')
 const canonicalDirectory = join(dotfiles, 'modules/home/apm/config')

@@ -8,7 +8,7 @@ if [ -z "$worktree" ]; then
   exit 1
 fi
 
-if [ "${WT_BUN_INSTALL:-0}" = "1" ] && [ -f "$worktree/package.json" ]; then
+if [ "${WT_BUN_INSTALL:-1}" = "1" ] && [ -f "$worktree/package.json" ]; then
   (cd "$worktree" && bun install) || true
 fi
 

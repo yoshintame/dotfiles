@@ -1,0 +1,82 @@
+#!/usr/bin/env bun
+import { lstatSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
+import { homedir } from "node:os"
+import { join } from "node:path"
+import { defineCommand, runMain } from "citty"
+
+const SELF = "claude-settings-relink"
+const HOME = homedir()
+const LIVE = process.env.CLAUDE_SETTINGS_LIVE ?? join(HOME, ".claude", "settings.json")
+const REPO = process.env.CLAUDE_SETTINGS_REPO ?? join(HOME, ".dotfiles", "modules", "home", "claude", "config", "settings.json")
+
+const ADOPT_KEYS = ["hooks"]
+
+function log(msg: string) {
+  process.stdout.write(`${SELF}: ${msg}\n`)
+}
+
+function die(msg: string): never {
+  process.stderr.write(`${SELF}: ${msg}\n`)
+  process.exit(1)
+}
+
+function readJson(path: string, label: string): Record<string, unknown> {
+  try {
+    return JSON.parse(readFileSync(path, "utf8"))
+  } catch (e) {
+    die(`${label} is not valid JSON (${path}): ${e instanceof Error ? e.message : e}`)
+  }
+}
+
+function relink() {
+  const tmp = `${LIVE}.relink.tmp`
+  try {
+    rmSync(tmp)
+  } catch {}
+  symlinkSync(REPO, tmp)
+  renameSync(tmp, LIVE)
+}
+
+const main = defineCommand({
+  meta: {
+    name: SELF,
+    description:
+      "Reconcile ~/.claude/settings.json after the VSCode sound-notification extension clobbers its nix symlink: adopt the extension's hooks into the dotfiles source (model stays repo-pinned) and restore the symlink.",
+  },
+  args: {
+    "dry-run": { type: "boolean", description: "Report what would change without writing anything." },
+  },
+  run({ args }) {
+    const dry = Boolean(args["dry-run"])
+
+    const st = lstatSync(LIVE, { throwIfNoEntry: false })
+    if (!st) die(`missing ${LIVE}`)
+    if (st.isSymbolicLink()) {
+      log("live is a symlink — nothing to do")
+      return
+    }
+
+    const live = readJson(LIVE, "live")
+    const repo = readJson(REPO, "repo")
+
+    const changed = ADOPT_KEYS.filter((k) => JSON.stringify(live[k]) !== JSON.stringify(repo[k]))
+
+    if (dry) {
+      log(changed.length ? `would adopt [${changed.join(", ")}] into repo and relink` : "adopted keys unchanged; would only relink")
+      return
+    }
+
+    if (changed.length) {
+      for (const k of changed) repo[k] = live[k]
+      writeFileSync(REPO, `${JSON.stringify(repo, null, 2)}\n`)
+      log(`adopted [${changed.join(", ")}] into ${REPO}`)
+    } else {
+      log("adopted keys unchanged")
+    }
+
+    relink()
+    log(`relinked ${LIVE} -> ${REPO}`)
+  },
+})
+
+runMain(main)

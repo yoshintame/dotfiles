@@ -761,6 +761,14 @@ dependencies:
   virtual_path: cursor-team-kit/skills/thermo-nuclear-code-quality-review
   is_virtual: true
   package_type: claude_skill
+  deployed_files:
+  - .agents/skills/thermo-nuclear-code-quality-review
+  - .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
+  - .claude/skills/thermo-nuclear-code-quality-review
+  - .claude/skills/thermo-nuclear-code-quality-review/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
   content_hash: sha256:9052b01b46b1d8dbf94c45f9313ec1983443f9a460e83d49cdc7fe0f640ca476
 - repo_url: senate-exchange/ai-skills
   name: senate-skills
@@ -889,9 +897,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 369fb403371b1b76175559cef8d1ef8f31c716fd
-  resolved_ref: v1.2.1
-  version: 1.2.1
+  resolved_commit: 898444a5eca3a52eb55f0fc409e1e671c905af8c
+  resolved_ref: v1.3.0
+  version: 1.3.0
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1024,8 +1032,6 @@ dependencies:
   - .agents/skills/tanstack-react-router/SKILL.md
   - .agents/skills/test-discipline
   - .agents/skills/test-discipline/SKILL.md
-  - .agents/skills/thermo-nuclear-code-quality-review
-  - .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
   - .agents/skills/ts-react-style
   - .agents/skills/ts-react-style/SKILL.md
   - .agents/skills/ts-react-style/references/react.md
@@ -1176,8 +1182,6 @@ dependencies:
   - .claude/skills/tanstack-react-router/SKILL.md
   - .claude/skills/test-discipline
   - .claude/skills/test-discipline/SKILL.md
-  - .claude/skills/thermo-nuclear-code-quality-review
-  - .claude/skills/thermo-nuclear-code-quality-review/SKILL.md
   - .claude/skills/ts-react-style
   - .claude/skills/ts-react-style/SKILL.md
   - .claude/skills/ts-react-style/references/react.md
@@ -1268,9 +1272,9 @@ dependencies:
     .agents/skills/refactor/references/repeated-io.md: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
     .agents/skills/refactor/references/single-pass-classification.md: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
     .agents/skills/rename-session/SKILL.md: sha256:1b23d63893d4c7c1a68a04c7d275aabef4cf860145139dbfb4775f661d5f3c28
-    .agents/skills/rename-session/scripts/append-custom-title.ts: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
-    .agents/skills/rename-workspace/SKILL.md: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
-    .agents/skills/rename-workspace/scripts/rename-workspace.ts: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
+    .agents/skills/rename-session/scripts/append-custom-title.ts: sha256:7ffe79893d8b14268f4c655ae41fe66fb09aeb91a814182fdcec5ffcdc656d3f
+    .agents/skills/rename-workspace/SKILL.md: sha256:c3498ea8c88e4353b06c824bd4ae38f04b566bec31cf514ba3a94c2b0b98bc47
+    .agents/skills/rename-workspace/scripts/rename-workspace.ts: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
     .agents/skills/reset-sessions/SKILL.md: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
     .agents/skills/reset-sessions/scripts/lib.ts: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
     .agents/skills/reset-sessions/scripts/reset-sessions.ts: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
@@ -1287,7 +1291,6 @@ dependencies:
     .agents/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
     .agents/skills/tanstack-react-router/SKILL.md: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
     .agents/skills/test-discipline/SKILL.md: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
-    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
     .agents/skills/ts-react-style/SKILL.md: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
     .agents/skills/ts-react-style/references/react.md: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
     .agents/skills/ts-react-style/references/typescript.md: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
@@ -1371,9 +1374,9 @@ dependencies:
     .claude/skills/refactor/references/repeated-io.md: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
     .claude/skills/refactor/references/single-pass-classification.md: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
     .claude/skills/rename-session/SKILL.md: sha256:1b23d63893d4c7c1a68a04c7d275aabef4cf860145139dbfb4775f661d5f3c28
-    .claude/skills/rename-session/scripts/append-custom-title.ts: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
-    .claude/skills/rename-workspace/SKILL.md: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
-    .claude/skills/rename-workspace/scripts/rename-workspace.ts: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
+    .claude/skills/rename-session/scripts/append-custom-title.ts: sha256:7ffe79893d8b14268f4c655ae41fe66fb09aeb91a814182fdcec5ffcdc656d3f
+    .claude/skills/rename-workspace/SKILL.md: sha256:c3498ea8c88e4353b06c824bd4ae38f04b566bec31cf514ba3a94c2b0b98bc47
+    .claude/skills/rename-workspace/scripts/rename-workspace.ts: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
     .claude/skills/reset-sessions/SKILL.md: sha256:68bc3739886ee6b80ac2c91834b97ddc254165c685eb81d739e5600843bbc7b2
     .claude/skills/reset-sessions/scripts/lib.ts: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
     .claude/skills/reset-sessions/scripts/reset-sessions.ts: sha256:c4d0eed556b232892286bd3444dbf0fe70a19b86b1c746ffb6edba0b45eb544f
@@ -1390,7 +1393,6 @@ dependencies:
     .claude/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
     .claude/skills/tanstack-react-router/SKILL.md: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
     .claude/skills/test-discipline/SKILL.md: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
-    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
     .claude/skills/ts-react-style/SKILL.md: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
     .claude/skills/ts-react-style/references/react.md: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
     .claude/skills/ts-react-style/references/typescript.md: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
@@ -1403,10 +1405,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:45320ca431b07e859c5b32cdc829524551223f928beba59ae84044517ca2642a
+  content_hash: sha256:8016765edbfad62bb8e95385db4ef513e1a1165f60c04b3884b28c1838429079
   constraint: ^1.0.0
-  resolved_tag: v1.2.1
-  resolved_at: '2026-09-08T02:19:57+00:00'
+  resolved_tag: v1.3.0
+  resolved_at: '2026-09-09T06:18:59+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -3523,7 +3525,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
+  content_hash: sha256:7ffe79893d8b14268f4c655ae41fe66fb09aeb91a814182fdcec5ffcdc656d3f
 - kind: project-relative
   target: claude
   value: .claude/skills/rename-workspace
@@ -3541,7 +3543,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
+  content_hash: sha256:c3498ea8c88e4353b06c824bd4ae38f04b566bec31cf514ba3a94c2b0b98bc47
 - kind: project-relative
   target: claude
   value: .claude/skills/rename-workspace/scripts/rename-workspace.ts
@@ -3550,7 +3552,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
+  content_hash: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
 - kind: project-relative
   target: claude
   value: .claude/skills/reset-sessions
@@ -4088,8 +4090,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
+  - cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  active_owner: cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
   content_hash: null
 - kind: project-relative
   target: claude
@@ -4097,9 +4099,9 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
+  - cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  active_owner: cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
 - kind: project-relative
   target: claude
   value: .claude/skills/ts-react-style
@@ -6862,7 +6864,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:4e846821ec0b0b548c38568acc6206cda82ce887a5fc06ee2f02fb7fb61d66bc
+  content_hash: sha256:7ffe79893d8b14268f4c655ae41fe66fb09aeb91a814182fdcec5ffcdc656d3f
 - kind: project-relative
   target: codex
   value: .agents/skills/rename-workspace
@@ -6880,7 +6882,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:980f4196806e73f3dc8a3291297939d9a9491c5800fbd7aa6652e2d06488d1f0
+  content_hash: sha256:c3498ea8c88e4353b06c824bd4ae38f04b566bec31cf514ba3a94c2b0b98bc47
 - kind: project-relative
   target: codex
   value: .agents/skills/rename-workspace/scripts/rename-workspace.ts
@@ -6889,7 +6891,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:bb8eb3a2b2376e2bff6d17806030883612c6c4d4922adf4a3a68dbf8d9c751f4
+  content_hash: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
 - kind: project-relative
   target: codex
   value: .agents/skills/reset-sessions
@@ -7427,8 +7429,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
+  - cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  active_owner: cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
   content_hash: null
 - kind: project-relative
   target: codex
@@ -7436,9 +7438,9 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:4c4953c0d078ae76058b1503be93cf91b6151f3d6790a73bf26690fcb8105492
+  - cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  active_owner: cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
 - kind: project-relative
   target: codex
   value: .agents/skills/ts-react-style

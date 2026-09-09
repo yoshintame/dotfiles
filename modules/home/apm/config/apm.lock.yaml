@@ -892,14 +892,14 @@ dependencies:
   content_hash: sha256:5747054fdf494f67433a5e326688efd95561cb0932ef5f4cae167098b83a45a1
   constraint: ^1.1.0
   resolved_tag: v1.1.0
-  resolved_at: '2026-09-07T04:02:50+00:00'
+  resolved_at: '2026-09-09T07:15:48+00:00'
   declared_license: UNLICENSED
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 898444a5eca3a52eb55f0fc409e1e671c905af8c
-  resolved_ref: v1.3.0
-  version: 1.3.0
+  resolved_commit: 0e319906116532213c4e7651ce3fd05da87671ac
+  resolved_ref: v1.3.1
+  version: 1.3.1
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1294,7 +1294,7 @@ dependencies:
     .agents/skills/ts-react-style/SKILL.md: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
     .agents/skills/ts-react-style/references/react.md: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
     .agents/skills/ts-react-style/references/typescript.md: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
-    .agents/skills/vault-types/SKILL.md: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
+    .agents/skills/vault-types/SKILL.md: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
     .agents/skills/vscode-marketplace/SKILL.md: sha256:1e6bccff86991ad7aa825df9da8abfcc6e9744a4b64be7c7d8e3a1fe6365c0a9
     .agents/skills/vscode-marketplace/vscode-marketplace.py: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
     .agents/skills/worktree-open/SKILL.md: sha256:a8f6828793e360a9870466e8c5081e31976894b68c6bdef0b21541ce2f524870
@@ -1396,7 +1396,7 @@ dependencies:
     .claude/skills/ts-react-style/SKILL.md: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
     .claude/skills/ts-react-style/references/react.md: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
     .claude/skills/ts-react-style/references/typescript.md: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
-    .claude/skills/vault-types/SKILL.md: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
+    .claude/skills/vault-types/SKILL.md: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
     .claude/skills/vscode-marketplace/SKILL.md: sha256:1e6bccff86991ad7aa825df9da8abfcc6e9744a4b64be7c7d8e3a1fe6365c0a9
     .claude/skills/vscode-marketplace/vscode-marketplace.py: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
     .claude/skills/worktree-open/SKILL.md: sha256:a8f6828793e360a9870466e8c5081e31976894b68c6bdef0b21541ce2f524870
@@ -1405,10 +1405,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:8016765edbfad62bb8e95385db4ef513e1a1165f60c04b3884b28c1838429079
+  content_hash: sha256:1fd726e0ae87bdfbad658b0f6b0f5b2378e72888a7f658dffb485a38e7ca6dae
   constraint: ^1.0.0
-  resolved_tag: v1.3.0
-  resolved_at: '2026-09-09T06:18:59+00:00'
+  resolved_tag: v1.3.1
+  resolved_at: '2026-09-09T07:15:48+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -4155,7 +4155,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
+  content_hash: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
 - kind: project-relative
   target: claude
   value: .claude/skills/vscode-marketplace
@@ -7494,7 +7494,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:2868d9d1980a4737b5ec0608beeefa096702d18fa1fc3ef8e90e937e168bc386
+  content_hash: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
 - kind: project-relative
   target: codex
   value: .agents/skills/vscode-marketplace

@@ -752,6 +752,16 @@ dependencies:
   - pdf
   - pptx
   - xlsx
+- repo_url: cursor/plugins
+  name: thermo-nuclear-code-quality-review
+  host: github.com
+  resolved_commit: df3fb154fb982fb83f649de8646d4af6a0cb16b3
+  resolved_ref: main
+  version: unknown
+  virtual_path: cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  is_virtual: true
+  package_type: claude_skill
+  content_hash: sha256:9052b01b46b1d8dbf94c45f9313ec1983443f9a460e83d49cdc7fe0f640ca476
 - repo_url: senate-exchange/ai-skills
   name: senate-skills
   host: github.com

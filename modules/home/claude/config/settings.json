@@ -319,7 +319,11 @@
       "Read(//Users/yoshintame/.ssh/**)",
       "Read(//Users/yoshintame/.gnupg/**)",
       "Read(//Users/yoshintame/.aws/**)",
-      "Read(//Users/yoshintame/.config/gh/**)"
+      "Read(//Users/yoshintame/.config/gh/**)",
+      "Edit(//Users/yoshintame/.claude/skills/**)",
+      "Write(//Users/yoshintame/.claude/skills/**)",
+      "Edit(//Users/yoshintame/.agents/skills/**)",
+      "Write(//Users/yoshintame/.agents/skills/**)"
     ],
     "ask": [
       "Bash(scp:*)",

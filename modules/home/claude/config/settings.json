@@ -666,6 +666,7 @@
         "~/Documents/obsidian/yoshintame",
         "~/.local/share/Trash",
         "~/.bun",
+        "~/.local/share/pnpm",
         "~/.cache/search-reddit",
         "/tmp",
         "/private/tmp"
@@ -684,6 +685,12 @@
       "docker *",
       "bun run storybook",
       "bun run storybook *",
+      "pnpm run start",
+      "pnpm run start *",
+      "pnpm run dev",
+      "pnpm run dev *",
+      "pnpm exec playwright *",
+      "pnpm run test:e2e *",
       "ssh *",
       "scp *",
       "sftp *",
@@ -694,7 +701,8 @@
       "git -C * commit-atomic *",
       "bun *link-and-open.ts",
       "ps *",
-      "bun *reset-sessions.ts*"
+      "bun *reset-sessions.ts*",
+      "bun *append-custom-title.ts*"
     ],
     "env": {
       "BUN_TMPDIR": "/tmp",

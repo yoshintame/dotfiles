@@ -7,4 +7,11 @@ dependencies:
       ref: ^1.0.0
     - git: https://github.com/senate-exchange/ai-skills.git
       ref: ^1.1.0
+    - git: https://github.com/anthropics/skills.git
+      ref: main
+      skills:
+        - docx
+        - pdf
+        - pptx
+        - xlsx
   mcp: []

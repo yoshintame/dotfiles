@@ -38,6 +38,15 @@ trust_level = "trusted"
 [projects."/Users/yoshintame/Development/work/vtb/repos/fact"]
 trust_level = "trusted"
 
+[projects."/Users/yoshintame/Development/work/senate/senate@ai-skills"]
+trust_level = "trusted"
+
+[projects."/Users/yoshintame/Development/personal/agent-skills"]
+trust_level = "trusted"
+
+[projects."/Users/yoshintame/Development/work/vtb/repos/gele"]
+trust_level = "trusted"
+
 [tui]
 resume_cwd = "session"
 

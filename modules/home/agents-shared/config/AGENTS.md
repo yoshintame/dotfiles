@@ -43,6 +43,8 @@
 
 All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-dotbot symlinks from `~/.dotfiles`. Edit the **original in the repo**, never the `~/.claude/` copy. For the full path map and linking mechanics — what is live immediately vs. needs `mise run dot:rebuild` — see `~/.dotfiles/CLAUDE.md`.
 
+Switching which APM package provides a given skill (same skill name, different source) needs a full `apm install` (`mise run dot:apm install`), not a scoped `apm update <pkg>`. A scoped update deletes the old provider's files but does not redeploy the new, previously shadowed provider, so the skill silently disappears until a full install re-resolves every provider.
+
 ## Pasted images
 
 Images pasted into a chat message are never exposed to the agent as files — they persist as base64 image blocks in the session transcript. Recover the bytes (byte-for-byte identical to the original, no re-encoding) with `extract-images` (on `PATH`; run `extract-images --help`): it discovers the current session's transcript and decodes images from the most recent image-bearing user message to files on disk. Reach for it whenever you need a pasted screenshot as a real file — bug-report assets, saving an attachment, diffing an image.

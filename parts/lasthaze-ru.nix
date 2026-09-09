@@ -26,7 +26,7 @@
             fi
 
             temp_dir=$(mktemp -d)
-            trap 'chmod -R u+w "$temp_dir"; rm -r "$temp_dir"' EXIT
+            trap 'rm -rf "$temp_dir"' EXIT
 
             SOPS_AGE_KEY_FILE="$age_key_file" sops --decrypt --extract '["TAILSCALE_AUTHKEY"]' "$secrets_file" > "$temp_dir/authkey"
             if ! grep -Eq '^tskey-auth-' "$temp_dir/authkey"; then

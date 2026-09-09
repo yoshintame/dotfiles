@@ -1,7 +1,6 @@
 {
   disko = {
     imageBuilder.imageFormat = "qcow2";
-    memSize = 2048;
 
     devices.disk.main = {
       device = "/dev/vda";

@@ -12,6 +12,10 @@
 
   boot = {
     growPartition = true;
+    kernel.sysctl = {
+      "net.ipv4.conf.all.rp_filter" = lib.mkForce 2;
+      "net.ipv4.conf.default.rp_filter" = lib.mkForce 2;
+    };
     loader = {
       systemd-boot.enable = false;
       efi.canTouchEfiVariables = false;
@@ -26,13 +30,7 @@
 
   fileSystems."/".autoResize = true;
 
-  nix = {
-    gc = {
-      automatic = true;
-      options = lib.mkForce "--delete-older-than 14d";
-    };
-    settings.auto-optimise-store = true;
-  };
+  nix.gc.options = lib.mkForce "--delete-older-than 14d";
 
   services.qemuGuest.enable = true;
 

@@ -567,7 +567,9 @@
         "~/.local/share/pnpm",
         "~/.cache/search-reddit",
         "/tmp",
-        "/private/tmp"
+        "/private/tmp",
+        "/var/folders",
+        "/private/var/folders"
       ],
       "denyWrite": [
         "~/Backups"

@@ -61,6 +61,7 @@
       "Bash(file *)",
       "Bash(find *)",
       "Bash(FORCE_NPM=1 npm install)",
+      "Bash(gh api:*)",
       "Bash(gh issue list *)",
       "Bash(gh issue view *)",
       "Bash(gh pr checks *)",
@@ -333,10 +334,23 @@
       "Bash(resticprofile:*)",
       "Bash(rp:*)",
       "Bash(git push:*)",
-      "Bash(gh api:*)",
       "Bash(gh release:*)",
       "Bash(gh gist:*)",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(gh api -X *)",
+      "Bash(gh api * -X *)",
+      "Bash(gh api --method *)",
+      "Bash(gh api * --method *)",
+      "Bash(gh api -f *)",
+      "Bash(gh api * -f *)",
+      "Bash(gh api --raw-field *)",
+      "Bash(gh api * --raw-field *)",
+      "Bash(gh api -F *)",
+      "Bash(gh api * -F *)",
+      "Bash(gh api --field *)",
+      "Bash(gh api * --field *)",
+      "Bash(gh api --input *)",
+      "Bash(gh api * --input *)"
     ],
     "defaultMode": "auto",
     "additionalDirectories": [
@@ -606,7 +620,11 @@
       "bun *link-and-open.ts",
       "ps *",
       "bun *reset-sessions.ts*",
-      "bun *append-custom-title.ts*"
+      "bun *append-custom-title.ts*",
+      "gh *",
+      "search-reddit *",
+      "search-github *",
+      "search-hn *"
     ],
     "env": {
       "BUN_TMPDIR": "/tmp",

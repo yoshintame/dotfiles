@@ -65,6 +65,8 @@ in
     actual.enable = true;
     archivebox.enable = false;
     paperless.enable = false;
+    postgres.enable = true;
+    powersync.enable = true;
   };
 
   home-manager.users.${username} = {

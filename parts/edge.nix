@@ -1,15 +1,22 @@
 { inputs, ... }:
+let
+  cliNames = [
+    "add-user"
+    "remove-user"
+    "list-users"
+    "user-stats"
+    "check-roster"
+  ];
+in
 {
   perSystem =
     { pkgs, ... }:
     let
-      clis = inputs.edge.lib.mkClis pkgs;
-
       wrap =
-        name: cli:
+        name:
         pkgs.writeShellApplication {
           name = "edge-${name}";
-          runtimeInputs = [ cli ];
+          runtimeInputs = [ (inputs.edge.lib.mkClis pkgs).${name} ];
           text = ''
             export PROXY_ATTR="''${PROXY_ATTR:-lasthaze-edge}"
             export PROXY_DEPLOY_HOST="''${PROXY_DEPLOY_HOST:-root@lasthaze-edge}"
@@ -19,8 +26,11 @@
         };
     in
     {
-      packages = pkgs.lib.mapAttrs' (
-        name: cli: pkgs.lib.nameValuePair "edge-${name}" (wrap name cli)
-      ) clis;
+      packages = builtins.listToAttrs (
+        map (name: {
+          name = "edge-${name}";
+          value = wrap name;
+        }) cliNames
+      );
     };
 }

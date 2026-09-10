@@ -153,7 +153,7 @@
             specialArgs = {
               flakeRoot = "/var/lib/edge-deploy/dotfiles";
               gatusPackage = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.gatus;
-              nodes.homelab = inputs.self.nixosConfigurations.lasthaze-homelab.config;
+              homelabServices = inputs.self.nixosConfigurations.lasthaze-homelab.config.homelab.services;
             };
             modules = [
               inputs.edge.nixosModules.proxy

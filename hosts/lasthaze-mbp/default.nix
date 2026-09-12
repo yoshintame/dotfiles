@@ -13,7 +13,7 @@
     "nix-command"
     "flakes"
   ];
-  nix.settings.builders = "@/etc/nix/machines";
+  nix.distributedBuilds = true;
   nix.buildMachines = [
     {
       hostName = "lasthaze-homelab";

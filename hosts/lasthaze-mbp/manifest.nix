@@ -3,7 +3,6 @@
   my = myLib.enableList [
     "macos-defaults"
     "homebrew"
-    "linux-builder"
     "session-env"
   ];
 

@@ -1,6 +1,7 @@
 if not set -q TMUX
     and not string match -q "$TERM_PROGRAM" "vscode"
     and not string match -q "$TERM_PROGRAM" "WarpTerminal"
+    and not string match -q "$TERM_PROGRAM" "Zed"
 
     set -g TMUX tmux new-session -d -s base
     eval $TMUX

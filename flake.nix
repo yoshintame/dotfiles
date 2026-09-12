@@ -76,7 +76,6 @@
         darwin = [
           ./modules/darwin/macos-defaults
           ./modules/darwin/homebrew
-          ./modules/darwin/linux-builder
           ./modules/darwin/session-env
         ];
         nixos = [

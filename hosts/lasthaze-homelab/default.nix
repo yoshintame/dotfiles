@@ -50,6 +50,7 @@ in
   };
 
   services.tailscale.extraSetFlags = [ "--advertise-routes=192.168.1.48/32" ];
+  services.tailscale.extraUpFlags = [ "--advertise-tags=tag:homelab" ];
 
   system.stateVersion = "25.05";
 

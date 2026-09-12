@@ -8,7 +8,7 @@
 
 	"grants": [
 		{
-			"src": ["*"],
+			"src": ["autogroup:member"],
 			"dst": ["*"],
 			"ip":  ["*"],
 		},

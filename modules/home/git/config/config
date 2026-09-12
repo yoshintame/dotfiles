@@ -6,6 +6,11 @@
 [github]
     user        = yoshintame
 
+[credential "https://github.com"]
+    helper      = ""
+    helper      = github-ro
+    useHttpPath = true
+
 [credential]
     helper      = osxkeychain
 

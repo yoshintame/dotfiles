@@ -26,6 +26,10 @@
 
 Исключение — новый **Nix-код** (`*.nix`): флейк видит только git-tracked, его надо `git add` перед любой из команд.
 
+## Tailscale ACL
+
+`tailscale/policy.hujson` — tailnet ACL policy, synced to Tailscale on push to `master` via `.github/workflows/tailscale-acl.yml` (OAuth client, secrets `TS_OAUTH_CLIENT_ID`/`TS_OAUTH_SECRET`/`TS_TAILNET`). Tags go in `extraUpFlags` (not `extraSetFlags` — `tailscale set` does not support `--advertise-tags`). Changing port grants or adding tags requires editing the policy file; CI applies on push, tests on PR.
+
 ## Скиллы через APM
 
 Скиллы Claude Code и Codex доставляет APM, а не Nix/nix-link. Глобальный manifest и lock живут в `modules/home/apm/config/`; project-зависимости — в `apm.yml` и `apm.lock.yaml` корня соответствующего репозитория. В dotfiles project manifest подключает ровно `lasthaze-edge-ops` и `lasthaze-edge-decoy-site` из versioned-пакета `lasthaze-edge` и разворачивает их в `.claude/skills/` и `.agents/skills/`.

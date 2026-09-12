@@ -1,11 +1,5 @@
 { config, myLib, ... }:
 myLib.mkModule config "vscode" {
-  home.shellAliases = {
-    e = "zed --wait";
-    edit = "zed --wait";
-    ee = "zed --wait .";
-  };
-
   nixLink.links = {
     "~/Library/Application Support/Cursor/User/" = {
       path = "modules/home/vscode/config/**";

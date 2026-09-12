@@ -46,6 +46,9 @@ myLib.mkModule config "fish" {
     sp = "speedtest";
     cl = "clear";
     aliasessh = "manssh list";
+    e = "$EDITOR";
+    edit = "$EDITOR";
+    ee = "$EDITOR .";
   };
 
   home.packages = with pkgs; [

@@ -14,6 +14,16 @@
     "flakes"
   ];
   nix.settings.builders = "@/etc/nix/machines";
+  nix.buildMachines = [
+    {
+      hostName = "lasthaze-homelab";
+      sshUser = "root";
+      protocol = "ssh-ng";
+      systems = [ "x86_64-linux" ];
+      maxJobs = 4;
+      supportedFeatures = [ "big-parallel" ];
+    }
+  ];
   nix.settings.trusted-users = [
     "@admin"
     hostFacts.username

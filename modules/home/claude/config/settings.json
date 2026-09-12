@@ -2,7 +2,8 @@
   "cleanupPeriodDays": 36500,
   "env": {
     "BUN_TMPDIR": "/tmp",
-    "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache"
+    "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache",
+    "CLAUDE_TRUSTED_DIRS_MODE": "prefix"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -457,6 +458,16 @@
           }
         ],
         "matcher": "AskUserQuestion|ExitPlanMode"
+      },
+      {
+        "matcher": "Read|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/cross-repo-claude-md.sh",
+            "timeout": 5000
+          }
+        ]
       }
     ],
     "WorktreeCreate": [
@@ -647,5 +658,10 @@
       ]
     }
   },
-  "model": "claude-opus-4-6[1m]"
+  "model": "claude-opus-4-6[1m]",
+  "trustedDirectories": [
+    "/Users/yoshintame/Development",
+    "/Users/yoshintame/.dotfiles",
+    "/Users/yoshintame/.local/share/worktrees"
+  ]
 }

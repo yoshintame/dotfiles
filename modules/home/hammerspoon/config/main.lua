@@ -223,12 +223,12 @@ end
 hs.hotkey.bind({ "alt" }, "F", toggleFloatMaximize)
 
 local function newDraft(ext)
-    local dir = os.getenv("HOME") .. "/.local/share/cc-drafts"
+    local dir = os.getenv("HOME") .. "/.local/share/scratchpad"
     hs.execute("/bin/mkdir -p '" .. dir .. "'")
     local path = dir .. "/draft-" .. os.date("%Y-%m-%d--%H-%M-%S") .. "." .. (ext or "md")
     local f = io.open(path, "w")
     if f then f:close() end
-    hs.task.new("/usr/bin/open", nil, { "-a", "Visual Studio Code", path }):start()
+    hs.task.new("/usr/bin/open", nil, { "-a", "Zed", path }):start()
 end
 hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 

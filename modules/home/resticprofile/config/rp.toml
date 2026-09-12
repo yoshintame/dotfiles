@@ -29,9 +29,9 @@ esac
 ["rp:backup-and-push"]
 description = "Full cycle: backup all + copy to B2 and Google Drive"
 run = [
-  "resticprofile -n all backup",
-  "resticprofile -n local-to-b2 copy",
-  "resticprofile -n local-to-gdrive copy",
+  "resticprofile --lock-wait 15m -n all backup",
+  "resticprofile --lock-wait 15m -n local-to-b2 copy",
+  "resticprofile --lock-wait 15m -n local-to-gdrive copy",
 ]
 
 ["rp:snapshots"]

@@ -1,9 +1,9 @@
 { config, myLib, ... }:
 myLib.mkModule config "vscode" {
   home.shellAliases = {
-    e = "code --wait";
-    edit = "code --wait";
-    ee = "code --wait .";
+    e = "zed --wait";
+    edit = "zed --wait";
+    ee = "zed --wait .";
   };
 
   nixLink.links = {

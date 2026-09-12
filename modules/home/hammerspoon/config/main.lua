@@ -146,6 +146,19 @@ local function resetClaudeSessions()
     task:start()
 end
 
+local function restartPaseoDaemon()
+    hs.alert.show("♻︎ Restarting Paseo daemon…")
+    local task = hs.task.new("/opt/homebrew/bin/paseo", function(exitCode)
+        if exitCode == 0 then
+            hs.alert.show("✅ Paseo daemon restarted")
+        else
+            hs.alert.show("⚠️ paseo daemon restart failed (exit " .. tostring(exitCode) .. ")")
+        end
+    end, { "daemon", "restart" })
+    task:setEnvironment({ HOME = os.getenv("HOME"), PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" })
+    task:start()
+end
+
 local function osa(script)
     return function() hs.osascript.applescript(script) end
 end
@@ -432,6 +445,7 @@ spoon.LeaderFlow:setup({
             { "r", "Raycast", restartApp("com.raycast.macos") },
             { "c", "CleanShot X", restartApp("com.getcleanshot.app-setapp") },
             { "p", "Color Picker", restartApp("io.sipapp.Sip-setapp") },
+            { "e", "Paseo daemon", restartPaseoDaemon },
             { "h", "Hammerspoon", reload() },
             { "a", "All", restartAll },
             { "d", "Reset CC Sessions", resetClaudeSessions },

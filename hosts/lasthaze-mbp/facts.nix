@@ -2,8 +2,8 @@ let
   username = "yoshintame";
   homeDir = "/Users/${username}";
   sharedEnv = {
-    EDITOR = "code --wait";
-    VISUAL = "code --wait";
+    EDITOR = "zed --wait";
+    VISUAL = "zed --wait";
     GOPATH = "${homeDir}/go";
     PNPM_HOME = "${homeDir}/.local/share/pnpm";
     DOTFILES = "${homeDir}/.dotfiles";

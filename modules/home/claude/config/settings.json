@@ -662,6 +662,7 @@
   "trustedDirectories": [
     "/Users/yoshintame/Development",
     "/Users/yoshintame/.dotfiles",
-    "/Users/yoshintame/.local/share/worktrees"
+    "/Users/yoshintame/.local/share/worktrees",
+    "/Users/yoshintame/Documents/obsidian/yoshintame"
   ]
 }

@@ -13,6 +13,7 @@
     "nix-command"
     "flakes"
   ];
+  nix.settings.builders = "@/etc/nix/machines";
   nix.settings.trusted-users = [
     "@admin"
     hostFacts.username

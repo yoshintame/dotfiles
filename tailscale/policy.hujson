@@ -1,0 +1,51 @@
+{
+	"tagOwners": {
+		"tag:homelab":   ["m.ivanov0427@gmail.com"],
+		"tag:edge":      ["m.ivanov0427@gmail.com"],
+		"tag:ru-exit":   ["m.ivanov0427@gmail.com"],
+		"tag:proxy-vps": ["m.ivanov0427@gmail.com"],
+	},
+
+	"grants": [
+		{
+			"src": ["*"],
+			"dst": ["*"],
+			"ip":  ["*"],
+		},
+		{
+			"src": ["tag:edge"],
+			"dst": ["tag:homelab"],
+			"ip": [
+				"tcp:9090",
+				"tcp:3100",
+				"tcp:9093",
+				"icmp:*",
+			],
+		},
+		{
+			"src": ["tag:homelab"],
+			"dst": ["tag:edge"],
+			"ip":  ["tcp:8080"],
+		},
+		{
+			"src": ["m.ivanov0427@gmail.com"],
+			"dst": ["tag:homelab"],
+			"ip":  ["tcp:22"],
+		},
+	],
+
+	"ssh": [
+		{
+			"action": "accept",
+			"src":    ["autogroup:member"],
+			"dst":    ["autogroup:self"],
+			"users":  ["autogroup:nonroot", "root"],
+		},
+		{
+			"action": "accept",
+			"src":    ["m.ivanov0427@gmail.com"],
+			"dst":    ["tag:homelab"],
+			"users":  ["yoshintame", "root"],
+		},
+	],
+}

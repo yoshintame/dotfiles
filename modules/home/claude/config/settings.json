@@ -365,6 +365,7 @@
       "/Users/yoshintame/.claude/handoffs/-Users-yoshintame-Documents-obsidian-yoshintame"
     ]
   },
+  "model": "claude-opus-4-6[1m]",
   "hooks": {
     "PermissionRequest": [
       {
@@ -451,13 +452,13 @@
         ]
       },
       {
+        "matcher": "AskUserQuestion|ExitPlanMode",
         "hooks": [
           {
             "type": "command",
             "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
           }
-        ],
-        "matcher": "AskUserQuestion|ExitPlanMode"
+        ]
       },
       {
         "matcher": "Read|Edit|Write",
@@ -496,24 +497,24 @@
     ],
     "Elicitation": [
       {
+        "matcher": ".*",
         "hooks": [
           {
             "type": "command",
             "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
           }
-        ],
-        "matcher": ".*"
+        ]
       }
     ],
     "StopFailure": [
       {
+        "matcher": ".*",
         "hooks": [
           {
             "type": "command",
             "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --failed"
           }
-        ],
-        "matcher": ".*"
+        ]
       }
     ],
     "PostToolBatch": [
@@ -528,22 +529,22 @@
     ],
     "ElicitationResult": [
       {
+        "matcher": ".*",
         "hooks": [
           {
             "type": "command",
             "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --tooldone"
           }
-        ],
-        "matcher": ".*"
+        ]
       }
     ]
   },
   "enabledPlugins": {
     "worktrunk@worktrunk": false,
-    "warp@claude-code-warp": true,
     "fallow@fallow-skills": true,
     "serena@claude-plugins-official": false,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "warp@claude-code-warp": true
   },
   "extraKnownMarketplaces": {
     "worktrunk": {
@@ -552,16 +553,16 @@
         "repo": "max-sixty/worktrunk"
       }
     },
-    "claude-code-warp": {
-      "source": {
-        "source": "github",
-        "repo": "warpdotdev/claude-code-warp"
-      }
-    },
     "fallow-skills": {
       "source": {
         "source": "github",
         "repo": "fallow-rs/fallow-skills"
+      }
+    },
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
       }
     }
   },
@@ -658,7 +659,6 @@
       ]
     }
   },
-  "model": "claude-opus-4-6[1m]",
   "trustedDirectories": [
     "/Users/yoshintame/Development",
     "/Users/yoshintame/.dotfiles",

@@ -7,8 +7,7 @@
 
 ## *Bash*
 
-- *NEVER use `cd` in Bash commands. Always use absolute paths or tool-specific flags such as `git -C /path`.*
-- *NEVER chain commands with `cd /path &&` or `cd /path;`.*
+- *Prefer absolute paths or tool-specific flags (`git -C /path`, `bun run --cwd /path`). Use `cd /path && cmd` when the tool requires cwd context (e.g. worktrunk aliases, branch-relative commands) or when it's simpler than the absolute-path alternative.*
 - *The Bash tool runs a POSIX shell (zsh), not fish. Use POSIX syntax for every command you execute via the tool, e.g. `export NAME=value`.*
 - *The user's own interactive terminal is fish. ONLY when writing a command for the user to copy and run there, use fish syntax, e.g. `set -x NAME value` instead of `export NAME=value`. Default everywhere else is POSIX.*
 

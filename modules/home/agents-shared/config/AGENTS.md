@@ -10,6 +10,7 @@
 - *Prefer absolute paths or tool-specific flags (`git -C /path`, `bun run --cwd /path`). Use `cd /path && cmd` when the tool requires cwd context (e.g. worktrunk aliases, branch-relative commands) or when it's simpler than the absolute-path alternative.*
 - *The Bash tool runs a POSIX shell (zsh), not fish. Use POSIX syntax for every command you execute via the tool, e.g. `export NAME=value`.*
 - *The user's own interactive terminal is fish. ONLY when writing a command for the user to copy and run there, use fish syntax, e.g. `set -x NAME value` instead of `export NAME=value`. Default everywhere else is POSIX.*
+- *Dev servers (`wt dev`, `wt dev:local`, `bun run dev`, `vite`) — always launch with `dangerouslyDisableSandbox: true`. The Bash sandbox blocks macOS FSEvents syscalls, so Vite's file watcher (and any other fsevents-based watcher) silently fails to detect changes — HMR breaks, edits don't reflect. Polling (`usePolling`) works around it but wastes CPU; disabling the sandbox for these long-running processes is the correct fix.*
 
 ## Контекст инструментов
 

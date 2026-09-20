@@ -897,9 +897,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 8e7dcf917d9739e0bd75b1077be166cb143b958c
-  resolved_ref: v1.5.1
-  version: 1.5.1
+  resolved_commit: bc30418cf5a7fc26ae1905033b58a2eec46c4cbf
+  resolved_ref: v1.5.2
+  version: 1.5.2
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1249,7 +1249,7 @@ dependencies:
     .agents/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
     .agents/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
     .agents/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
-    .agents/skills/homelab-deploy/SKILL.md: sha256:4c69e3ae366d791b29f67fe7f24f866ea2e3f7271481393edf19e67fb749b8c3
+    .agents/skills/homelab-deploy/SKILL.md: sha256:04e7aab7504902b82c4d66a37f75c0c3eb97afb8b37c8f562df7b235d1d9ee76
     .agents/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
     .agents/skills/keyswitcher-update/SKILL.md: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
     .agents/skills/keyswitcher-update/references/signing-cert.md: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
@@ -1284,7 +1284,7 @@ dependencies:
     .agents/skills/rewrite/SKILL.md: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
     .agents/skills/session-link/SKILL.md: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
     .agents/skills/session-link/scripts/link-session-to.ts: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
-    .agents/skills/session-status/SKILL.md: sha256:b70a4b79eaf3edd3f16e2a859404d805d589795530c033aa41715a9453d62dbd
+    .agents/skills/session-status/SKILL.md: sha256:cf063035ae80bd8ed6a334dc88fd7e75d9aa90a7a469cb5694dfd20809dd6f28
     .agents/skills/session-status/scripts/session-status.ts: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
     .agents/skills/skill-dev/SKILL.md: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
     .agents/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
@@ -1351,7 +1351,7 @@ dependencies:
     .claude/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
     .claude/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
     .claude/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
-    .claude/skills/homelab-deploy/SKILL.md: sha256:4c69e3ae366d791b29f67fe7f24f866ea2e3f7271481393edf19e67fb749b8c3
+    .claude/skills/homelab-deploy/SKILL.md: sha256:04e7aab7504902b82c4d66a37f75c0c3eb97afb8b37c8f562df7b235d1d9ee76
     .claude/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
     .claude/skills/keyswitcher-update/SKILL.md: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
     .claude/skills/keyswitcher-update/references/signing-cert.md: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
@@ -1386,7 +1386,7 @@ dependencies:
     .claude/skills/rewrite/SKILL.md: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
     .claude/skills/session-link/SKILL.md: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
     .claude/skills/session-link/scripts/link-session-to.ts: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
-    .claude/skills/session-status/SKILL.md: sha256:b70a4b79eaf3edd3f16e2a859404d805d589795530c033aa41715a9453d62dbd
+    .claude/skills/session-status/SKILL.md: sha256:cf063035ae80bd8ed6a334dc88fd7e75d9aa90a7a469cb5694dfd20809dd6f28
     .claude/skills/session-status/scripts/session-status.ts: sha256:237e36fb6a980a4f7f531e51fd34d4e3fc932e90055c9b44ef2ccd962f89a94b
     .claude/skills/skill-dev/SKILL.md: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
     .claude/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
@@ -1405,10 +1405,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:35ecad46cc990265bf43c57ded0a28ad7492f2f7f766d448de68a88aef47179c
+  content_hash: sha256:7e77bcb2229a7d3974185ce02df7bd2b6b523150e873856fcc1b307070d8b875
   constraint: ^1.0.0
-  resolved_tag: v1.5.1
-  resolved_at: '2026-09-20T09:00:15+00:00'
+  resolved_tag: v1.5.2
+  resolved_at: '2026-09-20T09:04:21+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -2598,7 +2598,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:4c69e3ae366d791b29f67fe7f24f866ea2e3f7271481393edf19e67fb749b8c3
+  content_hash: sha256:04e7aab7504902b82c4d66a37f75c0c3eb97afb8b37c8f562df7b235d1d9ee76
 - kind: project-relative
   target: claude
   value: .claude/skills/keybind
@@ -3993,7 +3993,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:b70a4b79eaf3edd3f16e2a859404d805d589795530c033aa41715a9453d62dbd
+  content_hash: sha256:cf063035ae80bd8ed6a334dc88fd7e75d9aa90a7a469cb5694dfd20809dd6f28
 - kind: project-relative
   target: claude
   value: .claude/skills/session-status/scripts/session-status.ts
@@ -5937,7 +5937,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:4c69e3ae366d791b29f67fe7f24f866ea2e3f7271481393edf19e67fb749b8c3
+  content_hash: sha256:04e7aab7504902b82c4d66a37f75c0c3eb97afb8b37c8f562df7b235d1d9ee76
 - kind: project-relative
   target: legacy
   value: .agents/skills/keybind
@@ -7332,7 +7332,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:b70a4b79eaf3edd3f16e2a859404d805d589795530c033aa41715a9453d62dbd
+  content_hash: sha256:cf063035ae80bd8ed6a334dc88fd7e75d9aa90a7a469cb5694dfd20809dd6f28
 - kind: project-relative
   target: legacy
   value: .agents/skills/session-status/scripts/session-status.ts

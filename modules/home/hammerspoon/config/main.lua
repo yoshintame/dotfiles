@@ -232,6 +232,8 @@ local function newDraft(ext)
 end
 hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 
+require("raycast-nav").start()
+
 require("clipboard-history").start({
     proxy.paste_history1,
     proxy.paste_history2,
@@ -394,6 +396,13 @@ spoon.LeaderFlow:setup({
                 { "v", "Vbirf", text("vbirf2001@gmail.com") },
             }},
         }},
+
+        { "f", "Downloads Nav", function()
+            raycast("raycast://extensions/thomas/downloads-manager-nav/manage-downloads")()
+            hs.timer.doAfter(0.3, function()
+                require("raycast-nav").activate()
+            end)
+        end },
 
         { "d", "[development]", {
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },

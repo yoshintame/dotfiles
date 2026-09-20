@@ -591,6 +591,7 @@
     "filesystem": {
       "allowWrite": [
         "~/Development",
+        "~/.paseo/worktrees",
         "~/Documents/obsidian/yoshintame",
         "~/.local/share/Trash",
         "~/.bun",

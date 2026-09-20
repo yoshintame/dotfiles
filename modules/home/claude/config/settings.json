@@ -596,6 +596,7 @@
         "~/.bun",
         "~/.local/share/pnpm",
         "~/.cache/search-reddit",
+        "~/.cache/uv",
         "/tmp",
         "/private/tmp",
         "/var/folders",

@@ -7,6 +7,7 @@ local isNavMode = false
 local searchModeActive = false
 local escapeTap = nil
 local appWatcher = nil
+local windowFilter = nil
 
 local NAV_BINDINGS = {
     { key = "j", mods = { "ctrl" }, toKey = "b" },
@@ -94,18 +95,26 @@ function M.start()
         if eventType == hs.application.watcher.activated then
             local bundle = app and app:bundleID() or "nil"
             if bundle ~= "com.raycast.macos" then
-                print("[raycast-nav] other app activated: " .. (appName or "nil") .. " (" .. bundle .. ") -> deactivate")
                 forceDeactivate()
             end
         elseif eventType == hs.application.watcher.deactivated then
             local bundle = app and app:bundleID() or "nil"
             if bundle == "com.raycast.macos" then
-                print("[raycast-nav] Raycast deactivated -> deactivate")
                 forceDeactivate()
             end
         end
     end)
     appWatcher:start()
+
+    windowFilter = hs.window.filter.new(false):setAppFilter("Raycast")
+    windowFilter:subscribe(hs.window.filter.windowDestroyed, function()
+        print("[raycast-nav] Raycast window destroyed -> deactivate")
+        forceDeactivate()
+    end)
+    windowFilter:subscribe(hs.window.filter.windowUnfocused, function()
+        print("[raycast-nav] Raycast window unfocused -> deactivate")
+        forceDeactivate()
+    end)
 
     print("[raycast-nav] started")
 end
@@ -114,6 +123,7 @@ function M.stop()
     forceDeactivate()
     if escapeTap then escapeTap:stop() end
     if appWatcher then appWatcher:stop() end
+    if windowFilter then windowFilter:unsubscribeAll() end
 end
 
 return M

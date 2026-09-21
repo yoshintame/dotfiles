@@ -897,9 +897,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 1391e38c925331a66a90c06c9cb5f6ea7ca9ac1c
-  resolved_ref: v1.6.1
-  version: 1.6.1
+  resolved_commit: 3b29c08e4ed208ba5e49b7c19c465d5ab2cbe330
+  resolved_ref: v1.6.2+3b29c08
+  version: 1.6.2+3b29c08
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -930,6 +930,9 @@ dependencies:
   - .agents/skills/deep-research/references/corpus-market.md
   - .agents/skills/deep-research/references/corpus-software.md
   - .agents/skills/deep-research/references/evidence.md
+  - .agents/skills/delete-session
+  - .agents/skills/delete-session/SKILL.md
+  - .agents/skills/delete-session/scripts/delete-session.ts
   - .agents/skills/done
   - .agents/skills/done/SKILL.md
   - .agents/skills/effect-ts
@@ -1085,6 +1088,9 @@ dependencies:
   - .claude/skills/deep-research/references/corpus-market.md
   - .claude/skills/deep-research/references/corpus-software.md
   - .claude/skills/deep-research/references/evidence.md
+  - .claude/skills/delete-session
+  - .claude/skills/delete-session/SKILL.md
+  - .claude/skills/delete-session/scripts/delete-session.ts
   - .claude/skills/done
   - .claude/skills/done/SKILL.md
   - .claude/skills/effect-ts
@@ -1231,6 +1237,8 @@ dependencies:
     .agents/skills/deep-research/references/corpus-market.md: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
     .agents/skills/deep-research/references/corpus-software.md: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
     .agents/skills/deep-research/references/evidence.md: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+    .agents/skills/delete-session/SKILL.md: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
+    .agents/skills/delete-session/scripts/delete-session.ts: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
     .agents/skills/done/SKILL.md: sha256:b161055a6f29b3192386f840f39baeeb3f97bba2b39fc5eb823e663e93206ff4
     .agents/skills/effect-ts/SKILL.md: sha256:384d59c20dbfb9e64fe9469e25196d239099d1c9de5b0fcd7b39b3de1a246e31
     .agents/skills/effect-ts/references/concurrency-and-resources.md: sha256:1f55aa15a5d12679eed72ecc86516d70a99a7dae7f95dbf21121280cd461bc5c
@@ -1291,15 +1299,15 @@ dependencies:
     .agents/skills/rename-workspace/scripts/rename-workspace.ts: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
     .agents/skills/reset-sessions/SKILL.md: sha256:a7771b09d5d6e12aa84d57e958326d57a5c4d79d5c8014db3694b223cec04f0f
     .agents/skills/reset-sessions/scripts/lib.ts: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
-    .agents/skills/reset-sessions/scripts/reset-sessions.ts: sha256:e4b0d28d867e733feb393e970a4922658d1013b4bd985030567c5f28610ea654
-    .agents/skills/reset-sessions/scripts/session-reaper.ts: sha256:c3e7d3fffffb680e520c0719350f3be8693c5acef8983eb6f9e0c3e2dce9c3b3
+    .agents/skills/reset-sessions/scripts/reset-sessions.ts: sha256:eff8844188ae0315b6d37016a52c8131aea84c6f9a54f8e7e9613676f6302798
+    .agents/skills/reset-sessions/scripts/session-reaper.ts: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
     .agents/skills/rewrite-audit/SKILL.md: sha256:92c232aa09d83789d751d516ef1c980a692df498136a66480e43417b2a60fb4a
     .agents/skills/rewrite-audit/scripts/audit-map.ts: sha256:5aac9a3dbd3993d400d7c20b83c4eda52f638d63580066055a5dacf13b372a14
     .agents/skills/rewrite/SKILL.md: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
     .agents/skills/session-link/SKILL.md: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
     .agents/skills/session-link/scripts/link-session-to.ts: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
     .agents/skills/session-status/SKILL.md: sha256:0f63a7d8b0856b06fc65a9754e655f0f7932b37854984e881cd018b1c96447b7
-    .agents/skills/session-status/scripts/session-status.ts: sha256:9502b9cc57f90ca45a82de67b4a8363c8a649cdffad5e21ffd657a33859030fe
+    .agents/skills/session-status/scripts/session-status.ts: sha256:3a03067ab736ddcf9af11ba56d4d0f44474b5c9febae065ea321cd01054187d5
     .agents/skills/skill-dev/SKILL.md: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
     .agents/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
     .agents/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
@@ -1337,6 +1345,8 @@ dependencies:
     .claude/skills/deep-research/references/corpus-market.md: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
     .claude/skills/deep-research/references/corpus-software.md: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
     .claude/skills/deep-research/references/evidence.md: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+    .claude/skills/delete-session/SKILL.md: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
+    .claude/skills/delete-session/scripts/delete-session.ts: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
     .claude/skills/done/SKILL.md: sha256:b161055a6f29b3192386f840f39baeeb3f97bba2b39fc5eb823e663e93206ff4
     .claude/skills/effect-ts/SKILL.md: sha256:384d59c20dbfb9e64fe9469e25196d239099d1c9de5b0fcd7b39b3de1a246e31
     .claude/skills/effect-ts/references/concurrency-and-resources.md: sha256:1f55aa15a5d12679eed72ecc86516d70a99a7dae7f95dbf21121280cd461bc5c
@@ -1397,15 +1407,15 @@ dependencies:
     .claude/skills/rename-workspace/scripts/rename-workspace.ts: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
     .claude/skills/reset-sessions/SKILL.md: sha256:a7771b09d5d6e12aa84d57e958326d57a5c4d79d5c8014db3694b223cec04f0f
     .claude/skills/reset-sessions/scripts/lib.ts: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
-    .claude/skills/reset-sessions/scripts/reset-sessions.ts: sha256:e4b0d28d867e733feb393e970a4922658d1013b4bd985030567c5f28610ea654
-    .claude/skills/reset-sessions/scripts/session-reaper.ts: sha256:c3e7d3fffffb680e520c0719350f3be8693c5acef8983eb6f9e0c3e2dce9c3b3
+    .claude/skills/reset-sessions/scripts/reset-sessions.ts: sha256:eff8844188ae0315b6d37016a52c8131aea84c6f9a54f8e7e9613676f6302798
+    .claude/skills/reset-sessions/scripts/session-reaper.ts: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
     .claude/skills/rewrite-audit/SKILL.md: sha256:92c232aa09d83789d751d516ef1c980a692df498136a66480e43417b2a60fb4a
     .claude/skills/rewrite-audit/scripts/audit-map.ts: sha256:5aac9a3dbd3993d400d7c20b83c4eda52f638d63580066055a5dacf13b372a14
     .claude/skills/rewrite/SKILL.md: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
     .claude/skills/session-link/SKILL.md: sha256:be6a19e09de6d757a988f424f2b0b814fadaa7e056b6ffc950de7bf74426db34
     .claude/skills/session-link/scripts/link-session-to.ts: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
     .claude/skills/session-status/SKILL.md: sha256:0f63a7d8b0856b06fc65a9754e655f0f7932b37854984e881cd018b1c96447b7
-    .claude/skills/session-status/scripts/session-status.ts: sha256:9502b9cc57f90ca45a82de67b4a8363c8a649cdffad5e21ffd657a33859030fe
+    .claude/skills/session-status/scripts/session-status.ts: sha256:3a03067ab736ddcf9af11ba56d4d0f44474b5c9febae065ea321cd01054187d5
     .claude/skills/skill-dev/SKILL.md: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
     .claude/skills/state-reconstruction/SKILL.md: sha256:9c627e24e94b2277c2edc2a92b9adf82eff3f0be64ad689f5215da83fa47ae6c
     .claude/skills/state-reconstruction/scripts/region-sessions.ts: sha256:62208e3ea461751c44f59f92c1f27bcb5ff374df76c268aa5241e7bba3ee80c9
@@ -1423,10 +1433,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:76b7237a290e04091201a74b950f038f2d2f0556fa80a707ee96a5cc6730c204
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:84cffdbd4f502197588520ca60e8acda722e01803c6ca785b3b9dd399c72f4c7
+  content_hash: sha256:d5ceb51f2887c123925f64c11c5ed106ac22a8ca46ef9f0714e3fa2fbd510243
   constraint: ^1.0.0
-  resolved_tag: v1.6.1
-  resolved_at: '2026-09-21T06:05:11+00:00'
+  resolved_tag: v1.6.2+3b29c08
+  resolved_at: '2026-09-21T07:26:02+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -1690,6 +1700,33 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/delete-session
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/delete-session/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
+- kind: project-relative
+  target: claude
+  value: .claude/skills/delete-session/scripts/delete-session.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
 - kind: project-relative
   target: claude
   value: .claude/skills/docx
@@ -3651,7 +3688,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:e4b0d28d867e733feb393e970a4922658d1013b4bd985030567c5f28610ea654
+  content_hash: sha256:eff8844188ae0315b6d37016a52c8131aea84c6f9a54f8e7e9613676f6302798
 - kind: project-relative
   target: claude
   value: .claude/skills/reset-sessions/scripts/session-reaper.ts
@@ -3660,7 +3697,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c3e7d3fffffb680e520c0719350f3be8693c5acef8983eb6f9e0c3e2dce9c3b3
+  content_hash: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
 - kind: project-relative
   target: claude
   value: .claude/skills/rewrite
@@ -4065,7 +4102,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9502b9cc57f90ca45a82de67b4a8363c8a649cdffad5e21ffd657a33859030fe
+  content_hash: sha256:3a03067ab736ddcf9af11ba56d4d0f44474b5c9febae065ea321cd01054187d5
 - kind: project-relative
   target: claude
   value: .claude/skills/skill-dev
@@ -5074,6 +5111,33 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+- kind: project-relative
+  target: codex
+  value: .agents/skills/delete-session
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/delete-session/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
+- kind: project-relative
+  target: codex
+  value: .agents/skills/delete-session/scripts/delete-session.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
 - kind: project-relative
   target: codex
   value: .agents/skills/docx
@@ -7035,7 +7099,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:e4b0d28d867e733feb393e970a4922658d1013b4bd985030567c5f28610ea654
+  content_hash: sha256:eff8844188ae0315b6d37016a52c8131aea84c6f9a54f8e7e9613676f6302798
 - kind: project-relative
   target: codex
   value: .agents/skills/reset-sessions/scripts/session-reaper.ts
@@ -7044,7 +7108,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c3e7d3fffffb680e520c0719350f3be8693c5acef8983eb6f9e0c3e2dce9c3b3
+  content_hash: sha256:f7c651067e5dd9016b3120c27f800c1abdfcff9510888692add247c3005b6843
 - kind: project-relative
   target: codex
   value: .agents/skills/rewrite
@@ -7449,7 +7513,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9502b9cc57f90ca45a82de67b4a8363c8a649cdffad5e21ffd657a33859030fe
+  content_hash: sha256:3a03067ab736ddcf9af11ba56d4d0f44474b5c9febae065ea321cd01054187d5
 - kind: project-relative
   target: codex
   value: .agents/skills/skill-dev

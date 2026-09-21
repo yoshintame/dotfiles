@@ -235,8 +235,7 @@ hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 require("raycast-nav").start()
 
 local finderCopyPath = hs.hotkey.new({"cmd", "shift"}, "C", function()
-    local app = hs.application.frontmostApplication()
-    if app then app:selectMenuItem({"Edit", "Copy as Pathname"}) end
+    hs.eventtap.keyStroke({"cmd", "alt"}, "C")
 end)
 local finderHotkeyWatcher = hs.application.watcher.new(function(_, event, app)
     if not app or app:bundleID() ~= "com.apple.finder" then return end

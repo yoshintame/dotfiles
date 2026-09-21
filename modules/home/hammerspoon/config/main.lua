@@ -329,6 +329,7 @@ spoon.LeaderFlow:setup({
             { "m", "google.com/maps", url("https://www.google.com/maps") },
             { "d", "Senate daily", joinMeeting("https://us06web.zoom.us/j/84129720700?pwd=Czei5trGxXmY6TfREpHfjVGiNuLGBH.1&jst=2", "daily") },
             { "w", "Senate weekly", joinMeeting("https://us06web.zoom.us/j/81435225054?pwd=6uR77sp5Oq2hvFtei463Vghub9jpY5.1&jst=2", "weekly") },
+            { "H", "Homelab Services", raycast("raycast://extensions/yoshintame/raycast-homelab/list") },
             { "l", "[localhost]", {
                     { "c", "CRM", url("http://localhost:4003") },
                     { "t", "TG-Mini", url("http://localhost:8004") },

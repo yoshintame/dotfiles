@@ -234,6 +234,23 @@ hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 
 require("raycast-nav").start()
 
+local finderCopyPath = hs.hotkey.new({"cmd", "shift"}, "C", function()
+    local app = hs.application.frontmostApplication()
+    if app then app:selectMenuItem({"Edit", "Copy as Pathname"}) end
+end)
+local finderHotkeyWatcher = hs.application.watcher.new(function(_, event, app)
+    if not app or app:bundleID() ~= "com.apple.finder" then return end
+    if event == hs.application.watcher.activated then
+        finderCopyPath:enable()
+    elseif event == hs.application.watcher.deactivated then
+        finderCopyPath:disable()
+    end
+end)
+finderHotkeyWatcher:start()
+if hs.application.frontmostApplication():bundleID() == "com.apple.finder" then
+    finderCopyPath:enable()
+end
+
 require("clipboard-history").start({
     proxy.paste_history1,
     proxy.paste_history2,

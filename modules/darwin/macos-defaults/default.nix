@@ -262,6 +262,9 @@ myLib.mkModule config "macos-defaults" {
       };
 
       "com.apple.finder" = {
+        NSUserKeyEquivalents = {
+          "Copy as Pathname" = "@$c";
+        };
         DisableAllAnimations = true;
         DesktopViewSettings = {
           IconViewSettings = {

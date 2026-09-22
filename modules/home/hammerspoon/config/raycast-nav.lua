@@ -1,6 +1,8 @@
 local M = {}
 
 local ESCAPE_KEYCODE = 53
+local ARROW_UP_KEYCODE = 126
+local ARROW_DOWN_KEYCODE = 125
 
 local modal = hs.hotkey.modal.new()
 local isNavMode = false
@@ -23,12 +25,19 @@ local NAV_BINDINGS = {
     { key = "return", mods = { "ctrl", "shift" }, toKey = "return" },
 }
 
+local function sendModeSignal(mode)
+    local app = hs.application.find("com.raycast.macos")
+    if app then
+        hs.eventtap.keyStroke({ "ctrl", "shift" }, mode == "nav" and "[" or "]", nil, app)
+    end
+end
+
 local function enterNavMode()
     if isNavMode then return end
     modal:enter()
     isNavMode = true
     searchModeActive = false
-    hs.alert.show("NAV", nil, nil, 0.4)
+    sendModeSignal("nav")
 end
 
 local function exitNavMode(reason)
@@ -36,7 +45,7 @@ local function exitNavMode(reason)
     modal:exit()
     isNavMode = false
     if reason ~= "silent" then
-        hs.alert.show("SEARCH", nil, nil, 0.4)
+        sendModeSignal("search")
     end
 end
 
@@ -83,7 +92,17 @@ end
 
 function M.start()
     escapeTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)
-        if e:getKeyCode() == ESCAPE_KEYCODE and searchModeActive then
+        if not searchModeActive then return false end
+        local code = e:getKeyCode()
+        if code == ESCAPE_KEYCODE then
+            enterNavMode()
+            return true
+        end
+        if code == ARROW_UP_KEYCODE or code == ARROW_DOWN_KEYCODE then
+            enterNavMode()
+            return false
+        end
+        if code == hs.keycodes.map["f"] and e:getFlags():containExactly({}) then
             enterNavMode()
             return true
         end
@@ -91,7 +110,7 @@ function M.start()
     end)
     escapeTap:start()
 
-    appWatcher = hs.application.watcher.new(function(appName, eventType, app)
+    appWatcher = hs.application.watcher.new(function(_, eventType, app)
         if eventType == hs.application.watcher.activated then
             local bundle = app and app:bundleID() or "nil"
             if bundle ~= "com.raycast.macos" then
@@ -108,15 +127,11 @@ function M.start()
 
     windowFilter = hs.window.filter.new(false):setAppFilter("Raycast")
     windowFilter:subscribe(hs.window.filter.windowDestroyed, function()
-        print("[raycast-nav] Raycast window destroyed -> deactivate")
         forceDeactivate()
     end)
     windowFilter:subscribe(hs.window.filter.windowUnfocused, function()
-        print("[raycast-nav] Raycast window unfocused -> deactivate")
         forceDeactivate()
     end)
-
-    print("[raycast-nav] started")
 end
 
 function M.stop()

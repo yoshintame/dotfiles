@@ -234,21 +234,22 @@ hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 
 require("raycast-nav").start()
 
-local finderCopyPath = hs.hotkey.new({"cmd", "shift"}, "C", function()
-    hs.eventtap.keyStroke({"cmd", "alt"}, "C")
-end)
-local finderHotkeyWatcher = hs.application.watcher.new(function(_, event, app)
+hs.hotkey.bind({"cmd", "shift"}, "C", function()
+    local app = hs.application.frontmostApplication()
     if not app or app:bundleID() ~= "com.apple.finder" then return end
-    if event == hs.application.watcher.activated then
-        finderCopyPath:enable()
-    elseif event == hs.application.watcher.deactivated then
-        finderCopyPath:disable()
+    local _, path = hs.osascript.applescript([[
+        tell application "Finder"
+            set sel to selection
+            if (count of sel) > 0 then
+                return POSIX path of (item 1 of sel as alias)
+            end if
+        end tell
+    ]])
+    if path then
+        hs.pasteboard.setContents(path)
+        hs.alert.show("Copied: " .. path)
     end
 end)
-finderHotkeyWatcher:start()
-if hs.application.frontmostApplication():bundleID() == "com.apple.finder" then
-    finderCopyPath:enable()
-end
 
 require("clipboard-history").start({
     proxy.paste_history1,

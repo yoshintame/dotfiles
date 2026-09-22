@@ -438,6 +438,11 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/smart-approve.sh"
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/git-clone-layout.sh",
+            "if": "Bash(git clone *)"
           }
         ]
       },
@@ -638,7 +643,15 @@
       "gh *",
       "search-reddit *",
       "search-github *",
-      "search-hn *"
+      "search-hn *",
+      "bun run dev",
+      "bun run dev *",
+      "bun run dev:local",
+      "bun run dev:local *",
+      "wt dev",
+      "wt dev *",
+      "wt dev:local",
+      "wt dev:local *"
     ],
     "env": {
       "BUN_TMPDIR": "/tmp",

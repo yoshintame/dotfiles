@@ -82,3 +82,9 @@ dependencies:
     env:
       GRAFANA_URL: https://grafana-tjtqs92jvneqfmpy.senateexchange.com
       GRAFANA_SERVICE_ACCOUNT_TOKEN: ${GRAFANA_SERVICE_ACCOUNT_TOKEN}
+  - name: tana-local
+    registry: false
+    transport: http
+    url: http://127.0.0.1:8262/mcp
+    headers:
+      Authorization: Bearer mcp_32ad677829fc13790e5f69871703a73757ac84284aba390e44bb57cde691d40d

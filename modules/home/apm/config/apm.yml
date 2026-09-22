@@ -71,3 +71,14 @@ dependencies:
     - -y
     - -c
     - node ~/.console-ninja/mcp/
+  - name: grafana-monitor
+    registry: false
+    transport: stdio
+    command: uvx
+    args:
+    - --from
+    - mcp-grafana
+    - mcp-grafana
+    env:
+      GRAFANA_URL: https://grafana-tjtqs92jvneqfmpy.senateexchange.com
+      GRAFANA_SERVICE_ACCOUNT_TOKEN: ${GRAFANA_SERVICE_ACCOUNT_TOKEN}

@@ -6,6 +6,35 @@
 		"tag:proxy-vps": ["m.ivanov0427@gmail.com"],
 	},
 
+	"autoApprovers": {
+		"routes": {
+			"0.0.0.0/0": ["tag:ru-exit"],
+			"::/0":       ["tag:ru-exit"],
+		},
+	},
+
+	"nodeAttrs": [
+		{
+			"target": ["*"],
+			"app": {
+				"tailscale.com/app-connectors": [
+					{
+						"name":       "Russian Services",
+						"connectors": ["tag:ru-exit"],
+						"domains": [
+							"gosuslugi.ru",
+							"*.gosuslugi.ru",
+							"mos.ru",
+							"*.mos.ru",
+							"emias.info",
+							"*.emias.info",
+						],
+					},
+				],
+			},
+		},
+	],
+
 	"grants": [
 		{
 			"src": ["autogroup:member"],
@@ -46,6 +75,12 @@
 			"src":    ["m.ivanov0427@gmail.com"],
 			"dst":    ["tag:homelab"],
 			"users":  ["yoshintame", "root"],
+		},
+		{
+			"action": "accept",
+			"src":    ["m.ivanov0427@gmail.com"],
+			"dst":    ["tag:ru-exit"],
+			"users":  ["root"],
 		},
 	],
 }

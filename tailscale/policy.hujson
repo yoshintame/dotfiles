@@ -19,7 +19,7 @@
 			"app": {
 				"tailscale.com/app-connectors": [
 					{
-						"name":       "Russian Services",
+						"name":       "russian-services",
 						"connectors": ["tag:ru-exit"],
 						"domains": [
 							"gosuslugi.ru",

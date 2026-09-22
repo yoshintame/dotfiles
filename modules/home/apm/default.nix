@@ -4,4 +4,11 @@ myLib.mkModule config "apm" {
     "~/.apm/apm.lock.yaml" = "modules/home/apm/config/apm.lock.yaml";
     "~/.apm/apm.yml" = "modules/home/apm/config/apm.yml";
   };
+
+  sopsTemplates.render = {
+    "~/.config/fish/conf.d/mcp-secrets.fish" = {
+      template = ./config/mcp-secrets.fish.tmpl;
+      secretsFile = ./secrets.yaml;
+    };
+  };
 }

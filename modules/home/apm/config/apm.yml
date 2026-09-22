@@ -1,20 +1,73 @@
 name: yoshintame-global
 version: 1.0.0
-targets: [claude, codex]
+targets:
+- claude
+- codex
 dependencies:
   apm:
-    - git: https://github.com/yoshintame/agent-skills.git
-      ref: ^1.0.0
-    - git: https://github.com/senate-exchange/ai-skills.git
-      ref: ^1.1.0
-    - git: https://github.com/anthropics/skills.git
-      ref: main
-      skills:
-        - docx
-        - pdf
-        - pptx
-        - xlsx
-    - git: https://github.com/cursor/plugins.git
-      ref: main
-      path: cursor-team-kit/skills/thermo-nuclear-code-quality-review
-  mcp: []
+  - git: https://github.com/yoshintame/agent-skills.git
+    ref: ^1.0.0
+  - git: https://github.com/senate-exchange/ai-skills.git
+    ref: ^1.1.0
+  - git: https://github.com/anthropics/skills.git
+    ref: main
+    skills:
+    - docx
+    - pdf
+    - pptx
+    - xlsx
+  - git: https://github.com/cursor/plugins.git
+    ref: main
+    path: cursor-team-kit/skills/thermo-nuclear-code-quality-review
+  mcp:
+  - name: chrome-devtools
+    registry: false
+    transport: stdio
+    command: bunx
+    args:
+    - -y
+    - chrome-devtools-mcp@latest
+    - --browser-url=http://127.0.0.1:9222
+  - name: raindrop
+    registry: false
+    transport: stdio
+    command: bunx
+    args:
+    - -y
+    - '@adeze/raindrop-mcp'
+    env:
+      RAINDROP_ACCESS_TOKEN: ${RAINDROP_ACCESS_TOKEN}
+  - name: ynab
+    registry: false
+    transport: stdio
+    command: bunx
+    args:
+    - -y
+    - '@dizzlkheinz/ynab-mcpb@0.26.7'
+    env:
+      YNAB_ACCESS_TOKEN: ${YNAB_ACCESS_TOKEN}
+      YNAB_MCP_ENABLE_DELTA: 'true'
+      YNAB_MCP_CACHE_DEFAULT_TTL_MS: '300000'
+  - name: ticktick
+    registry: false
+    transport: stdio
+    command: bunx
+    args:
+    - -y
+    - '@alexarevalo.ai/mcp-server-ticktick'
+    env:
+      TICKTICK_CLIENT_ID: ${TICKTICK_CLIENT_ID}
+      TICKTICK_CLIENT_SECRET: ${TICKTICK_CLIENT_SECRET}
+      TICKTICK_ACCESS_TOKEN: ${TICKTICK_ACCESS_TOKEN}
+  - name: answeroverflow
+    registry: false
+    transport: http
+    url: https://www.answeroverflow.com/mcp
+  - name: console-ninja
+    registry: false
+    transport: stdio
+    command: npx
+    args:
+    - -y
+    - -c
+    - node ~/.console-ninja/mcp/

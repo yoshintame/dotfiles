@@ -11,4 +11,5 @@ myLib.mkModule config "apm" {
       secretsFile = ./secrets.yaml;
     };
   };
+
 }

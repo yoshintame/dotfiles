@@ -18,6 +18,7 @@ depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
 sudo env NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+apm install --global --only mcp
 '''
 
 ["dot:rebuild-full"]
@@ -27,6 +28,7 @@ depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
 sudo env DOT_BREW_FULL=1 NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+apm install --global --only mcp
 '''
 
 ["dot:link"]

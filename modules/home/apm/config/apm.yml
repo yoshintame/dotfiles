@@ -73,15 +73,15 @@ dependencies:
     - node ~/.console-ninja/mcp/
   - name: grafana-monitor
     registry: false
-    transport: stdio
-    command: uvx
-    args:
-    - --from
-    - mcp-grafana
-    - mcp-grafana
-    env:
-      GRAFANA_URL: https://grafana-tjtqs92jvneqfmpy.senateexchange.com
-      GRAFANA_SERVICE_ACCOUNT_TOKEN: ${GRAFANA_SERVICE_ACCOUNT_TOKEN}
+    transport: http
+    url: https://grafana-tjtqs92jvneqfmpy.senateexchange.com/mcp-grafana/mcp
+    headers:
+      Authorization: Bearer ${GRAFANA_MCP_GATEWAY_TOKEN}
+      X-Grafana-Service-Account-Token: ${GRAFANA_SERVICE_ACCOUNT_TOKEN}
+    extra:
+      bearer_token_env_var: GRAFANA_MCP_GATEWAY_TOKEN
+      env_http_headers:
+        X-Grafana-Service-Account-Token: GRAFANA_SERVICE_ACCOUNT_TOKEN
   - name: tana-local
     registry: false
     transport: http

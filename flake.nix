@@ -78,6 +78,7 @@
           ./modules/darwin/homebrew
           ./modules/darwin/session-env
           ./modules/darwin/home-dns
+          ./modules/darwin/codex-hooks
         ];
         nixos = [
           ./modules/nixos/base

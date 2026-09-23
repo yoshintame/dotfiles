@@ -5,6 +5,7 @@
     "homebrew"
     "session-env"
     "home-dns"
+    "codex-hooks"
   ];
 
   home-manager.users.yoshintame.my = myLib.enableList [

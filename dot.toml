@@ -18,7 +18,7 @@ depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
 sudo env NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
-command -v apm >/dev/null && apm install --global --only mcp || echo "WARN: apm not found, skipping MCP install"
+mise run dot:mcp
 '''
 
 ["dot:rebuild-full"]
@@ -28,7 +28,7 @@ depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
 sudo env DOT_BREW_FULL=1 NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
-command -v apm >/dev/null && apm install --global --only mcp || echo "WARN: apm not found, skipping MCP install"
+mise run dot:mcp
 '''
 
 ["dot:link"]
@@ -40,8 +40,13 @@ out="$(mktemp -d)/result"
 nix build --impure --out-link "$out" \
   '.#darwinConfigurations.lasthaze-mbp.config.home-manager.users.yoshintame.home.activationPackage'
 "$out/activate"
-command -v apm >/dev/null && apm install --global --only mcp || echo "WARN: apm not found, skipping MCP install"
+mise run dot:mcp
 '''
+
+["dot:mcp"]
+description = "Install global MCP servers via APM with SOPS secrets in its env only"
+dir = "{{env.DOTFILES}}"
+run = 'bun run "{{env.DOTFILES}}/packages/apm-global/src/mcp-install.ts"'
 
 ["dot:apm"]
 description = "Run APM in global scope, persist its lock, and restore nix links"

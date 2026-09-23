@@ -363,7 +363,7 @@
   "console-ninja.outputMode": "In View",
   "console-ninja.dateTimeDisplayMode": "None",
   "playwright.reuseBrowser": false,
-  "claudeCode.selectedModel": "claude-opus-4-8",
+  "claudeCode.selectedModel": "claude-opus-5-5[1m]",
   "claudeCode.preferredLocation": "sidebar",
   "gitlens.gitCommands.skipConfirmations": [
     "fetch:command",

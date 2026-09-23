@@ -7,8 +7,6 @@
 {
   imports = [ ./manifest.nix ];
 
-  networking.knownNetworkServices = [ "Wi-Fi" ];
-
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"

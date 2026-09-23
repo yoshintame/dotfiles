@@ -4,6 +4,7 @@
     "macos-defaults"
     "homebrew"
     "session-env"
+    "home-dns"
   ];
 
   home-manager.users.yoshintame.my = myLib.enableList [

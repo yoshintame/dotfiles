@@ -773,9 +773,9 @@ dependencies:
 - repo_url: senate-exchange/ai-skills
   name: senate-skills
   host: github.com
-  resolved_commit: b98aba8a8095dd1e167229480afa3d57929b346d
-  resolved_ref: v1.4.0
-  version: 1.4.0
+  resolved_commit: 3992730648e47f7de009da8778e54b6a2f09c31b
+  resolved_ref: v1.5.0
+  version: 1.5.0
   package_type: marketplace_plugin
   deployed_files:
   - .agents/skills/senate-backlog-outline
@@ -862,8 +862,8 @@ dependencies:
     .agents/skills/senate-grafana/SKILL.md: sha256:1e2739aba630890500c9af095a215490731d7d8686b49b00d02f29d83015f5b0
     .agents/skills/senate-grafana/scripts/discover.ts: sha256:93ba85c84cd71be049c1cc3b9428839936575908e0e74755365de256d90f97d3
     .agents/skills/senate-i18n/SKILL.md: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
-    .agents/skills/senate-infra/SKILL.md: sha256:ff322a895aaafe3025962dd3740ee91076fcf105c1f3c24a77e17665e50f2f12
-    .agents/skills/senate-infra/scripts/discover-hosts.ts: sha256:3922dfa2fb296d868ad67cfa655b08598a011ff2107f3c6cca8922f0dd11d73c
+    .agents/skills/senate-infra/SKILL.md: sha256:7e6de24251227c94c5a918e4a2f6a043636f91413494ff13dd819f8f60a2a1f4
+    .agents/skills/senate-infra/scripts/discover-hosts.ts: sha256:0a31242bcb3aba6374e912d25faa894734010030bc43c885f24f0ebc6c1017e3
     .agents/skills/senate-infra/scripts/onboardix-psql.sh: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
     .agents/skills/senate-infra/scripts/replica-psql.sh: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
     .agents/skills/senate-inline-docs/SKILL.md: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
@@ -885,8 +885,8 @@ dependencies:
     .claude/skills/senate-grafana/SKILL.md: sha256:1e2739aba630890500c9af095a215490731d7d8686b49b00d02f29d83015f5b0
     .claude/skills/senate-grafana/scripts/discover.ts: sha256:93ba85c84cd71be049c1cc3b9428839936575908e0e74755365de256d90f97d3
     .claude/skills/senate-i18n/SKILL.md: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
-    .claude/skills/senate-infra/SKILL.md: sha256:ff322a895aaafe3025962dd3740ee91076fcf105c1f3c24a77e17665e50f2f12
-    .claude/skills/senate-infra/scripts/discover-hosts.ts: sha256:3922dfa2fb296d868ad67cfa655b08598a011ff2107f3c6cca8922f0dd11d73c
+    .claude/skills/senate-infra/SKILL.md: sha256:7e6de24251227c94c5a918e4a2f6a043636f91413494ff13dd819f8f60a2a1f4
+    .claude/skills/senate-infra/scripts/discover-hosts.ts: sha256:0a31242bcb3aba6374e912d25faa894734010030bc43c885f24f0ebc6c1017e3
     .claude/skills/senate-infra/scripts/onboardix-psql.sh: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
     .claude/skills/senate-infra/scripts/replica-psql.sh: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
     .claude/skills/senate-inline-docs/SKILL.md: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
@@ -899,10 +899,10 @@ dependencies:
     .claude/skills/senate-release-note/SKILL.md: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
     .claude/skills/senate-update-docs-from-changes/SKILL.md: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
     .claude/skills/senate-vault/SKILL.md: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
-  content_hash: sha256:7bcf015455aff5cd0cdd77ca822b46281c05795ba0ce58a246bb7550210201fe
+  content_hash: sha256:5eafae867e7abee25d110a112563a2effccef490a846ef3b435bbca3cf83c53c
   constraint: ^1.1.0
-  resolved_tag: v1.4.0
-  resolved_at: '2026-09-23T18:15:37+00:00'
+  resolved_tag: v1.5.0
+  resolved_at: '2026-09-23T18:56:02+00:00'
   declared_license: UNLICENSED
 - repo_url: yoshintame/agent-skills
   name: agent-skills
@@ -3914,7 +3914,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:ff322a895aaafe3025962dd3740ee91076fcf105c1f3c24a77e17665e50f2f12
+  content_hash: sha256:7e6de24251227c94c5a918e4a2f6a043636f91413494ff13dd819f8f60a2a1f4
 - kind: project-relative
   target: claude
   value: .claude/skills/senate-infra/scripts/discover-hosts.ts
@@ -3923,7 +3923,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:3922dfa2fb296d868ad67cfa655b08598a011ff2107f3c6cca8922f0dd11d73c
+  content_hash: sha256:0a31242bcb3aba6374e912d25faa894734010030bc43c885f24f0ebc6c1017e3
 - kind: project-relative
   target: claude
   value: .claude/skills/senate-infra/scripts/onboardix-psql.sh
@@ -7352,7 +7352,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:ff322a895aaafe3025962dd3740ee91076fcf105c1f3c24a77e17665e50f2f12
+  content_hash: sha256:7e6de24251227c94c5a918e4a2f6a043636f91413494ff13dd819f8f60a2a1f4
 - kind: project-relative
   target: codex
   value: .agents/skills/senate-infra/scripts/discover-hosts.ts
@@ -7361,7 +7361,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:3922dfa2fb296d868ad67cfa655b08598a011ff2107f3c6cca8922f0dd11d73c
+  content_hash: sha256:0a31242bcb3aba6374e912d25faa894734010030bc43c885f24f0ebc6c1017e3
 - kind: project-relative
   target: codex
   value: .agents/skills/senate-infra/scripts/onboardix-psql.sh

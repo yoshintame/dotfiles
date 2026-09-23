@@ -8354,15 +8354,6 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
-  value: console-ninja
-  runtime: claude
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
   value: grafana-monitor
   runtime: claude
   scope: project
@@ -8426,15 +8417,6 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
-  value: console-ninja
-  runtime: codex
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
   value: grafana-monitor
   runtime: codex
   scope: project
@@ -8481,7 +8463,6 @@ deployments:
 mcp_servers:
 - answeroverflow
 - chrome-devtools
-- console-ninja
 - grafana-monitor
 - raindrop
 - tana-local
@@ -8502,15 +8483,6 @@ mcp_configs:
     - --browser-url=http://127.0.0.1:9222
     registry: false
     command: bunx
-  console-ninja:
-    name: console-ninja
-    transport: stdio
-    args:
-    - -y
-    - -c
-    - node ~/.console-ninja/mcp/
-    registry: false
-    command: npx
   grafana-monitor:
     name: grafana-monitor
     transport: http
@@ -8537,8 +8509,9 @@ mcp_configs:
     transport: http
     registry: false
     headers:
-      Authorization: Bearer mcp_32ad677829fc13790e5f69871703a73757ac84284aba390e44bb57cde691d40d
+      Authorization: Bearer ${TANA_MCP_TOKEN}
     url: http://127.0.0.1:8262/mcp
+    bearer_token_env_var: TANA_MCP_TOKEN
   ticktick:
     name: ticktick
     transport: stdio
@@ -8567,7 +8540,6 @@ mcp_target_servers:
   claude:
   - answeroverflow
   - chrome-devtools
-  - console-ninja
   - grafana-monitor
   - raindrop
   - tana-local
@@ -8576,7 +8548,6 @@ mcp_target_servers:
   codex:
   - answeroverflow
   - chrome-devtools
-  - console-ninja
   - grafana-monitor
   - raindrop
   - tana-local

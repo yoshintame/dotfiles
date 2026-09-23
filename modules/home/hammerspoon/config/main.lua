@@ -322,7 +322,7 @@ spoon.LeaderFlow:setup({
         { "p", "Passwords", shortcut(proxy.passwords) },
 
         { "m", "[model]", {
-            { "m", "Opus 4.8", text("/model claude-opus-4-8") },
+            { "m", "Opus 5.5 1M", text("/model claude-opus-5-5[1m]") },
             { "o", "Opus 5", text("/model claude-opus-5") },
             { "f", "Fable 5", text("/model claude-fable-5") },
             { "s", "Sonnet 5", text("/model claude-sonnet-5") },

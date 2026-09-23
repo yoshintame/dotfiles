@@ -77,6 +77,7 @@
           ./modules/darwin/macos-defaults
           ./modules/darwin/homebrew
           ./modules/darwin/session-env
+          ./modules/darwin/home-dns
         ];
         nixos = [
           ./modules/nixos/base

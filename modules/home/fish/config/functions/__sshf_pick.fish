@@ -2,8 +2,14 @@ function __sshf_pick --description "Fuzzy-pick an ssh alias (fzf); prints '<acti
     type -q fzf; or return 1
     type -q manssh; or return 1
 
-    set -l rows (manssh list 2>/dev/null \
-        | string replace -rf '^\s+(\S+)\s+->\s+(\S+).*' '$1\t$2')
+    set -l rows
+    for alias in (manssh list 2>/dev/null | string replace -rf '^\s+(\S+)\s+->.*' '$1')
+        set -l cfg (command ssh -G $alias 2>/dev/null)
+        set -l user (string replace -rf '^user (.+)' '$1' -- $cfg)
+        set -l host (string replace -rf '^hostname (.+)' '$1' -- $cfg)
+        set -l port (string replace -rf '^port (.+)' '$1' -- $cfg)
+        set -a rows "$alias"\t"$user@$host:$port"
+    end
     test -n "$rows"; or return 0
 
     set rows (__sshf_mru $rows)

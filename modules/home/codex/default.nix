@@ -4,4 +4,6 @@ myLib.mkModule config "codex" {
     "~/.codex/AGENTS.md" = "modules/home/agents-shared/config/AGENTS.md";
     "~/.codex/config.toml" = "modules/home/codex/config/config.toml";
   };
+
+  home.file.".codex/config.toml".force = true;
 }

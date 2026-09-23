@@ -63,14 +63,6 @@ dependencies:
     registry: false
     transport: http
     url: https://www.answeroverflow.com/mcp
-  - name: console-ninja
-    registry: false
-    transport: stdio
-    command: npx
-    args:
-    - -y
-    - -c
-    - node ~/.console-ninja/mcp/
   - name: grafana-monitor
     registry: false
     transport: http
@@ -87,4 +79,6 @@ dependencies:
     transport: http
     url: http://127.0.0.1:8262/mcp
     headers:
-      Authorization: Bearer mcp_32ad677829fc13790e5f69871703a73757ac84284aba390e44bb57cde691d40d
+      Authorization: Bearer ${TANA_MCP_TOKEN}
+    extra:
+      bearer_token_env_var: TANA_MCP_TOKEN

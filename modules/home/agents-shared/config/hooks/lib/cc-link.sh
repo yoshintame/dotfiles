@@ -1,13 +1,13 @@
 # shellcheck shell=bash
 # Shared glue for the Claude Code session hardlink router.
-# Sourced by worktree-create.sh / session-start.sh / worktree-remove.sh.
+# Sourced by worktree-create.sh / session-start.sh.
 # Resolves the dotfiles repo root (from this file's real location) and a bun
 # binary (mise PATH may be absent in the hook env), then invokes the TS linker
 # non-blocking: it never writes stdout and never aborts the caller.
 
 _cc_self="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || realpath "${BASH_SOURCE[0]}" 2>/dev/null || printf '%s' "${BASH_SOURCE[0]}")"
 case "$_cc_self" in
-  */modules/agents-shared/config/hooks/lib/*) _CC_REPO="${_cc_self%/modules/agents-shared/config/hooks/lib/*}" ;;
+  */modules/home/agents-shared/config/hooks/lib/*) _CC_REPO="${_cc_self%/modules/home/agents-shared/config/hooks/lib/*}" ;;
   *) _CC_REPO="${DOTFILES:-$HOME/.dotfiles}" ;;
 esac
 _CC_LINKER="$_CC_REPO/packages/link-session/src/cli.ts"
@@ -35,15 +35,5 @@ cc_link_session() {
   [ -f "$_CC_LINKER" ] || { _cc_log "linker-missing $_CC_LINKER"; return 0; }
   _cc_ensure_logdir
   "$bun" "$_CC_LINKER" link "$@" >/dev/null 2>>"$_CC_LOG" || _cc_log "link-failed: $*"
-  return 0
-}
-
-# cc_unlink_dir <worktree-cwd>
-cc_unlink_dir() {
-  local bun
-  bun="$(_cc_bun)" || { _cc_log "bun-not-found (unlink $1)"; return 0; }
-  [ -f "$_CC_LINKER" ] || { _cc_log "linker-missing $_CC_LINKER"; return 0; }
-  _cc_ensure_logdir
-  "$bun" "$_CC_LINKER" unlink-dir "$@" >/dev/null 2>>"$_CC_LOG" || _cc_log "unlink-failed: $*"
   return 0
 }

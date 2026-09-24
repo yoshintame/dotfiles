@@ -22,10 +22,7 @@
 
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
-  networking.hosts."100.123.237.27" = [
-    "lasthaze-homelab"
-    "grafana.yoshintame.space"
-  ];
+  networking.hosts."100.123.237.27" = [ "lasthaze-homelab" ];
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
   sops.secrets."TAILSCALE_AUTHKEY".sopsFile = ../../secrets/lasthaze-edge/edge.yaml;
@@ -58,6 +55,7 @@
 
   homelab.sentinel = {
     enable = true;
+    homelabAddress = "100.123.237.27";
     listenAddress = "100.98.13.73";
     environmentFile = config.sops.secrets."GATUS_ENV".path;
   };

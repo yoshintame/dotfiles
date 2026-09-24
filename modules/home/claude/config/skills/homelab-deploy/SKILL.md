@@ -22,6 +22,7 @@ All `just` commands run from the homelab repo (`~/Development/personal/lasthaze-
 | `/homelab-deploy dev` | `just dev` | push nixos-rebuild from Mac, no git commit needed |
 | `/homelab-deploy dev test` | `just dev test` | same but `test` instead of `switch` (reverts on reboot) |
 | `/homelab-deploy status` | `just deploy-status` | inspect the last deploy run |
+| `/homelab-deploy failed` | `just failed` | failed units, split into service failures and healthcheck probes |
 
 Without args: check `git -C ~/Development/personal/lasthaze-homelab status --porcelain`. If there are uncommitted changes in the homelab repo, warn and suggest `just dev`. If clean, ask for a filter (service name like `powersync`, `adguard`) and run `just deploy-wait <filter>`.
 
@@ -42,6 +43,15 @@ Dev iteration without committing: builds from the Mac's working tree via `nixos-
 The recipe handles the **1Password store-ssh gotcha** automatically: `nix run …nixos-rebuild` uses SSH from the nix store, but 1Password ties signing approval to the binary path → `Permission denied`. The recipe opens a system-SSH ControlMaster first and makes nixos-rebuild reuse it via `NIX_SSHOPTS`.
 
 `action` defaults to `switch`. Use `test` for networking/ssh/firewall changes — reverts on next boot (manual magic-rollback).
+
+The hourly `homelab-deploy.timer` rebuilds from `main` and overwrites a dev generation. `systemctl stop` on the timer does not hold: every `switch` starts it again, and `systemctl mask --runtime` loses to the unit in `/etc`. For a series of dev switches, hold the deploy service with a runtime drop-in in `/run/systemd/system/homelab-deploy.service.d/` carrying `ConditionPathExists=!/run/homelab-deploy.hold` and touch that file; both vanish on reboot.
+
+## Container runtime
+
+Apps run as `virtualisation.oci-containers` under rootful Podman, one container `<name>-<key>` per `homelab.services.<name>.containers.<key>`, unit `podman-<name>-<key>.service`, all inside `homelab-<name>.slice` and network `<name>`.
+
+- Inspect on the box: `sudo podman ps -a`, `journalctl -u 'podman-<name>-*'`, `systemctl stop homelab-<name>.slice` to stop a whole service.
+- A switch can exit 4 while the service is fine: transient healthcheck units (`<64-hex>-<hex>.service`) that failed a probe are counted as failed. `just failed` separates them from real service failures; `deploy-wait` runs it.
 
 ## One change, one topology
 

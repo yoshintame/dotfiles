@@ -1,0 +1,40 @@
+# Added by OrbStack: 'orb' SSH host for Linux machines
+# This only works if it's at the top of ssh_config (before any Host blocks).
+# This won't be added again if you remove it.
+Include ~/.orbstack/ssh/config
+
+# --- senate: personal overrides first, then hosts from senate@infra
+
+Include /Users/yoshintame/.ssh/senate.conf
+Include /Users/yoshintame/Development/work/senate/senate@infra/ssh/config
+
+# --- lasthaze
+
+Host lasthaze-edge
+    Hostname lasthaze-edge
+    User root
+
+Host lasthaze-homelab
+    Hostname lasthaze-homelab
+    User yoshintame
+
+Host lasthaze-ru
+    Hostname lasthaze-ru
+    User root
+
+# --- orbstack
+
+Host orb-root
+    Hostname 127.0.0.1
+    Port 32222
+    User root
+    IdentityFile ~/.orbstack/ssh/id_ed25519
+    IdentitiesOnly yes
+    ProxyCommand '/Applications/OrbStack.app/Contents/Frameworks/OrbStack Helper.app/Contents/MacOS/OrbStack Helper' ssh-proxy-fdpass 501
+    ProxyUseFdpass yes
+
+# --- defaults
+
+# managed-by: dot:bootstrap-ssh
+Host *
+    IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"

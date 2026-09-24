@@ -47,6 +47,7 @@
     homelab = {
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-prod.follows = "nixpkgs";
     };
 
     edge = {

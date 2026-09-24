@@ -7,44 +7,8 @@
 	},
 
 	"autoApprovers": {
-		"routes": {
-			"0.0.0.0/0": ["tag:ru-exit"],
-			"::/0":       ["tag:ru-exit"],
-		},
+		"exitNode": ["tag:ru-exit"],
 	},
-
-	"nodeAttrs": [
-		{
-			"target": ["*"],
-			"app": {
-				"tailscale.com/app-connectors": [
-					{
-						"name":       "russian-services",
-						"connectors": ["tag:ru-exit"],
-						"domains": [
-							"gosuslugi.ru",
-							"*.gosuslugi.ru",
-							"mos.ru",
-							"*.mos.ru",
-							"emias.info",
-							"*.emias.info",
-						],
-						"routes": [
-							"109.207.0.0/20",
-							"212.11.128.0/19",
-							"94.79.51.0/24",
-							"213.59.253.0/24",
-							"213.59.254.0/24",
-							"82.202.189.0/24",
-							"212.45.30.0/24",
-							"77.238.101.0/24",
-							"84.201.152.0/24",
-						],
-					},
-				],
-			},
-		},
-	],
 
 	"grants": [
 		{

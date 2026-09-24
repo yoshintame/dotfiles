@@ -53,6 +53,7 @@
 			"src": ["tag:edge"],
 			"dst": ["tag:homelab"],
 			"ip": [
+				"tcp:443",
 				"tcp:9090",
 				"tcp:3100",
 				"tcp:9093",

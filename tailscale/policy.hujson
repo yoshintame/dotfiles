@@ -52,11 +52,5 @@
 			"dst":    ["tag:homelab"],
 			"users":  ["yoshintame", "root"],
 		},
-		{
-			"action": "accept",
-			"src":    ["m.ivanov0427@gmail.com"],
-			"dst":    ["tag:ru-exit"],
-			"users":  ["root"],
-		},
 	],
 }

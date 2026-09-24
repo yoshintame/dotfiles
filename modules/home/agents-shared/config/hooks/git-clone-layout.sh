@@ -3,27 +3,63 @@ set -euo pipefail
 
 input="$(cat)"
 tool_name="$(echo "$input" | jq -r '.tool_name // ""')"
-
 [[ "$tool_name" != "Bash" ]] && exit 0
 
 cmd="$(echo "$input" | jq -r '.tool_input.command // ""')"
 [[ -z "$cmd" ]] && exit 0
 
-if ! echo "$cmd" | grep -qE '(^|[;&|`(]\s*)git\s+clone\s'; then
-  exit 0
-fi
+echo "$cmd" | grep -qE '(^|[;&|`(]\s*)git\s+clone\s' || exit 0
+echo "$cmd" | grep -qE '(^|[;&|`(]\s*)FORCE_CLONE_PATH=1\s' && exit 0
 
-if echo "$cmd" | grep -qE '(^|[;&|`(]\s*)FORCE_CLONE_PATH=1\s'; then
-  exit 0
-fi
+DEV="$HOME/Development"
+CACHE="$HOME/.cache/repos"
 
-HOME_DIR="$HOME"
-DEV="$HOME_DIR/Development"
-CACHE="$HOME_DIR/.cache/repos"
+cwd="$(echo "$input" | jq -r '.cwd // ""')"
+[[ -z "$cwd" ]] && cwd="$(pwd)"
+
+clone_segment="$(echo "$cmd" | sed -E 's/.*git[[:space:]]+clone[[:space:]]+//; s/[;&|].*//')"
+read -ra tokens <<< "$clone_segment"
+
+positionals=()
+skip_next=false
+for tok in "${tokens[@]}"; do
+  if $skip_next; then skip_next=false; continue; fi
+  case "$tok" in
+    --branch|--depth|--jobs|--reference|--origin|--template|--config|--separate-git-dir|--filter|--bundle-uri|-b|-j|-o|-c|-u|--upload-pack)
+      skip_next=true ;;
+    -*) ;;
+    *) positionals+=("$tok") ;;
+  esac
+done
+
+[[ ${#positionals[@]} -eq 0 ]] && exit 0
+
+url="${positionals[0]}"
+url="${url%\"}"; url="${url#\"}"; url="${url%\'}"; url="${url#\'}"
+
+owner=""
+repo=""
+if [[ "$url" =~ ^[a-zA-Z]+://[^/]+/(.+)/([^/]+)$ ]] || [[ "$url" =~ ^[^/@]+@[^:]+:(.+)/([^/]+)$ ]]; then
+  owner="${BASH_REMATCH[1]##*/}"
+  repo="${BASH_REMATCH[2]%.git}"
+  repo="${repo%/}"
+fi
+owner="$(echo "$owner" | tr '[:upper:]' '[:lower:]')"
+
+if [[ ${#positionals[@]} -ge 2 ]]; then
+  target="${positionals[1]}"
+  target="${target%\"}"; target="${target#\"}"; target="${target%\'}"; target="${target#\'}"
+  target="${target/#\~/$HOME}"
+  target="${target/#\$HOME/$HOME}"
+  [[ "$target" != /* ]] && target="$cwd/$target"
+else
+  name="${repo:-$(basename "${url%.git}")}"
+  target="$cwd/$name"
+fi
+target="${target%/}"
 
 deny() {
-  local reason="$1"
-  jq -n --arg r "$reason" '{
+  jq -n --arg r "$1" '{
     hookSpecificOutput: {
       hookEventName: "PreToolUse",
       permissionDecision: "deny",
@@ -33,87 +69,27 @@ deny() {
   exit 0
 }
 
-cwd="$(echo "$input" | jq -r '.cwd // ""')"
-[[ -z "$cwd" ]] && cwd="$(pwd)"
-
-resolve_path() {
-  local p="$1"
-  p="${p/#\~/$HOME_DIR}"
-  p="${p/#\$HOME/$HOME_DIR}"
-  if [[ "$p" != /* ]]; then
-    p="$cwd/$p"
+rel_ok() {
+  local base="$1" rel
+  [[ "$target" == "$base/"* ]] || return 1
+  rel="${target#"$base/"}"
+  [[ "$rel" =~ ^[^/]+/[^/]+$ ]] || return 1
+  if [[ -n "$owner" ]]; then
+    [[ "${rel%%/*}" == "$owner" ]] || return 1
   fi
-  echo "$p"
+  return 0
 }
 
-extract_clone_target() {
-  local tokens url_seen=false
-  read -ra tokens <<< "$cmd"
-  local skip_next=false
-  local last_positional=""
-  local positional_count=0
+rel_ok "$DEV" && exit 0
+rel_ok "$CACHE" && exit 0
+if [[ -z "$owner" && "$target" =~ ^"$DEV"/local/[^/]+$ ]]; then
+  exit 0
+fi
 
-  for tok in "${tokens[@]}"; do
-    if $skip_next; then
-      skip_next=false
-      continue
-    fi
-    [[ "$tok" == "git" || "$tok" == "clone" ]] && continue
-    [[ "$tok" == FORCE_CLONE_PATH=* ]] && continue
+if [[ -n "$owner" && -n "$repo" ]]; then
+  expected="Expected: ~/Development/$owner/$repo (work repo) or ~/.cache/repos/$owner/$repo (read-only reference clone)."
+else
+  expected="Expected: ~/Development/<owner>/<repo>, ~/Development/local/<repo> for a repo without remote, or ~/.cache/repos/<owner>/<repo> for a reference clone."
+fi
 
-    if [[ "$tok" == --* ]]; then
-      case "$tok" in
-        --branch|--depth|--jobs|-j|--reference|--origin|-o|--template|--config|-c|--separate-git-dir|--filter|--bundle-uri)
-          skip_next=true ;;
-        --branch=*|--depth=*|--jobs=*|--reference=*|--origin=*|--template=*|--config=*|--separate-git-dir=*|--filter=*|--bundle-uri=*)
-          ;; # value is part of the flag
-      esac
-      continue
-    fi
-    if [[ "$tok" == -* ]]; then
-      case "$tok" in
-        -b|-j|-o|-c) skip_next=true ;;
-      esac
-      continue
-    fi
-
-    positional_count=$((positional_count + 1))
-    last_positional="$tok"
-  done
-
-  if [[ $positional_count -ge 2 ]]; then
-    echo "$last_positional"
-  elif [[ $positional_count -eq 1 ]]; then
-    local repo_name
-    repo_name="$(basename "$last_positional" .git)"
-    echo "$cwd/$repo_name"
-  fi
-}
-
-clone_target="$(extract_clone_target)"
-[[ -z "$clone_target" ]] && exit 0
-
-clone_target="$(resolve_path "$clone_target")"
-
-allowed_prefixes=(
-  "$DEV/work/"
-  "$DEV/personal/"
-  "$DEV/forks/"
-  "$DEV/sandbox/"
-  "$DEV/archive/"
-  "$CACHE/"
-)
-
-for prefix in "${allowed_prefixes[@]}"; do
-  if [[ "$clone_target" == "$prefix"* ]]; then
-    exit 0
-  fi
-done
-
-deny "git clone target does not match disk layout conventions (see /disk-layout skill). Allowed:
-  ~/Development/work/<company>/<repo>
-  ~/Development/personal/<repo>
-  ~/Development/forks/<repo>
-  ~/Development/sandbox/<repo>
-  ~/.cache/repos/<repo>
-Override: FORCE_CLONE_PATH=1 git clone ..."
+deny "git clone target ${target/#"$HOME"/\~} breaks the disk layout (see /disk-layout skill). $expected Owner is the origin remote owner in lowercase; no host, category or language folders. Override: FORCE_CLONE_PATH=1 git clone ..."

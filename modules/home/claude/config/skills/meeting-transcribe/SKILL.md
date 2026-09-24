@@ -37,6 +37,8 @@ Argument: one or more recording file paths. One recording per meeting; the impor
 
    Run it in the background — a 45-minute recording takes ~8 minutes end to end and a foreground call dies on the tool timeout. Transcription is only cached when `MP_CACHE_DIR` is set, so a run killed midway bills Deepgram again on retry.
 
+   Run it with the Bash sandbox disabled (`dangerouslyDisableSandbox: true`) — Deepgram is not in the sandbox network allowlist, and a sandboxed run dies at transcription with `403 Connection blocked by network allowlist`. The per-command `allowed_domains` does not lift it. See `[[claude-sandbox-blocks-meeting-import]]`.
+
    The AI summary runs through the `claude-code` provider (Claude Max subscription, $0, no key). Never add `ANTHROPIC_API_KEY` to `_scripts/.env` — it trips the subscription guard.
 
 5. **Archive the recording.** Raw media does not live in the vault — move it out once the import has read it:

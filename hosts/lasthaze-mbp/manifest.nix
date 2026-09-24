@@ -47,6 +47,7 @@
     "resticprofile"
     "serena"
     "session-reaper"
+    "ssh"
     "starship"
     "tig"
     "tmux"

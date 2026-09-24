@@ -67,6 +67,7 @@
       ./home/resticprofile
       ./home/serena
       ./home/session-reaper
+      ./home/ssh
       ./home/starship
       ./home/tig
       ./home/tmux

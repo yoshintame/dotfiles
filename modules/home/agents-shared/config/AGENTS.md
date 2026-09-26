@@ -10,7 +10,7 @@
 - *Prefer absolute paths or tool-specific flags (`git -C /path`, `bun run --cwd /path`). Use `cd /path && cmd` when the tool requires cwd context (e.g. worktrunk aliases, branch-relative commands) or when it's simpler than the absolute-path alternative.*
 - *The Bash tool runs a POSIX shell (zsh), not fish. Use POSIX syntax for every command you execute via the tool, e.g. `export NAME=value`.*
 - *The user's own interactive terminal is fish. ONLY when writing a command for the user to copy and run there, use fish syntax, e.g. `set -x NAME value` instead of `export NAME=value`. Default everywhere else is POSIX.*
-- *Dev servers (`wt dev`, `wt dev:local`, `bun run dev`, `vite`) — always launch with `dangerouslyDisableSandbox: true`. Inside the sandbox Vite's proxy cannot reach the backend: all egress must go through the sandbox filtering proxy, which Vite's http-proxy bypasses, so every `/api` request fails with 500. `excludedCommands` covers only bare invocations, not `cd … &&` or env-prefixed ones.*
+- *Dev servers (`wt dev`, `wt dev:local`, `bun run dev`, `vite`) — always launch with `dangerouslyDisableSandbox: true`. Inside the sandbox external hostnames do not resolve (`getaddrinfo ENOTFOUND`) and Vite's proxy ignores `HTTP(S)_PROXY`, so every `/api` request to a remote backend (dev stand) fails with 500. Do not rely on `sandbox.excludedCommands` — matching commands were observed to still run fully sandboxed.*
 
 ## Контекст инструментов
 

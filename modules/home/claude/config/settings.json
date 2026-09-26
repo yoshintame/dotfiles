@@ -587,7 +587,10 @@
         "/Users/yoshintame/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock",
         "/Users/yoshintame/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
       ],
-      "allowLocalBinding": true
+      "allowLocalBinding": true,
+      "allowMachLookup": [
+        "com.apple.FSEvents"
+      ]
     },
     "filesystem": {
       "allowWrite": [

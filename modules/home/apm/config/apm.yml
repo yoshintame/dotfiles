@@ -74,6 +74,10 @@ dependencies:
       bearer_token_env_var: GRAFANA_MCP_GATEWAY_TOKEN
       env_http_headers:
         X-Grafana-Service-Account-Token: GRAFANA_SERVICE_ACCOUNT_TOKEN
+  - name: metabase
+    registry: false
+    transport: http
+    url: https://mb.senateexchange.com/api/metabase-mcp
   - name: tana-local
     registry: false
     transport: http

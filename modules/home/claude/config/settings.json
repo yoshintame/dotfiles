@@ -437,10 +437,6 @@
           },
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/smart-approve.sh"
-          },
-          {
-            "type": "command",
             "command": "$HOME/.claude/hooks/git-clone-layout.sh",
             "if": "Bash(git clone *)"
           }

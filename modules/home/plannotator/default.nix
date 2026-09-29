@@ -1,25 +1,11 @@
 {
   config,
-  lib,
   pkgs,
   myLib,
   ...
 }:
 let
   home = config.home.homeDirectory;
-  user = config.home.username;
-  binPath = lib.concatStringsSep ":" [
-    "${home}/.local/bin"
-    "${home}/.local/share/mise/shims"
-    "/etc/profiles/per-user/${user}/bin"
-    "${home}/.nix-profile/bin"
-    "/run/current-system/sw/bin"
-    "/opt/homebrew/bin"
-    "/usr/bin"
-    "/bin"
-    "/usr/sbin"
-    "/sbin"
-  ];
   desvio = pkgs.stdenvNoCC.mkDerivation {
     pname = "desvio";
     version = "0.1.0-unstable-2026-09-08";
@@ -41,7 +27,7 @@ myLib.mkModule config "plannotator" {
 
   nixLink.links = {
     "~/.config/desvio/plannotator" = "modules/home/plannotator/config";
-    "~/.local/bin/plannotator-update" = "modules/home/plannotator/config/update.sh";
+    "~/.local/bin/plannotator-update" = "modules/home/plannotator/update.sh";
   };
 
   launchd.agents.plannotator-update = {
@@ -49,8 +35,9 @@ myLib.mkModule config "plannotator" {
     config = {
       ProgramArguments = [ "${home}/.local/bin/plannotator-update" ];
       EnvironmentVariables = {
-        PATH = binPath;
+        PATH = myLib.launchdPath config [ "${home}/.local/bin" ];
         HOME = home;
+        DESVIO_AUTO_RESOLVE = "0";
       };
       StartCalendarInterval = [
         {

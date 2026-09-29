@@ -6,20 +6,6 @@
 }:
 let
   home = config.home.homeDirectory;
-  user = config.home.username;
-  binPath = lib.concatStringsSep ":" [
-    "${home}/.local/share/mise/shims"
-    "/etc/profiles/per-user/${user}/bin"
-    "${home}/.nix-profile/bin"
-    "/run/current-system/sw/bin"
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
-    "/usr/local/bin"
-    "/usr/bin"
-    "/bin"
-    "/usr/sbin"
-    "/sbin"
-  ];
   stateDir = "${home}/.local/state/cc-trace";
 in
 myLib.mkModule config "cc-trace" {
@@ -40,7 +26,7 @@ myLib.mkModule config "cc-trace" {
         "${home}/.local/bin/cc-trace-compact"
       ];
       EnvironmentVariables = {
-        PATH = binPath;
+        PATH = myLib.launchdPath config [ ];
         HOME = home;
       };
       StartInterval = 300;

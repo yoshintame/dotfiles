@@ -6,20 +6,6 @@
 }:
 let
   home = config.home.homeDirectory;
-  user = config.home.username;
-  binPath = lib.concatStringsSep ":" [
-    "${home}/.local/share/mise/shims"
-    "/etc/profiles/per-user/${user}/bin"
-    "${home}/.nix-profile/bin"
-    "/run/current-system/sw/bin"
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
-    "/usr/local/bin"
-    "/usr/bin"
-    "/bin"
-    "/usr/sbin"
-    "/sbin"
-  ];
 in
 myLib.mkModule config "claude" {
   programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable {
@@ -32,7 +18,7 @@ myLib.mkModule config "claude" {
       ProgramArguments = [ "${home}/.local/bin/claude-settings-relink" ];
       WatchPaths = [ "${home}/.claude/settings.json" ];
       EnvironmentVariables = {
-        PATH = binPath;
+        PATH = myLib.launchdPath config [ ];
         HOME = home;
       };
       RunAtLoad = true;

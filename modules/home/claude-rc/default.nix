@@ -1,25 +1,10 @@
 {
   config,
-  lib,
   myLib,
   ...
 }:
 let
   home = config.home.homeDirectory;
-  user = config.home.username;
-  binPath = lib.concatStringsSep ":" [
-    "${home}/.local/share/mise/shims"
-    "/etc/profiles/per-user/${user}/bin"
-    "${home}/.nix-profile/bin"
-    "/run/current-system/sw/bin"
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
-    "/usr/local/bin"
-    "/usr/bin"
-    "/bin"
-    "/usr/sbin"
-    "/sbin"
-  ];
 in
 myLib.mkModule config "claude-rc" {
   launchd.agents.claude-rc = {
@@ -32,7 +17,7 @@ myLib.mkModule config "claude-rc" {
       ];
       WorkingDirectory = "${home}/Documents/obsidian/yoshintame";
       EnvironmentVariables = {
-        PATH = binPath;
+        PATH = myLib.launchdPath config [ ];
         HOME = home;
       };
       RunAtLoad = true;

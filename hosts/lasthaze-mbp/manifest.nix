@@ -41,6 +41,7 @@
     "nvim"
     "op"
     "ouch"
+    "plannotator"
     "pnpm"
     "python"
     "rclone"

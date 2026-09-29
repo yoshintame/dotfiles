@@ -61,6 +61,7 @@
       ./home/nvim
       ./home/op
       ./home/ouch
+      ./home/plannotator
       ./home/pnpm
       ./home/python
       ./home/rclone

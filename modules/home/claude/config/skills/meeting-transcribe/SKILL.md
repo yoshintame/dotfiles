@@ -7,7 +7,7 @@ Never hand-roll transcription — no direct Deepgram/curl, no ad-hoc whisper. Th
 
 Vault root: `$OBSIDIAN_VAULT`, fallback `~/Documents/obsidian/yoshintame`.
 
-Argument: one or more recording file paths. One recording per meeting; the import uses the first media file it finds. Zoom calls recorded with CleanShot land in `~/Pictures/Screenshots` (`zoom.us Zoom <Meeting|Workplace> on <Month> <DD> <YYYY> at <HH.MM.SS>.mp4` — the window-title word varies), not `~/Downloads` — when the user names a meeting by weekday, match that filename's date there.
+Argument: one or more recording file paths. One recording per meeting; the import uses the first media file it finds. Zoom calls recorded with CleanShot land in `~/Pictures/Screenshots` (`zoom.us Zoom <Meeting|Workplace> on <Month> <DD> <YYYY> at <HH.MM.SS>.mp4` — the window-title word varies), not `~/Downloads`; Telegram calls land there too as `Telegram Telegram @ Михаил on <Month> <DD> <YYYY> at <HH.MM.SS>.mp4`, where the name is the vault owner's, not the callee's — read the callee off the call window in an early frame (`ffmpeg -ss 25 -frames:v 1`). When the user names a meeting by weekday, match that filename's date there.
 
 ## Steps
 

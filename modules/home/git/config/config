@@ -34,7 +34,7 @@
     gpgsign = true
 
 [gpg "ssh"]
-    program            = git-ssh-sign
+    program            = /Users/yoshintame/.local/bin/git-ssh-sign
     allowedSignersFile = ~/.config/git/allowed_signers
 
 [advice] # disable advices

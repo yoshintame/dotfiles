@@ -8,7 +8,7 @@
 
 [credential "https://github.com"]
     helper      = ""
-    helper      = github-ro
+    helper      = !$HOME/.local/bin/git-credential-github-ro
     useHttpPath = true
 
 [credential]

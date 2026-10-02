@@ -6,13 +6,13 @@
 [github]
     user        = yoshintame
 
+[credential]
+    helper      = osxkeychain
+
 [credential "https://github.com"]
     helper      = ""
     helper      = !$HOME/.local/bin/git-credential-github-ro
     useHttpPath = true
-
-[credential]
-    helper      = osxkeychain
 
 [core]
     pager       = delta

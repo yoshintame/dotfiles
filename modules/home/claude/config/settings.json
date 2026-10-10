@@ -305,6 +305,15 @@
       "mcp__grafana-monitor__list_loki_label_values",
       "mcp__grafana-monitor__query_loki_stats",
       "mcp__grafana-monitor__query_loki_logs",
+      "mcp__grafana-homelab__list_datasources",
+      "mcp__grafana-homelab__list_prometheus_metric_names",
+      "mcp__grafana-homelab__search_dashboards",
+      "mcp__grafana-homelab__list_prometheus_label_values",
+      "mcp__grafana-homelab__query_prometheus",
+      "mcp__grafana-homelab__list_loki_label_names",
+      "mcp__grafana-homelab__list_loki_label_values",
+      "mcp__grafana-homelab__query_loki_stats",
+      "mcp__grafana-homelab__query_loki_logs",
       "Read(//Users/yoshintame/**)"
     ],
     "deny": [

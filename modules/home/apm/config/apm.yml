@@ -74,6 +74,15 @@ dependencies:
       bearer_token_env_var: GRAFANA_MCP_GATEWAY_TOKEN
       env_http_headers:
         X-Grafana-Service-Account-Token: GRAFANA_SERVICE_ACCOUNT_TOKEN
+  - name: grafana-homelab
+    registry: false
+    transport: http
+    url: https://lasthaze-homelab.alpine-ulmer.ts.net:8445/mcp
+    headers:
+      X-Grafana-Service-Account-Token: ${HOMELAB_GRAFANA_SERVICE_ACCOUNT_TOKEN}
+    extra:
+      env_http_headers:
+        X-Grafana-Service-Account-Token: HOMELAB_GRAFANA_SERVICE_ACCOUNT_TOKEN
   - name: metabase
     registry: false
     transport: http

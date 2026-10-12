@@ -30,7 +30,7 @@
 
   fileSystems."/".autoResize = true;
 
-  nix.gc.options = lib.mkForce "--delete-older-than 14d";
+  nix.gc.options = "--delete-older-than 14d";
 
   services.qemuGuest.enable = true;
 

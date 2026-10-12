@@ -19,7 +19,6 @@ groups:
       - local-ops
       - b2-ops
       - gdrive-ops
-      - onedrive-ops
   check:
     profiles:
       - local-ops
@@ -76,6 +75,7 @@ profiles:
 
   base:
     initialize: true
+    force-inactive-lock: true
     password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
     {{- if .Env.RESTICPROFILE_SCHEDULE_ID }}
     env:
@@ -274,17 +274,6 @@ profiles:
 
   onedrive-ops:
     inherit: onedrive
-    forget:
-      group-by: "host,tags"
-      keep-daily: 30
-      keep-weekly: 12
-      keep-monthly: 12
-      keep-yearly: 3
-      prune: true
-      host: true
-      tag: true
-      schedule: "sun 7:00"
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-forget.log"
     check:
       read-data-subset: "5%"
       schedule: "*-*-01 9:00"

@@ -12,6 +12,7 @@ let
   };
 
   rpCli = mkMiseCli { name = "rp"; };
+  home = config.home.homeDirectory;
 in
 myLib.mkModule config "resticprofile" {
   home.packages = [ rpCli ];
@@ -37,6 +38,32 @@ myLib.mkModule config "resticprofile" {
     "~/.config/resticprofile/repo.key" = {
       template = ./config/repo.key.tmpl;
       secretsFile = ./secrets.yaml;
+    };
+  };
+
+  launchd.agents.resticprofile-logrotate = {
+    enable = true;
+    config = {
+      ProgramArguments = [
+        "/opt/homebrew/sbin/logrotate"
+        "--state"
+        "${home}/.local/share/resticprofile/logrotate.state"
+        "${home}/.config/resticprofile/logrotate.conf"
+      ];
+      EnvironmentVariables = {
+        PATH = myLib.launchdPath config [ ];
+        HOME = home;
+      };
+      StartCalendarInterval = [
+        {
+          Hour = 7;
+          Minute = 0;
+        }
+      ];
+      ProcessType = "Background";
+      LowPriorityIO = true;
+      StandardOutPath = "/tmp/resticprofile-logrotate.log";
+      StandardErrorPath = "/tmp/resticprofile-logrotate.err";
     };
   };
 }

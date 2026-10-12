@@ -4,8 +4,10 @@ version: "2"
 
 global:
   default-command: snapshots
-  scheduler: crond
   restic-binary: /opt/homebrew/bin/restic
+  schedule-defaults:
+    permission: user_logged_on
+    priority: background
 
 groups:
   all:
@@ -37,7 +39,6 @@ mixins:
       repository: "$REPOSITORY"
       password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
       schedule: "0,3,6,9,12,15,18,21:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-$TARGET.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
@@ -60,7 +61,6 @@ mixins:
       host: true
       tag: true
       schedule: "$FORGET_SCHEDULE"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-forget.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
@@ -69,7 +69,6 @@ mixins:
     check:
       read-data-subset: "5%"
       schedule: "$CHECK_SCHEDULE"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-check.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
@@ -83,6 +82,10 @@ profiles:
   base:
     initialize: true
     password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
+    {{- if .Env.RESTICPROFILE_SCHEDULE_ID }}
+    env:
+      GOMAXPROCS: "2"
+    {{- end }}
     backup:
       group-by: "host,tags"
       exclude:
@@ -166,7 +169,6 @@ profiles:
       tag:
         - "{{ .Profile.Name }}"
       schedule: "*:15,45"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}"
@@ -228,7 +230,6 @@ profiles:
       tag:
         - home
       schedule: "1,7,13,19:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_HOME_BACKUP_UUID}"
@@ -272,7 +273,6 @@ profiles:
       option:
         - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone --config {{ .Env.HOME }}/.config/rclone/onedrive.conf"
       schedule: "2,5,8,11,14,17,20,23:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-onedrive.log"
 
   onedrive-ops:
@@ -287,12 +287,10 @@ profiles:
       host: true
       tag: true
       schedule: "sun 7:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-forget.log"
     check:
       read-data-subset: "5%"
       schedule: "*-*-01 9:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-check.log"
 
   local-ops:
@@ -307,7 +305,6 @@ profiles:
       host: true
       tag: true
       schedule: "sun 4:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
@@ -315,7 +312,6 @@ profiles:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
     check:
       schedule: "*-*-01 6:00"
-      schedule-permission: user
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"

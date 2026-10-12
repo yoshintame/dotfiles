@@ -10,6 +10,10 @@
   system.stateVersion = "25.05";
   time.timeZone = lib.mkForce "UTC";
 
+  nix.gc.options = lib.mkForce "--delete-older-than 7d";
+  nix.settings.min-free = 1024 * 1024 * 1024;
+  nix.settings.max-free = 3 * 1024 * 1024 * 1024;
+
   boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = false;
   boot.loader.timeout = 1;

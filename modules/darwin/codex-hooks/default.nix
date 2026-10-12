@@ -27,6 +27,7 @@ let
           hooks = map (name: command name { }) [
             "tool-steering.sh"
             "commit-attribution-guard.sh"
+            "restic-lock-guard.sh"
             "git-clone-layout.sh"
           ];
         }

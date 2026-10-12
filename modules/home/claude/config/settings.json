@@ -446,6 +446,10 @@
           },
           {
             "type": "command",
+            "command": "$HOME/.claude/hooks/restic-lock-guard.sh"
+          },
+          {
+            "type": "command",
             "command": "$HOME/.claude/hooks/git-clone-layout.sh",
             "if": "Bash(git clone *)"
           }

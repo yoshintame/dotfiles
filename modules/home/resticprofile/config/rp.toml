@@ -106,25 +106,11 @@ arg "<action>" help="Schedule action" default="status" {
 }
 '''
 run = '''
-LOGROTATE_LINE="0 7 * * * /opt/homebrew/sbin/logrotate --state $HOME/.local/share/resticprofile/logrotate.state $HOME/.config/resticprofile/logrotate.conf # logrotate-resticprofile"
-_cron_add_logrotate() {
-    (crontab -l 2>/dev/null | grep -v "logrotate-resticprofile"; echo "$LOGROTATE_LINE") | crontab -
-}
-_cron_remove_logrotate() {
-    (crontab -l 2>/dev/null | grep -v "logrotate-resticprofile") | crontab -
-}
 case "${usage_action?}" in
-    up)
-        _cron_add_logrotate
-        resticprofile schedule --all
-        ;;
-    down)
-        resticprofile unschedule --all
-        _cron_remove_logrotate
-        ;;
+    up)     resticprofile schedule --all ;;
+    down)   resticprofile unschedule --all ;;
     reload)
         resticprofile unschedule --all
-        _cron_add_logrotate
         resticprofile schedule --all
         resticprofile status
         ;;

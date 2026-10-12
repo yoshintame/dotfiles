@@ -38,7 +38,6 @@ mixins:
       initialize-copy-chunker-params: true
       repository: "$REPOSITORY"
       password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
-      schedule: "0,3,6,9,12,15,18,21:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-$TARGET.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
@@ -49,8 +48,6 @@ mixins:
     default-vars:
       TARGET: ""
       HC_UUID: ""
-      FORGET_SCHEDULE: ""
-      CHECK_SCHEDULE: ""
     forget:
       group-by: "host,tags"
       keep-daily: 30
@@ -60,7 +57,6 @@ mixins:
       prune: true
       host: true
       tag: true
-      schedule: "$FORGET_SCHEDULE"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-forget.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
@@ -68,7 +64,6 @@ mixins:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/fail"
     check:
       read-data-subset: "5%"
-      schedule: "$CHECK_SCHEDULE"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-check.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
@@ -129,8 +124,8 @@ profiles:
   # home-manager (programs.rclone в modules/rclone). OAuth-токен лежит
   # в SOPS (modules/rclone/secrets.yaml). На новой машине после
   # darwin-rebuild rclone сразу работает — без интерактивного `rclone config`.
-  # `rclone.program`: cron-окружение macOS не имеет нужных путей в PATH,
-  # restic не находит rclone — указываем явный nix-путь.
+  # `rclone.program`: PATH планового задания — снимок на момент
+  # `rp schedule up`, restic может не найти rclone — указываем явный nix-путь.
   gdrive:
     inherit: base
     repository: "rclone:gdrive:backups/restic/main"
@@ -245,6 +240,8 @@ profiles:
         TARGET: b2
         HC_UUID: "${HC_COPY_TO_B2_UUID}"
         REPOSITORY: "b2:yoshintame:restic/main"
+    copy:
+      schedule: "0,3,6,9,12,15,18,21:00"
 
   local-to-gdrive:
     inherit: local
@@ -304,7 +301,6 @@ profiles:
       prune: true
       host: true
       tag: true
-      schedule: "sun 4:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
@@ -324,8 +320,8 @@ profiles:
       - name: remote-ops
         TARGET: b2
         HC_UUID: "${HC_MAINT_B2_UUID}"
-        FORGET_SCHEDULE: "sun 5:00"
-        CHECK_SCHEDULE: "*-*-01 7:00"
+    check:
+      schedule: "*-*-01 7:00"
 
   gdrive-ops:
     inherit: gdrive
@@ -333,5 +329,3 @@ profiles:
       - name: remote-ops
         TARGET: gdrive
         HC_UUID: "${HC_MAINT_GDRIVE_UUID}"
-        FORGET_SCHEDULE: "sun 6:00"
-        CHECK_SCHEDULE: "*-*-01 8:00"

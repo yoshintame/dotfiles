@@ -99,7 +99,7 @@ esac
 '''
 
 ["rp:schedule"]
-description = "Manage cron schedules"
+description = "Manage schedules"
 usage = '''
 arg "<action>" help="Schedule action" default="status" {
   choices "up" "down" "reload" "status"

@@ -10,6 +10,9 @@
   system.stateVersion = "25.05";
   time.timeZone = lib.mkForce "UTC";
 
+  nix.gc.options = "--delete-older-than 14d";
+  nix.settings.min-free = 1024 * 1024 * 1024;
+
   boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = false;
   boot.loader.timeout = 1;
@@ -18,6 +21,7 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
     device = "/dev/vda";
+    configurationLimit = 5;
   };
 
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";

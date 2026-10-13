@@ -18,7 +18,7 @@ uv = "latest"
 [settings]
 python.uv_venv_auto = true
 color_theme = "catppuccin"
-trusted_config_paths = ["~/Development/work", "~/.paseo/worktrees"]
+trusted_config_paths = ["~/Development/work", "~/Development/projects", "~/Development/yoshintame", "~/.paseo/worktrees"]
 
 [tasks."cc:model-reset"]
 description = "Вернуть дефолтную модель Claude Code на claude-opus-5-5[1m] (откат перезаписи нативным пикером расширения)"

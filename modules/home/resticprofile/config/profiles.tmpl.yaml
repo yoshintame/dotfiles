@@ -117,7 +117,7 @@ profiles:
   b2:
     inherit: base
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
-    repository: "b2:yoshintame:restic/main"
+    repository: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
   # rclone и его `[gdrive]` remote управляются декларативно через
@@ -239,7 +239,7 @@ profiles:
       - name: remote-copy
         TARGET: b2
         HC_UUID: "${HC_COPY_TO_B2_UUID}"
-        REPOSITORY: "b2:yoshintame:restic/main"
+        REPOSITORY: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
     copy:
       schedule: "0,3,6,9,12,15,18,21:00"
 

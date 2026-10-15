@@ -18,6 +18,10 @@ Host lasthaze-homelab
     Hostname lasthaze-homelab
     User yoshintame
 
+Host lasthaze-gaming
+    Hostname lasthaze-gaming
+    User yoshintame
+
 Host lasthaze-ru
     Hostname lasthaze-ru
     User root

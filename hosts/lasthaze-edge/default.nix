@@ -62,21 +62,18 @@
     homelabAddress = "100.123.237.27";
     listenAddress = "100.98.13.73";
     environmentFile = config.sops.secrets."GATUS_ENV".path;
-    backupHeartbeats =
-      lib.mapAttrs
-        (_: interval: {
-          inherit interval;
-          tokenVariable = "GATUS_BACKUP_TOKEN_MBP";
-        })
-        {
-          mbp-dev = "9h";
-          mbp-home = "14h";
-          mbp-copy-b2 = "13h";
-          mbp-copy-onedrive = "13h";
-          mbp-check-local = "768h";
-          mbp-check-b2 = "768h";
-          mbp-check-onedrive = "768h";
-        };
+    backupHeartbeats.mbp = {
+      tokenVariable = "GATUS_BACKUP_TOKEN_MBP";
+      jobs = {
+        dev-backup = "9h";
+        home-backup = "14h";
+        local-to-b2-copy = "13h";
+        local-to-onedrive-copy = "13h";
+        local-ops-check = "768h";
+        b2-ops-check = "768h";
+        onedrive-ops-check = "768h";
+      };
+    };
   };
 
   systemd.services.gatus.serviceConfig.SupplementaryGroups = [ "gatus-secrets" ];

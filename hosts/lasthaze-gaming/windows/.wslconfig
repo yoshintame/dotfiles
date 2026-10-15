@@ -1,0 +1,6 @@
+[wsl2]
+vmIdleTimeout=600000
+
+[experimental]
+autoMemoryReclaim=gradual
+sparseVhd=true

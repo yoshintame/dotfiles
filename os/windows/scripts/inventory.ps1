@@ -18,7 +18,7 @@ function Invoke-Step([string]$Name, [string]$Tool, [scriptblock]$Action) {
 
 function Invoke-Native([string]$Log, [scriptblock]$Command) {
     $global:LASTEXITCODE = 0
-    & $Command *> (Join-Path $OutDir $Log)
+    & $Command *>&1 | Out-File -FilePath (Join-Path $OutDir $Log) -Encoding utf8
     if ($LASTEXITCODE -ne 0) { throw "exit code $LASTEXITCODE, see $Log" }
 }
 

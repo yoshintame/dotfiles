@@ -3,7 +3,10 @@ import { join } from "node:path";
 
 const GENERATOR_URL = "https://schneegans.de/windows/unattend-generator/download/";
 
-const accounts = [{ name: "yoshintame", group: "Administrators" }];
+const accounts = [
+  { name: "yoshintame", group: "Administrators" },
+  { name: "ksoosha", group: "Administrators" },
+];
 
 const removedApps = [
   "3DViewer",

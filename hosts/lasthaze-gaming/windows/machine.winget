@@ -13,23 +13,29 @@ resources:
             scope: machine
 
   - name: DeveloperMode
-    type: Microsoft.Windows/Registry
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
     properties:
-      keyPath: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
-      valueName: AllowDevelopmentWithoutDevLicense
-      valueData:
-        DWord: 1
+      getScript: |
+        @{ value = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -ErrorAction SilentlyContinue).'AllowDevelopmentWithoutDevLicense' }
+      testScript: |
+        (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -ErrorAction SilentlyContinue).'AllowDevelopmentWithoutDevLicense' -eq 1
+      setScript: |
+        New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Force -ErrorAction SilentlyContinue | Out-Null
+        New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -Value 1 -PropertyType DWord -Force | Out-Null
     metadata:
       winget:
         securityContext: elevated
 
   - name: Sudo
-    type: Microsoft.Windows/Registry
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
     properties:
-      keyPath: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Sudo
-      valueName: Enabled
-      valueData:
-        DWord: 3
+      getScript: |
+        @{ value = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Sudo' -Name 'Enabled' -ErrorAction SilentlyContinue).'Enabled' }
+      testScript: |
+        (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Sudo' -Name 'Enabled' -ErrorAction SilentlyContinue).'Enabled' -eq 3
+      setScript: |
+        New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Sudo' -Force -ErrorAction SilentlyContinue | Out-Null
+        New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Sudo' -Name 'Enabled' -Value 3 -PropertyType DWord -Force | Out-Null
     metadata:
       winget:
         securityContext: elevated
@@ -467,14 +473,17 @@ resources:
         securityContext: elevated
 
   - name: SshDefaultShell
-    type: Microsoft.Windows/Registry
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
     dependsOn:
       - OpenSshServer
     properties:
-      keyPath: HKLM\SOFTWARE\OpenSSH
-      valueName: DefaultShell
-      valueData:
-        String: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+      getScript: |
+        @{ value = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\OpenSSH' -Name 'DefaultShell' -ErrorAction SilentlyContinue).'DefaultShell' }
+      testScript: |
+        (Get-ItemProperty -Path 'HKLM:\SOFTWARE\OpenSSH' -Name 'DefaultShell' -ErrorAction SilentlyContinue).'DefaultShell' -eq 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+      setScript: |
+        New-Item -Path 'HKLM:\SOFTWARE\OpenSSH' -Force -ErrorAction SilentlyContinue | Out-Null
+        New-ItemProperty -Path 'HKLM:\SOFTWARE\OpenSSH' -Name 'DefaultShell' -Value 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -PropertyType String -Force | Out-Null
     metadata:
       winget:
         securityContext: elevated
@@ -490,8 +499,9 @@ resources:
       testScript: |
         $rule = Get-NetFirewallRule -Name OpenSSH-Server-In-TCP -ErrorAction SilentlyContinue
         if (-not $rule) { return $false }
-        $remote = @(($rule | Get-NetFirewallAddressFilter).RemoteAddress) | Sort-Object
-        ($remote -join ',') -eq (@('100.64.0.0/255.192.0.0', 'fd7a:115c:a1e0::/48') | Sort-Object) -join ','
+        $remote = (@(($rule | Get-NetFirewallAddressFilter).RemoteAddress) | Sort-Object) -join ','
+        $expected = (@('100.64.0.0/255.192.0.0', 'fd7a:115c:a1e0::/48') | Sort-Object) -join ','
+        $remote -eq $expected
       setScript: |
         if (-not (Get-NetFirewallRule -Name OpenSSH-Server-In-TCP -ErrorAction SilentlyContinue)) {
             New-NetFirewallRule -Name OpenSSH-Server-In-TCP -DisplayName 'OpenSSH Server (sshd)' -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow | Out-Null

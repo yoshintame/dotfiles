@@ -88,9 +88,10 @@ resources:
     properties:
       getScript: |
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
-        @{ missing = @(& $mise ls --global --missing 2>$null) }
+        @{ missing = if (Test-Path $mise) { @(& $mise ls --global --missing 2>$null) } else { $null } }
       testScript: |
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
+        if (-not (Test-Path $mise)) { return $false }
         $missing = & $mise ls --global --missing 2>$null
         -not $missing
       setScript: |

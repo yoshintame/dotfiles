@@ -1,0 +1,14 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+      force: true
+
+- link:
+    ~/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json: modules/windows/windows-terminal/config/settings.json
+    ~/AppData/Roaming/Zed/settings.json: modules/home/zed/config/settings.json
+    ~/AppData/Roaming/Zed/keymap.json: modules/home/zed/config/keymap.json
+    ~/AppData/Roaming/Zed/themes: modules/home/zed/config/themes
+    ~/.config/mise/config.toml: modules/windows/mise/config/config.toml
+    ~/.gitconfig: modules/windows/git/config/.gitconfig
+    ~/.wslconfig: hosts/lasthaze-gaming/windows/.wslconfig

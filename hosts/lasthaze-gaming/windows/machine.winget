@@ -1,0 +1,532 @@
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2023/08/config/document.json
+metadata:
+  winget:
+    processor: dscv3
+resources:
+  - name: WingetMachineScope
+    type: Microsoft.WinGet/UserSettingsFile
+    properties:
+      action: Partial
+      settings:
+        installBehavior:
+          preferences:
+            scope: machine
+
+  - name: DeveloperMode
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
+      valueName: AllowDevelopmentWithoutDevLicense
+      valueData:
+        DWord: 1
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Sudo
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Sudo
+      valueName: Enabled
+      valueData:
+        DWord: 3
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: VirtualMachinePlatform
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    properties:
+      getScript: |
+        @{ state = (Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform).State.ToString() }
+      testScript: |
+        (Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform).State -eq 'Enabled'
+      setScript: |
+        Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart | Out-Null
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Wsl
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - VirtualMachinePlatform
+    properties:
+      id: Microsoft.WSL
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Steam
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Valve.Steam
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: EpicGamesLauncher
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: EpicGames.EpicGamesLauncher
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: EAApp
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: ElectronicArts.EADesktop
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: BattleNet
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Blizzard.BattleNet
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Sunshine
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: LizardByte.Sunshine
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Afterburner
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Guru3D.Afterburner
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Rtss
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Guru3D.RTSS
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: NvidiaApp
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: XP8CLZL93F5Z4P
+      source: msstore
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: FlydigiSpaceStation
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Flydigi.FlydigiSpaceStation
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: OnePassword
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: AgileBits.1Password
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Chrome
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Google.Chrome
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Tailscale
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Tailscale.Tailscale
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Git
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Git.Git
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Zed
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: ZedIndustries.Zed
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: PowerToys
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Microsoft.PowerToys
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: AutoHotkey
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: AutoHotkey.AutoHotkey
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Everything
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: voidtools.Everything
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: SevenZip
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: 7zip.7zip
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: QBittorrent
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: qBittorrent.qBittorrent
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: JetBrainsMonoNerdFont
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: DEVCOM.JetBrainsMonoNerdFont
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Ludusavi
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: mtkennerly.ludusavi
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Osquery
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: osquery.osquery
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Smartmontools
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: smartmontools.smartmontools
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: ObsStudio
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: OBSProject.OBSStudio
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Stremio
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Stremio.Stremio
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: TeamSpeak
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: TeamSpeakSystems.TeamSpeakClient
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: WinDirStat
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: WinDirStat.WinDirStat
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Rufus
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Rufus.Rufus
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Autoruns
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - WingetMachineScope
+    properties:
+      id: Microsoft.Sysinternals.Autoruns
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: OpenSshServer
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    properties:
+      getScript: |
+        @{ capability = (Get-WindowsCapability -Online -Name 'OpenSSH.Server~~~~0.0.1.0').State.ToString(); service = (Get-Service sshd -ErrorAction SilentlyContinue).StartType }
+      testScript: |
+        $service = Get-Service sshd -ErrorAction SilentlyContinue
+        $service -and $service.StartType -eq 'Automatic' -and $service.Status -eq 'Running'
+      setScript: |
+        if ((Get-WindowsCapability -Online -Name 'OpenSSH.Server~~~~0.0.1.0').State -ne 'Installed') {
+            Add-WindowsCapability -Online -Name 'OpenSSH.Server~~~~0.0.1.0' | Out-Null
+        }
+        Set-Service sshd -StartupType Automatic
+        Start-Service sshd
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: SshAdministratorsAuthorizedKeys
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    dependsOn:
+      - OpenSshServer
+    properties:
+      getScript: |
+        $file = 'C:\ProgramData\ssh\administrators_authorized_keys'
+        @{ content = if (Test-Path $file) { (Get-Content $file -Raw).Trim() } else { $null } }
+      testScript: |
+        $file = 'C:\ProgramData\ssh\administrators_authorized_keys'
+        $key = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev yoshintame-mbp'
+        (Test-Path $file) -and (Get-Content $file -Raw).Trim() -eq $key
+      setScript: |
+        $file = 'C:\ProgramData\ssh\administrators_authorized_keys'
+        $key = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJz1+EB4G3BZUXHDTrLCmRVFUnzEuKbSO5zIwKWGl0ev yoshintame-mbp'
+        Set-Content -Path $file -Value $key -Encoding ascii
+        icacls.exe $file /inheritance:r /grant '*S-1-5-32-544:F' /grant '*S-1-5-18:F' | Out-Null
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: SshdKeyOnlyAuth
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    dependsOn:
+      - OpenSshServer
+    properties:
+      getScript: |
+        @{ lines = @(Select-String -Path 'C:\ProgramData\ssh\sshd_config' -Pattern '^(PasswordAuthentication|KbdInteractiveAuthentication) ' | ForEach-Object Line) }
+      testScript: |
+        $lines = Get-Content 'C:\ProgramData\ssh\sshd_config'
+        ($lines -contains 'PasswordAuthentication no') -and ($lines -contains 'KbdInteractiveAuthentication no')
+      setScript: |
+        $cfg = 'C:\ProgramData\ssh\sshd_config'
+        $lines = @(Get-Content $cfg | Where-Object { $_ -notmatch '^#?(PasswordAuthentication|KbdInteractiveAuthentication) ' })
+        $lines = @('PasswordAuthentication no', 'KbdInteractiveAuthentication no') + $lines
+        $lines | Set-Content $cfg -Encoding ascii
+        Restart-Service sshd
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: SshDefaultShell
+    type: Microsoft.Windows/Registry
+    dependsOn:
+      - OpenSshServer
+    properties:
+      keyPath: HKLM\SOFTWARE\OpenSSH
+      valueName: DefaultShell
+      valueData:
+        String: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: SshFirewallTailscaleOnly
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    dependsOn:
+      - OpenSshServer
+    properties:
+      getScript: |
+        $rule = Get-NetFirewallRule -Name OpenSSH-Server-In-TCP -ErrorAction SilentlyContinue
+        @{ exists = [bool]$rule; remote = if ($rule) { @(($rule | Get-NetFirewallAddressFilter).RemoteAddress) } else { @() } }
+      testScript: |
+        $rule = Get-NetFirewallRule -Name OpenSSH-Server-In-TCP -ErrorAction SilentlyContinue
+        if (-not $rule) { return $false }
+        $remote = @(($rule | Get-NetFirewallAddressFilter).RemoteAddress) | Sort-Object
+        ($remote -join ',') -eq (@('100.64.0.0/255.192.0.0', 'fd7a:115c:a1e0::/48') | Sort-Object) -join ','
+      setScript: |
+        if (-not (Get-NetFirewallRule -Name OpenSSH-Server-In-TCP -ErrorAction SilentlyContinue)) {
+            New-NetFirewallRule -Name OpenSSH-Server-In-TCP -DisplayName 'OpenSSH Server (sshd)' -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow | Out-Null
+        }
+        Set-NetFirewallRule -Name OpenSSH-Server-In-TCP -Enabled True -RemoteAddress 100.64.0.0/10, fd7a:115c:a1e0::/48
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: EthernetWakeOnMagicPacketOnly
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    properties:
+      getScript: |
+        @{ adapters = @(Get-NetAdapter -Physical | Where-Object MediaType -eq '802.3' | Get-NetAdapterPowerManagement | Select-Object Name, WakeOnMagicPacket, WakeOnPattern) }
+      testScript: |
+        $pm = @(Get-NetAdapter -Physical | Where-Object MediaType -eq '802.3' | Get-NetAdapterPowerManagement)
+        $pm.Count -gt 0 -and -not ($pm | Where-Object { $_.WakeOnMagicPacket -ne 'Enabled' -or $_.WakeOnPattern -ne 'Disabled' })
+      setScript: |
+        Get-NetAdapter -Physical | Where-Object MediaType -eq '802.3' | Set-NetAdapterPowerManagement -WakeOnMagicPacket Enabled -WakeOnPattern Disabled
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: NoSleepOnAc
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    properties:
+      getScript: |
+        @{ standby = (powercfg /query SCHEME_CURRENT SUB_SLEEP STANDBYIDLE | Select-String 'Current AC').ToString().Trim(); hibernate = (powercfg /query SCHEME_CURRENT SUB_SLEEP HIBERNATEIDLE | Select-String 'Current AC').ToString().Trim() }
+      testScript: |
+        $standby = (powercfg /query SCHEME_CURRENT SUB_SLEEP STANDBYIDLE | Select-String 'Current AC').ToString()
+        $hibernate = (powercfg /query SCHEME_CURRENT SUB_SLEEP HIBERNATEIDLE | Select-String 'Current AC').ToString()
+        $standby -match '0x00000000$' -and $hibernate -match '0x00000000$'
+      setScript: |
+        powercfg /change standby-timeout-ac 0
+        powercfg /change hibernate-timeout-ac 0
+    metadata:
+      winget:
+        securityContext: elevated

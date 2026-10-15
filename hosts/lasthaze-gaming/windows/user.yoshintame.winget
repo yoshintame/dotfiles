@@ -1,0 +1,99 @@
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2023/08/config/document.json
+metadata:
+  winget:
+    processor: dscv3
+resources:
+  - name: WindowsTerminal
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Microsoft.WindowsTerminal
+      source: winget
+      acceptAgreements: true
+
+  - name: Mise
+    type: Microsoft.WinGet/Package
+    properties:
+      id: jdx.mise
+      source: winget
+      acceptAgreements: true
+
+  - name: Discord
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Discord.Discord
+      source: winget
+      acceptAgreements: true
+
+  - name: Telegram
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Telegram.TelegramDesktop
+      source: winget
+      acceptAgreements: true
+
+  - name: Spotify
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Spotify.Spotify
+      source: winget
+      acceptAgreements: true
+
+  - name: Osu
+    type: Microsoft.WinGet/Package
+    properties:
+      id: ppy.osu
+      source: winget
+      acceptAgreements: true
+
+  - name: GameSirNexus
+    type: Microsoft.WinGet/Package
+    properties:
+      id: 9PMJKF5NSTDR
+      source: msstore
+      acceptAgreements: true
+
+  - name: HyperXNgenuity
+    type: Microsoft.WinGet/Package
+    properties:
+      id: 9P1TBXR6QDCX
+      source: msstore
+      acceptAgreements: true
+
+  - name: WhatsApp
+    type: Microsoft.WinGet/Package
+    properties:
+      id: 9NKSQGP7F2NH
+      source: msstore
+      acceptAgreements: true
+
+  - name: Dotbot
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    dependsOn:
+      - Mise
+    properties:
+      getScript: |
+        @{ repo = Join-Path $env:USERPROFILE '.dotfiles' }
+      testScript: |
+        $false
+      setScript: |
+        $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
+        $repo = Join-Path $env:USERPROFILE '.dotfiles'
+        & $mise exec uv@0.13.1 -- uv tool run dotbot==1.24.0 -d $repo -c (Join-Path $repo 'hosts\lasthaze-gaming\windows\links.yaml')
+        if ($LASTEXITCODE -ne 0) { throw "dotbot exited with $LASTEXITCODE" }
+
+  - name: MiseTools
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    dependsOn:
+      - Dotbot
+    properties:
+      getScript: |
+        $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
+        @{ missing = @(& $mise ls --global --missing 2>$null) }
+      testScript: |
+        $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
+        $missing = & $mise ls --global --missing 2>$null
+        -not $missing
+      setScript: |
+        $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
+        & $mise install --yes
+        if ($LASTEXITCODE -ne 0) { throw "mise install exited with $LASTEXITCODE" }

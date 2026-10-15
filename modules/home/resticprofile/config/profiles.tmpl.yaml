@@ -40,8 +40,10 @@ mixins:
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-$TARGET.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-copy-$TARGET/external?success=true' || true"
       run-after-fail:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/fail"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-copy-$TARGET/external?success=false' || true"
 
   remote-ops:
     default-vars:
@@ -66,8 +68,10 @@ mixins:
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-check.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-check-$TARGET/external?success=true' || true"
       run-after-fail:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/fail"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-check-$TARGET/external?success=false' || true"
 
 profiles:
   default:
@@ -167,8 +171,10 @@ profiles:
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-dev/external?success=true' || true"
       run-after-fail:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}/fail"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-dev/external?success=false' || true"
 
   home:
     inherit: local
@@ -228,8 +234,10 @@ profiles:
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_HOME_BACKUP_UUID}"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-home/external?success=true' || true"
       run-after-fail:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_HOME_BACKUP_UUID}/fail"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-home/external?success=false' || true"
 
   local-to-b2:
     inherit: local
@@ -271,6 +279,10 @@ profiles:
         - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone --config {{ .Env.HOME }}/.config/rclone/onedrive.conf"
       schedule: "2,5,8,11,14,17,20,23:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-onedrive.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-copy-onedrive/external?success=true' || true"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-copy-onedrive/external?success=false' || true"
 
   onedrive-ops:
     inherit: onedrive
@@ -278,6 +290,10 @@ profiles:
       read-data-subset: "5%"
       schedule: "*-*-01 9:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-check.log"
+      run-after:
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-check-onedrive/external?success=true' || true"
+      run-after-fail:
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-check-onedrive/external?success=false' || true"
 
   local-ops:
     inherit: local
@@ -300,8 +316,10 @@ profiles:
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
       run-after:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-check-local/external?success=true' || true"
       run-after-fail:
         - "curl -fsS -m 10 --retry 5 https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
+        - "curl -fsS -m 10 --retry 5 -X POST -H 'Authorization: Bearer ${GATUS_BACKUP_TOKEN}' 'http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-check-local/external?success=false' || true"
 
   b2-ops:
     inherit: b2

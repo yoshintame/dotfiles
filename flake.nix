@@ -34,6 +34,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -163,6 +168,19 @@
               inputs.disko.nixosModules.disko
               inputs.srvos.nixosModules.server
               inputs.sops-nix.nixosModules.sops
+            ];
+          };
+
+          lasthaze-gaming = {
+            arch = "x86_64";
+            class = "nixos";
+            path = ./hosts/lasthaze-gaming;
+            specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
+            modules = [
+              inputs.nixos-wsl.nixosModules.default
+              ./modules/nixos/wsl
+              ./lib/nix-windows
+              ./modules/windows/windows-defaults
             ];
           };
 

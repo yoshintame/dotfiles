@@ -2,6 +2,8 @@
 {
   mkModule = import ./mk-module.nix { inherit lib; };
 
+  regValue = import ./nix-windows/values.nix { };
+
   enabled = {
     enable = true;
   };

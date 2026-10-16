@@ -26,11 +26,22 @@ in
         };
     in
     {
-      packages = builtins.listToAttrs (
-        map (name: {
-          name = "edge-${name}";
-          value = wrap name;
-        }) cliNames
-      );
+      packages =
+        builtins.listToAttrs (
+          map (name: {
+            name = "edge-${name}";
+            value = wrap name;
+          }) cliNames
+        )
+        // {
+          edge-op-sync = pkgs.writeShellApplication {
+            name = "edge-op-sync";
+            runtimeInputs = [
+              pkgs.jq
+              pkgs.sops
+            ];
+            text = builtins.readFile ./edge-op-sync.sh;
+          };
+        };
     };
 }

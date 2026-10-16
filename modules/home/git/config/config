@@ -1,6 +1,6 @@
 [user]
-    name        = Mikhail Ivanov
-    email       = m.ivanov0427@gmail.com
+	name = Mikhail Ivanov
+	email = m.ivanov0427@gmail.com
     signingkey  = key::ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIbTATm+HASu4lHB7ve40n0/0GBz7mj5zpCi+jGUy+eORgYBm2bbzsLcpf6PZPYaFoXM7tDh7kRXtb0GZgg6xVQ=
 
 [github]

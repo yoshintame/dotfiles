@@ -15,6 +15,7 @@ tap "lusingander/tap"
 tap "madzarm/tap"
 tap "mylee04/tools"
 tap "nikitabobko/tap"
+tap "nkzw-tech/tap"
 tap "osx-cross/arm"
 tap "osx-cross/avr"
 tap "peterldowns/tap"
@@ -88,12 +89,12 @@ brew "gnupg"
 brew "grc"
 # Tool for glamorous shell scripts
 brew "gum"
+# Review-first terminal diff viewer for agent-authored changesets
+brew "hunk"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # Git-compatible distributed version control system
 brew "jj"
-# TUI for interacting with the Jujutsu version control system
-brew "jjui"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # TUI playground to experiment and play with jq
@@ -182,13 +183,18 @@ brew "worktrunk"
 brew "yazi"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# A modern SSH connection manager for your terminal
+brew "gu1llaum-3/sshm/sshm", trusted: true
+# Hybrid search CLI for Claude Code chat sessions (BM25 + vector + RRF)
+brew "madzarm/tap/ccsearch", trusted: true
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
 cask "1password-cli"
 # Privacy-focused app for managing your finances
 cask "actual"
-cask "aerospace"
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "nikitabobko/tap/aerospace", trusted: true
 # Utility to add Dynamic Island like features to notch area
 cask "alcove"
 # Enable Windows-like alt-tab
@@ -207,6 +213,8 @@ cask "claude-code@latest"
 cask "codex"
 # OpenAI's Codex desktop app for managing coding agents
 cask "codex-app"
+# Visual diff tool for Git changes
+cask "nkzw-tech/tap/codiff", trusted: true
 cask "cotypist"
 # Disk space visualiser
 cask "daisydisk"
@@ -237,6 +245,8 @@ cask "fork"
 cask "gcloud-cli"
 # Git client for simultaneous branches on top of your existing workflow
 cask "gitbutler"
+# Git client focusing on productivity
+cask "gitkraken"
 # Web browser
 cask "google-chrome"
 # Desktop automation application
@@ -258,7 +268,10 @@ cask "insomnia"
 cask "jordanbaird-ice"
 # Keyboard customiser
 cask "karabiner-elements"
-cask "keyward"
+# Terminal UI for SSH keys, ~/.ssh/config, security audits, and encrypted backups
+cask "gateway-of-last-resort/tap/keyward", trusted: true
+# Wallet desktop application to maintain multiple cryptocurrencies
+cask "ledger-wallet"
 # App to manage software development and track bugs
 cask "linear"
 # Screenshot and screen recording tool
@@ -327,10 +340,14 @@ cask "shottr"
 cask "signal"
 # Team communication and collaboration software
 cask "slack"
+# Git GUI client
+cask "sourcegit"
 # Music streaming service
 cask "spotify"
 # Video game digital distribution service
 cask "steam"
+# Git client
+cask "sublime-merge"
 # Mesh VPN based on WireGuard
 cask "tailscale-app"
 cask "tana"
@@ -340,6 +357,8 @@ cask "teamspeak-client"
 cask "telegram"
 # To-do & task list manager
 cask "ticktick"
+# Git client focusing on power and productivity
+cask "tower"
 # Configurable document editor that supports Markdown
 cask "typora"
 # Open-source code editor
@@ -352,6 +371,8 @@ cask "warp"
 cask "whatsapp"
 # REST, GraphQL and gRPC client
 cask "yaak"
+# Full-featured companion app to the YubiKey
+cask "yubico-authenticator"
 # Multiplayer code editor
 cask "zed"
 # Video communication and virtual meeting platform
@@ -455,14 +476,11 @@ vscode "yoavbls.pretty-ts-errors"
 vscode "yoshintame.inlinemd-claude-bridge"
 vscode "yzhang.markdown-all-in-one"
 mas "1Password for Safari", id: 1569813296
-mas "Caramba Switcher", id: 1565826179
 mas "Dropover", id: 1355679052
 mas "ExcalidrawZ", id: 6636493997
 mas "Happ", id: 6504287215
 mas "Klack", id: 6446206067
-mas "OK JSON", id: 1576121509
+mas "LINE", id: 539883307
 mas "PDFgear", id: 6469021132
-mas "Shadowrocket", id: 932747118
 mas "TaskForge", id: 6744716215
-mas "Worklog", id: 1668882560
 mas "Xcode", id: 497799835

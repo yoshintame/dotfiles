@@ -4,9 +4,9 @@ dependencies:
 - repo_url: yoshintame/lasthaze-edge
   name: lasthaze-edge-skills
   host: github.com
-  resolved_commit: 3e65c717fcb03f916bed571539b6dd0656c8c38c
-  resolved_ref: v1.0.1
-  version: 1.0.1
+  resolved_commit: 11b0439b3a7b0d43446d2648ad3cbc0d8fdeb924
+  resolved_ref: v1.1.0
+  version: 1.1.0
   package_type: apm_package
   deployed_files:
   - .agents/skills/lasthaze-edge-decoy-site
@@ -19,16 +19,16 @@ dependencies:
   - .claude/skills/lasthaze-edge-ops/SKILL.md
   deployed_file_hashes:
     .agents/skills/lasthaze-edge-decoy-site/SKILL.md: sha256:18f567e0f8136877ddc944aa5528aeeb0e97a75f1fec1da3a9bbfb54d59c6b28
-    .agents/skills/lasthaze-edge-ops/SKILL.md: sha256:f7e825bc49105115d07f9d343322f7bec41e94fdacc53ae57f1ff5caecfce436
+    .agents/skills/lasthaze-edge-ops/SKILL.md: sha256:46fcaf9e98cfdd51e2b1725bcb4d16a2b91cb2ded5cc62510f4664b40cbbbe66
     .claude/skills/lasthaze-edge-decoy-site/SKILL.md: sha256:18f567e0f8136877ddc944aa5528aeeb0e97a75f1fec1da3a9bbfb54d59c6b28
-    .claude/skills/lasthaze-edge-ops/SKILL.md: sha256:f7e825bc49105115d07f9d343322f7bec41e94fdacc53ae57f1ff5caecfce436
-  content_hash: sha256:87bf8e57bfa67b95e4374aad300f410a59ef82f9ccc11d4e5b704ed23cf46aa8
+    .claude/skills/lasthaze-edge-ops/SKILL.md: sha256:46fcaf9e98cfdd51e2b1725bcb4d16a2b91cb2ded5cc62510f4664b40cbbbe66
+  content_hash: sha256:1aad87d19edc9328a4744cfad1be473efea2c60fe7fb8d350fb55da39faa43a9
   skill_subset:
   - lasthaze-edge-decoy-site
   - lasthaze-edge-ops
   constraint: ^1.0.0
-  resolved_tag: v1.0.1
-  resolved_at: '2026-10-12T07:31:54+00:00'
+  resolved_tag: v1.1.0
+  resolved_at: '2026-10-16T06:11:41+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -66,7 +66,7 @@ deployments:
   owners:
   - yoshintame/lasthaze-edge
   active_owner: yoshintame/lasthaze-edge
-  content_hash: sha256:f7e825bc49105115d07f9d343322f7bec41e94fdacc53ae57f1ff5caecfce436
+  content_hash: sha256:46fcaf9e98cfdd51e2b1725bcb4d16a2b91cb2ded5cc62510f4664b40cbbbe66
 - kind: project-relative
   target: codex
   value: .agents/skills/lasthaze-edge-decoy-site
@@ -102,4 +102,4 @@ deployments:
   owners:
   - yoshintame/lasthaze-edge
   active_owner: yoshintame/lasthaze-edge
-  content_hash: sha256:f7e825bc49105115d07f9d343322f7bec41e94fdacc53ae57f1ff5caecfce436
+  content_hash: sha256:46fcaf9e98cfdd51e2b1725bcb4d16a2b91cb2ded5cc62510f4664b40cbbbe66

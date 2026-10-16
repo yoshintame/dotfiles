@@ -6,6 +6,7 @@ let
     "list-users"
     "user-stats"
     "check-roster"
+    "op-sync"
   ];
 in
 {

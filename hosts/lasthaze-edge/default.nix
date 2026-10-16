@@ -69,9 +69,11 @@
         home-backup = "14h";
         local-to-b2-copy = "13h";
         local-to-onedrive-copy = "13h";
+        local-to-gdrive-copy = "13h";
         local-ops-check = "768h";
         b2-ops-check = "768h";
         onedrive-ops-check = "768h";
+        gdrive-ops-check = "768h";
       };
     };
   };

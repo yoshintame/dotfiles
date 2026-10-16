@@ -13,6 +13,7 @@ esac
 secrets="${PROXY_SECRETS_FILE:-$PWD/secrets/lasthaze-edge/edge.yaml}"
 vault="${EDGE_OP_VAULT:-Private}"
 tag="${EDGE_OP_TAG:-lasthaze-edge}"
+marker="edge-op-sync"
 prefix="lasthaze-edge — "
 
 [[ -f "$secrets" ]] || die "secrets file not found: $secrets (run from the dotfiles root)"
@@ -31,27 +32,36 @@ run() {
   "$@"
 }
 
-created=0 updated=0 archived=0 unchanged=0
+created=0 updated=0 adopted=0 archived=0 unchanged=0
 
 while IFS=$'\t' read -r name url; do
   title="$prefix$name"
-  IFS=$'\t' read -r id current < <(jq -r --arg t "$title" '
+  IFS=$'\t' read -r id current managed tags < <(jq -r --arg t "$title" --arg m "$marker" '
     [.[] | select(.title == $t)][0] // empty
-    | [.id, ((.urls // []) | (map(select(.primary)) + .)[0].href // "")]
+    | [
+        .id,
+        ((.urls // []) | (map(select(.primary)) + .)[0].href // ""),
+        ((.tags // []) | any(. == $m)),
+        ((.tags // []) + [$m] | unique | join(","))
+      ]
     | @tsv
   ' <<<"$items") || true
 
   if [[ -z "${id:-}" ]]; then
-    template="$(jq -n --arg title "$title" --arg name "$name" --arg url "$url" --arg tag "$tag" '{
+    template="$(jq -n --arg title "$title" --arg name "$name" --arg url "$url" --arg tag "$tag" --arg m "$marker" '{
       title: $title,
       category: "LOGIN",
-      tags: [$tag],
+      tags: [$tag, $m],
       urls: [{label: "subscription", primary: true, href: $url}],
       fields: [{id: "username", type: "STRING", purpose: "USERNAME", label: "username", value: $name}]
     }')"
     run op item create --vault "$vault" --format json <<<"$template" >/dev/null
     echo "created:  $name"
     created=$((created + 1))
+  elif [[ "$managed" != true ]]; then
+    run op item edit "$id" --vault "$vault" --tags "$tags" --url "$url" </dev/null >/dev/null
+    echo "adopted:  $name"
+    adopted=$((adopted + 1))
   elif [[ "$current" != "$url" ]]; then
     run op item edit "$id" --vault "$vault" --url "$url" </dev/null >/dev/null
     echo "updated:  $name"
@@ -59,15 +69,16 @@ while IFS=$'\t' read -r name url; do
   else
     unchanged=$((unchanged + 1))
   fi
-  id="" current=""
+  id="" current="" managed="" tags=""
 done < <(jq -r --arg base "$base" 'to_entries[] | [.key, $base + "/" + .value.subPath] | @tsv' <<<"$users")
 
 while IFS=$'\t' read -r id name; do
   run op item delete "$id" --vault "$vault" --archive </dev/null
   echo "archived: $name"
   archived=$((archived + 1))
-done < <(jq -r --arg p "$prefix" --argjson names "$(jq -c 'keys' <<<"$users")" '
+done < <(jq -r --arg p "$prefix" --arg m "$marker" --argjson names "$(jq -c 'keys' <<<"$users")" '
   .[]
+  | select((.tags // []) | any(. == $m))
   | select(.title | startswith($p))
   | (.title | ltrimstr($p)) as $name
   | select(any($names[]; . == $name) | not)
@@ -75,7 +86,7 @@ done < <(jq -r --arg p "$prefix" --argjson names "$(jq -c 'keys' <<<"$users")" '
   | @tsv
 ' <<<"$items")
 
-summary="created $created, updated $updated, archived $archived, unchanged $unchanged"
+summary="created $created, updated $updated, adopted $adopted, archived $archived, unchanged $unchanged"
 if $dry_run; then
   summary="dry run: $summary"
 fi

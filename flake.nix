@@ -95,6 +95,12 @@
           ./modules/nixos/sysctl-hardening
         ];
       };
+      wslAspects = [
+        inputs.nixos-wsl.nixosModules.default
+        ./modules/nixos/wsl
+        ./lib/nix-windows
+        ./modules/windows/windows-defaults
+      ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
@@ -176,12 +182,7 @@
             class = "nixos";
             path = ./hosts/lasthaze-gaming;
             specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
-            modules = [
-              inputs.nixos-wsl.nixosModules.default
-              ./modules/nixos/wsl
-              ./lib/nix-windows
-              ./modules/windows/windows-defaults
-            ];
+            modules = wslAspects;
           };
 
           lasthaze-ru = {

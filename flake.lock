@@ -280,23 +280,14 @@
       "inputs": {
         "flake-parts": [
           "flake-parts"
-        ],
-        "git-hooks": [
-          "git-hooks"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "treefmt-nix": [
-          "treefmt-nix"
         ]
       },
       "locked": {
-        "lastModified": 1792229478,
-        "narHash": "sha256-5onSntxqwDVTmf4us8ABSAIfWC4WYohMtytE7qWPzYM=",
+        "lastModified": 1792258459,
+        "narHash": "sha256-FRK+n0Irt91Ndv30IeBsFX/us9WRyBzcpv4zAncEGso=",
         "owner": "yoshintame",
         "repo": "nix-win",
-        "rev": "b2aa0715f6b8c8bbde13ec8dcf97b9a092e512eb",
+        "rev": "267ffeb42afca46a1d11b7bc07cf017e10440a9f",
         "type": "github"
       },
       "original": {

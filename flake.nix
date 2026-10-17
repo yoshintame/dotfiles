@@ -39,6 +39,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-win = {
+      url = "github:yoshintame/nix-win";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -98,7 +103,7 @@
       wslAspects = [
         inputs.nixos-wsl.nixosModules.default
         ./modules/nixos/wsl
-        ./lib/nix-windows
+        inputs.nix-win.nixosModules.default
         ./modules/windows/windows-defaults
         ./modules/windows/windows-openssh
         ./modules/windows/windows-power

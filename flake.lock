@@ -276,6 +276,26 @@
         "type": "github"
       }
     },
+    "nix-win": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792225030,
+        "narHash": "sha256-7YJj0r4Lj2zcs+GfHNYY6x5b9iq0eVaJt081gXxf0kA=",
+        "owner": "yoshintame",
+        "repo": "nix-win",
+        "rev": "d9113b094b897163c51daa57cb4ca0ce99f8e2dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yoshintame",
+        "repo": "nix-win",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_3",
@@ -402,6 +422,7 @@
         "home-manager": "home-manager",
         "homelab": "homelab",
         "nix-darwin": "nix-darwin",
+        "nix-win": "nix-win",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-darwin": "nixpkgs-darwin",

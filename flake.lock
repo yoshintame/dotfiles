@@ -283,11 +283,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792258459,
-        "narHash": "sha256-FRK+n0Irt91Ndv30IeBsFX/us9WRyBzcpv4zAncEGso=",
+        "lastModified": 1792325634,
+        "narHash": "sha256-tFGV2smVRgmgRxDQ64Bq42Pa13Exy0TQFicYOWix8bo=",
         "owner": "yoshintame",
         "repo": "nix-win",
-        "rev": "267ffeb42afca46a1d11b7bc07cf017e10440a9f",
+        "rev": "cad658543a5465fa479be4442b2bee10d85914d0",
         "type": "github"
       },
       "original": {

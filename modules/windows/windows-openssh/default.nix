@@ -14,6 +14,7 @@ myLib.mkModule config "windows-openssh" {
     firewall.rules.OpenSSH-Server-In-TCP = {
       displayName = "OpenSSH SSH Server (sshd)";
       localPort = 22;
+      interfaceAlias = "Tailscale";
       remoteAddress = [
         "100.64.0.0/10"
         "fd7a:115c:a1e0::/48"
@@ -31,15 +32,16 @@ myLib.mkModule config "windows-openssh" {
           AuthorizedKeysFile .ssh/authorized_keys
           PasswordAuthentication no
           KbdInteractiveAuthentication no
+          AllowUsers yoshintame
           Subsystem sftp sftp-server.exe
 
           Match Group administrators
                  AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
         '';
-        onChange = "powershell -NoProfile -Command Restart-Service sshd";
+        onChange = ''"%SystemRoot%\System32\OpenSSH\sshd.exe" -t && powershell -NoProfile -Command Restart-Service sshd'';
       };
       "${sshDir}\\administrators_authorized_keys" = {
-        text = lib.concatLines config.users.users.yoshintame.openssh.authorizedKeys.keys;
+        text = lib.concatLines myLib.authorizedKeys;
         grants = [
           "*S-1-5-32-544:F"
           "*S-1-5-18:F"

@@ -6,8 +6,8 @@ on:
       - flake.nix
       - flake.lock
       - hosts/lasthaze-gaming/**
-      - modules/nixos/wsl/**
-      - modules/windows/**
+      - lib/**
+      - modules/**
       - .github/workflows/nix-windows.yml
   workflow_dispatch:
 
@@ -18,18 +18,18 @@ jobs:
   tarball:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
 
-      - uses: cachix/install-nix-action@v31
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702
 
       - name: Build the lasthaze-gaming tarball
         run: |
           nix build .#nixosConfigurations.lasthaze-gaming.config.system.build.tarballBuilder
           sudo ./result/bin/nixos-wsl-tarball-builder lasthaze-gaming.wsl
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: lasthaze-gaming-wsl
           path: lasthaze-gaming.wsl
@@ -44,11 +44,11 @@ jobs:
     steps:
       - run: git config --global core.autocrlf false
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: lasthaze-gaming-wsl
 
@@ -56,7 +56,7 @@ jobs:
         run: |
           wsl --update
           wsl --install --from-file lasthaze-gaming.wsl --name NixOS --no-launch
-          wsl -d NixOS -e true
+          wsl -d NixOS -e /run/current-system/sw/bin/true
           $repo = '/mnt/' + $PWD.Drive.Name.ToLower() + ($PWD.Path.Substring(2) -replace '\\', '/')
           "REPO=$repo" >> $env:GITHUB_ENV
 

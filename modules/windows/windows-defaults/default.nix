@@ -55,14 +55,14 @@ let
     windows.registry.HKCU.Software.Microsoft.Windows.CurrentVersion.Explorer.Advanced = {
       HideFileExt = 0;
       Hidden = 1;
-      LaunchTo = 1;
+      LaunchTo = 1; # open Explorer on This PC
     };
   };
 
   system = {
     windows.registry.HKLM.SOFTWARE.Microsoft.Windows.CurrentVersion = {
-      Sudo.Enabled = 3;
-      AppModelUnlock.AllowDevelopmentWithoutDevLicense = 1;
+      Sudo.Enabled = 3; # sudo.exe inline: output and exit code stay in the calling console
+      AppModelUnlock.AllowDevelopmentWithoutDevLicense = 1; # developer mode
     };
 
     windows.power.timeouts = {
@@ -79,25 +79,27 @@ let
   debloat = {
     windows.registry.HKLM.SOFTWARE = {
       Policies.Microsoft.Windows = {
-        DataCollection.AllowTelemetry = 1;
-        System.PublishUserActivities = 0;
+        DataCollection.AllowTelemetry = 1; # required diagnostic data only; Pro treats 0 as 1
+        System.PublishUserActivities = 0; # activity history
         WindowsCopilot.TurnOffWindowsCopilot = 1;
         WindowsAI = {
-          DisableAIDataAnalysis = 1;
-          AllowRecallEnablement = 0;
+          DisableAIDataAnalysis = 1; # Recall snapshots analysis
+          AllowRecallEnablement = 0; # Recall feature itself
           TurnOffSavingSnapshots = 1;
-          DisableClickToDo = 1;
+          DisableClickToDo = 1; # Click to Do screen actions
         };
         "Windows Search" = {
+          # Cortana in search
           AllowCortana = 0;
           CortanaConsent = 0;
         };
-        CloudContent.DisableConsumerAccountStateContent = 1;
-        GameDVR.AllowGameDVR = 0;
-        "Device Metadata".PreventDeviceMetadataFromNetwork = 1;
+        CloudContent.DisableConsumerAccountStateContent = 1; # Microsoft 365 ads on the Settings home page
+        GameDVR.AllowGameDVR = 0; # Game DVR for all users
+        "Device Metadata".PreventDeviceMetadataFromNetwork = 1; # no vendor apps pulled with device drivers
       };
-      Policies.WindowsNotepad.DisableAIFeatures = 1;
+      Policies.WindowsNotepad.DisableAIFeatures = 1; # Copilot in Notepad
       Microsoft.Windows.CurrentVersion.Policies.Paint = {
+        # AI features in Paint
         DisableCocreator = 1;
         DisableGenerativeFill = 1;
         DisableImageCreator = 1;
@@ -113,58 +115,60 @@ let
           DisableAIDataAnalysis = 1;
           DisableClickToDo = 1;
         };
-        Explorer.DisableSearchBoxSuggestions = 1;
+        Explorer.DisableSearchBoxSuggestions = 1; # Bing results in Start search
       };
 
       Software.Microsoft = {
         Windows.CurrentVersion = {
-          AdvertisingInfo.Enabled = 0;
-          Privacy.TailoredExperiencesWithDiagnosticDataEnabled = 0;
+          AdvertisingInfo.Enabled = 0; # advertising ID
+          Privacy.TailoredExperiencesWithDiagnosticDataEnabled = 0; # tips and ads based on diagnostic data
           Explorer.Advanced = {
-            Start_TrackProgs = 0;
+            Start_TrackProgs = 0; # Start and search ranking by launched apps
             ShowCopilotButton = 0;
-            Start_IrisRecommendations = 0;
-            ShowSyncProviderNotifications = 0;
-            Start_AccountNotifications = 0;
+            Start_IrisRecommendations = 0; # tips and app promotions in Start
+            ShowSyncProviderNotifications = 0; # OneDrive ads in Explorer
+            Start_AccountNotifications = 0; # Microsoft account nags in Start
           };
           ContentDeliveryManager = {
-            "SubscribedContent-310093Enabled" = 0;
-            "SubscribedContent-338387Enabled" = 0;
-            "SubscribedContent-338388Enabled" = 0;
-            "SubscribedContent-338389Enabled" = 0;
-            "SubscribedContent-338393Enabled" = 0;
+            "SubscribedContent-310093Enabled" = 0; # welcome experience after updates
+            "SubscribedContent-338387Enabled" = 0; # lock screen tips
+            "SubscribedContent-338388Enabled" = 0; # suggestions in Start
+            "SubscribedContent-338389Enabled" = 0; # tips while using Windows
+            "SubscribedContent-338393Enabled" = 0; # suggested content in Settings
             "SubscribedContent-353694Enabled" = 0;
             "SubscribedContent-353696Enabled" = 0;
             "SubscribedContent-353698Enabled" = 0;
-            SystemPaneSuggestionsEnabled = 0;
-            SoftLandingEnabled = 0;
-            SilentInstalledAppsEnabled = 0;
-            RotatingLockScreenOverlayEnabled = 0;
+            SystemPaneSuggestionsEnabled = 0; # app suggestions in Start
+            SoftLandingEnabled = 0; # tips about Windows features
+            SilentInstalledAppsEnabled = 0; # silent install of promoted apps
+            RotatingLockScreenOverlayEnabled = 0; # fun facts overlay on the lock screen
           };
-          SystemSettings.AccountNotifications.EnableAccountNotifications = 0;
-          UserProfileEngagement.ScoobeSystemSettingEnabled = 0;
+          SystemSettings.AccountNotifications.EnableAccountNotifications = 0; # account notifications in Settings
+          UserProfileEngagement.ScoobeSystemSettingEnabled = 0; # "finish setting up your device" prompt
           Notifications.Settings = {
-            "Windows.SystemToast.Suggested".Enabled = 0;
-            "Windows.SystemToast.BackupReminder".Enabled = 0;
+            "Windows.SystemToast.Suggested".Enabled = 0; # suggested-service toasts
+            "Windows.SystemToast.BackupReminder".Enabled = 0; # Windows Backup reminders
           };
-          Mobility.OptedIn = 0;
-          GameDVR.AppCaptureEnabled = 0;
+          Mobility.OptedIn = 0; # Phone Link suggestions
+          GameDVR.AppCaptureEnabled = 0; # Game Bar background recording
         };
-        Speech_OneCore.Settings.OnlineSpeechPrivacy.HasAccepted = 0;
-        Input.TIPC.Enabled = 0;
+        Speech_OneCore.Settings.OnlineSpeechPrivacy.HasAccepted = 0; # online speech recognition
+        Input.TIPC.Enabled = 0; # send inking and typing data to Microsoft
         InputPersonalization = {
+          # learn from handwriting and typing
           RestrictImplicitInkCollection = 1;
           RestrictImplicitTextCollection = 1;
           TrainedDataStore.HarvestContacts = 0;
         };
-        Personalization.Settings.AcceptedPrivacyPolicy = 0;
+        Personalization.Settings.AcceptedPrivacyPolicy = 0; # speech and inking personalization consent
         Siuf.Rules = {
+          # feedback prompts: never
           NumberOfSIUFInPeriod = 0;
           PeriodInNanoSeconds = null;
         };
       };
 
-      System.GameConfigStore.GameDVR_Enabled = 0;
+      System.GameConfigStore.GameDVR_Enabled = 0; # Game DVR
     };
 
     windows.services = {

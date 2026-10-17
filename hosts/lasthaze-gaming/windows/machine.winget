@@ -12,6 +12,31 @@ resources:
           preferences:
             scope: machine
 
+  - name: VirtualMachinePlatform
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    properties:
+      getScript: |
+        @{ state = (Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform).State.ToString() }
+      testScript: |
+        (Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform).State -eq 'Enabled'
+      setScript: |
+        Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart | Out-Null
+    metadata:
+      winget:
+        securityContext: elevated
+
+  - name: Wsl
+    type: Microsoft.WinGet/Package
+    dependsOn:
+      - VirtualMachinePlatform
+    properties:
+      id: Microsoft.WSL
+      source: winget
+      acceptAgreements: true
+    metadata:
+      winget:
+        securityContext: elevated
+
   - name: Steam
     type: Microsoft.WinGet/Package
     dependsOn:

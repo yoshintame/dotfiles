@@ -20,28 +20,7 @@ myLib.mkModule config "wsl" {
 
   nix.settings.trusted-users = [ config.wsl.defaultUser ];
 
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      stdenv.cc.cc
-      zlib
-      zstd
-      openssl
-      curl
-      libffi
-      libxml2
-      expat
-      xz
-      bzip2
-      sqlite
-      ncurses
-      readline
-      icu
-      libuuid
-      util-linux
-      glib
-    ];
-  };
+  programs.nix-ld.enable = true;
 
   environment.systemPackages = [ pkgs.wget ];
 }

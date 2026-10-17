@@ -1,0 +1,68 @@
+name: nix-windows
+
+on:
+  push:
+    paths:
+      - flake.nix
+      - flake.lock
+      - hosts/lasthaze-gaming/**
+      - lib/nix-windows/**
+      - modules/nixos/wsl/**
+      - modules/windows/windows-defaults/**
+      - .github/workflows/nix-windows.yml
+  workflow_dispatch:
+
+jobs:
+  tarball:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+
+      - name: Build the lasthaze-gaming tarball
+        run: |
+          nix build .#nixosConfigurations.lasthaze-gaming.config.system.build.tarballBuilder
+          sudo ./result/bin/nixos-wsl-tarball-builder lasthaze-gaming.wsl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lasthaze-gaming-wsl
+          path: lasthaze-gaming.wsl
+          retention-days: 3
+
+  windows:
+    needs: tarball
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: lasthaze-gaming-wsl
+
+      - name: Install the distribution
+        run: |
+          wsl --update
+          wsl --install --from-file lasthaze-gaming.wsl --name NixOS --no-launch
+          wsl -d NixOS -- true
+
+      - name: Create the managed users' hives
+        run: |
+          foreach ($user in 'yoshintame', 'ksoosha') {
+            net user $user "P@ss-$(New-Guid)" /add
+            New-Item -ItemType Directory -Force "C:\Users\$user" | Out-Null
+            Copy-Item C:\Users\Default\NTUSER.DAT "C:\Users\$user\NTUSER.DAT"
+          }
+
+      - name: windows-rebuild switch
+        run: wsl -d NixOS -- windows-rebuild switch --flake "$(wsl -d NixOS -- wslpath -u $PWD)#lasthaze-gaming"
+
+      - name: windows-rebuild check
+        run: wsl -d NixOS -- windows-rebuild check --flake "$(wsl -d NixOS -- wslpath -u $PWD)#lasthaze-gaming"
+
+      - name: windows-rebuild switch again
+        run: wsl -d NixOS -- windows-rebuild switch --flake "$(wsl -d NixOS -- wslpath -u $PWD)#lasthaze-gaming"

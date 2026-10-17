@@ -5,6 +5,8 @@
     "users"
     "wsl"
     "windows-defaults"
+    "windows-openssh"
+    "windows-power"
   ];
 
   home-manager.users.yoshintame.my = myLib.enableList [

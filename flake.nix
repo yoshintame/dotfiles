@@ -100,6 +100,8 @@
         ./modules/nixos/wsl
         ./lib/nix-windows
         ./modules/windows/windows-defaults
+        ./modules/windows/windows-openssh
+        ./modules/windows/windows-power
       ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {

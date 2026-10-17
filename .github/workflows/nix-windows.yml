@@ -6,7 +6,6 @@ on:
       - flake.nix
       - flake.lock
       - hosts/lasthaze-gaming/**
-      - lib/nix-windows/**
       - modules/nixos/wsl/**
       - modules/windows/**
       - .github/workflows/nix-windows.yml

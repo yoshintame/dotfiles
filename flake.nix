@@ -42,6 +42,9 @@
     nix-win = {
       url = "github:yoshintame/nix-win";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.git-hooks.follows = "git-hooks";
     };
 
     disko = {

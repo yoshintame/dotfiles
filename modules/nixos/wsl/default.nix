@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   myLib,
   ...
 }:
@@ -15,10 +14,8 @@ myLib.mkModule config "wsl" {
     };
   };
 
-  boot.loader.systemd-boot.enable = lib.mkForce false;
-  boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
-
-  nix.settings.trusted-users = [ config.wsl.defaultUser ];
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables = false;
 
   programs.nix-ld.enable = true;
 

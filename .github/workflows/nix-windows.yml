@@ -8,15 +8,20 @@ on:
       - hosts/lasthaze-gaming/**
       - lib/nix-windows/**
       - modules/nixos/wsl/**
-      - modules/windows/windows-defaults/**
+      - modules/windows/**
       - .github/workflows/nix-windows.yml
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   tarball:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: cachix/install-nix-action@v31
 
@@ -38,7 +43,11 @@ jobs:
       run:
         shell: pwsh
     steps:
+      - run: git config --global core.autocrlf false
+
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/download-artifact@v4
         with:
@@ -48,21 +57,24 @@ jobs:
         run: |
           wsl --update
           wsl --install --from-file lasthaze-gaming.wsl --name NixOS --no-launch
-          wsl -d NixOS -- true
+          wsl -d NixOS -e true
+          $repo = '/mnt/' + $PWD.Drive.Name.ToLower() + ($PWD.Path.Substring(2) -replace '\\', '/')
+          "REPO=$repo" >> $env:GITHUB_ENV
 
       - name: Create the managed users' hives
         run: |
-          foreach ($user in 'yoshintame', 'ksoosha') {
-            net user $user "P@ss-$(New-Guid)" /add
+          $users = wsl -d NixOS -e /run/current-system/sw/bin/nix eval --json "$env:REPO#nixosConfigurations.lasthaze-gaming.config.windows.users" --apply builtins.attrNames | ConvertFrom-Json
+          foreach ($user in $users) {
+            New-LocalUser -Name $user -NoPassword | Out-Null
             New-Item -ItemType Directory -Force "C:\Users\$user" | Out-Null
-            Copy-Item C:\Users\Default\NTUSER.DAT "C:\Users\$user\NTUSER.DAT"
+            Copy-Item -Force C:\Users\Default\NTUSER.DAT "C:\Users\$user\NTUSER.DAT"
           }
 
       - name: windows-rebuild switch
-        run: wsl -d NixOS -- windows-rebuild switch --flake "$(wsl -d NixOS -- wslpath -u $PWD)#lasthaze-gaming"
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:REPO#lasthaze-gaming"
 
       - name: windows-rebuild check
-        run: wsl -d NixOS -- windows-rebuild check --flake "$(wsl -d NixOS -- wslpath -u $PWD)#lasthaze-gaming"
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild check --flake "$env:REPO#lasthaze-gaming"
 
       - name: windows-rebuild switch again
-        run: wsl -d NixOS -- windows-rebuild switch --flake "$(wsl -d NixOS -- wslpath -u $PWD)#lasthaze-gaming"
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:REPO#lasthaze-gaming"

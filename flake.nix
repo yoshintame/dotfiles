@@ -41,10 +41,7 @@
 
     nix-win = {
       url = "github:yoshintame/nix-win";
-      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.treefmt-nix.follows = "treefmt-nix";
-      inputs.git-hooks.follows = "git-hooks";
     };
 
     disko = {
@@ -101,16 +98,12 @@
           ./modules/nixos/tailscale
           ./modules/nixos/sops-age-key
           ./modules/nixos/sysctl-hardening
+          ./modules/nixos/wsl
+          ./modules/windows/windows-defaults
+          ./modules/windows/windows-openssh
+          ./modules/windows/windows-power
         ];
       };
-      wslAspects = [
-        inputs.nixos-wsl.nixosModules.default
-        ./modules/nixos/wsl
-        inputs.nix-win.nixosModules.default
-        ./modules/windows/windows-defaults
-        ./modules/windows/windows-openssh
-        ./modules/windows/windows-power
-      ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
@@ -134,7 +127,14 @@
         };
 
         perClass = class: {
-          modules = [ homeManagerModule.${class} ] ++ systemAspects.${class};
+          modules = [
+            homeManagerModule.${class}
+          ]
+          ++ inputs.nixpkgs.lib.optionals (class == "nixos") [
+            inputs.nixos-wsl.nixosModules.default
+            inputs.nix-win.nixosModules.default
+          ]
+          ++ systemAspects.${class};
         };
 
         hosts = {
@@ -192,7 +192,6 @@
             class = "nixos";
             path = ./hosts/lasthaze-gaming;
             specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
-            modules = wslAspects;
           };
 
           lasthaze-ru = {

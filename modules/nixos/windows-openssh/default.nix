@@ -38,7 +38,8 @@ myLib.mkModule config "windows-openssh" {
           Match Group administrators
                  AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
         '';
-        onChange = ''"%SystemRoot%\System32\OpenSSH\sshd.exe" -t && powershell -NoProfile -Command Restart-Service sshd'';
+        validate = file: ''"%SystemRoot%\System32\OpenSSH\sshd.exe" -t -f ${file}'';
+        onChange = "powershell -NoProfile -Command Restart-Service sshd";
       };
       "${sshDir}\\administrators_authorized_keys" = {
         text = lib.concatLines myLib.authorizedKeys;

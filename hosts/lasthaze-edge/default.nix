@@ -70,6 +70,7 @@
         local-to-b2-copy = "13h";
         local-to-onedrive-copy = "13h";
         local-to-gdrive-copy = "13h";
+        local-ops-forget = "216h";
         local-ops-check = "768h";
         b2-ops-check = "768h";
         onedrive-ops-check = "768h";

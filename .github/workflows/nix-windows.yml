@@ -1,0 +1,117 @@
+name: nix-windows
+
+on:
+  push:
+    paths:
+      - flake.nix
+      - flake.lock
+      - hosts/lasthaze-gaming/**
+      - lib/**
+      - modules/**
+      - .github/workflows/nix-windows.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tarball:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702
+
+      - name: Build the lasthaze-gaming tarball
+        run: |
+          nix build .#nixosConfigurations.lasthaze-gaming.config.system.build.tarballBuilder
+          sudo ./result/bin/nixos-wsl-tarball-builder lasthaze-gaming.wsl
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: lasthaze-gaming-wsl
+          path: lasthaze-gaming.wsl
+          retention-days: 3
+
+  windows:
+    needs: tarball
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - run: git config --global core.autocrlf false
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: lasthaze-gaming-wsl
+
+      - name: Install the distribution
+        run: |
+          wsl --update
+          wsl --install --from-file lasthaze-gaming.wsl --name NixOS --no-launch
+          wsl -d NixOS -e /run/current-system/sw/bin/true
+          $repo = '/mnt/' + $PWD.Drive.Name.ToLower() + ($PWD.Path.Substring(2) -replace '\\', '/')
+          "REPO=$repo" >> $env:GITHUB_ENV
+
+      - name: Create the managed users' hives
+        run: |
+          $users = wsl -d NixOS -e /run/current-system/sw/bin/nix eval --json "$env:REPO#nixosConfigurations.lasthaze-gaming.config.windows.users" --apply builtins.attrNames | ConvertFrom-Json
+          foreach ($user in $users) {
+            New-LocalUser -Name $user -NoPassword | Out-Null
+            New-Item -ItemType Directory -Force "C:\Users\$user" | Out-Null
+            Copy-Item -Force C:\Users\Default\NTUSER.DAT "C:\Users\$user\NTUSER.DAT"
+          }
+
+      - name: Unbind the SSH rule from the Tailscale interface the runner lacks
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP host
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          Set-Content -Path (Join-Path $dir flake.nix) -Value @"
+          {
+            inputs.dotfiles.url = "git+file://$env:REPO";
+            outputs =
+              { dotfiles, ... }:
+              {
+                nixosConfigurations.lasthaze-gaming = dotfiles.nixosConfigurations.lasthaze-gaming.extendModules {
+                  modules = [
+                    (
+                      { lib, ... }:
+                      {
+                        windows.firewall.rules.OpenSSH-Server-In-TCP.interfaceAlias = lib.mkForce null;
+                      }
+                    )
+                  ];
+                };
+              };
+          }
+          "@
+          $flake = '/mnt/' + $dir.Substring(0, 1).ToLower() + ($dir.Substring(2) -replace '\\', '/')
+          "HOST=$flake#lasthaze-gaming" >> $env:GITHUB_ENV
+
+      - name: Plant a junction at the staging directory
+        run: |
+          New-Item -ItemType Directory C:\nix-win-bait | Out-Null
+          Set-Content C:\nix-win-bait\canary bait
+          New-Item -ItemType Junction -Path "$env:ProgramData\nix-win" -Target C:\nix-win-bait | Out-Null
+
+      - name: windows-rebuild switch
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:HOST"
+
+      - name: Check the staging directory and the installed files
+        run: |
+          if (-not (Test-Path C:\nix-win-bait\canary)) { throw 'staging emptied the junction target' }
+          if ((Get-Item -Force "$env:ProgramData\nix-win").Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'the staging directory is still a link' }
+          if ((Get-Item C:\ProgramData\ssh\sshd_config).IsReadOnly) { throw 'sshd_config was installed read-only' }
+
+      - name: windows-rebuild check
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild check --flake "$env:HOST"
+
+      - name: windows-rebuild switch again
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:HOST"

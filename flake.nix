@@ -34,6 +34,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-win = {
+      url = "github:yoshintame/nix-win";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -82,12 +92,18 @@
           ./modules/darwin/codex-hooks
         ];
         nixos = [
+          inputs.nixos-wsl.nixosModules.default
+          inputs.nix-win.nixosModules.default
           ./modules/nixos/base
           ./modules/nixos/ssh
           ./modules/nixos/users
           ./modules/nixos/tailscale
           ./modules/nixos/sops-age-key
           ./modules/nixos/sysctl-hardening
+          ./modules/nixos/wsl
+          ./modules/nixos/windows-defaults
+          ./modules/nixos/windows-openssh
+          ./modules/nixos/windows-power
         ];
       };
     in
@@ -164,6 +180,13 @@
               inputs.srvos.nixosModules.server
               inputs.sops-nix.nixosModules.sops
             ];
+          };
+
+          lasthaze-gaming = {
+            arch = "x86_64";
+            class = "nixos";
+            path = ./hosts/lasthaze-gaming;
+            specialArgs.flakeRoot = "/home/yoshintame/.dotfiles";
           };
 
           lasthaze-ru = {

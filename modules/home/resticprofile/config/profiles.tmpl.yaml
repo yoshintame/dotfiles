@@ -18,7 +18,6 @@ groups:
   maintenance:
     profiles:
       - local-ops
-      - b2-ops
   check:
     profiles:
       - local-ops
@@ -41,16 +40,6 @@ mixins:
   remote-ops:
     default-vars:
       TARGET: ""
-    forget:
-      group-by: "host,tags"
-      keep-daily: 30
-      keep-weekly: 12
-      keep-monthly: 12
-      keep-yearly: 3
-      prune: true
-      host: true
-      tag: true
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-forget.log"
     check:
       read-data-subset: "5%"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-check.log"

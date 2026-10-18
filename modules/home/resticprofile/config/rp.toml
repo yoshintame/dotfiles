@@ -6,7 +6,7 @@
 description = "Run backup"
 usage = '''
 arg "<profile>" help="Backup profile" default="all" {
-  choices "all" "dev" "home"
+  choices "all" "dev" "home" "vault"
 }
 '''
 run = 'resticprofile -n ${usage_profile?} backup'
@@ -224,13 +224,14 @@ logrotate --state "$HOME/.local/share/resticprofile/logrotate.state" \
 description = "Tail profile log"
 usage = '''
 arg "<profile>" help="Log profile" default="dev" {
-  choices "dev" "home" "copy" "copy-gdrive" "local" "local-check" "b2" "b2-check" "gdrive-check"
+  choices "dev" "home" "vault" "copy" "copy-gdrive" "local" "local-check" "b2" "b2-check" "gdrive-check"
 }
 '''
 run = '''
 case "${usage_profile?}" in
     dev)          tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-dev.log" ;;
     home)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-home.log" ;;
+    vault)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-vault.log" ;;
     copy)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
     copy-gdrive)  tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-gdrive.log" ;;
     local)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log" ;;

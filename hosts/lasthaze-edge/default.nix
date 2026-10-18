@@ -67,6 +67,7 @@
       jobs = {
         dev-backup = "9h";
         home-backup = "14h";
+        vault-backup = "9h";
         local-to-b2-copy = "13h";
         local-to-onedrive-copy = "13h";
         local-to-gdrive-copy = "13h";

@@ -14,6 +14,7 @@ groups:
     profiles:
       - dev
       - home
+      - vault
   maintenance:
     profiles:
       - local-ops
@@ -237,6 +238,21 @@ profiles:
         - url: "https://hc-ping.com/${HC_HOME_BACKUP_UUID}"
       send-after-fail...:
         - url: "https://hc-ping.com/${HC_HOME_BACKUP_UUID}/fail"
+
+  vault:
+    inherit: local
+    lock: "/tmp/resticprofile-vault.lock"
+    backup:
+      source:
+        - "{{ .Env.HOME }}/Documents/obsidian/yoshintame"
+      exclude...:
+        - "**/.obsidian/workspace*.json"
+      tag:
+        - vault
+      skip-if-unchanged: true
+      retry-lock: 5m
+      schedule: "*:00,10,20,30,40,50"
+      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-vault.log"
 
   local-to-b2:
     inherit: local

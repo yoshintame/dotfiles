@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 27755027ac091a51e3097ccae381d470837c51c0
-  resolved_ref: ^1.0.0
-  version: 1.11.0
+  resolved_commit: 8e5ea829fff9e83c46d685278f7b3f873fca8ae6
+  resolved_ref: v1.12.0+8e5ea82
+  version: 1.12.0+8e5ea82
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1302,8 +1302,8 @@ dependencies:
     .agents/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
     .agents/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
     .agents/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
-    .agents/skills/homelab-add-service/SKILL.md: sha256:a4ab2999a3991a1cd02f84186cc933764d74171a368ee86021f1c6f3ecf22133
-    .agents/skills/homelab-add-service/references/examples.md: sha256:6f40d8c8526703c1fa672e7cd499d02f52cfcdec8c59473f1c3ed057101e6d6c
+    .agents/skills/homelab-add-service/SKILL.md: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
+    .agents/skills/homelab-add-service/references/examples.md: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
     .agents/skills/homelab-add-service/scripts/compose-to-homelab.ts: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
     .agents/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .agents/skills/homelab-deploy/SKILL.md: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
@@ -1359,7 +1359,7 @@ dependencies:
     .agents/skills/vscode-marketplace/vscode-marketplace.py: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
     .agents/skills/worktree-open/SKILL.md: sha256:6e6a55e7f25f3039ebecc45b85fcb5c25ec3d82d85db1b4bcf81193c5011c386
     .agents/skills/worktree-open/scripts/link-and-open.ts: sha256:583e655d5deebe9fbac0777f5a0252ec96fe01b384ea3c03bac1922edb4f5816
-    .agents/skills/wt-land/SKILL.md: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
+    .agents/skills/wt-land/SKILL.md: sha256:3a7d7584916c7c034058386553d9ec4ecfe2e9c2c3339317583ff22e3c3c4180
     .agents/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .agents/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .agents/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
@@ -1420,8 +1420,8 @@ dependencies:
     .claude/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
     .claude/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
     .claude/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
-    .claude/skills/homelab-add-service/SKILL.md: sha256:a4ab2999a3991a1cd02f84186cc933764d74171a368ee86021f1c6f3ecf22133
-    .claude/skills/homelab-add-service/references/examples.md: sha256:6f40d8c8526703c1fa672e7cd499d02f52cfcdec8c59473f1c3ed057101e6d6c
+    .claude/skills/homelab-add-service/SKILL.md: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
+    .claude/skills/homelab-add-service/references/examples.md: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
     .claude/skills/homelab-add-service/scripts/compose-to-homelab.ts: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
     .claude/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .claude/skills/homelab-deploy/SKILL.md: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
@@ -1477,11 +1477,14 @@ dependencies:
     .claude/skills/vscode-marketplace/vscode-marketplace.py: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
     .claude/skills/worktree-open/SKILL.md: sha256:6e6a55e7f25f3039ebecc45b85fcb5c25ec3d82d85db1b4bcf81193c5011c386
     .claude/skills/worktree-open/scripts/link-and-open.ts: sha256:583e655d5deebe9fbac0777f5a0252ec96fe01b384ea3c03bac1922edb4f5816
-    .claude/skills/wt-land/SKILL.md: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
+    .claude/skills/wt-land/SKILL.md: sha256:3a7d7584916c7c034058386553d9ec4ecfe2e9c2c3339317583ff22e3c3c4180
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:cfded56bfe3c55f322395d46bacdee4040815f04324671fbd7e2ca6408e6bd63
+  content_hash: sha256:7c7b0b4e3ef4dbbb4a5600030c0eb0d14daf4046669d7e89d790def2bd6b559d
+  constraint: ^1.0.0
+  resolved_tag: v1.12.0+8e5ea82
+  resolved_at: '2026-10-18T15:35:43+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -2788,7 +2791,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:a4ab2999a3991a1cd02f84186cc933764d74171a368ee86021f1c6f3ecf22133
+  content_hash: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
 - kind: project-relative
   target: claude
   value: .claude/skills/homelab-add-service/references/examples.md
@@ -2797,7 +2800,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:6f40d8c8526703c1fa672e7cd499d02f52cfcdec8c59473f1c3ed057101e6d6c
+  content_hash: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
 - kind: project-relative
   target: claude
   value: .claude/skills/homelab-add-service/scripts/compose-to-homelab.ts
@@ -4534,7 +4537,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
+  content_hash: sha256:3a7d7584916c7c034058386553d9ec4ecfe2e9c2c3339317583ff22e3c3c4180
 - kind: project-relative
   target: claude
   value: .claude/skills/wt-workflow
@@ -5067,7 +5070,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/actualize
   runtime: null
   scope: project
@@ -5076,7 +5079,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/actualize/SKILL.md
   runtime: null
   scope: project
@@ -5085,7 +5088,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:34c619c0fb744f7f97aeaeb0e917217500b0c3eb9b49bdd5ddcf54772ae1f2fe
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ai-attack-audit
   runtime: null
   scope: project
@@ -5094,7 +5097,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ai-attack-audit/SKILL.md
   runtime: null
   scope: project
@@ -5103,7 +5106,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1604e8859fc020a6096d28ecdbf8592b5257d6db7421b5a35e248dcccc827a16
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ai-attack-audit/scripts/scan.ts
   runtime: null
   scope: project
@@ -5112,7 +5115,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:13c60d04f88cef1dc7f13526cf8348751477290057b727d437c93a1b4054c059
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-friction
   runtime: null
   scope: project
@@ -5121,7 +5124,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-friction/SKILL.md
   runtime: null
   scope: project
@@ -5130,7 +5133,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:2b981ff55b21503c32d9a28225466ff187a4ff5c0105118f12ec273c50b422ba
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-friction/assets/friction.sql
   runtime: null
   scope: project
@@ -5139,7 +5142,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:7d2d487b12a2c3dc1d4d33620c8d1c9dc7cc598908915bf0cdf8fd48089231d4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-friction/scripts/decompose.py
   runtime: null
   scope: project
@@ -5148,7 +5151,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ee177cae8c825d5686d96d85f4dc7e476cd0c51e7f3deb66f214f330f2d24ecf
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-friction/scripts/miner.ts
   runtime: null
   scope: project
@@ -5157,7 +5160,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:7f1b7bb4ba30599395040d26c78fef89cb2f250bdb4473b5f44dff97dd08abcc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-permissions
   runtime: null
   scope: project
@@ -5166,7 +5169,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-permissions/SKILL.md
   runtime: null
   scope: project
@@ -5175,7 +5178,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b8be05bf80c1b3b87050787980cb9e09457934382b024240bffe2715edc1202a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/analyze-permissions/scripts/analyze-permissions.py
   runtime: null
   scope: project
@@ -5184,7 +5187,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ba470ff11952a949ef94f927aef6f58ee15857d695155937cae896fd0e7f5639
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/brew-cask
   runtime: null
   scope: project
@@ -5193,7 +5196,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/brew-cask/SKILL.md
   runtime: null
   scope: project
@@ -5202,7 +5205,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f13b235e1643b9b12397bce9320893b6b82565c4a9479d6cb4704927fc5804a2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-fork
   runtime: null
   scope: project
@@ -5211,7 +5214,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-fork-recover
   runtime: null
   scope: project
@@ -5220,7 +5223,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-fork-recover/SKILL.md
   runtime: null
   scope: project
@@ -5229,7 +5232,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-fork/SKILL.md
   runtime: null
   scope: project
@@ -5238,7 +5241,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:34d0a6c1472352d48cb4c933788a2a06858224e703ff412a6098269b4511969c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-model-reset
   runtime: null
   scope: project
@@ -5247,7 +5250,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/cc-model-reset/SKILL.md
   runtime: null
   scope: project
@@ -5256,7 +5259,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:94917e1e2363efdecf7e8069cfca7ebb9ee4df436fdfda39b2ec2d959d9e10a7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/create-skill
   runtime: null
   scope: project
@@ -5265,7 +5268,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/create-skill/SKILL.md
   runtime: null
   scope: project
@@ -5274,7 +5277,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f6fb83408529d0e8ebd697ef803f61e45bf368d2eebcc8e31ebd31eed78deadd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/create-skill/scripts/slop-lint.ts
   runtime: null
   scope: project
@@ -5283,7 +5286,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research
   runtime: null
   scope: project
@@ -5292,7 +5295,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/SKILL.md
   runtime: null
   scope: project
@@ -5301,7 +5304,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/choice.md
   runtime: null
   scope: project
@@ -5310,7 +5313,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/corpus-market.md
   runtime: null
   scope: project
@@ -5319,7 +5322,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/corpus-software.md
   runtime: null
   scope: project
@@ -5328,7 +5331,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/deep-research/references/evidence.md
   runtime: null
   scope: project
@@ -5337,7 +5340,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/delete-session
   runtime: null
   scope: project
@@ -5346,7 +5349,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/delete-session/SKILL.md
   runtime: null
   scope: project
@@ -5355,7 +5358,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/delete-session/scripts/delete-session.ts
   runtime: null
   scope: project
@@ -5364,7 +5367,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/disk-layout
   runtime: null
   scope: project
@@ -5373,7 +5376,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/disk-layout/SKILL.md
   runtime: null
   scope: project
@@ -5382,7 +5385,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:93bb40d002232ee18da2dccb903210b0e2978fa9538e10087c7ca44a5ac34cb2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx
   runtime: null
   scope: project
@@ -5391,7 +5394,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/LICENSE.txt
   runtime: null
   scope: project
@@ -5400,7 +5403,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/SKILL.md
   runtime: null
   scope: project
@@ -5409,7 +5412,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:8017469ea95fb7d28225c62daf8e2f3492a7b516fc64c18c28977cbf8980b7fe
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/__init__.py
   runtime: null
   scope: project
@@ -5418,7 +5421,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/accept_changes.py
   runtime: null
   scope: project
@@ -5427,7 +5430,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0c991d2bc7304a1248e9f3bf9b1498f0b6e76641fc457e7cbd73c99b4eef3a74
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/comment.py
   runtime: null
   scope: project
@@ -5436,7 +5439,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:37d116e5f56bb142b208c6c6a4bbcf960495abf470ddb7c6675ccfac864ba3d7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/merge_runs.py
   runtime: null
   scope: project
@@ -5445,7 +5448,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3ab367fd7fba4647943d0aa5e65203b15458551410f5ffc821d902616a4b9f40
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/helpers/__init__.py
   runtime: null
   scope: project
@@ -5454,7 +5457,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:678e42456d9e10923c8b9a93691cdd993de3433448a184fa72a0c31f4ae086d5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/helpers/pptx_chart.py
   runtime: null
   scope: project
@@ -5463,7 +5466,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:47ac266f7d39d11ede6bb0d1f3a19d801394fd2964636f1b48beb701f1832964
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/helpers/pptx_slide.py
   runtime: null
   scope: project
@@ -5472,7 +5475,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7b9f69b4a5bd6a2d9eabf9e0e3e796d7a421373145f6a8cd11f60b7ba2d6a5d0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/helpers/pptx_theme.py
   runtime: null
   scope: project
@@ -5481,7 +5484,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:ebb54c56e9c13807f5f98f0cae22d47cdd0162da8525eaa664e3f2c8c8d6bb03
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd
   runtime: null
   scope: project
@@ -5490,7 +5493,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:41b93bd8857cc68b1e43be2806a872d736a9bdd6566900062d8fdb57d7bbb354
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd
   runtime: null
   scope: project
@@ -5499,7 +5502,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3fd0586f2637b98bb9886f0e0b67d89e1cc987c2d158cc7deb5f5b9890ced412
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd
   runtime: null
   scope: project
@@ -5508,7 +5511,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:29b254ee0d10414a8504b5a08149c7baec35a60d5ff607d6b3f492aa36815f40
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd
   runtime: null
   scope: project
@@ -5517,7 +5520,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5cb76dabd8b97d1e9308a1700b90c20139be4d50792d21a7f09789f5cccd6026
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd
   runtime: null
   scope: project
@@ -5526,7 +5529,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5375417f0f5394b8dd1a7035b9679151f19a6b65df309dec10cfb4a420cb00e9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd
   runtime: null
   scope: project
@@ -5535,7 +5538,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5d389d42befbebd91945d620242347caecd3367f9a3a7cf8d97949507ae1f53c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd
   runtime: null
   scope: project
@@ -5544,7 +5547,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:b4532b6d258832953fbb3ee4c711f4fe25d3faf46a10644b2505f17010d01e88
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd
   runtime: null
   scope: project
@@ -5553,7 +5556,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bdad416b096b61d37b71603b2c949484f9070c830bdaeba93bf35e15c8900614
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd
   runtime: null
   scope: project
@@ -5562,7 +5565,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:d173c3e5d61e42e2e3a97226c632fd2ab7cc481fc4e492365b87024ab546daff
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd
   runtime: null
   scope: project
@@ -5571,7 +5574,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3c6709101c6aaa82888df5d8795c33f9e857196790eb320d9194e64be2b6bdd8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd
   runtime: null
   scope: project
@@ -5580,7 +5583,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0b364451dc36a48dd6dae0f3b6ada05fd9b71e5208211f8ee5537d7e51a587e2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd
   runtime: null
   scope: project
@@ -5589,7 +5592,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:e2abacbb9a55ce1365f8961bc1b1395bbc811e512b111000d8c333f98458dece
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd
   runtime: null
   scope: project
@@ -5598,7 +5601,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0ef4bb354ff44b923564c4ddbdda5987919d220225129ec94614a618ceafc281
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd
   runtime: null
   scope: project
@@ -5607,7 +5610,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0d103b99a4a8652f8871552a69d42d2a3760ac6a5e3ef02d979c4273257ff6a4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd
   runtime: null
   scope: project
@@ -5616,7 +5619,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9c085407751b9061c1f996f6c39ce58451be22a8d334f09175f0e89e42736285
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd
   runtime: null
   scope: project
@@ -5625,7 +5628,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bc92e36ccd233722d4c5869bec71ddc7b12e2df56059942cce5a39065cc9c368
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd
   runtime: null
   scope: project
@@ -5634,7 +5637,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7b5b7413e2c895b1e148e82e292a117d53c7ec65b0696c992edca57b61b4a74b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd
   runtime: null
   scope: project
@@ -5643,7 +5646,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3213ef1631606250f5010b42cad7ef716f7c59426367798e33c374c0ec391d3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd
   runtime: null
   scope: project
@@ -5652,7 +5655,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:12264f3c03d738311cd9237d212f1c07479e70f0cbe1ae725d29b36539aef637
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd
   runtime: null
   scope: project
@@ -5661,7 +5664,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:beffeed56945c22a77440122c8bdc426f3fcbe7f3b12ea0976c770d1f8d54578
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd
   runtime: null
   scope: project
@@ -5670,7 +5673,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f5ee623b08b6a66935e5aced2f5d8ad0fc71bf9e8e833cd490150c0fa94b8763
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd
   runtime: null
   scope: project
@@ -5679,7 +5682,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:585bedc1313b40888dcc544cb74cd939a105ee674f3b1d3aa1cc6d34f70ff155
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd
   runtime: null
   scope: project
@@ -5688,7 +5691,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:133c9f64a5c5d573b78d0a474122b22506d8eadb5e063f67cdbbb8fa2f161d0e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd
   runtime: null
   scope: project
@@ -5697,7 +5700,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6bdeb169c3717eb01108853bd9fc5a3750fb1fa5b82abbdd854d49855a40f519
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd
   runtime: null
   scope: project
@@ -5706,7 +5709,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:475dcae1e7d1ea46232db6f8481040c15e53a52a3c256831d3df204212b0e831
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd
   runtime: null
   scope: project
@@ -5715,7 +5718,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:c2dd9f61f892deae6acd8d20771ea79b12018af25f3bf8d06639c8542d218cfd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd
   runtime: null
   scope: project
@@ -5724,7 +5727,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:a539aa2fb154fa50e0f5cc97e6ad7cbc66f8ec3e3746f61ec6a8b0d5d15ecdf2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd
   runtime: null
   scope: project
@@ -5733,7 +5736,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9e0b7209fc69ab11987900404540969976000c5ebe4d4f58c43dc3842886bf3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd
   runtime: null
   scope: project
@@ -5742,7 +5745,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:451958454e8588dfc7cd945981ada142ca06ff3307937f5700df059c2b307fa8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd
   runtime: null
   scope: project
@@ -5751,7 +5754,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6de111e11403f7cd49027400755bae0ea1cabef2815f09bd40a24f0017613b24
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd
   runtime: null
   scope: project
@@ -5760,7 +5763,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f565adfef5a502044abc3a9153e157edc25af78304d335994afb958874b15e26
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/mce/mc.xsd
   runtime: null
   scope: project
@@ -5769,7 +5772,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3a37e461ecf5a8670fdec34029703401f8728ab9c96ec1739a6ae58d55212413
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-2010.xsd
   runtime: null
   scope: project
@@ -5778,7 +5781,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:568b26ee156cb9549aa439ca2158965f77b7c1602b7e0316f40ac6cf586e35f2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-2012.xsd
   runtime: null
   scope: project
@@ -5787,7 +5790,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0fa75578a000439a7988ba0c59fdc69f774bbd416cbacc14d07125b3f686cb74
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-2018.xsd
   runtime: null
   scope: project
@@ -5796,7 +5799,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:be0ff793a22dd31384650c3a4da14c2fa8062751c2e97b0e5ee852bda13c60ad
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-cex-2018.xsd
   runtime: null
   scope: project
@@ -5805,7 +5808,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:fddc2b880cabb9005aebbc7e783e53c19fec1c03df7d0e2f2076a33a0fdfd081
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-cid-2016.xsd
   runtime: null
   scope: project
@@ -5814,7 +5817,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:127ca209fa73d7cb708449cb355c871867948a96e4a74f7bf5811ef62d17991d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd
   runtime: null
   scope: project
@@ -5823,7 +5826,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:842e7163409c8d74f4d7088a8bc99500d80bc75332681a0980055b08f374a604
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/schemas/microsoft/wml-symex-2015.xsd
   runtime: null
   scope: project
@@ -5832,7 +5835,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:16f6f8072249f431370723c2cd8974672e0d9c897e00e97dd918079df934871b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/soffice.py
   runtime: null
   scope: project
@@ -5841,7 +5844,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:df2c8d7249c132a4512d744482e4b5ed0ecbe885f0bcfb1295e7e6a7ced0432c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/validate.py
   runtime: null
   scope: project
@@ -5850,7 +5853,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:346a4c89d92fff55e610f11efda48c30228815b29bdb10b987e48f7af70acf1e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/validators/__init__.py
   runtime: null
   scope: project
@@ -5859,7 +5862,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:83e0f035c5abea238d3f2c3968afbd511ed022b527b7c9cb60a9434cc34ff987
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/validators/base.py
   runtime: null
   scope: project
@@ -5868,7 +5871,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f818ea28c793ba42960fa4498265e2632a62c86f7b5d6aff6fa89dacc02d59ea
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/validators/docx.py
   runtime: null
   scope: project
@@ -5877,7 +5880,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:93d3444c0ef3f043d21a2285c46d2cda478426b930dc33dcf3b11265935517b5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/validators/pptx.py
   runtime: null
   scope: project
@@ -5886,7 +5889,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:17eadad2b7a8374ccbe4cda45693bcd6a36f9d61a7d60f9c9ceef9464dec8299
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/office/validators/redlining.py
   runtime: null
   scope: project
@@ -5895,7 +5898,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:ed50d0885eee4b9c387f546b059bcaed64086815880a5167336244f93e305123
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/templates/comments.xml
   runtime: null
   scope: project
@@ -5904,7 +5907,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:a08ba83ee8790ac9e3dc61921f4988f19edd7e06ac09d6f1897a877c1581818d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/templates/commentsExtended.xml
   runtime: null
   scope: project
@@ -5913,7 +5916,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:544eeecfeceed4b468fff163cd9c366d33641c8b8ab691ce002576197846afe8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/templates/commentsExtensible.xml
   runtime: null
   scope: project
@@ -5922,7 +5925,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bad10b3283e6ad6e7ef6d1ca5169683721ed690ee331282c65df04017e080631
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/templates/commentsIds.xml
   runtime: null
   scope: project
@@ -5931,7 +5934,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:db20f9616e004ec42ef736e80c2384e45db0f8d1194d31dc8b37c7d6ecdd6420
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/docx/scripts/templates/people.xml
   runtime: null
   scope: project
@@ -5940,7 +5943,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:056f63aa1197fd8c9dda980c9f1b9ff016fd5fa4a462df8aec5f384f39d23e37
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/done
   runtime: null
   scope: project
@@ -5949,7 +5952,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/done/SKILL.md
   runtime: null
   scope: project
@@ -5958,7 +5961,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ed6bb43b14d90998452293e2e91bfcc51e0a70471f2a96ed8ac6289638cb98c4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts
   runtime: null
   scope: project
@@ -5967,7 +5970,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/SKILL.md
   runtime: null
   scope: project
@@ -5976,7 +5979,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:384d59c20dbfb9e64fe9469e25196d239099d1c9de5b0fcd7b39b3de1a246e31
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/concurrency-and-resources.md
   runtime: null
   scope: project
@@ -5985,7 +5988,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1f55aa15a5d12679eed72ecc86516d70a99a7dae7f95dbf21121280cd461bc5c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/config-and-logging.md
   runtime: null
   scope: project
@@ -5994,7 +5997,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:757289c3d7c2010b785cd0645f4df1c4d50f9729a89d8673d68c3695b7bc53d0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/effect-stdlib-first.md
   runtime: null
   scope: project
@@ -6003,7 +6006,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9adca13e50ea369be3277e9b1e226e3fc36ea5b267081a71a78560f6fada5b90
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/effect-stdlib-first.pdf
   runtime: null
   scope: project
@@ -6012,7 +6015,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1938e4363c16ef3a0b301976a9398649c20992fca0afe5ed91e126e3c75706a7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/errors.md
   runtime: null
   scope: project
@@ -6021,7 +6024,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:eb024bd49b896c8ceb88dc37145cb188e9d0ae7049214dae4631f20cd2d81a14
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/pattern-matching.md
   runtime: null
   scope: project
@@ -6030,7 +6033,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:570304281abe918f5b2c29d77044a0b2efff447de27313b2fa1ae2b6938dbdf4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/schema-and-boundaries.md
   runtime: null
   scope: project
@@ -6039,7 +6042,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:015708f5f18378f7e541a1b8dc791932dd3b178c4545abb5d3dd65231d4dd743
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/services-and-layers.md
   runtime: null
   scope: project
@@ -6048,7 +6051,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:0fe693d194bc9f0a73341539dc977a4c387439684cae6f0855831b4b2c7d030f
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/effect-ts/references/testing.md
   runtime: null
   scope: project
@@ -6057,7 +6060,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:eac4a1acfd96b12b5dca07933bf42d162b626da2e30a4831dd967303797efcdd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract
   runtime: null
   scope: project
@@ -6066,7 +6069,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract/SKILL.md
   runtime: null
   scope: project
@@ -6075,7 +6078,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4dbdb01f3573267f0c51fe262c8b50961ba31b449b0a4083620360b4a11bdacb
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract/references/types.md
   runtime: null
   scope: project
@@ -6084,7 +6087,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:60213ec3f45b738c180cc66cfe05b228335d47e7baf7a8eca944282ebff93f7e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/extract/scripts/history-lint.ts
   runtime: null
   scope: project
@@ -6093,7 +6096,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a751f07080de402780c1a5c98597ec0323918b9a37910347e8815ab5727945fd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/fetch-reddit
   runtime: null
   scope: project
@@ -6102,7 +6105,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/fetch-reddit/SKILL.md
   runtime: null
   scope: project
@@ -6111,7 +6114,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5a82547d5fc776492c1b05e4b0e4a835be3330e758c5c758679ecf21341788c4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/fetch-reddit/scripts/fetch-reddit.py
   runtime: null
   scope: project
@@ -6120,7 +6123,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:47c48ddd8d412ce721b3e8abe4cd2f4d2cf43807a639811ecf4c83987fc80770
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-best
   runtime: null
   scope: project
@@ -6129,7 +6132,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-best/SKILL.md
   runtime: null
   scope: project
@@ -6138,7 +6141,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ea84d45656b8dc4d8d9e083e6a9102ab505079642ac59f2bd15eb78f2f0f72a4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session
   runtime: null
   scope: project
@@ -6147,7 +6150,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/SKILL.md
   runtime: null
   scope: project
@@ -6156,7 +6159,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:8c16f797121bc1b51ba0462ea9c81f1feda05bddfef25f4291f00adc3e8abc50
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/assets/cc.sql
   runtime: null
   scope: project
@@ -6165,7 +6168,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:59ed6e3ab85f4b8ab0d7eac36cbdd31f7019045b37f65852ed5d3cf23818d4a8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/scripts/open-session.ts
   runtime: null
   scope: project
@@ -6174,7 +6177,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5f935ff44a1beb8fe1290321e70b60b3ec707ec87ed23b1fa27b4a4b250f175e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/scripts/search.ts
   runtime: null
   scope: project
@@ -6183,7 +6186,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:70716dd5b8ef11e1c43f23cfd8416451233fe7f6a6917343cc38748c2e3852ec
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-session/scripts/session-meta.ts
   runtime: null
   scope: project
@@ -6192,7 +6195,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9223fb2a702939663ddd19f3cff1785697efa7fcf2d8aac24e66d9a08793abbd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-skills
   runtime: null
   scope: project
@@ -6201,7 +6204,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-skills/SKILL.md
   runtime: null
   scope: project
@@ -6210,7 +6213,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:124ebf5e19c69060565591ebbfbbe1c82bd36a1f32514a122688c1fb4af70839
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/find-skills/scripts/list-skills.ts
   runtime: null
   scope: project
@@ -6219,7 +6222,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4cc5c7212e721ab5e8d50b7f88c5a8f26a66726e85788703c970a84747d81fe0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-commit
   runtime: null
   scope: project
@@ -6228,7 +6231,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-commit/SKILL.md
   runtime: null
   scope: project
@@ -6237,7 +6240,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:781afe7329ea0d02e336d5fb4315c92064a5fa6a0a0d989dad5b1c6f0c73e4ad
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-commit/scripts/gather-context.sh
   runtime: null
   scope: project
@@ -6246,7 +6249,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5084a571b338e79234b5376fb7f1ae3f639130b1513284102a040098335ac9ce
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-ref
   runtime: null
   scope: project
@@ -6255,7 +6258,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-ref/SKILL.md
   runtime: null
   scope: project
@@ -6264,7 +6267,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:311ddbf898f9f9fa3f5766eacdfac4258b0561fa41a85bab67af12e75ce0d0da
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/git-ref/scripts/git-ref.ts
   runtime: null
   scope: project
@@ -6273,7 +6276,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:110238d272d49240d8676855a9c5720b542f37356e0c689ff771053796a7c71c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create
   runtime: null
   scope: project
@@ -6282,7 +6285,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create-independent-deep-research
   runtime: null
   scope: project
@@ -6291,7 +6294,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create-independent-deep-research/SKILL.md
   runtime: null
   scope: project
@@ -6300,7 +6303,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create/SKILL.md
   runtime: null
   scope: project
@@ -6309,7 +6312,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e6c7f6430efe05d0efb12e7ac1f7b91c2d37a13008fa40502cf8dac3741040fc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-create/scripts/handoff-create.ts
   runtime: null
   scope: project
@@ -6318,7 +6321,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-pickup
   runtime: null
   scope: project
@@ -6327,7 +6330,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-pickup/SKILL.md
   runtime: null
   scope: project
@@ -6336,7 +6339,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/handoff-pickup/scripts/handoff-pickup.ts
   runtime: null
   scope: project
@@ -6345,7 +6348,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-add-service
   runtime: null
   scope: project
@@ -6354,25 +6357,25 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-add-service/SKILL.md
   runtime: null
   scope: project
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:a4ab2999a3991a1cd02f84186cc933764d74171a368ee86021f1c6f3ecf22133
+  content_hash: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-add-service/references/examples.md
   runtime: null
   scope: project
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:6f40d8c8526703c1fa672e7cd499d02f52cfcdec8c59473f1c3ed057101e6d6c
+  content_hash: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-add-service/scripts/compose-to-homelab.ts
   runtime: null
   scope: project
@@ -6381,7 +6384,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-add-service/scripts/convert.ts
   runtime: null
   scope: project
@@ -6390,7 +6393,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-deploy
   runtime: null
   scope: project
@@ -6399,7 +6402,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/homelab-deploy/SKILL.md
   runtime: null
   scope: project
@@ -6408,7 +6411,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keybind
   runtime: null
   scope: project
@@ -6417,7 +6420,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keybind/SKILL.md
   runtime: null
   scope: project
@@ -6426,7 +6429,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update
   runtime: null
   scope: project
@@ -6435,7 +6438,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/SKILL.md
   runtime: null
   scope: project
@@ -6444,7 +6447,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/references/signing-cert.md
   runtime: null
   scope: project
@@ -6453,7 +6456,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/references/threat-model.md
   runtime: null
   scope: project
@@ -6462,7 +6465,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b8894f811078a1b0c16acb7c635b661561befe078bcfdf50b06220c20d097a25
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/build-verify-install.sh
   runtime: null
   scope: project
@@ -6471,7 +6474,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/check-update.sh
   runtime: null
   scope: project
@@ -6480,7 +6483,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/create-signing-cert.sh
   runtime: null
   scope: project
@@ -6489,7 +6492,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ebd1f2baa97c25d0fad275bb9e046543381c72658c09bfcfdd3560389916f17d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/keyswitcher-update/scripts/prepare-diff.sh
   runtime: null
   scope: project
@@ -6498,7 +6501,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6e7d2e791f599f0fc6bbdd2dbeb284a25290a149eaab3af964127ae8f0f3a2df
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/maintenance-cleanup
   runtime: null
   scope: project
@@ -6507,7 +6510,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/maintenance-cleanup/SKILL.md
   runtime: null
   scope: project
@@ -6516,7 +6519,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:895a377135aac799d308a5905e1c56f5db0fad4e5d7689850517bda84f1ed1d0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/maintenance-cleanup/scripts/scan.ts
   runtime: null
   scope: project
@@ -6525,7 +6528,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/meeting-transcribe
   runtime: null
   scope: project
@@ -6534,7 +6537,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/meeting-transcribe/SKILL.md
   runtime: null
   scope: project
@@ -6543,7 +6546,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/mobx-keystone
   runtime: null
   scope: project
@@ -6552,7 +6555,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/mobx-keystone/SKILL.md
   runtime: null
   scope: project
@@ -6561,7 +6564,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/obsidian-vault
   runtime: null
   scope: project
@@ -6570,7 +6573,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/obsidian-vault/SKILL.md
   runtime: null
   scope: project
@@ -6579,7 +6582,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/op-secrets
   runtime: null
   scope: project
@@ -6588,7 +6591,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/op-secrets/SKILL.md
   runtime: null
   scope: project
@@ -6597,7 +6600,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:582417430cac68fb998b62b7ed7c3c45844b9943a7cfaa5cf423342a49258ee4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/op-secrets/scripts/op-meta.ts
   runtime: null
   scope: project
@@ -6606,7 +6609,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:d7e9b4bc981eb5e93689cd70facd73f47d5a8278c682a6762fbf791fec6b4749
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import
   runtime: null
   scope: project
@@ -6615,7 +6618,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import/SKILL.md
   runtime: null
   scope: project
@@ -6624,7 +6627,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:90b6491b9158c77fc0c8ac9e7f601e0034834b3d6a97e518889064c71f776632
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import/scripts/deferred-import.ts
   runtime: null
   scope: project
@@ -6633,7 +6636,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:868f258276c0d2cd3384a605a7afe903c48155aefbdc9d4c1b9e878e47e77961
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paseo-import/scripts/import-current-session.ts
   runtime: null
   scope: project
@@ -6642,7 +6645,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:3c498d25c9edba6babc0c9db91ac078a6268139550ab3332a61977b47b454a6a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paused
   runtime: null
   scope: project
@@ -6651,7 +6654,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/paused/SKILL.md
   runtime: null
   scope: project
@@ -6660,7 +6663,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:32a3036f854673609070d5af3d4db9a07f955611d93c4ee95c02d183396adffc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf
   runtime: null
   scope: project
@@ -6669,7 +6672,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/LICENSE.txt
   runtime: null
   scope: project
@@ -6678,7 +6681,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/SKILL.md
   runtime: null
   scope: project
@@ -6687,7 +6690,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9f78b8359fbd4943ad260a7a1e436e5a96503406d6c34e99f69223d647d85b9c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/forms.md
   runtime: null
   scope: project
@@ -6696,7 +6699,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9530b3f57034792e0242a3abfe8b3c296466329551916f2ff6c5a70db78f7e44
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/reference.md
   runtime: null
   scope: project
@@ -6705,7 +6708,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:03a5f964f8abecbbe156f363356e927e864d7ee964f1012c84ee1bfc8acbeb95
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/check_bounding_boxes.py
   runtime: null
   scope: project
@@ -6714,7 +6717,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0ced522402dd7b3c82a0be9518cf4e485fa9cc0467d7beab6ddb04cb36fcc3e1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/check_fillable_fields.py
   runtime: null
   scope: project
@@ -6723,7 +6726,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:1fe10b9980a5493c9bbec8c20630c603eaa475b45403751c08f26738736647b8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/convert_pdf_to_images.py
   runtime: null
   scope: project
@@ -6732,7 +6735,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7f58e292a67e18a8ff000d30bad2469389546731f7e8a698cc1d0aed001ea15d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/create_validation_image.py
   runtime: null
   scope: project
@@ -6741,7 +6744,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:8fa9fd7962c9f940045b81cf6b991e7c1057c1838e3f9cc6d305007a222ffebf
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/extract_form_field_info.py
   runtime: null
   scope: project
@@ -6750,7 +6753,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bb235b36f497bbb1c7c6821cecf527bbba7213520de11219da99f7b13a38c109
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/extract_form_structure.py
   runtime: null
   scope: project
@@ -6759,7 +6762,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6814e3fe8f78c2b16d766c132b5a727ff7a31b71d76a7d46bd6e40fe50bc97c5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/fill_fillable_fields.py
   runtime: null
   scope: project
@@ -6768,7 +6771,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:d140872c2e92e41b1e05370ae8d270c5b7f5ebdf55d9905f03bc974a9c708ff5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pdf/scripts/fill_pdf_form_with_annotations.py
   runtime: null
   scope: project
@@ -6777,7 +6780,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:8a56e063a49ed53c0b0e1d312ecf8023af76816ed139486ec3b539873de202fd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx
   runtime: null
   scope: project
@@ -6786,7 +6789,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/LICENSE.txt
   runtime: null
   scope: project
@@ -6795,7 +6798,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/SKILL.md
   runtime: null
   scope: project
@@ -6804,7 +6807,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:a7ff03e2c85b636f55232a6b1555f5dd90216b7a1a359ab289d8364e6acbc6a0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/__init__.py
   runtime: null
   scope: project
@@ -6813,7 +6816,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/add_slide.py
   runtime: null
   scope: project
@@ -6822,7 +6825,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3922f819ee1f6b8bdc6aa146d1a86de70640f5f919321fe3f01a764482ff69c9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/clean.py
   runtime: null
   scope: project
@@ -6831,7 +6834,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5c808cd4dff7e02661ef3c68b5917f4e25097cc6610c92a3a7df4a6366a5c3c1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/helpers/__init__.py
   runtime: null
   scope: project
@@ -6840,7 +6843,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:678e42456d9e10923c8b9a93691cdd993de3433448a184fa72a0c31f4ae086d5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/helpers/pptx_chart.py
   runtime: null
   scope: project
@@ -6849,7 +6852,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:47ac266f7d39d11ede6bb0d1f3a19d801394fd2964636f1b48beb701f1832964
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/helpers/pptx_slide.py
   runtime: null
   scope: project
@@ -6858,7 +6861,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7b9f69b4a5bd6a2d9eabf9e0e3e796d7a421373145f6a8cd11f60b7ba2d6a5d0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/helpers/pptx_theme.py
   runtime: null
   scope: project
@@ -6867,7 +6870,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:ebb54c56e9c13807f5f98f0cae22d47cdd0162da8525eaa664e3f2c8c8d6bb03
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd
   runtime: null
   scope: project
@@ -6876,7 +6879,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:41b93bd8857cc68b1e43be2806a872d736a9bdd6566900062d8fdb57d7bbb354
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd
   runtime: null
   scope: project
@@ -6885,7 +6888,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3fd0586f2637b98bb9886f0e0b67d89e1cc987c2d158cc7deb5f5b9890ced412
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd
   runtime: null
   scope: project
@@ -6894,7 +6897,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:29b254ee0d10414a8504b5a08149c7baec35a60d5ff607d6b3f492aa36815f40
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd
   runtime: null
   scope: project
@@ -6903,7 +6906,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5cb76dabd8b97d1e9308a1700b90c20139be4d50792d21a7f09789f5cccd6026
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd
   runtime: null
   scope: project
@@ -6912,7 +6915,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5375417f0f5394b8dd1a7035b9679151f19a6b65df309dec10cfb4a420cb00e9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd
   runtime: null
   scope: project
@@ -6921,7 +6924,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5d389d42befbebd91945d620242347caecd3367f9a3a7cf8d97949507ae1f53c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd
   runtime: null
   scope: project
@@ -6930,7 +6933,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:b4532b6d258832953fbb3ee4c711f4fe25d3faf46a10644b2505f17010d01e88
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd
   runtime: null
   scope: project
@@ -6939,7 +6942,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bdad416b096b61d37b71603b2c949484f9070c830bdaeba93bf35e15c8900614
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd
   runtime: null
   scope: project
@@ -6948,7 +6951,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:d173c3e5d61e42e2e3a97226c632fd2ab7cc481fc4e492365b87024ab546daff
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd
   runtime: null
   scope: project
@@ -6957,7 +6960,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3c6709101c6aaa82888df5d8795c33f9e857196790eb320d9194e64be2b6bdd8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd
   runtime: null
   scope: project
@@ -6966,7 +6969,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0b364451dc36a48dd6dae0f3b6ada05fd9b71e5208211f8ee5537d7e51a587e2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd
   runtime: null
   scope: project
@@ -6975,7 +6978,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:e2abacbb9a55ce1365f8961bc1b1395bbc811e512b111000d8c333f98458dece
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd
   runtime: null
   scope: project
@@ -6984,7 +6987,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0ef4bb354ff44b923564c4ddbdda5987919d220225129ec94614a618ceafc281
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd
   runtime: null
   scope: project
@@ -6993,7 +6996,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0d103b99a4a8652f8871552a69d42d2a3760ac6a5e3ef02d979c4273257ff6a4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd
   runtime: null
   scope: project
@@ -7002,7 +7005,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9c085407751b9061c1f996f6c39ce58451be22a8d334f09175f0e89e42736285
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd
   runtime: null
   scope: project
@@ -7011,7 +7014,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bc92e36ccd233722d4c5869bec71ddc7b12e2df56059942cce5a39065cc9c368
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd
   runtime: null
   scope: project
@@ -7020,7 +7023,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7b5b7413e2c895b1e148e82e292a117d53c7ec65b0696c992edca57b61b4a74b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd
   runtime: null
   scope: project
@@ -7029,7 +7032,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3213ef1631606250f5010b42cad7ef716f7c59426367798e33c374c0ec391d3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd
   runtime: null
   scope: project
@@ -7038,7 +7041,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:12264f3c03d738311cd9237d212f1c07479e70f0cbe1ae725d29b36539aef637
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd
   runtime: null
   scope: project
@@ -7047,7 +7050,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:beffeed56945c22a77440122c8bdc426f3fcbe7f3b12ea0976c770d1f8d54578
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd
   runtime: null
   scope: project
@@ -7056,7 +7059,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f5ee623b08b6a66935e5aced2f5d8ad0fc71bf9e8e833cd490150c0fa94b8763
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd
   runtime: null
   scope: project
@@ -7065,7 +7068,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:585bedc1313b40888dcc544cb74cd939a105ee674f3b1d3aa1cc6d34f70ff155
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd
   runtime: null
   scope: project
@@ -7074,7 +7077,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:133c9f64a5c5d573b78d0a474122b22506d8eadb5e063f67cdbbb8fa2f161d0e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd
   runtime: null
   scope: project
@@ -7083,7 +7086,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6bdeb169c3717eb01108853bd9fc5a3750fb1fa5b82abbdd854d49855a40f519
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd
   runtime: null
   scope: project
@@ -7092,7 +7095,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:475dcae1e7d1ea46232db6f8481040c15e53a52a3c256831d3df204212b0e831
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd
   runtime: null
   scope: project
@@ -7101,7 +7104,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:c2dd9f61f892deae6acd8d20771ea79b12018af25f3bf8d06639c8542d218cfd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd
   runtime: null
   scope: project
@@ -7110,7 +7113,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:a539aa2fb154fa50e0f5cc97e6ad7cbc66f8ec3e3746f61ec6a8b0d5d15ecdf2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd
   runtime: null
   scope: project
@@ -7119,7 +7122,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9e0b7209fc69ab11987900404540969976000c5ebe4d4f58c43dc3842886bf3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd
   runtime: null
   scope: project
@@ -7128,7 +7131,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:451958454e8588dfc7cd945981ada142ca06ff3307937f5700df059c2b307fa8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd
   runtime: null
   scope: project
@@ -7137,7 +7140,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6de111e11403f7cd49027400755bae0ea1cabef2815f09bd40a24f0017613b24
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd
   runtime: null
   scope: project
@@ -7146,7 +7149,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f565adfef5a502044abc3a9153e157edc25af78304d335994afb958874b15e26
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/mce/mc.xsd
   runtime: null
   scope: project
@@ -7155,7 +7158,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3a37e461ecf5a8670fdec34029703401f8728ab9c96ec1739a6ae58d55212413
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-2010.xsd
   runtime: null
   scope: project
@@ -7164,7 +7167,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:568b26ee156cb9549aa439ca2158965f77b7c1602b7e0316f40ac6cf586e35f2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-2012.xsd
   runtime: null
   scope: project
@@ -7173,7 +7176,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0fa75578a000439a7988ba0c59fdc69f774bbd416cbacc14d07125b3f686cb74
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-2018.xsd
   runtime: null
   scope: project
@@ -7182,7 +7185,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:be0ff793a22dd31384650c3a4da14c2fa8062751c2e97b0e5ee852bda13c60ad
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-cex-2018.xsd
   runtime: null
   scope: project
@@ -7191,7 +7194,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:fddc2b880cabb9005aebbc7e783e53c19fec1c03df7d0e2f2076a33a0fdfd081
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-cid-2016.xsd
   runtime: null
   scope: project
@@ -7200,7 +7203,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:127ca209fa73d7cb708449cb355c871867948a96e4a74f7bf5811ef62d17991d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd
   runtime: null
   scope: project
@@ -7209,7 +7212,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:842e7163409c8d74f4d7088a8bc99500d80bc75332681a0980055b08f374a604
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/schemas/microsoft/wml-symex-2015.xsd
   runtime: null
   scope: project
@@ -7218,7 +7221,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:16f6f8072249f431370723c2cd8974672e0d9c897e00e97dd918079df934871b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/soffice.py
   runtime: null
   scope: project
@@ -7227,7 +7230,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:df2c8d7249c132a4512d744482e4b5ed0ecbe885f0bcfb1295e7e6a7ced0432c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/validate.py
   runtime: null
   scope: project
@@ -7236,7 +7239,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:346a4c89d92fff55e610f11efda48c30228815b29bdb10b987e48f7af70acf1e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/validators/__init__.py
   runtime: null
   scope: project
@@ -7245,7 +7248,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:83e0f035c5abea238d3f2c3968afbd511ed022b527b7c9cb60a9434cc34ff987
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/validators/base.py
   runtime: null
   scope: project
@@ -7254,7 +7257,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f818ea28c793ba42960fa4498265e2632a62c86f7b5d6aff6fa89dacc02d59ea
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/validators/docx.py
   runtime: null
   scope: project
@@ -7263,7 +7266,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:93d3444c0ef3f043d21a2285c46d2cda478426b930dc33dcf3b11265935517b5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/validators/pptx.py
   runtime: null
   scope: project
@@ -7272,7 +7275,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:17eadad2b7a8374ccbe4cda45693bcd6a36f9d61a7d60f9c9ceef9464dec8299
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/office/validators/redlining.py
   runtime: null
   scope: project
@@ -7281,7 +7284,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:ed50d0885eee4b9c387f546b059bcaed64086815880a5167336244f93e305123
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/pptx/scripts/thumbnail.py
   runtime: null
   scope: project
@@ -7290,7 +7293,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:94ef83a84346aa2d63913de0d42bb2fe902ccdc17bfac6130096ca758381793c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor
   runtime: null
   scope: project
@@ -7299,7 +7302,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/SKILL.md
   runtime: null
   scope: project
@@ -7308,7 +7311,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:131233c9ea427de9b45a69b1d97ea07b10823313e95c7126c63c51f8272cb304
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/references/duplicated-services.md
   runtime: null
   scope: project
@@ -7317,7 +7320,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5f1e583b81b963167199c289aaafb80de9f3f104841e982d9a2a337f8f033b42
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/references/repeated-io.md
   runtime: null
   scope: project
@@ -7326,7 +7329,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b61a9177a97148ab6de40ae9b72104d8c8c481aebf829afa2deba001bc04af11
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/refactor/references/single-pass-classification.md
   runtime: null
   scope: project
@@ -7335,7 +7338,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:008b7fad2e9703521543dbbf06ea046706b517ebf59e8c2dc025399cc29e4527
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-session
   runtime: null
   scope: project
@@ -7344,7 +7347,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-session/SKILL.md
   runtime: null
   scope: project
@@ -7353,7 +7356,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:4687682ccd48d9d21e13191ef5da54d19374d4f82cd1f8bb8633c0a8a3fbed33
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-session/scripts/append-custom-title.ts
   runtime: null
   scope: project
@@ -7362,7 +7365,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:05e78ecd98a4330a1c73efd475548683398c9fa1eab52c2534fef734c9002ce8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-workspace
   runtime: null
   scope: project
@@ -7371,7 +7374,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-workspace/SKILL.md
   runtime: null
   scope: project
@@ -7380,7 +7383,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c3498ea8c88e4353b06c824bd4ae38f04b566bec31cf514ba3a94c2b0b98bc47
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rename-workspace/scripts/rename-workspace.ts
   runtime: null
   scope: project
@@ -7389,7 +7392,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:2925f3aab0091c9342b5d5a6176292e55514aad10fe2407f5adface021022081
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions
   runtime: null
   scope: project
@@ -7398,7 +7401,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/SKILL.md
   runtime: null
   scope: project
@@ -7407,7 +7410,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ffecd41eccd4be5a06b554af47b4f45b76ad1c3575c3d1648b8e899e1262e046
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/scripts/lib.ts
   runtime: null
   scope: project
@@ -7416,7 +7419,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:b6864f5d3e9a944b6351d3d32a4210abf400cdc29912c3fef8e35fe9243f6dd2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/scripts/reset-sessions.ts
   runtime: null
   scope: project
@@ -7425,7 +7428,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e4b0d28d867e733feb393e970a4922658d1013b4bd985030567c5f28610ea654
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/reset-sessions/scripts/session-reaper.ts
   runtime: null
   scope: project
@@ -7434,7 +7437,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c3e7d3fffffb680e520c0719350f3be8693c5acef8983eb6f9e0c3e2dce9c3b3
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite
   runtime: null
   scope: project
@@ -7443,7 +7446,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite-audit
   runtime: null
   scope: project
@@ -7452,7 +7455,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite-audit/SKILL.md
   runtime: null
   scope: project
@@ -7461,7 +7464,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:caa4fecc562932858ef1e128db2d44682802b572374350515d1f6004fbc68267
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite-audit/scripts/audit-map.ts
   runtime: null
   scope: project
@@ -7470,7 +7473,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:5aac9a3dbd3993d400d7c20b83c4eda52f638d63580066055a5dacf13b372a14
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/rewrite/SKILL.md
   runtime: null
   scope: project
@@ -7479,7 +7482,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:d15ae6b7c227fbbda931149721e3c0ae442b99594d63ca765e26e7749b35403a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-backlog-outline
   runtime: null
   scope: project
@@ -7488,7 +7491,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-backlog-outline/SKILL.md
   runtime: null
   scope: project
@@ -7497,7 +7500,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-business-docs
   runtime: null
   scope: project
@@ -7506,7 +7509,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-business-docs/SKILL.md
   runtime: null
   scope: project
@@ -7515,7 +7518,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-code-to-jira-task
   runtime: null
   scope: project
@@ -7524,7 +7527,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-code-to-jira-task/SKILL.md
   runtime: null
   scope: project
@@ -7533,7 +7536,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-audit
   runtime: null
   scope: project
@@ -7542,7 +7545,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-audit/SKILL.md
   runtime: null
   scope: project
@@ -7551,7 +7554,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-audit/scripts/inventory.ts
   runtime: null
   scope: project
@@ -7560,7 +7563,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-to-jira-tasks
   runtime: null
   scope: project
@@ -7569,7 +7572,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-docs-to-jira-tasks/SKILL.md
   runtime: null
   scope: project
@@ -7578,7 +7581,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-frontend-api
   runtime: null
   scope: project
@@ -7587,7 +7590,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-frontend-api/SKILL.md
   runtime: null
   scope: project
@@ -7596,7 +7599,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:f6f424b09aa4f5079fb418231686278a3b377279c168307a3a38198604c2cf7a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-grafana
   runtime: null
   scope: project
@@ -7605,7 +7608,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-grafana/SKILL.md
   runtime: null
   scope: project
@@ -7614,7 +7617,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:1e2739aba630890500c9af095a215490731d7d8686b49b00d02f29d83015f5b0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-grafana/scripts/discover.ts
   runtime: null
   scope: project
@@ -7623,7 +7626,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:93ba85c84cd71be049c1cc3b9428839936575908e0e74755365de256d90f97d3
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-i18n
   runtime: null
   scope: project
@@ -7632,7 +7635,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-i18n/SKILL.md
   runtime: null
   scope: project
@@ -7641,7 +7644,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra
   runtime: null
   scope: project
@@ -7650,7 +7653,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/SKILL.md
   runtime: null
   scope: project
@@ -7659,7 +7662,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:c40efb5756b6e014d9b8df9408ffc1ce1bb66968ee1a49616d2461cdc8eb947a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/scripts/discover-hosts.ts
   runtime: null
   scope: project
@@ -7668,7 +7671,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:e60b5eedb402a850dcdff8fb5d0c5560a84911f73c84c51de70e937e077548d9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/scripts/onboardix-psql.sh
   runtime: null
   scope: project
@@ -7677,7 +7680,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:a08f7c58610c5c0099af1994bf69c2c4da7258b5ba2383714a5e277ad22dc1d7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-infra/scripts/replica-psql.sh
   runtime: null
   scope: project
@@ -7686,7 +7689,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:4112383d720d2412388ec77c650d2b6eea4205cd703f493935438378c7600e2e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-inline-docs
   runtime: null
   scope: project
@@ -7695,7 +7698,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-inline-docs/SKILL.md
   runtime: null
   scope: project
@@ -7704,7 +7707,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:139c63eb5ce3e7a9dd7872cef3ade8bbf632139ab0ce334ca2110351f0db721c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-jira
   runtime: null
   scope: project
@@ -7713,7 +7716,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-jira/JIRA_MEDIA.md
   runtime: null
   scope: project
@@ -7722,7 +7725,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:619b738b6dcd67c0098e25c5ae91e703150fcd2bdf85bcfc5ed796af82ef8a86
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-jira/SKILL.md
   runtime: null
   scope: project
@@ -7731,7 +7734,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:7027c8168911346bde040fc63584d59050ed272e3a4e759e9bf0a765940a842c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops
   runtime: null
   scope: project
@@ -7740,7 +7743,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/SKILL.md
   runtime: null
   scope: project
@@ -7749,7 +7752,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:dc843fb8d01a01c697837abe206d4be7b792c80cec9ae1220dbc3a809dc8e4d8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/scripts/delete-test-client.sql
   runtime: null
   scope: project
@@ -7758,7 +7761,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:b7716c5301fe26525fa5a4e4abe090082920a0a1ab4af4831f0c493c1975cf48
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/scripts/diag-client-partner.sql
   runtime: null
   scope: project
@@ -7767,7 +7770,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:ed5cf372fe732dcae5cc7e5e0a04edb5fd63400563e8b346192353a184fcbf6a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-prod-db-ops/scripts/fk-explore.sql
   runtime: null
   scope: project
@@ -7776,7 +7779,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:80c6abde7a02b2231b7bf3c398b15b2dab1be8c0ef9447e2480cd554e4e28ad2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-release-note
   runtime: null
   scope: project
@@ -7785,7 +7788,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-release-note/SKILL.md
   runtime: null
   scope: project
@@ -7794,7 +7797,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-update-docs-from-changes
   runtime: null
   scope: project
@@ -7803,7 +7806,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-update-docs-from-changes/SKILL.md
   runtime: null
   scope: project
@@ -7812,7 +7815,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-vault
   runtime: null
   scope: project
@@ -7821,7 +7824,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/senate-vault/SKILL.md
   runtime: null
   scope: project
@@ -7830,7 +7833,7 @@ deployments:
   active_owner: senate-exchange/ai-skills
   content_hash: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-link
   runtime: null
   scope: project
@@ -7839,7 +7842,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-link/SKILL.md
   runtime: null
   scope: project
@@ -7848,7 +7851,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:86647702b4f8d608ab3900d1b47966e022d5a10a57b9ca43bcd2a642c22c88e1
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-link/scripts/link-session-to.ts
   runtime: null
   scope: project
@@ -7857,7 +7860,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:407e397ac1e97ce751799594e36ba1773f1136efe4860bc3454f1ea85c9f391d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-status
   runtime: null
   scope: project
@@ -7866,7 +7869,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-status/SKILL.md
   runtime: null
   scope: project
@@ -7875,7 +7878,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:c46945321001780f8345537624c7d898d56e3aa410b9b4c325d966d4add4acc8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/session-status/scripts/session-status.ts
   runtime: null
   scope: project
@@ -7884,7 +7887,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:160e5c291d532c7ca1599a0daa388a57bb74e3799a3d358cbfc99598f07c1a1d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/skill-dev
   runtime: null
   scope: project
@@ -7893,7 +7896,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/skill-dev/SKILL.md
   runtime: null
   scope: project
@@ -7902,7 +7905,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e5a83dd9951eeec09325299e5a0f52ebaded42055a041d299f286852f56d74d6
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/state-reconstruction
   runtime: null
   scope: project
@@ -7911,7 +7914,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/state-reconstruction/SKILL.md
   runtime: null
   scope: project
@@ -7920,7 +7923,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:45d81038d6e065d8534899ce1670e40653880064b2bcf234a40465c26fee068e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/state-reconstruction/scripts/region-sessions.ts
   runtime: null
   scope: project
@@ -7929,7 +7932,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:f1fd433f427ed41447081f3b03cb7a59fc28a95829e8cf0babc48ebc0d21b571
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/tanstack-react-router
   runtime: null
   scope: project
@@ -7938,7 +7941,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/tanstack-react-router/SKILL.md
   runtime: null
   scope: project
@@ -7947,7 +7950,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:af7e5ae2d7aea67efcdcae373009334c03c6a1daf2f79e8c8f77d5f51af55065
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/test-discipline
   runtime: null
   scope: project
@@ -7956,7 +7959,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/test-discipline/SKILL.md
   runtime: null
   scope: project
@@ -7965,7 +7968,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/thermo-nuclear-code-quality-review
   runtime: null
   scope: project
@@ -7974,7 +7977,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
   runtime: null
   scope: project
@@ -7983,7 +7986,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:2c7d3683eeafeae7633cf4aca9a04f0030c1258a7f3f7da09ce869f3b46c6234
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style
   runtime: null
   scope: project
@@ -7992,7 +7995,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style/SKILL.md
   runtime: null
   scope: project
@@ -8001,7 +8004,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:ef190ab10b07d93fed81e3e8e76b93e92d89869f14b6fdc2578cd30a9c163cf7
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style/references/react.md
   runtime: null
   scope: project
@@ -8010,7 +8013,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fa33af4bb68ce04a0f6f7109b180336e3231726cadd8a59c34430efbcb214ad2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/ts-react-style/references/typescript.md
   runtime: null
   scope: project
@@ -8019,7 +8022,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6bb711425e2517f296064ca7ba6e1a38237b3bd9187dd1e5bc2ad61d8b09b0ef
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vault-types
   runtime: null
   scope: project
@@ -8028,7 +8031,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vault-types/SKILL.md
   runtime: null
   scope: project
@@ -8037,7 +8040,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vscode-marketplace
   runtime: null
   scope: project
@@ -8046,7 +8049,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vscode-marketplace/SKILL.md
   runtime: null
   scope: project
@@ -8055,7 +8058,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:e90041a63fe685dd9ba8b85bce17baeb716dddc641632ab131485776ef668710
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/vscode-marketplace/vscode-marketplace.py
   runtime: null
   scope: project
@@ -8064,7 +8067,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/worktree-open
   runtime: null
   scope: project
@@ -8073,7 +8076,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/worktree-open/SKILL.md
   runtime: null
   scope: project
@@ -8082,7 +8085,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:6e6a55e7f25f3039ebecc45b85fcb5c25ec3d82d85db1b4bcf81193c5011c386
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/worktree-open/scripts/link-and-open.ts
   runtime: null
   scope: project
@@ -8091,7 +8094,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:583e655d5deebe9fbac0777f5a0252ec96fe01b384ea3c03bac1922edb4f5816
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-land
   runtime: null
   scope: project
@@ -8100,16 +8103,16 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-land/SKILL.md
   runtime: null
   scope: project
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9d11d569f4aa486bbd2890d23c876ce1260bc9ec901ca28c50f51577bf27c333
+  content_hash: sha256:3a7d7584916c7c034058386553d9ec4ecfe2e9c2c3339317583ff22e3c3c4180
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-workflow
   runtime: null
   scope: project
@@ -8118,7 +8121,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/wt-workflow/SKILL.md
   runtime: null
   scope: project
@@ -8127,7 +8130,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx
   runtime: null
   scope: project
@@ -8136,7 +8139,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/LICENSE.txt
   runtime: null
   scope: project
@@ -8145,7 +8148,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/SKILL.md
   runtime: null
   scope: project
@@ -8154,7 +8157,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6712b39718fe815054abca9c3ee72f989613e6f771c8a5c58f30a65a6c905622
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/helpers/__init__.py
   runtime: null
   scope: project
@@ -8163,7 +8166,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:678e42456d9e10923c8b9a93691cdd993de3433448a184fa72a0c31f4ae086d5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/helpers/pptx_chart.py
   runtime: null
   scope: project
@@ -8172,7 +8175,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:47ac266f7d39d11ede6bb0d1f3a19d801394fd2964636f1b48beb701f1832964
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/helpers/pptx_slide.py
   runtime: null
   scope: project
@@ -8181,7 +8184,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7b9f69b4a5bd6a2d9eabf9e0e3e796d7a421373145f6a8cd11f60b7ba2d6a5d0
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/helpers/pptx_theme.py
   runtime: null
   scope: project
@@ -8190,7 +8193,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:ebb54c56e9c13807f5f98f0cae22d47cdd0162da8525eaa664e3f2c8c8d6bb03
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd
   runtime: null
   scope: project
@@ -8199,7 +8202,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:41b93bd8857cc68b1e43be2806a872d736a9bdd6566900062d8fdb57d7bbb354
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd
   runtime: null
   scope: project
@@ -8208,7 +8211,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3fd0586f2637b98bb9886f0e0b67d89e1cc987c2d158cc7deb5f5b9890ced412
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd
   runtime: null
   scope: project
@@ -8217,7 +8220,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:29b254ee0d10414a8504b5a08149c7baec35a60d5ff607d6b3f492aa36815f40
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd
   runtime: null
   scope: project
@@ -8226,7 +8229,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5cb76dabd8b97d1e9308a1700b90c20139be4d50792d21a7f09789f5cccd6026
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd
   runtime: null
   scope: project
@@ -8235,7 +8238,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5375417f0f5394b8dd1a7035b9679151f19a6b65df309dec10cfb4a420cb00e9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd
   runtime: null
   scope: project
@@ -8244,7 +8247,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:5d389d42befbebd91945d620242347caecd3367f9a3a7cf8d97949507ae1f53c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd
   runtime: null
   scope: project
@@ -8253,7 +8256,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:b4532b6d258832953fbb3ee4c711f4fe25d3faf46a10644b2505f17010d01e88
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd
   runtime: null
   scope: project
@@ -8262,7 +8265,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bdad416b096b61d37b71603b2c949484f9070c830bdaeba93bf35e15c8900614
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd
   runtime: null
   scope: project
@@ -8271,7 +8274,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:d173c3e5d61e42e2e3a97226c632fd2ab7cc481fc4e492365b87024ab546daff
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd
   runtime: null
   scope: project
@@ -8280,7 +8283,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3c6709101c6aaa82888df5d8795c33f9e857196790eb320d9194e64be2b6bdd8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd
   runtime: null
   scope: project
@@ -8289,7 +8292,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0b364451dc36a48dd6dae0f3b6ada05fd9b71e5208211f8ee5537d7e51a587e2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd
   runtime: null
   scope: project
@@ -8298,7 +8301,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:e2abacbb9a55ce1365f8961bc1b1395bbc811e512b111000d8c333f98458dece
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd
   runtime: null
   scope: project
@@ -8307,7 +8310,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0ef4bb354ff44b923564c4ddbdda5987919d220225129ec94614a618ceafc281
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd
   runtime: null
   scope: project
@@ -8316,7 +8319,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0d103b99a4a8652f8871552a69d42d2a3760ac6a5e3ef02d979c4273257ff6a4
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd
   runtime: null
   scope: project
@@ -8325,7 +8328,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9c085407751b9061c1f996f6c39ce58451be22a8d334f09175f0e89e42736285
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd
   runtime: null
   scope: project
@@ -8334,7 +8337,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:bc92e36ccd233722d4c5869bec71ddc7b12e2df56059942cce5a39065cc9c368
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd
   runtime: null
   scope: project
@@ -8343,7 +8346,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:7b5b7413e2c895b1e148e82e292a117d53c7ec65b0696c992edca57b61b4a74b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd
   runtime: null
   scope: project
@@ -8352,7 +8355,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3213ef1631606250f5010b42cad7ef716f7c59426367798e33c374c0ec391d3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd
   runtime: null
   scope: project
@@ -8361,7 +8364,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:12264f3c03d738311cd9237d212f1c07479e70f0cbe1ae725d29b36539aef637
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd
   runtime: null
   scope: project
@@ -8370,7 +8373,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:beffeed56945c22a77440122c8bdc426f3fcbe7f3b12ea0976c770d1f8d54578
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd
   runtime: null
   scope: project
@@ -8379,7 +8382,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f5ee623b08b6a66935e5aced2f5d8ad0fc71bf9e8e833cd490150c0fa94b8763
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd
   runtime: null
   scope: project
@@ -8388,7 +8391,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:585bedc1313b40888dcc544cb74cd939a105ee674f3b1d3aa1cc6d34f70ff155
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd
   runtime: null
   scope: project
@@ -8397,7 +8400,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:133c9f64a5c5d573b78d0a474122b22506d8eadb5e063f67cdbbb8fa2f161d0e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd
   runtime: null
   scope: project
@@ -8406,7 +8409,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6bdeb169c3717eb01108853bd9fc5a3750fb1fa5b82abbdd854d49855a40f519
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd
   runtime: null
   scope: project
@@ -8415,7 +8418,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:475dcae1e7d1ea46232db6f8481040c15e53a52a3c256831d3df204212b0e831
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd
   runtime: null
   scope: project
@@ -8424,7 +8427,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:c2dd9f61f892deae6acd8d20771ea79b12018af25f3bf8d06639c8542d218cfd
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd
   runtime: null
   scope: project
@@ -8433,7 +8436,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:a539aa2fb154fa50e0f5cc97e6ad7cbc66f8ec3e3746f61ec6a8b0d5d15ecdf2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd
   runtime: null
   scope: project
@@ -8442,7 +8445,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:9e0b7209fc69ab11987900404540969976000c5ebe4d4f58c43dc3842886bf3a
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd
   runtime: null
   scope: project
@@ -8451,7 +8454,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:451958454e8588dfc7cd945981ada142ca06ff3307937f5700df059c2b307fa8
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd
   runtime: null
   scope: project
@@ -8460,7 +8463,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:6de111e11403f7cd49027400755bae0ea1cabef2815f09bd40a24f0017613b24
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd
   runtime: null
   scope: project
@@ -8469,7 +8472,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f565adfef5a502044abc3a9153e157edc25af78304d335994afb958874b15e26
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/mce/mc.xsd
   runtime: null
   scope: project
@@ -8478,7 +8481,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:3a37e461ecf5a8670fdec34029703401f8728ab9c96ec1739a6ae58d55212413
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-2010.xsd
   runtime: null
   scope: project
@@ -8487,7 +8490,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:568b26ee156cb9549aa439ca2158965f77b7c1602b7e0316f40ac6cf586e35f2
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-2012.xsd
   runtime: null
   scope: project
@@ -8496,7 +8499,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:0fa75578a000439a7988ba0c59fdc69f774bbd416cbacc14d07125b3f686cb74
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-2018.xsd
   runtime: null
   scope: project
@@ -8505,7 +8508,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:be0ff793a22dd31384650c3a4da14c2fa8062751c2e97b0e5ee852bda13c60ad
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-cex-2018.xsd
   runtime: null
   scope: project
@@ -8514,7 +8517,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:fddc2b880cabb9005aebbc7e783e53c19fec1c03df7d0e2f2076a33a0fdfd081
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-cid-2016.xsd
   runtime: null
   scope: project
@@ -8523,7 +8526,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:127ca209fa73d7cb708449cb355c871867948a96e4a74f7bf5811ef62d17991d
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd
   runtime: null
   scope: project
@@ -8532,7 +8535,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:842e7163409c8d74f4d7088a8bc99500d80bc75332681a0980055b08f374a604
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/schemas/microsoft/wml-symex-2015.xsd
   runtime: null
   scope: project
@@ -8541,7 +8544,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:16f6f8072249f431370723c2cd8974672e0d9c897e00e97dd918079df934871b
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/soffice.py
   runtime: null
   scope: project
@@ -8550,7 +8553,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:df2c8d7249c132a4512d744482e4b5ed0ecbe885f0bcfb1295e7e6a7ced0432c
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/validate.py
   runtime: null
   scope: project
@@ -8559,7 +8562,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:346a4c89d92fff55e610f11efda48c30228815b29bdb10b987e48f7af70acf1e
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/validators/__init__.py
   runtime: null
   scope: project
@@ -8568,7 +8571,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:83e0f035c5abea238d3f2c3968afbd511ed022b527b7c9cb60a9434cc34ff987
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/validators/base.py
   runtime: null
   scope: project
@@ -8577,7 +8580,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:f818ea28c793ba42960fa4498265e2632a62c86f7b5d6aff6fa89dacc02d59ea
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/validators/docx.py
   runtime: null
   scope: project
@@ -8586,7 +8589,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:93d3444c0ef3f043d21a2285c46d2cda478426b930dc33dcf3b11265935517b5
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/validators/pptx.py
   runtime: null
   scope: project
@@ -8595,7 +8598,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:17eadad2b7a8374ccbe4cda45693bcd6a36f9d61a7d60f9c9ceef9464dec8299
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/office/validators/redlining.py
   runtime: null
   scope: project
@@ -8604,7 +8607,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:ed50d0885eee4b9c387f546b059bcaed64086815880a5167336244f93e305123
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/xlsx/scripts/recalc.py
   runtime: null
   scope: project
@@ -8613,7 +8616,7 @@ deployments:
   active_owner: anthropics/skills
   content_hash: sha256:66f6e726d5a53cfabea0b6471d6669deb95e54e96cb7913b687e4388da1bb3d9
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/youtube-summary
   runtime: null
   scope: project
@@ -8622,7 +8625,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: null
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/youtube-summary/SKILL.md
   runtime: null
   scope: project
@@ -8631,7 +8634,7 @@ deployments:
   active_owner: yoshintame/agent-skills
   content_hash: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
 - kind: project-relative
-  target: codex
+  target: legacy
   value: .agents/skills/youtube-summary/scripts/yt-transcript
   runtime: null
   scope: project

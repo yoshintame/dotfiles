@@ -87,6 +87,7 @@ profiles:
         - "**/.cursor/extensions"
         - "**/.claude/cache"
         - "**/.claude/debug"
+        - "**/.claude/cc.duckdb*"
         - "**/Documents/huggingface"
         - "**/Library/Application Support/CleanShot/media"
         - "**/Cache"
@@ -296,13 +297,13 @@ profiles:
     inherit: local
     forget:
       group-by: "host,tags"
-      keep-within: 7d
+      keep-within: 30d
       keep-daily: 30
       keep-weekly: 12
-      keep-monthly: unlimited
       prune: true
       host: true
       tag: true
+      schedule: "Sun 05:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
       send-after...:
         - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"

@@ -57,7 +57,7 @@ myLib.mkModule config "windows-defaults" {
     gaming.gameDvr = false;
 
     system = {
-      sudo = "inline";
+      sudo = "inputDisabled";
       developerMode = true;
       errorReporting = false;
       deviceMetadataDownload = false;

@@ -69,14 +69,13 @@ esac
 description = "Forget + prune"
 usage = '''
 arg "<target>" help="Target" default="all" {
-  choices "all" "local" "b2"
+  choices "all" "local"
 }
 '''
 run = '''
 case "${usage_target?}" in
     all)    resticprofile -n maintenance forget ;;
     local)  resticprofile -n local-ops forget ;;
-    b2)     resticprofile -n b2-ops forget ;;
 esac
 '''
 
@@ -224,7 +223,7 @@ logrotate --state "$HOME/.local/share/resticprofile/logrotate.state" \
 description = "Tail profile log"
 usage = '''
 arg "<profile>" help="Log profile" default="dev" {
-  choices "dev" "home" "vault" "copy" "copy-gdrive" "local" "local-check" "b2" "b2-check" "gdrive-check"
+  choices "dev" "home" "vault" "copy" "copy-gdrive" "local" "local-check" "b2-check" "gdrive-check"
 }
 '''
 run = '''
@@ -236,7 +235,6 @@ case "${usage_profile?}" in
     copy-gdrive)  tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-gdrive.log" ;;
     local)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log" ;;
     local-check)  tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-check.log" ;;
-    b2)           tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-forget.log" ;;
     b2-check)     tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log" ;;
     gdrive-check) tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-gdrive-ops-check.log" ;;
 esac

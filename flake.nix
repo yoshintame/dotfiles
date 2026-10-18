@@ -92,6 +92,8 @@
           ./modules/darwin/codex-hooks
         ];
         nixos = [
+          inputs.nixos-wsl.nixosModules.default
+          inputs.nix-win.nixosModules.default
           ./modules/nixos/base
           ./modules/nixos/ssh
           ./modules/nixos/users
@@ -99,9 +101,9 @@
           ./modules/nixos/sops-age-key
           ./modules/nixos/sysctl-hardening
           ./modules/nixos/wsl
-          ./modules/windows/windows-defaults
-          ./modules/windows/windows-openssh
-          ./modules/windows/windows-power
+          ./modules/nixos/windows-defaults
+          ./modules/nixos/windows-openssh
+          ./modules/nixos/windows-power
         ];
       };
     in
@@ -127,14 +129,7 @@
         };
 
         perClass = class: {
-          modules = [
-            homeManagerModule.${class}
-          ]
-          ++ inputs.nixpkgs.lib.optionals (class == "nixos") [
-            inputs.nixos-wsl.nixosModules.default
-            inputs.nix-win.nixosModules.default
-          ]
-          ++ systemAspects.${class};
+          modules = [ homeManagerModule.${class} ] ++ systemAspects.${class};
         };
 
         hosts = {

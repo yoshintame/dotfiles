@@ -41,16 +41,25 @@
         ];
       };
 
-      checks = {
-        toplevel-lasthaze-homelab = evalToplevel "lasthaze-homelab" self.nixosConfigurations.lasthaze-homelab.config.system.build.toplevel;
-        toplevel-lasthaze-edge = evalToplevel "lasthaze-edge" self.nixosConfigurations.lasthaze-edge.config.system.build.toplevel;
-        toplevel-lasthaze-gaming = evalToplevel "lasthaze-gaming" self.nixosConfigurations.lasthaze-gaming.config.system.build.toplevel;
-        windows-lasthaze-gaming = evalToplevel "windows-lasthaze-gaming" self.nixosConfigurations.lasthaze-gaming.config.windows.build.toplevel;
-        toplevel-lasthaze-ru = evalToplevel "lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.toplevel;
-        image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;
-      }
-      // lib.optionalAttrs (system == "aarch64-darwin") {
-        toplevel-lasthaze-mbp = evalToplevel "lasthaze-mbp" self.darwinConfigurations.lasthaze-mbp.config.system.build.toplevel;
-      };
+      checks =
+        lib.mapAttrs' (
+          name: host:
+          lib.nameValuePair "toplevel-${name}" (evalToplevel name host.config.system.build.toplevel)
+        ) self.nixosConfigurations
+        // lib.mapAttrs' (
+          name: host:
+          lib.nameValuePair "windows-${name}" (
+            evalToplevel "windows-${name}" host.config.windows.build.toplevel
+          )
+        ) (lib.filterAttrs (_: host: host.config.windows.enable) self.nixosConfigurations)
+        // {
+          image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;
+        }
+        // lib.optionalAttrs (system == "aarch64-darwin") (
+          lib.mapAttrs' (
+            name: host:
+            lib.nameValuePair "toplevel-${name}" (evalToplevel name host.config.system.build.toplevel)
+          ) self.darwinConfigurations
+        );
     };
 }

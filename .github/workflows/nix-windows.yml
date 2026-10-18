@@ -69,11 +69,49 @@ jobs:
             Copy-Item -Force C:\Users\Default\NTUSER.DAT "C:\Users\$user\NTUSER.DAT"
           }
 
+      - name: Unbind the SSH rule from the Tailscale interface the runner lacks
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP host
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          Set-Content -Path (Join-Path $dir flake.nix) -Value @"
+          {
+            inputs.dotfiles.url = "git+file://$env:REPO";
+            outputs =
+              { dotfiles, ... }:
+              {
+                nixosConfigurations.lasthaze-gaming = dotfiles.nixosConfigurations.lasthaze-gaming.extendModules {
+                  modules = [
+                    (
+                      { lib, ... }:
+                      {
+                        windows.firewall.rules.OpenSSH-Server-In-TCP.interfaceAlias = lib.mkForce null;
+                      }
+                    )
+                  ];
+                };
+              };
+          }
+          "@
+          $flake = '/mnt/' + $dir.Substring(0, 1).ToLower() + ($dir.Substring(2) -replace '\\', '/')
+          "HOST=$flake#lasthaze-gaming" >> $env:GITHUB_ENV
+
+      - name: Plant a junction at the staging directory
+        run: |
+          New-Item -ItemType Directory C:\nix-win-bait | Out-Null
+          Set-Content C:\nix-win-bait\canary bait
+          New-Item -ItemType Junction -Path "$env:ProgramData\nix-win" -Target C:\nix-win-bait | Out-Null
+
       - name: windows-rebuild switch
-        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:REPO#lasthaze-gaming"
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:HOST"
+
+      - name: Check the staging directory and the installed files
+        run: |
+          if (-not (Test-Path C:\nix-win-bait\canary)) { throw 'staging emptied the junction target' }
+          if ((Get-Item -Force "$env:ProgramData\nix-win").Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'the staging directory is still a link' }
+          if ((Get-Item C:\ProgramData\ssh\sshd_config).IsReadOnly) { throw 'sshd_config was installed read-only' }
 
       - name: windows-rebuild check
-        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild check --flake "$env:REPO#lasthaze-gaming"
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild check --flake "$env:HOST"
 
       - name: windows-rebuild switch again
-        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:REPO#lasthaze-gaming"
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:HOST"

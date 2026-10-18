@@ -62,7 +62,6 @@
       "Bash(file *)",
       "Bash(find *)",
       "Bash(FORCE_NPM=1 npm install)",
-      "Bash(gh api:*)",
       "Bash(gh issue list *)",
       "Bash(gh issue view *)",
       "Bash(gh pr checks *)",
@@ -334,33 +333,16 @@
       "Edit(//Users/yoshintame/.claude/skills/**)",
       "Write(//Users/yoshintame/.claude/skills/**)",
       "Edit(//Users/yoshintame/.agents/skills/**)",
-      "Write(//Users/yoshintame/.agents/skills/**)"
+      "Write(//Users/yoshintame/.agents/skills/**)",
+      "mcp__paseo__respond_to_permission"
     ],
     "ask": [
       "Bash(scp:*)",
       "Bash(sftp:*)",
       "Bash(rsync:*)",
-      "Bash(restic:*)",
-      "Bash(resticprofile:*)",
-      "Bash(rp:*)",
       "Bash(git push:*)",
-      "Bash(gh release:*)",
       "Bash(gh gist:*)",
-      "Bash(gh auth:*)",
-      "Bash(gh api -X *)",
-      "Bash(gh api * -X *)",
-      "Bash(gh api --method *)",
-      "Bash(gh api * --method *)",
-      "Bash(gh api -f *)",
-      "Bash(gh api * -f *)",
-      "Bash(gh api --raw-field *)",
-      "Bash(gh api * --raw-field *)",
-      "Bash(gh api -F *)",
-      "Bash(gh api * -F *)",
-      "Bash(gh api --field *)",
-      "Bash(gh api * --field *)",
-      "Bash(gh api --input *)",
-      "Bash(gh api * --input *)"
+      "Bash(gh auth:*)"
     ],
     "defaultMode": "auto",
     "additionalDirectories": [
@@ -381,7 +363,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -c --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" '{ts: $ts, tool: .tool_name, input: .tool_input, session: .session_id}' >> \"$HOME/.claude/permission-requests.jsonl\""
+            "command": "jq -c --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" '{ts: $ts, tool: .tool_name, input: .tool_input, session: .session_id, mode: .permission_mode, suggestions: .permission_suggestions}' >> \"$HOME/.claude/permission-requests.jsonl\""
           }
         ]
       },
@@ -690,5 +672,17 @@
     "/Users/yoshintame/.dotfiles",
     "/Users/yoshintame/.local/share/worktrees",
     "/Users/yoshintame/Documents/obsidian/yoshintame"
-  ]
+  ],
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Source control: GitHub accounts github.com/yoshintame (personal) and github.com/senate-exchange (work org), and all repos under them",
+      "Trusted internal domains: *.senateexchange.com",
+      "Backups: restic repositories are managed by resticprofile (`rp` is a wrapper around it); the local hub is ~/Backups/restic/main, offsite copies live on a homelab rest-server and in Backblaze B2"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Backup Destruction: running restic, resticprofile or rp with forget, prune, key remove, or any command that deletes snapshots, repository files or keys, unless the user explicitly asked for that exact operation on that repository"
+    ]
+  }
 }

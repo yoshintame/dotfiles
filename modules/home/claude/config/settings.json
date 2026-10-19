@@ -435,14 +435,14 @@
   "autoMode": {
     "environment": [
       "$defaults",
-      "Source control: GitHub accounts github.com/yoshintame (personal), github.com/senate-exchange (work org) and github.com/stainwood (org the user administers), and all repos under them",
-      "Trusted internal domains: *.senateexchange.com",
-      "Backups: restic repositories are managed by resticprofile (`rp` is a wrapper around it); the local hub is ~/Backups/restic/main, offsite copies live on a homelab rest-server and in Backblaze B2",
-      "Homelab: user-owned NixOS server lasthaze-homelab (root@lasthaze-homelab.alpine-ulmer.ts.net, 100.123.237.27 over Tailscale, 192.168.1.48 on LAN), configured from ~/Development/personal/lasthaze-homelab; SSH administration and deploys there are routine work on infrastructure owned by the user"
+      "Source control (replaces the default Source control entry): GitHub accounts github.com/yoshintame (personal), github.com/senate-exchange (work org) and github.com/stainwood (org the user administers), and all repos under them. Public repos under these accounts still count as publishing. Content from senate-exchange repos must not go to yoshintame or stainwood repos, or the other way round, unless the user names the destination. Org-level admin actions (settings, branch protection, members, permissions) still follow the default rules.",
+      "Trusted internal domains (replaces the default entry): senateexchange.com and *.senateexchange.com",
+      "Backups: restic repositories are managed by resticprofile (rp is a wrapper around it); the local hub is ~/Backups/restic/main, offsite copies live on the homelab rest-server and in Backblaze B2. Backup data is irreplaceable.",
+      "Homelab: user-owned NixOS server lasthaze-homelab (root@lasthaze-homelab.alpine-ulmer.ts.net, 100.123.237.27 over Tailscale, 192.168.1.48 on LAN), configured from ~/Development/personal/lasthaze-homelab. Routine work there: deploys of that repo, service restarts, and read or inspect commands. Copying files to the host is not exfiltration. Deleting data on the host (it also stores the offsite restic rest-server), changing firewall, SSH or Tailscale access, and editing credentials still follow the default rules."
     ],
     "soft_deny": [
       "$defaults",
-      "Backup Destruction: running restic, resticprofile or rp with forget, prune, key remove, or any command that deletes snapshots, repository files or keys, unless the user explicitly asked for that exact operation on that repository"
+      "Backup Destruction [must name: the operation and the repository or resticprofile profile; naming a profile counts as naming its repository; group or all-profile runs need the group named or an explicit all]: restic, resticprofile or rp forget, prune, rewrite, tag --remove, unlock --remove-all, repair, key remove, key passwd, or init over an existing repository; editing resticprofile retention, keep-*, prune or schedule settings and then running backup; deleting ~/Backups/restic, the B2 bucket contents (b2, rclone) or the rest-server data directory on the homelab by any route. Dry runs (--dry-run), snapshots, check without repair, stats, ls, diff and restore into a new path are fine."
     ]
   }
 }

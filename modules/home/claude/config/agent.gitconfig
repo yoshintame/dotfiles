@@ -1,0 +1,6 @@
+[include]
+	path = ~/.config/git/config
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false

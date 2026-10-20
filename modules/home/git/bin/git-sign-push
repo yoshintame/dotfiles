@@ -49,7 +49,7 @@ if [ -z "$base" ]; then
     fi
 fi
 
-sign_exec='git commit --amend --no-edit --no-verify -S'
+sign_exec='git commit --amend --allow-empty --no-edit --no-verify -S'
 
 if [ "$root_rebase" -eq 1 ]; then
     git rebase --root --rebase-merges --exec "$sign_exec" || die "sign rebase failed"

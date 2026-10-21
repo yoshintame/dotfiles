@@ -8680,6 +8680,15 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
+  value: linear
+  runtime: claude
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
   value: metabase
   runtime: claude
   scope: project
@@ -8761,6 +8770,15 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
+  value: linear
+  runtime: codex
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
   value: metabase
   runtime: codex
   scope: project
@@ -8809,6 +8827,7 @@ mcp_servers:
 - chrome-devtools
 - grafana-homelab
 - grafana-monitor
+- linear
 - metabase
 - raindrop
 - tana-local
@@ -8849,6 +8868,11 @@ mcp_configs:
     bearer_token_env_var: GRAFANA_MCP_GATEWAY_TOKEN
     env_http_headers:
       X-Grafana-Service-Account-Token: GRAFANA_SERVICE_ACCOUNT_TOKEN
+  linear:
+    name: linear
+    transport: http
+    registry: false
+    url: https://mcp.linear.app/mcp
   metabase:
     name: metabase
     transport: http
@@ -8902,6 +8926,7 @@ mcp_target_servers:
   - chrome-devtools
   - grafana-homelab
   - grafana-monitor
+  - linear
   - metabase
   - raindrop
   - tana-local
@@ -8912,6 +8937,7 @@ mcp_target_servers:
   - chrome-devtools
   - grafana-homelab
   - grafana-monitor
+  - linear
   - metabase
   - raindrop
   - tana-local

@@ -17,6 +17,10 @@ in
       yoshintame = { };
       ksoosha = { };
     };
+    winget = {
+      bundle = ./windows/winget.bundle.json;
+      bundleFile = "${flakeRoot}/hosts/lasthaze-gaming/windows/winget.bundle.json";
+    };
   };
 
   home-manager.users.${username} = {

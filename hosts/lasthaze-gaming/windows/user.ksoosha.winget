@@ -51,3 +51,17 @@ resources:
       id: 9N5QR3KW6CMC
       source: msstore
       acceptAgreements: true
+
+  - name: Stremio
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Stremio.Stremio
+      source: winget
+      acceptAgreements: true
+
+  - name: NvidiaApp
+    type: Microsoft.WinGet/Package
+    properties:
+      id: XP8CLZL93F5Z4P
+      source: msstore
+      acceptAgreements: true

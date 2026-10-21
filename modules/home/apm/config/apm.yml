@@ -84,6 +84,10 @@ dependencies:
     registry: false
     transport: http
     url: https://mb.senateexchange.com/api/metabase-mcp
+  - name: linear
+    registry: false
+    transport: http
+    url: https://mcp.linear.app/mcp
   - name: tana-local
     registry: false
     transport: http

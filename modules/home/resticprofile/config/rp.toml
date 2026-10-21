@@ -119,7 +119,7 @@ esac
 # --- Quick save/load ---
 
 ["rp:save"]
-description = "Quick-save current dir (full, no exclusions)"
+description = "Quick-save current dir (global excludes apply)"
 run = 'RP_SAVE_DIR="$(pwd)" resticprofile -n quicksave backup'
 
 ["rp:load"]

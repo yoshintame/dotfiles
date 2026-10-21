@@ -70,7 +70,12 @@ jobs:
           }
 
       - name: Name the runner's adapter Tailscale like the host's
-        run: Get-NetAdapter -Physical | Where-Object Status -eq Up | Select-Object -First 1 | Rename-NetAdapter -NewName Tailscale
+        run: |
+          Get-NetAdapter | Format-Table -AutoSize Name, InterfaceDescription, Status, ifIndex
+          $route = Get-NetRoute -DestinationPrefix 0.0.0.0/0 | Sort-Object RouteMetric | Select-Object -First 1
+          if (-not $route) { throw 'no default route to find the runner adapter by' }
+          Get-NetAdapter -InterfaceIndex $route.ifIndex | Rename-NetAdapter -NewName Tailscale
+          Get-NetAdapter -Name Tailscale | Out-Null
 
       - name: Plant a junction at the staging directory
         run: |

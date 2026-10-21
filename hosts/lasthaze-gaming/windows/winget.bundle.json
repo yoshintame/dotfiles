@@ -1,0 +1,28 @@
+{
+  "7zip.7zip": {},
+  "AgileBits.1Password": {},
+  "AutoHotkey.AutoHotkey": {},
+  "Blizzard.BattleNet": {
+    "location": "C:\\Program Files (x86)\\Battle.net"
+  },
+  "ElectronicArts.EADesktop": {},
+  "EpicGames.EpicGamesLauncher": {},
+  "Flydigi.FlydigiSpaceStation": {},
+  "Git.Git": {},
+  "Google.Chrome": {},
+  "Guru3D.Afterburner": {},
+  "Guru3D.RTSS": {},
+  "LizardByte.Sunshine": {},
+  "Microsoft.PowerToys": {},
+  "Microsoft.Sysinternals.Autoruns": {},
+  "OBSProject.OBSStudio": {},
+  "Rufus.Rufus": {},
+  "TeamSpeakSystems.TeamSpeakClient": {},
+  "Valve.Steam": {},
+  "WinDirStat.WinDirStat": {},
+  "ZedIndustries.Zed": {},
+  "mtkennerly.ludusavi": {},
+  "qBittorrent.qBittorrent": {},
+  "smartmontools.smartmontools": {},
+  "voidtools.Everything": {}
+}

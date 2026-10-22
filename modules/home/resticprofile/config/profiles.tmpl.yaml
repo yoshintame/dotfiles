@@ -199,6 +199,8 @@ profiles:
         - ".bash_history"
         - ".history.db"
         - ".local/share/fish/fish_history"
+        - ".local/share/atuin"
+        - ".paseo"
         - ".yep-anywhere"
         - ".quokka"
         - ".wallaby"
@@ -218,7 +220,14 @@ profiles:
         - "Library/Application Support/app.cotypist.Cotypist/cotypist.db-wal"
         - "Library/Application Support/app.cotypist.Cotypist/Models/adapters"
         - "Library/Application Support/app.cotypist.Cotypist/completionStats.json"
+        - "Library/Application Support/zoxide"
+        - "Library/Application Support/com.wiheads.paste-setapp/db.sqlite"
+        - "Library/Application Support/com.wiheads.paste-setapp/db.sqlite-shm"
+        - "Library/Application Support/com.wiheads.paste-setapp/db.sqlite-wal"
         - "Library/Keychains/login.keychain-db"
+      exclude...:
+        - "**/.paseo/models"
+        - "**/.paseo/*.log"
       tag:
         - home
       schedule: "1,7,13,19:00"

@@ -70,7 +70,12 @@ jobs:
           }
 
       - name: Name the runner's adapter Tailscale like the host's
-        run: Get-NetAdapter -Physical | Where-Object Status -eq Up | Select-Object -First 1 | Rename-NetAdapter -NewName Tailscale
+        run: |
+          Get-NetAdapter | Format-Table -AutoSize Name, InterfaceDescription, Status, ifIndex
+          $route = Get-NetRoute -DestinationPrefix 0.0.0.0/0 | Sort-Object RouteMetric | Select-Object -First 1
+          if (-not $route) { throw 'no default route to find the runner adapter by' }
+          Get-NetAdapter -InterfaceIndex $route.ifIndex | Rename-NetAdapter -NewName Tailscale
+          Get-NetAdapter -Name Tailscale | Out-Null
 
       - name: Plant a junction at the staging directory
         run: |
@@ -92,3 +97,32 @@ jobs:
 
       - name: windows-rebuild switch again
         run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --flake "$env:FLAKE#lasthaze-gaming"
+
+      - name: Narrow the winget packages to one for the runner
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP 'winget-ci'
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          @"
+          {
+            inputs.dotfiles.url = "$env:FLAKE";
+            outputs = { dotfiles, ... }: {
+              nixosConfigurations.lasthaze-gaming = dotfiles.nixosConfigurations.lasthaze-gaming.extendModules {
+                modules = [ ({ lib, ... }: { windows.winget.packages = lib.mkForce { "Notepad++.Notepad++" = { }; }; }) ];
+              };
+            };
+          }
+          "@ | Set-Content -Encoding ascii (Join-Path $dir flake.nix)
+          $wsl = '/mnt/' + $dir.Substring(0, 1).ToLower() + ($dir.Substring(2) -replace '\\', '/')
+          "WINGET_FLAKE=path:$wsl" >> $env:GITHUB_ENV
+
+      - name: windows-rebuild switch --winget
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild switch --winget --flake "$env:WINGET_FLAKE#lasthaze-gaming"
+
+      - name: windows-rebuild check --winget
+        run: wsl -d NixOS -e /run/current-system/sw/bin/windows-rebuild check --winget --flake "$env:WINGET_FLAKE#lasthaze-gaming"
+
+      - name: Check the winget package and where it was downloaded
+        run: |
+          winget list --id Notepad++.Notepad++ --exact --scope machine --accept-source-agreements --disable-interactivity
+          if ($LASTEXITCODE -ne 0) { throw 'Notepad++ is not installed machine-wide' }
+          if (-not (Test-Path "$env:ProgramFiles\nix-win\winget\tmp\WinGet")) { throw 'winget did not download into the admin-only TMP' }

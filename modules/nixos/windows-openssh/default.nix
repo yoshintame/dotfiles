@@ -9,6 +9,8 @@ let
 in
 myLib.mkModule config "windows-openssh" {
   windows = {
+    winget.packages."Tailscale.Tailscale" = { };
+
     capabilities = [ "OpenSSH.Server~~~~0.0.1.0" ];
 
     firewall.rules.OpenSSH-Server-In-TCP = {

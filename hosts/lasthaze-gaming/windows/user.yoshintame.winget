@@ -66,6 +66,34 @@ resources:
       source: msstore
       acceptAgreements: true
 
+  - name: JetBrainsMonoNerdFont
+    type: Microsoft.WinGet/Package
+    properties:
+      id: DEVCOM.JetBrainsMonoNerdFont
+      source: winget
+      acceptAgreements: true
+
+  - name: Osquery
+    type: Microsoft.WinGet/Package
+    properties:
+      id: osquery.osquery
+      source: winget
+      acceptAgreements: true
+
+  - name: Stremio
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Stremio.Stremio
+      source: winget
+      acceptAgreements: true
+
+  - name: NvidiaApp
+    type: Microsoft.WinGet/Package
+    properties:
+      id: XP8CLZL93F5Z4P
+      source: msstore
+      acceptAgreements: true
+
   - name: Dotbot
     type: Microsoft.DSC.Transitional/WindowsPowerShellScript
     dependsOn:

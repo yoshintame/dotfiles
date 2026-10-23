@@ -13,7 +13,7 @@ myLib.mkModule config "apm" {
         filtered="$(mktemp)"
         trap 'rm -f "$filtered"' EXIT
         awk '/^[[:space:]]*\[/ { skip = ($0 ~ /^[[:space:]]*\[url "https:\/\/github\.com\/"\]/) } !skip' "$HOME/.config/git/config" > "$filtered"
-        GIT_CONFIG_GLOBAL="$filtered" "$HOME/.local/bin/apm" "$@"
+        GIT_CONFIG_GLOBAL="$filtered" "$HOME/.local/share/mise/shims/apm" "$@"
       '';
     })
   ];

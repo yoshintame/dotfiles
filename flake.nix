@@ -79,6 +79,7 @@
     }:
     let
       myLib = import ./lib { inherit (inputs.nixpkgs) lib; };
+      inherit (inputs.self.nixosConfigurations.lasthaze-edge.config.my) monitor;
       homeManagerModule = {
         darwin = inputs.home-manager.darwinModules.home-manager;
         nixos = inputs.home-manager.nixosModules.home-manager;
@@ -100,6 +101,7 @@
           ./modules/nixos/tailscale
           ./modules/nixos/sops-age-key
           ./modules/nixos/sysctl-hardening
+          ./modules/nixos/monitor
           ./modules/nixos/wsl
           ./modules/nixos/windows-defaults
           ./modules/nixos/windows-openssh
@@ -141,6 +143,7 @@
             specialArgs = {
               flakeRoot = "/Users/yoshintame/.dotfiles";
               hostFacts = import ./hosts/lasthaze-mbp/facts.nix;
+              inherit monitor;
             };
             modules = [
               (
@@ -156,7 +159,10 @@
             arch = "x86_64";
             class = "nixos";
             path = ./hosts/lasthaze-homelab;
-            specialArgs.flakeRoot = "/var/lib/homelab-deploy/dotfiles";
+            specialArgs = {
+              flakeRoot = "/var/lib/homelab-deploy/dotfiles";
+              inherit monitor;
+            };
             modules = [
               inputs.homelab.nixosModules.default
               inputs.disko.nixosModules.disko
@@ -171,11 +177,15 @@
             specialArgs = {
               flakeRoot = "/var/lib/edge-deploy/dotfiles";
               gatusPackage = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.gatus;
-              homelabServices = inputs.self.nixosConfigurations.lasthaze-homelab.config.homelab.services;
+              homelabFacts = import ./hosts/lasthaze-homelab/facts.nix;
+              monitoringTargets = {
+                homelab = inputs.self.nixosConfigurations.lasthaze-homelab.config.homelab.monitoringTargets;
+                mbp =
+                  inputs.self.darwinConfigurations.lasthaze-mbp.config.home-manager.users.yoshintame.my.resticprofile.monitoringTargets;
+              };
             };
             modules = [
               inputs.edge.nixosModules.proxy
-              inputs.homelab.nixosModules.sentinel
               inputs.disko.nixosModules.disko
               inputs.srvos.nixosModules.server
               inputs.sops-nix.nixosModules.sops

@@ -3,6 +3,7 @@
   lib,
   gatusPackage,
   homelabFacts,
+  edgeFacts,
   monitoringTargets,
   ...
 }:
@@ -76,7 +77,7 @@
 
   my.monitor = {
     telegram = {
-      chatId = -1004370351984;
+      chatId = edgeFacts.telegramChatId;
       topics = {
         gatus = 5;
         backups = 6;
@@ -95,6 +96,13 @@
       };
     };
   };
+
+  assertions = [
+    {
+      assertion = config.my.monitor.address == edgeFacts.monitor;
+      message = "hosts/lasthaze-edge/facts.nix: monitor must match the address my.monitor exports.";
+    }
+  ];
 
   services.gatus = {
     package = gatusPackage;

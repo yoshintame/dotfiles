@@ -59,13 +59,13 @@ profiles:
     backup:
       send-after: &gatus-after
         - method: POST
-          url: "http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-$PROFILE_NAME-$PROFILE_COMMAND/external?success=true"
+          url: "${GATUS_BACKUP_ENDPOINT}-$PROFILE_NAME-$PROFILE_COMMAND/external?success=true"
           headers: &gatus-auth
             - name: Authorization
               value: "Bearer ${GATUS_BACKUP_TOKEN}"
       send-after-fail: &gatus-fail
         - method: POST
-          url: "http://lasthaze-edge:8080/api/v1/endpoints/backup_mbp-$PROFILE_NAME-$PROFILE_COMMAND/external?success=false&error=$ERROR"
+          url: "${GATUS_BACKUP_ENDPOINT}-$PROFILE_NAME-$PROFILE_COMMAND/external?success=false&error=$ERROR"
           headers: *gatus-auth
       group-by: "host,tags"
       exclude:

@@ -19,6 +19,7 @@ let
       {
         secretsFile = null;
         permissions = "0600";
+        vars = { };
       }
       // value
       // {
@@ -29,6 +30,7 @@ let
         template = value;
         secretsFile = null;
         permissions = "0600";
+        vars = { };
         inherit dest;
       };
 
@@ -76,11 +78,23 @@ let
     let
       raw = builtins.readFile entry.template;
       analysis = analyzeVars raw;
-      inherit (analysis) secretVars escapedVars;
+      inherit (analysis) escapedVars;
+      plainVars = lib.attrNames entry.vars;
+      secretVars = lib.subtractLists plainVars analysis.secretVars;
       placeholderMap = lib.genAttrs secretVars (v: config.sops.placeholder.${v});
-      rendered = builtins.replaceStrings (
-        (map (k: "$\${${k}}") escapedVars) ++ (map (k: "\${${k}}") secretVars)
-      ) ((map (k: "\${${k}}") escapedVars) ++ (map (k: placeholderMap.${k}) secretVars)) raw;
+      rendered =
+        builtins.replaceStrings
+          (
+            (map (k: "$\${${k}}") escapedVars)
+            ++ (map (k: "\${${k}}") secretVars)
+            ++ (map (k: "\${${k}}") plainVars)
+          )
+          (
+            (map (k: "\${${k}}") escapedVars)
+            ++ (map (k: placeholderMap.${k}) secretVars)
+            ++ (map (k: entry.vars.${k}) plainVars)
+          )
+          raw;
       name = sanitizeName entry.dest;
     in
     {

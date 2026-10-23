@@ -1,6 +1,12 @@
-{ config, myLib, ... }:
+{
+  config,
+  lib,
+  myLib,
+  ...
+}:
 let
   homeDir = "/Users/yoshintame";
+  tccDefaults = builtins.getEnv "DOT_SKIP_TCC_DEFAULTS" != "1";
 in
 myLib.mkModule config "macos-defaults" {
   system.primaryUser = "yoshintame";
@@ -97,7 +103,7 @@ myLib.mkModule config "macos-defaults" {
       Clicking = true;
     };
 
-    universalaccess = {
+    universalaccess = lib.mkIf tccDefaults {
       closeViewScrollWheelToggle = true;
       closeViewZoomFollowsFocus = true;
     };
@@ -138,7 +144,7 @@ myLib.mkModule config "macos-defaults" {
         ];
       };
 
-      "com.apple.Mail" = {
+      "com.apple.Mail" = lib.mkIf tccDefaults {
         AddressesIncludeNameOnPasteboard = false;
         ConversationViewSortDescending = true;
         DisableReplyAnimations = true;
@@ -149,7 +155,7 @@ myLib.mkModule config "macos-defaults" {
         BrowseAllInterfaces = true;
       };
 
-      "com.apple.Safari" = {
+      "com.apple.Safari" = lib.mkIf tccDefaults {
         AlwaysRestoreSessionAtLaunch = true;
         AutoFillCreditCardData = false;
         AutoFillFromAddressBook = false;

@@ -1,18 +1,13 @@
 {
+  lib,
   pkgs,
   flakeRoot,
   hostFacts,
   ...
 }:
-{
-  imports = [ ./manifest.nix ];
-
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.distributedBuilds = true;
-  nix.buildMachines = [
+let
+  hasDeterminate = builtins.pathExists "/usr/local/bin/determinate-nixd";
+  buildMachines = [
     {
       hostName = "lasthaze-homelab";
       sshUser = "root";
@@ -22,11 +17,37 @@
       supportedFeatures = [ "big-parallel" ];
     }
   ];
-  nix.settings.trusted-users = [
+  trustedUsers = [
     "@admin"
     hostFacts.username
   ];
-  nix.channel.enable = false;
+in
+{
+  imports = [ ./manifest.nix ];
+
+  determinateNix = {
+    enable = hasDeterminate;
+    distributedBuilds = true;
+    inherit buildMachines;
+    customSettings = {
+      trusted-users = trustedUsers;
+      builders = "@/etc/nix/machines";
+      builders-use-substitutes = true;
+    };
+  };
+
+  nix = lib.mkIf (!hasDeterminate) {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      trusted-users = trustedUsers;
+    };
+    distributedBuilds = true;
+    inherit buildMachines;
+    channel.enable = false;
+  };
 
   system.stateVersion = 6;
 

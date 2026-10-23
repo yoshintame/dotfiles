@@ -24,6 +24,8 @@
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -143,6 +145,7 @@
               hostFacts = import ./hosts/lasthaze-mbp/facts.nix;
             };
             modules = [
+              inputs.determinate.darwinModules.default
               (
                 { lib, ... }:
                 {

@@ -48,10 +48,19 @@
   services.tailscale = {
     useRoutingFeatures = "none";
     authKeyFile = config.sops.secrets."TAILSCALE_AUTHKEY".path;
+    authKeyParameters = {
+      ephemeral = false;
+      preauthorized = true;
+    };
     extraUpFlags = [
+      "--reset"
       "--advertise-tags=tag:edge"
       "--accept-dns=false"
     ];
+  };
+  systemd.services.tailscaled-autoconnect.serviceConfig = {
+    Restart = "on-failure";
+    RestartSec = "10s";
   };
 
   edge = {

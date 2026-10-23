@@ -18,8 +18,8 @@ BTT → Preferences → Advanced Settings → Webserver:
 ### 2. Положить secret в SOPS
 
 ```fish
-echo "BTT_WEBSERVER_SHARED_SECRET: <вставь сюда>" > modules/btt-gestures/secrets.yaml
-sops -e -i modules/btt-gestures/secrets.yaml
+echo "BTT_WEBSERVER_SHARED_SECRET: <вставь сюда>" > modules/home/btt-gestures/secrets.yaml
+sops -e -i modules/home/btt-gestures/secrets.yaml
 ```
 
 После `dot rebuild` файл материализуется в `~/.config/sops-nix/secrets/BTT_WEBSERVER_SHARED_SECRET`.
@@ -88,7 +88,7 @@ dot btt-gestures dump    # вывести trigger JSON без обращения
 
 | Симптом | Причина | Фикс |
 |---|---|---|
-| `get_triggers failed: 401` | shared_secret неверный | Перепроверь `modules/btt-gestures/secrets.yaml` |
+| `get_triggers failed: 401` | shared_secret неверный | Перепроверь `modules/home/btt-gestures/secrets.yaml` |
 | `ECONNREFUSED 127.0.0.1:<port>` | Web Server выключен или другой порт | BTT Preferences → Advanced → Webserver; обнови `webserver.url` в `btt-gestures.yaml` |
 | Жест отображается, но `BTTTriggerTypeDescriptionReadOnly` показывает не тот жест | `BTTTriggerType` число не подходит для этой версии BTT | Запусти `bun -e` пробинг скрипт (см. ниже) для своей версии BTT и обнови `src/triggers.ts` |
 | Triggers попадают как "orphans" — есть через `get_trigger/?uuid=` но не в GUI | Использован `update_trigger` для создания нового (он не сохраняет metadata) | Sync использует `delete + add_new_trigger` — должно не происходить |

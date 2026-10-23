@@ -2,9 +2,9 @@
   description = "yoshintame dotfiles — nix-darwin + home-manager on flake-parts + easy-hosts";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     easy-hosts.url = "github:tgirlcloud/easy-hosts";
@@ -20,12 +20,12 @@
     };
 
     nix-darwin = {
-      url = "github:lnl7/nix-darwin/nix-darwin-25.05";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -35,7 +35,7 @@
     };
 
     nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL/release-25.05";
+      url = "github:nix-community/NixOS-WSL/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -50,7 +50,7 @@
     };
 
     srvos = {
-      url = "github:nix-community/srvos/0b3026958df11dbd14d09b3d8923ecb9ea3f43c2";
+      url = "github:nix-community/srvos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

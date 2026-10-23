@@ -1,7 +1,7 @@
 {
   flakeRoot,
   pkgs,
-  monitor,
+  edgeFacts,
   ...
 }:
 let
@@ -68,10 +68,10 @@ in
   homelab.monitoring = {
     enable = true;
     telegram = {
-      inherit (monitor.telegram) chatId;
+      chatId = edgeFacts.telegramChatId;
       topic = 4;
     };
-    monitor = monitor.address;
+    inherit (edgeFacts) monitor;
   };
 
   homelab.services = {

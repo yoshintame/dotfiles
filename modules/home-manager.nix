@@ -24,8 +24,14 @@
       ../lib/sops-templates
       (
         { config, lib, ... }:
+        let
+          ageKeyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+          hasAgeKey = builtins.pathExists ageKeyFile;
+        in
         {
-          sops.age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+          sops.age.keyFile = lib.mkDefault ageKeyFile;
+          sops.secrets = lib.mkIf (!hasAgeKey) (lib.mkForce { });
+          sops.templates = lib.mkIf (!hasAgeKey) (lib.mkForce { });
         }
       )
 

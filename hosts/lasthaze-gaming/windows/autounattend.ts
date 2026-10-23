@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
 import { join } from "node:path";
+import { $ } from "bun";
 
 const GENERATOR_URL = "https://schneegans.de/windows/unattend-generator/download/";
 
@@ -61,7 +62,6 @@ const removedApps = [
 const enabledFlags = [
   "UseKeyboard2",
   "BypassNetworkCheck",
-  "PauseBeforeFormatting",
   "TargetDiskNoPartitions",
   "TargetDiskInterfaceType",
   "TargetDiskMediaType",
@@ -147,21 +147,41 @@ const options: Record<string, string> = {
   AppLockerMode: "Skip",
 };
 
-const params = new URLSearchParams(options);
+const repoRoot = join(import.meta.dir, "../../..");
+const authorizedKeys: string[] = await $`nix eval --json --file ${join(repoRoot, "lib/authorized-keys.nix")}`.json();
+const firstLogon = await Bun.file(join(import.meta.dir, "first-logon.ps1")).text();
+
+const scripts: Record<string, string> = {
+  SystemScript0: "dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart",
+  SystemScriptType0: "Cmd",
+  FirstLogonScript0: `$authorizedKeys = @(${authorizedKeys.map((key) => `'${key.replaceAll("'", "''")}'`).join(", ")})\n${firstLogon}`,
+  FirstLogonScriptType0: "Ps1",
+};
+
+const variants = [
+  { file: "autounattend.xml", flags: [...enabledFlags, "PauseBeforeFormatting"] },
+  { file: "autounattend.vm.xml", flags: enabledFlags },
+];
+
+const base = new URLSearchParams({ ...options, ...scripts });
 accounts.forEach((account, index) => {
-  params.set(`AccountName${index}`, account.name);
-  params.set(`AccountDisplayName${index}`, "");
-  params.set(`AccountPassword${index}`, "");
-  params.set(`AccountGroup${index}`, account.group);
+  base.set(`AccountName${index}`, account.name);
+  base.set(`AccountDisplayName${index}`, "");
+  base.set(`AccountPassword${index}`, "");
+  base.set(`AccountGroup${index}`, account.group);
 });
-for (const flag of enabledFlags) params.set(flag, "true");
 
-const response = await fetch(`${GENERATOR_URL}?${params}`);
-if (!response.ok) throw new Error(`generator responded ${response.status} ${response.statusText}`);
+for (const variant of variants) {
+  const params = new URLSearchParams(base);
+  for (const flag of variant.flags) params.set(flag, "true");
 
-const xml = await response.text();
-if (!xml.includes("<unattend")) throw new Error("generator response is not an unattend document");
+  const response = await fetch(`${GENERATOR_URL}?${params}`);
+  if (!response.ok) throw new Error(`generator responded ${response.status} ${response.statusText}`);
 
-const output = join(import.meta.dir, "autounattend.xml");
-await Bun.write(output, xml);
-console.log(`wrote ${output}`);
+  const xml = await response.text();
+  if (!xml.includes("<unattend")) throw new Error("generator response is not an unattend document");
+
+  const output = join(import.meta.dir, variant.file);
+  await Bun.write(output, xml);
+  console.log(`wrote ${output}`);
+}

@@ -1,4 +1,9 @@
-{ flakeRoot, pkgs, ... }:
+{
+  flakeRoot,
+  pkgs,
+  monitor,
+  ...
+}:
 let
   username = "yoshintame";
   homeDir = "/home/${username}";
@@ -60,7 +65,14 @@ in
   homelab.infra.authelia.enable = true;
   homelab.infra.cloudflared.enable = true;
   homelab.infra.adguard.enable = true;
-  homelab.monitoring.enable = true;
+  homelab.monitoring = {
+    enable = true;
+    telegram = {
+      inherit (monitor.telegram) chatId;
+      topic = 4;
+    };
+    monitor = monitor.address;
+  };
 
   homelab.services = {
     actual.enable = true;

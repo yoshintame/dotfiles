@@ -30,6 +30,11 @@
                 default = "0600";
                 description = "File permissions (octal) for the rendered output";
               };
+              vars = lib.mkOption {
+                type = lib.types.attrsOf lib.types.str;
+                default = { };
+                description = "Non-secret values substituted for their \${NAME} placeholders at eval time instead of sops secrets";
+              };
             };
           }
         )

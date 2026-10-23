@@ -6,5 +6,6 @@
     "users"
     "tailscale"
     "sysctl-hardening"
+    "monitor"
   ];
 }

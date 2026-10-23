@@ -1,6 +1,8 @@
 {
   "7zip.7zip": {},
-  "AgileBits.1Password": {},
+  "AgileBits.1Password": {
+    "installerType": "msi"
+  },
   "AutoHotkey.AutoHotkey": {},
   "Blizzard.BattleNet": {
     "location": "C:\\Program Files (x86)\\Battle.net"

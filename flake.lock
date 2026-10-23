@@ -365,6 +365,7 @@
         "easy-hosts": "easy-hosts_2",
         "flake-parts": "flake-parts_3",
         "git-hooks": "git-hooks_2",
+        "nix-stencil": "nix-stencil",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -372,14 +373,15 @@
           "nixpkgs"
         ],
         "sops-nix": "sops-nix",
+        "terranix": "terranix",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1792088623,
-        "narHash": "sha256-cu6Z208THNi/IIJMG24y9ay9g/fV954GxS9asINyKts=",
+        "lastModified": 1792759879,
+        "narHash": "sha256-X7jPAVbEgzUdZkQKcJbrgk+GfQ2EckjsGjPeR231WA0=",
         "ref": "refs/heads/main",
-        "rev": "533dd6dce02ada7b9de3bea55053ab44584ba2fb",
-        "revCount": 127,
+        "rev": "9ca3700577732ef11e4c4501f7ffbd60d0532dba",
+        "revCount": 154,
         "type": "git",
         "url": "ssh://git@github.com/yoshintame/lasthaze-homelab"
       },
@@ -428,6 +430,44 @@
         "owner": "nix-darwin",
         "ref": "nix-darwin-26.05",
         "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "nix-stencil": {
+      "inputs": {
+        "flake-parts": [
+          "homelab",
+          "flake-parts"
+        ],
+        "git-hooks": [
+          "homelab",
+          "git-hooks"
+        ],
+        "nixpkgs": [
+          "homelab",
+          "nixpkgs"
+        ],
+        "sops-nix": [
+          "homelab",
+          "sops-nix"
+        ],
+        "treefmt-nix": [
+          "homelab",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792579838,
+        "narHash": "sha256-LC3NO9IfrDMFgTRWupc4UPWHhaTiIOpHYfbvfns64vo=",
+        "owner": "yoshintame",
+        "repo": "nix-stencil",
+        "rev": "6fc9f0fc935f33772d13ccc7d63621ee73e2e034",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yoshintame",
+        "ref": "v0.2.1",
+        "repo": "nix-stencil",
         "type": "github"
       }
     },
@@ -703,6 +743,48 @@
       "original": {
         "owner": "nix-community",
         "repo": "srvos",
+        "type": "github"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "terranix": {
+      "inputs": {
+        "flake-parts": [
+          "homelab",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "homelab",
+          "nixpkgs"
+        ],
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1779965098,
+        "narHash": "sha256-Jh0Zk+g0pEbNopADEtqvrnhrl83rlNFHpn3Zhz4s+VM=",
+        "owner": "terranix",
+        "repo": "terranix",
+        "rev": "36ed5bdee452978d0e9c4450de872483ab541006",
+        "type": "github"
+      },
+      "original": {
+        "owner": "terranix",
+        "ref": "2.9.0",
+        "repo": "terranix",
         "type": "github"
       }
     },

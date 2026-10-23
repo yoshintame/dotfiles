@@ -1,4 +1,11 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  gatusPackage,
+  homelabFacts,
+  monitoringTargets,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
@@ -15,7 +22,7 @@
 
   boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.loader.timeout = 1;
+  boot.loader.timeout = 5;
   boot.loader.grub = {
     enable = true;
     efiSupport = true;
@@ -26,7 +33,8 @@
 
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
-  networking.hosts."100.123.237.27" = [ "lasthaze-homelab" ];
+  networking.hosts.${homelabFacts.tailnetAddress} = [ "lasthaze-homelab" ];
+
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
   sops.secrets."TAILSCALE_AUTHKEY".sopsFile = ../../secrets/lasthaze-edge/edge.yaml;
@@ -40,10 +48,19 @@
   services.tailscale = {
     useRoutingFeatures = "none";
     authKeyFile = config.sops.secrets."TAILSCALE_AUTHKEY".path;
+    authKeyParameters = {
+      ephemeral = false;
+      preauthorized = true;
+    };
     extraUpFlags = [
+      "--reset"
       "--advertise-tags=tag:edge"
       "--accept-dns=false"
     ];
+  };
+  systemd.services.tailscaled-autoconnect.serviceConfig = {
+    Restart = "on-failure";
+    RestartSec = "10s";
   };
 
   edge = {
@@ -57,28 +74,35 @@
     };
   };
 
-  homelab.sentinel = {
-    enable = true;
-    homelabAddress = "100.123.237.27";
-    listenAddress = "100.98.13.73";
-    environmentFile = config.sops.secrets."GATUS_ENV".path;
-    backupHeartbeats.mbp = {
-      tokenVariable = "GATUS_BACKUP_TOKEN_MBP";
-      jobs = {
-        dev-backup = "9h";
-        home-backup = "14h";
-        vault-backup = "9h";
-        local-to-b2-copy = "13h";
-        local-to-onedrive-copy = "13h";
-        local-to-gdrive-copy = "13h";
-        local-ops-forget = "216h";
-        local-ops-check = "768h";
-        b2-ops-check = "768h";
-        onedrive-ops-check = "768h";
-        gdrive-ops-check = "768h";
+  my.monitor = {
+    telegram = {
+      chatId = -1004370351984;
+      topics = {
+        gatus = 5;
+        backups = 6;
+      };
+      defaultTopic = "gatus";
+    };
+    sources = {
+      homelab = {
+        targets = monitoringTargets.homelab;
+        address = homelabFacts.tailnetAddress;
+        tokenVariable = "GATUS_HEARTBEAT_TOKEN";
+      };
+      mbp = {
+        targets = monitoringTargets.mbp;
+        tokenVariable = "GATUS_BACKUP_TOKEN_MBP";
       };
     };
   };
 
+  services.gatus = {
+    package = gatusPackage;
+    environmentFile = config.sops.secrets."GATUS_ENV".path;
+    settings.ui = {
+      title = "Lasthaze Homelab Status";
+      "dashboard-heading" = "Lasthaze Homelab";
+    };
+  };
   systemd.services.gatus.serviceConfig.SupplementaryGroups = [ "gatus-secrets" ];
 }

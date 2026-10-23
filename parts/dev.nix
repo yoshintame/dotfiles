@@ -1,4 +1,14 @@
-{ self, lib, ... }:
+{
+  self,
+  inputs,
+  lib,
+  ...
+}:
+let
+  myLib = import ../lib { inherit lib; };
+  monitorCases = import ../modules/nixos/monitor/tests.nix { inherit inputs lib myLib; };
+  failedMonitorCases = lib.filter (c: c.actual != c.expected) monitorCases;
+in
 {
   perSystem =
     {
@@ -53,6 +63,16 @@
           )
         ) (lib.filterAttrs (_: host: host.config.windows.enable) self.nixosConfigurations)
         // {
+          monitor =
+            if failedMonitorCases == [ ] then
+              pkgs.runCommandLocal "monitor-tests" { } "touch $out"
+            else
+              throw "monitor tests failed:\n${
+                lib.concatMapStringsSep "\n" (
+                  c:
+                  "- ${c.name}\n    expected: ${builtins.toJSON c.expected}\n    actual:   ${builtins.toJSON c.actual}"
+                ) failedMonitorCases
+              }";
           image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;
         }
         // lib.optionalAttrs (system == "aarch64-darwin") (

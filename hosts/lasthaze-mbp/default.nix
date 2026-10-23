@@ -3,6 +3,7 @@
   pkgs,
   flakeRoot,
   hostFacts,
+  monitor,
   ...
 }:
 let
@@ -94,6 +95,7 @@ in
     backupFileExtension = "bkp";
 
     users.${hostFacts.username} = {
+      my.resticprofile.monitor = monitor.address;
       programs.bash.enable = true;
       programs.zsh.enable = true;
       programs.zsh.envExtra = ''

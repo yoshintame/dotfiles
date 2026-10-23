@@ -81,7 +81,7 @@
     }:
     let
       myLib = import ./lib { inherit (inputs.nixpkgs) lib; };
-      inherit (inputs.self.nixosConfigurations.lasthaze-edge.config.my) monitor;
+      edgeFacts = import ./hosts/lasthaze-edge/facts.nix;
       homeManagerModule = {
         darwin = inputs.home-manager.darwinModules.home-manager;
         nixos = inputs.home-manager.nixosModules.home-manager;
@@ -145,7 +145,7 @@
             specialArgs = {
               flakeRoot = "/Users/yoshintame/.dotfiles";
               hostFacts = import ./hosts/lasthaze-mbp/facts.nix;
-              inherit monitor;
+              inherit edgeFacts;
             };
             modules = [
               inputs.determinate.darwinModules.default
@@ -164,7 +164,7 @@
             path = ./hosts/lasthaze-homelab;
             specialArgs = {
               flakeRoot = "/var/lib/homelab-deploy/dotfiles";
-              inherit monitor;
+              inherit edgeFacts;
             };
             modules = [
               inputs.homelab.nixosModules.default
@@ -181,6 +181,7 @@
               flakeRoot = "/var/lib/edge-deploy/dotfiles";
               gatusPackage = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.gatus;
               homelabFacts = import ./hosts/lasthaze-homelab/facts.nix;
+              inherit edgeFacts;
               monitoringTargets = {
                 homelab = inputs.self.nixosConfigurations.lasthaze-homelab.config.homelab.monitoringTargets;
                 mbp =

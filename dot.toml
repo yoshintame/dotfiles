@@ -17,7 +17,8 @@ depends = ["dot:proxy-bindings"]
 # b2.env, hc.env, repo.key) silently disappear from new sops-nix generations.
 run = '''
 git add -A
-sudo env NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+mise run dot:sops-bootstrap
 mise run dot:mcp
 '''
 
@@ -27,7 +28,8 @@ dir = "{{env.DOTFILES}}"
 depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
-sudo env DOT_BREW_FULL=1 NIX_PATH="nixpkgs=flake:nixpkgs" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_FULL=1 DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+mise run dot:sops-bootstrap
 mise run dot:mcp
 '''
 
@@ -40,6 +42,7 @@ out="$(mktemp -d)/result"
 nix build --impure --out-link "$out" \
   '.#darwinConfigurations.lasthaze-mbp.config.home-manager.users.yoshintame.home.activationPackage'
 "$out/activate"
+mise run dot:sops-bootstrap
 mise run dot:mcp
 '''
 
@@ -72,20 +75,24 @@ run = 'bun run "$HOME/.dotfiles/packages/dump-packages/src/cli.ts"'
 ["dot:bootstrap-age-key"]
 description = "Restore sops age key from 1Password (run once on new machine)"
 run = '''
+set -euo pipefail
 KEY_DIR="$HOME/.config/sops/age"
 KEY_FILE="$KEY_DIR/keys.txt"
 if [ -f "$KEY_FILE" ]; then
     echo "Age key already exists at $KEY_FILE, skipping."
 else
     mkdir -p "$KEY_DIR"
-    /opt/homebrew/bin/op read 'op://Private/sops-age-key/private key' > "$KEY_FILE"
-    chmod 600 "$KEY_FILE"
+    tmp="$(mktemp "$KEY_DIR/keys.XXXXXX")"
+    trap 'rm -f "$tmp"' EXIT
+    /opt/homebrew/bin/op read 'op://Private/sops-age-key/private key' > "$tmp"
+    chmod 600 "$tmp"
+    mv "$tmp" "$KEY_FILE"
     echo "Age key restored to $KEY_FILE"
 fi
 '''
 
 ["dot:sops-bootstrap"]
-description = "Force-reload sops-nix LaunchAgent on darwin (workaround for Mic92/sops-nix#910 initial bootstrap I/O error)"
+description = "Force-reload sops-nix LaunchAgent on darwin and wait for it to decrypt (workaround for Mic92/sops-nix#910)"
 run = '''
 set -euo pipefail
 
@@ -97,10 +104,9 @@ fi
 PLIST="$HOME/Library/LaunchAgents/org.nix-community.home.sops-nix.plist"
 LABEL="org.nix-community.home.sops-nix"
 
-if [ ! -f "$PLIST" ]; then
-    echo "!! sops-nix plist not found at $PLIST"
-    echo "   Run a darwin-rebuild switch first so home-manager installs it via setupLaunchAgents."
-    exit 1
+if [ ! -f "$HOME/.config/sops/age/keys.txt" ] || [ ! -f "$PLIST" ]; then
+    echo "dot:sops-bootstrap: no age key or sops-nix plist yet — skipping"
+    exit 0
 fi
 
 # Bootout silently if loaded (returns 3 if not loaded — that is fine and expected on first install).
@@ -114,8 +120,22 @@ launchctl bootstrap "gui/$UID" "$PLIST"
 # RunAtLoad fires automatically on bootstrap but kickstart is a defensive nudge in case
 # launchd debounced it (e.g. when plist hash matched a previously-loaded version).
 launchctl kickstart -k "gui/$UID/$LABEL"
+sleep 1
 
-echo "sops-nix LaunchAgent reloaded; decrypted secrets should be available under ~/.config/sops-nix/secrets/."
+for _ in $(seq 1 60); do
+    state="$(launchctl print "gui/$UID/$LABEL" 2>/dev/null || true)"
+    if printf '%s' "$state" | grep -q 'state = not running'; then
+        if printf '%s' "$state" | grep -q 'last exit code = 0'; then
+            echo "sops-nix decrypted secrets under ~/.config/sops-nix/secrets/."
+            exit 0
+        fi
+        echo "!! sops-nix agent exited with an error — see: launchctl print gui/$UID/$LABEL"
+        exit 1
+    fi
+    sleep 0.5
+done
+echo "!! sops-nix agent still running after 30s — check: launchctl print gui/$UID/$LABEL"
+exit 1
 '''
 
 ["dot:bootstrap-ssh"]

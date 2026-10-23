@@ -1,12 +1,12 @@
 # dotfiles
 
-Personal macOS / Linux configuration managed declaratively via Nix (`nix-darwin` + `home-manager`), with live config symlinks via [nix-dotbot](https://github.com/yoshintame/nix-dotbot) and encrypted secrets via [SOPS](https://github.com/getsops/sops) + age.
+Personal macOS / NixOS configuration managed declaratively via Nix (`nix-darwin` + `home-manager` on flake-parts), with live config symlinks via [nix-link](lib/nix-link.nix) and encrypted secrets via [SOPS](https://github.com/getsops/sops) + age.
 
 ## Installation
 
 ### Fresh macOS (one command)
 
-On a freshly-installed Mac, after logging into Apple ID:
+On a freshly-installed Mac, after Setup Assistant and granting Full Disk Access to the terminal:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/yoshintame/dotfiles/master/bootstrap.sh | bash -s -- lasthaze-mbp
@@ -14,20 +14,21 @@ curl -fsSL https://raw.githubusercontent.com/yoshintame/dotfiles/master/bootstra
 
 This will:
 
-1. Install Xcode Command Line Tools (interactive)
-2. Clone this repo to `~/.dotfiles`
-3. Install Nix (Determinate Systems installer)
-4. Run `darwin-rebuild switch --flake .#lasthaze-mbp` — installs all Nix packages + Brewfile apps. The [sops-templates](modules/sops-templates) module has a bootstrap guard that skips secret rendering when the age key is absent, so the first switch on a fresh machine succeeds cleanly
-5. Restore the SOPS age key from 1Password (`op read`) — requires authorizing 1Password GUI + enabling CLI integration first
-6. Wire `~/.ssh/config` to the 1Password SSH Agent
-7. Re-run `darwin-rebuild switch` so sops-templates renders the secrets now that the key is present
-8. Print a post-install checklist and open System Settings panels for the TCC permissions that cannot be automated
+1. Install Xcode Command Line Tools (interactive) and clone this repo with submodules to `~/.dotfiles`
+2. Check Full Disk Access of the terminal and wait for the App Store sign-in that `mas` needs
+3. Install Rosetta, Homebrew and Nix (Determinate Nix; `BOOTSTRAP_NIX=upstream` for upstream Nix)
+4. Run the first `darwin-rebuild switch` with the Brewfile, using the nix-darwin revision pinned in `flake.lock`. The [sops-templates](lib/sops-templates) module gates secret rendering on the age key, so the first switch on a fresh machine succeeds without it
+5. Install mise toolchains and the repo's bun dependencies
+6. Restore the SOPS age key from 1Password (`op read`) — waits until 1Password is signed in with CLI integration enabled
+7. Wire `~/.ssh/config` to the 1Password SSH Agent
+8. Run `dot rebuild` — the second switch renders the secrets now that the key is present
+9. Open System Settings panels for the TCC permissions that cannot be automated
 
-Then follow `projects/post-install-checklist.md` (vault) for the ~5-minute manual cleanup (Accessibility, Input Monitoring, etc.).
+The remaining manual steps are in the reinstall runbook of the Obsidian vault: `projects/mbp-clean-reinstall/knowledge/mbp-reinstall-runbook.md`.
+
+`bootstrap.sh --test lasthaze-mbp` is the unattended mode for a Tart VM: it skips the App Store and Full Disk Access checks, `mas` entries of the Brewfile and TCC-protected defaults.
 
 ### Already-cloned repo
-
-If the repo is already at `~/.dotfiles`, use the thin wrapper:
 
 ```bash
 bash ~/.dotfiles/install.sh lasthaze-mbp
@@ -41,51 +42,30 @@ mise run dot:rebuild
 
 ## Hosts
 
-Current and planned host configurations. Full target state and roadmap live in the vault: `projects/dotfiles-target-architecture.md`.
-
-| Host              | OS                      | Wrapper                        | Role                                    | Status              |
-| ----------------- | ----------------------- | ------------------------------ | --------------------------------------- | ------------------- |
-| `lasthaze-mbp`    | macOS aarch64           | `nix-darwin` + home-manager    | Primary MacBook Pro                     | exists              |
-| `lasthaze-server` | Linux x86_64 (homelab)  | **NixOS** + home-manager       | Physical homelab server at home         | planned (priority)  |
-| `lasthaze-wsl`    | Fedora WSL2 on Windows  | home-manager (+ sys-mgr future)| Work laptop WSL dev env                 | future              |
-| `lasthaze-vps`    | Fedora x86_64 (generic) | home-manager (+ sys-mgr future)| Generic base config for any Fedora VPS  | future              |
-
-> **Note:** Current `flake.nix` still has `homeConfigurations.lasthaze-server` pointing at `hosts/lasthaze-home/` as a legacy home-manager config. Migration to full NixOS (priority P2) will both rename the directory and switch the wrapper.
+| Host               | Platform                | Configuration                           |
+| ------------------ | ----------------------- | --------------------------------------- |
+| `lasthaze-mbp`     | macOS aarch64           | nix-darwin + home-manager, `bootstrap.sh` |
+| `lasthaze-homelab` | NixOS x86_64            | NixOS + home-manager, own deploy        |
+| `lasthaze-edge`    | NixOS x86_64            | NixOS, own deploy                       |
+| `lasthaze-ru`      | NixOS x86_64            | NixOS, own deploy                       |
+| `lasthaze-gaming`  | NixOS-WSL on Windows    | NixOS-WSL + nix-win, `bootstrap.ps1`    |
 
 ## Architecture
 
 Three-layer hybrid approach:
 
-- **Nix layer** — packages and system defaults via nix-darwin + home-manager
-- **nix-dotbot layer** — live symlinks from [modules/](modules) into `~/.config` so edits apply both ways
+- **Nix layer** — packages and system defaults via nix-darwin / NixOS + home-manager
+- **nix-link layer** — live symlinks from [modules/](modules) into `~/.config` so edits apply both ways
 - **sops-templates layer** — templated configs rendered with decrypted secrets at activation time
 
-A deeper dive lives in the vault: `projects/dotfiles-architecture/dotfiles-architecture.md`.
-
-## Key docs
-
-User-facing documentation lives in the Obsidian vault (`~/Documents/obsidian/yoshintame/`). The repo only keeps code-artefacts (module READMEs, SKILL.md, AGENTS.md, configs).
-
-- `projects/dotfiles-target-architecture.md` (vault) — target architecture: 4 hosts, 3 wrappers, implementation roadmap with priorities
-- `projects/dotfiles-architecture/dotfiles-architecture.md` (vault) — current three-layer design and module patterns
-- `projects/dotfiles/secrets-management.md` (vault) — why SOPS, tradeoffs vs alternatives
-- `opinions/bootstrap-secret-strategies.md` (vault) — 1Password now, YubiKey later, Tailscale+selfhost as future option
-- `projects/post-install-checklist.md` (vault) — TCC permissions and manual steps macOS requires
-- `projects/testing-bootstrap.md` (vault) — VM-based testing: Tart (macOS), Lima (Linux), NixOS build-vm, Parallels (Windows/WSL)
-- `projects/dotfiles/homebrew-nix-integration.md` (vault) — how Brewfile ties into nix-darwin
-- `projects/dotfiles/path-management.md` (vault) — PATH organization (mise shims, nix, Homebrew)
-
-### Agent skills (Claude Code / Codex)
-
-- `projects/ai-agent-config/git-commit-skill.md` (vault) — safe commits with per-session private index (Claude + Codex)
-- `projects/ai-agent-config/deep-research-skill.md` (vault) — general research workflow with WebSearch-first + supplementary scripts
-- `projects/ai-agent-config/find-best-skill.md` (vault) — "find the best X" specialization with long list + mandatory red flags
-- `projects/ai-agent-config/web-research-scripts.md` (vault) — `search-reddit`/`search-hn`/`search-github` CLI infrastructure on `$PATH`
+Documentation lives in the Obsidian vault (`~/Documents/obsidian/yoshintame/`), entry point `areas/dotfiles.md`; the repo keeps only code artefacts.
 
 ## Common tasks
 
 ```bash
-mise run dot:rebuild              # git add -A && darwin-rebuild switch
+mise run dot:rebuild              # git add -A, darwin-rebuild switch, reload sops-nix, install MCP servers
+mise run dot:rebuild-full         # same, and converge Homebrew to the Brewfile
+mise run dot:link                 # home-manager links only, no sudo
 mise run dot:bootstrap-age-key    # restore SOPS age key from 1Password
 mise run dot:bootstrap-ssh        # wire ~/.ssh/config to 1Password SSH Agent
 mise run dot:proxy-bindings       # regen proxy-binding files from YAML

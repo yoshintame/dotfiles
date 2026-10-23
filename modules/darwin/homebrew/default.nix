@@ -1,11 +1,14 @@
 {
   config,
+  lib,
   hostFacts,
   myLib,
   ...
 }:
 let
   brewFull = builtins.getEnv "DOT_BREW_FULL" == "1";
+  noMas = builtins.getEnv "DOT_BREW_NO_MAS" == "1";
+  brewfile = builtins.readFile hostFacts.brewfile;
 in
 myLib.mkModule config "homebrew" {
   homebrew = {
@@ -17,7 +20,13 @@ myLib.mkModule config "homebrew" {
       extraFlags = [ "--force-cleanup" ];
     };
     global.brewfile = false;
-    extraConfig = builtins.readFile hostFacts.brewfile;
+    extraConfig =
+      if noMas then
+        lib.concatStringsSep "\n" (
+          builtins.filter (line: !lib.hasPrefix "mas " line) (lib.splitString "\n" brewfile)
+        )
+      else
+        brewfile;
   };
 
   environment.variables = {

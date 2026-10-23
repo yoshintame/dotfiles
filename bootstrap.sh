@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# bootstrap.sh — single-command dotfiles installer for macOS / Linux.
+# bootstrap.sh — single-command dotfiles installer for macOS.
 #
 # Usage (fresh machine, via curl):
 #   curl -fsSL https://raw.githubusercontent.com/yoshintame/dotfiles/master/bootstrap.sh | bash -s -- lasthaze-mbp
@@ -13,9 +13,10 @@ set -euo pipefail
 
 REPO_URL="${DOTFILES_REPO_URL:-https://github.com/yoshintame/dotfiles.git}"
 REPO_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+AGE_KEY="${HOME}/.config/sops/age/keys.txt"
 
-HOST="${1:-}"
-
+TEST_MODE=0
+HOST=""
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m!!\033[0m  %s\n' "$*" >&2; }
@@ -23,34 +24,61 @@ err()  { printf '\033[1;31mERR\033[0m %s\n' "$*" >&2; }
 
 usage() {
   cat >&2 <<EOF
-Usage: bootstrap.sh <host>
+Usage: bootstrap.sh [--test] <host>
 
-Hosts defined in flake.nix:
-  lasthaze-mbp       macOS (aarch64-darwin), nix-darwin + home-manager
-  lasthaze-homelab   Linux (x86_64-linux), NixOS + home-manager
+Hosts:
+  lasthaze-mbp   macOS (aarch64-darwin), nix-darwin + home-manager
 
-Examples:
-  bash bootstrap.sh lasthaze-mbp                     # macOS user-machine
-  bash bootstrap.sh lasthaze-homelab                 # NixOS server (after nixos-install)
+Options:
+  --test   unattended run for a VM: skips App Store and Full Disk Access
+           checks, mas entries of the Brewfile and TCC-protected defaults
 
-For lasthaze-homelab: install NixOS first (via nixos-anywhere or installer ISO),
-then run this script on the server. age-key is auto-derived from SSH host key
-on first boot via systemd oneshot (Tier 1b in bootstrap-secret-strategies vault note).
+Environment:
+  BOOTSTRAP_NIX=upstream   install upstream Nix instead of Determinate Nix
+  BOOTSTRAP_OPEN_PANELS=0  do not open System Settings panels at the end
 EOF
   exit 2
 }
 
-require_host() {
+parse_args() {
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --test) TEST_MODE=1 ;;
+      -h|--help) usage ;;
+      -*) err "Unknown option: $1"; usage ;;
+      *) HOST="$1" ;;
+    esac
+    shift
+  done
   if [ -z "${HOST}" ]; then
     err "HOST argument is required"
     usage
   fi
+  if [ "$(uname -s)" != "Darwin" ]; then
+    err "bootstrap.sh supports macOS only"
+    exit 1
+  fi
+  if [ "${TEST_MODE}" = "1" ]; then
+    export DOT_BREW_NO_MAS=1 DOT_SKIP_TCC_DEFAULTS=1 BOOTSTRAP_OPEN_PANELS=0
+  fi
+}
+
+wait_for_enter() {
+  printf '%s\n' "$1"
+  read -r _ </dev/tty
+}
+
+keep_sudo_alive() {
+  log "Caching sudo credentials"
+  sudo -v
+  while true; do
+    sudo -n true
+    sleep 50
+    kill -0 "$$" || exit
+  done 2>/dev/null &
 }
 
 ensure_xcode_clt() {
-  if [ "$(uname -s)" != "Darwin" ]; then
-    return 0
-  fi
   if xcode-select -p >/dev/null 2>&1; then
     log "Xcode Command Line Tools already installed"
     return 0
@@ -64,170 +92,170 @@ ensure_xcode_clt() {
   log "Xcode CLT ready"
 }
 
+ensure_rosetta() {
+  if /usr/bin/arch -x86_64 /usr/bin/true 2>/dev/null; then
+    log "Rosetta already installed"
+    return 0
+  fi
+  log "Installing Rosetta"
+  softwareupdate --install-rosetta --agree-to-license
+}
+
+check_app_store() {
+  if [ "${TEST_MODE}" = "1" ]; then
+    return 0
+  fi
+  open -a "App Store" || true
+  wait_for_enter "Sign in to the App Store (needed by mas in the Brewfile), then press Enter…"
+}
+
+check_full_disk_access() {
+  if [ "${TEST_MODE}" = "1" ]; then
+    return 0
+  fi
+  if defaults write com.apple.Safari BootstrapFullDiskAccessProbe -bool true 2>/dev/null; then
+    defaults delete com.apple.Safari BootstrapFullDiskAccessProbe 2>/dev/null || true
+    log "Terminal has Full Disk Access"
+    return 0
+  fi
+  open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles" || true
+  err "The terminal has no Full Disk Access: switch would fail writing Safari, Mail and universalaccess defaults."
+  err "Grant Full Disk Access to this terminal, reopen it and re-run bootstrap.sh ${HOST}."
+  exit 1
+}
+
+ensure_homebrew() {
+  if [ ! -x /opt/homebrew/bin/brew ]; then
+    log "Installing Homebrew"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    log "Homebrew already installed"
+  fi
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+}
+
 ensure_repo_cloned() {
   if [ -d "${REPO_DIR}/.git" ]; then
     log "Repo already present at ${REPO_DIR}"
+    git -C "${REPO_DIR}" submodule update --init --recursive
     return 0
   fi
   log "Cloning ${REPO_URL} → ${REPO_DIR}"
-  git clone "${REPO_URL}" "${REPO_DIR}"
+  git clone --recurse-submodules "${REPO_URL}" "${REPO_DIR}"
 }
 
 ensure_nix_installed() {
-  if command -v nix >/dev/null 2>&1; then
+  if command -v nix >/dev/null 2>&1 || [ -x /nix/var/nix/profiles/default/bin/nix ]; then
     log "Nix already installed"
     return 0
   fi
-  log "Installing Nix via Determinate Systems installer…"
-  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
-    | sh -s -- install --no-confirm
+  if [ "${BOOTSTRAP_NIX:-determinate}" = "upstream" ]; then
+    log "Installing upstream Nix"
+    curl --proto '=https' --tlsv1.2 -sSf -L https://nixos.org/nix/install | sh -s -- --daemon --yes
+  else
+    log "Installing Determinate Nix"
+    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
+      | sh -s -- install --no-confirm
+  fi
 }
 
 source_nix_env() {
   if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
     # shellcheck disable=SC1091
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  elif [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]; then
-    # shellcheck disable=SC1091
-    . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
   fi
   export NIX_CONFIG="experimental-features = nix-command flakes"
   export FLAKE_ROOT="${REPO_DIR}"
 }
 
-is_nixos_host() {
-  case "$1" in
-    lasthaze-homelab) return 0 ;;
-    *) return 1 ;;
-  esac
+use_system_path() {
+  export PATH="/run/current-system/sw/bin:/etc/profiles/per-user/${USER}/bin:${HOME}/.local/share/mise/shims:${PATH}"
+  export DOTFILES="${REPO_DIR}"
 }
 
-run_system_switch() {
-  local host="$1"
-  log "Building system for host: ${host}"
-  case "$(uname -s)" in
-    Darwin)
-      nix --extra-experimental-features "nix-command flakes" \
-        run github:lnl7/nix-darwin/nix-darwin-25.05#darwin-rebuild -- \
-        --impure switch --flake "${REPO_DIR}#${host}"
-      ;;
-    Linux)
-      if is_nixos_host "${host}"; then
-        if [ ! -f /etc/NIXOS ]; then
-          err "Host '${host}' is a NixOS configuration but this machine is not running NixOS."
-          err "Install NixOS first via nixos-anywhere or installer ISO, then re-run bootstrap."
-          exit 1
-        fi
-        sudo nixos-rebuild switch --flake "${REPO_DIR}#${host}"
-      else
-        nix --extra-experimental-features "nix-command flakes" \
-          run github:nix-community/home-manager/release-25.05 -- \
-          switch --impure --flake "${REPO_DIR}#${host}"
-      fi
-      ;;
-    *)
-      err "Unsupported OS: $(uname -s)"
-      exit 1
-      ;;
-  esac
+run_first_switch() {
+  local darwin_rebuild log_file
+  log "Building darwin-rebuild pinned by flake.lock"
+  darwin_rebuild="$(nix build --no-link --print-out-paths --inputs-from "${REPO_DIR}" nix-darwin#darwin-rebuild)"
+  log_file="$(mktemp)"
+
+  for attempt in 1 2; do
+    log "First switch for ${HOST} (attempt ${attempt})"
+    if sudo env PATH="${PATH}" NIX_CONFIG="${NIX_CONFIG}" NIX_PATH="nixpkgs=flake:nixpkgs" \
+      DOT_BREW_FULL=1 DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" \
+      "${darwin_rebuild}/bin/darwin-rebuild" switch --impure --flake "${REPO_DIR}#${HOST}" 2>&1 | tee "${log_file}"; then
+      return 0
+    fi
+    if [ "${attempt}" = "1" ] && grep -q 'Unexpected files in /etc' "${log_file}"; then
+      grep -E '^[[:space:]]+/etc/' "${log_file}" | while read -r file; do
+        log "Moving ${file} → ${file}.before-nix-darwin"
+        sudo mv "${file}" "${file}.before-nix-darwin"
+      done
+      continue
+    fi
+    err "First switch failed, see output above"
+    exit 1
+  done
+}
+
+setup_toolchains() {
+  log "Installing mise toolchains"
+  mise install uv
+  mise install
+  log "Installing bun dependencies of the repo"
+  (cd "${REPO_DIR}" && mise exec -- bun install)
 }
 
 bootstrap_age_key() {
-  local key_file="${HOME}/.config/sops/age/keys.txt"
-  if [ -f "${key_file}" ]; then
-    log "SOPS age key already present at ${key_file}"
+  if [ -f "${AGE_KEY}" ]; then
+    log "SOPS age key already present at ${AGE_KEY}"
     return 0
   fi
-  if is_nixos_host "${HOST}"; then
-    log "NixOS host — age key derived from SSH host key by sops-age-key-bootstrap.service"
-    log "Will appear at ${key_file} after first boot. See bootstrap-secret-strategies vault note (Tier 1b)."
+  if [ "${TEST_MODE}" = "1" ]; then
+    warn "Test mode: no age key at ${AGE_KEY}, secrets stay unrendered"
     return 0
   fi
-  if ! command -v op >/dev/null 2>&1; then
-    warn "1Password CLI (op) not found — skipping age-key bootstrap."
-    warn "Ensure brew bundle installed 1password-cli, authorize 1Password GUI, then run: mise run dot:bootstrap-age-key"
-    return 0
-  fi
-  if ! op account list >/dev/null 2>&1; then
-    warn "1Password CLI not authorized yet."
-    warn "Open 1Password.app → sign in → Settings → Developer → enable CLI integration, then run: mise run dot:bootstrap-age-key"
-    return 0
-  fi
-  log "Restoring SOPS age key from 1Password"
-  mkdir -p "$(dirname "${key_file}")"
-  op read 'op://Private/sops-age-key/private key' > "${key_file}"
-  chmod 600 "${key_file}"
+  open -a 1Password || true
+  until (cd "${REPO_DIR}" && mise run dot:bootstrap-age-key); do
+    wait_for_enter "Sign in to 1Password and enable Settings → Developer → Integrate with 1Password CLI, then press Enter to retry…"
+  done
 }
 
 bootstrap_ssh() {
-  if [ "$(uname -s)" != "Darwin" ]; then
+  if [ "${TEST_MODE}" = "1" ]; then
     return 0
   fi
-  if ! command -v mise >/dev/null 2>&1; then
-    warn "mise not found — skipping SSH Agent bootstrap. Run: mise run dot:bootstrap-ssh after rebuild."
-    return 0
-  fi
-  log "Configuring 1Password SSH Agent via mise"
+  log "Configuring 1Password SSH Agent"
   if ! (cd "${REPO_DIR}" && mise run dot:bootstrap-ssh); then
-    warn "dot:bootstrap-ssh failed — see docs/post-install-checklist.md"
+    warn "dot:bootstrap-ssh failed — enable Settings → Developer → Use the SSH agent in 1Password, then run: dot bootstrap-ssh"
   fi
 }
 
-bootstrap_sops_launch_agent() {
-  if [ "$(uname -s)" != "Darwin" ]; then
+run_second_switch() {
+  if [ ! -f "${AGE_KEY}" ]; then
+    warn "Age key missing — skipping second switch. Run 'dot rebuild' after 'dot bootstrap-age-key'."
     return 0
   fi
-  if ! command -v mise >/dev/null 2>&1; then
-    warn "mise not found — skipping sops-nix LaunchAgent reload. Run: mise run dot:sops-bootstrap after rebuild."
-    return 0
-  fi
-  if [ ! -f "${HOME}/.config/sops/age/keys.txt" ]; then
-    log "Skipping sops-nix LaunchAgent reload — age key not present yet."
-    return 0
-  fi
-  log "Reloading sops-nix LaunchAgent (workaround for darwin bug Mic92/sops-nix#910)"
-  if ! (cd "${REPO_DIR}" && mise run dot:sops-bootstrap); then
-    warn "dot:sops-bootstrap failed — run manually after fixing: mise run dot:sops-bootstrap"
-  fi
+  log "Second switch: render secrets with the age key present"
+  (cd "${REPO_DIR}" && mise run dot:rebuild)
 }
 
-print_post_install_checklist() {
-  if [ "$(uname -s)" != "Darwin" ]; then
-    return 0
-  fi
+print_next_steps() {
   cat <<EOF
 
-\033[1;32m================================================================\033[0m
-\033[1;32m  System build complete. Manual post-install steps remaining:\033[0m
-\033[1;32m================================================================\033[0m
+System build complete. The remaining manual steps are in the reinstall runbook
+of the Obsidian vault (projects/mbp-clean-reinstall/knowledge/mbp-reinstall-runbook.md):
 
-Full checklist: ${REPO_DIR}/docs/post-install-checklist.md
+  1. Accessibility and Input Monitoring: Karabiner, Hammerspoon, AeroSpace
+  2. Full Disk Access for restic
+  3. Login Items: Karabiner, Hammerspoon, AeroSpace
+  4. tailscale up, restic restore and identities
 
-Summary of what you still need to click through System Settings:
-
-  1. Apple ID / App Store signin (for mas)
-  2. 1Password signin + SSH Agent + CLI integration
-  3. Accessibility permissions: Karabiner / Hammerspoon / AeroSpace
-  4. Input Monitoring: karabiner_grabber, karabiner_observer
-  5. Full Disk Access: your terminal + restic
-  6. Login Items: Karabiner / Hammerspoon / AeroSpace
-  7. (optional) tailscale up
-
-These cannot be automated without MDM. See docs/post-install-checklist.md for deeplinks.
-
-After finishing the checklist run:
-  mise run dot:bootstrap-age-key   # if 1Password CLI was not ready during bootstrap
-  mise run dot:bootstrap-ssh       # finalize 1Password SSH Agent wiring
-  mise run dot:rebuild             # second switch — decrypts secrets via sops-nix
-  mise run dot:sops-bootstrap      # reload sops-nix LaunchAgent (one-time after first switch)
-
+These cannot be automated without MDM.
 EOF
 }
 
 open_permission_panels() {
-  if [ "$(uname -s)" != "Darwin" ]; then
-    return 0
-  fi
   if [ "${BOOTSTRAP_OPEN_PANELS:-1}" = "0" ]; then
     return 0
   fi
@@ -238,7 +266,7 @@ open_permission_panels() {
 }
 
 main() {
-  require_host
+  parse_args "$@"
 
   ensure_xcode_clt
   ensure_repo_cloned
@@ -247,33 +275,30 @@ main() {
   # Re-exec from the cloned repo so $0 / relative paths behave.
   if [ -z "${BOOTSTRAP_REEXEC:-}" ] && [ "${BASH_SOURCE[0]}" != "${REPO_DIR}/bootstrap.sh" ]; then
     log "Re-executing from ${REPO_DIR}/bootstrap.sh"
-    BOOTSTRAP_REEXEC=1 exec bash "${REPO_DIR}/bootstrap.sh" "${HOST}"
+    BOOTSTRAP_REEXEC=1 exec bash "${REPO_DIR}/bootstrap.sh" "$@"
   fi
 
+  check_full_disk_access
+  check_app_store
+  keep_sudo_alive
+  ensure_rosetta
+  ensure_homebrew
   ensure_nix_installed
   source_nix_env
 
-  # First switch: installs Nix packages + Brewfile (1password-cli, etc.).
   # The sops-templates wrapper around sops-nix declares its config inside a
   # mkIf gated on the age-key file existing on disk, so this first switch on
   # a fresh machine succeeds without secrets — sops-install-secrets is not
   # wired up yet.
-  run_system_switch "${HOST}"
+  run_first_switch
+  use_system_path
+  setup_toolchains
 
   bootstrap_age_key
   bootstrap_ssh
+  run_second_switch
 
-  # Second switch: re-evaluates the gate (age key now present), wires up
-  # sops-nix and decrypts secrets at activation.
-  if [ -f "${HOME}/.config/sops/age/keys.txt" ]; then
-    log "Re-running switch to apply sops-nix with age key present"
-    run_system_switch "${HOST}"
-    bootstrap_sops_launch_agent
-  else
-    warn "Age key still missing — skipping second switch. Run 'mise run dot:rebuild' after bootstrap-age-key succeeds."
-  fi
-
-  print_post_install_checklist
+  print_next_steps
   open_permission_panels
 }
 

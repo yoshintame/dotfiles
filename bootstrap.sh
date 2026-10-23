@@ -83,8 +83,17 @@ ensure_xcode_clt() {
     log "Xcode Command Line Tools already installed"
     return 0
   fi
-  log "Installing Xcode Command Line Tools (interactive prompt)…"
-  xcode-select --install || true
+  log "Installing Xcode Command Line Tools"
+  local marker=/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress label
+  touch "${marker}"
+  label="$(softwareupdate -l 2>/dev/null | sed -n 's/^\* Label: \(Command Line Tools for Xcode.*\)$/\1/p' | sort -V | tail -1)"
+  if [ -n "${label}" ]; then
+    sudo softwareupdate -i "${label}"
+  fi
+  rm -f "${marker}"
+  if ! xcode-select -p >/dev/null 2>&1; then
+    xcode-select --install || true
+  fi
   until xcode-select -p >/dev/null 2>&1; do
     sleep 5
     echo "  waiting for Xcode CLT install to finish…"

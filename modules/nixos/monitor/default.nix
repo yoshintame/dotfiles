@@ -105,10 +105,7 @@ lib.recursiveUpdate
           path = "/var/lib/gatus/data.db";
           "maximum-number-of-results" = 100;
         };
-        web = {
-          address = cfg.listenAddress;
-          inherit port;
-        };
+        web = { inherit port; };
         alerting.telegram = {
           token = "\${GATUS_TELEGRAM_TOKEN}";
           id = toString cfg.telegram.chatId;
@@ -120,19 +117,14 @@ lib.recursiveUpdate
     };
 
     networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ port ];
-    systemd.services.gatus = {
-      after = [ "tailscaled.service" ];
-      wants = [ "tailscaled.service" ];
-      serviceConfig = {
-        RestartSec = "5s";
-        MemoryHigh = "100M";
-        MemoryMax = "150M";
-      };
+    systemd.services.gatus.serviceConfig = {
+      RestartSec = "5s";
+      MemoryHigh = "100M";
+      MemoryMax = "150M";
     };
   })
   {
     options.my.monitor = {
-      listenAddress = mkOption { type = types.str; };
       address = mkOption {
         type = types.submodule {
           options = {

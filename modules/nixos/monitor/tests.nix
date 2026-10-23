@@ -25,7 +25,6 @@ let
           };
           my.monitor = {
             enable = true;
-            listenAddress = "127.0.0.1";
             telegram = {
               chatId = -1;
               topics = {

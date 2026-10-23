@@ -66,7 +66,6 @@
   };
 
   my.monitor = {
-    listenAddress = "100.98.13.73";
     telegram = {
       chatId = -1004370351984;
       topics = {

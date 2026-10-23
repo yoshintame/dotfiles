@@ -53,7 +53,6 @@ myLib.mkModule config "fish" {
 
   home.packages = with pkgs; [
     grc
-    thefuck
     fd
     ripgrep
   ];

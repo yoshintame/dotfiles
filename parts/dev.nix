@@ -20,7 +20,7 @@
         programs = {
           nixfmt = {
             enable = true;
-            package = pkgs.nixfmt-rfc-style;
+            package = pkgs.nixfmt;
           };
           deadnix.enable = true;
           statix.enable = true;
@@ -37,7 +37,7 @@
         packages = [
           pkgs.nixd
           pkgs.just
-          pkgs.nixfmt-rfc-style
+          pkgs.nixfmt
         ];
       };
 

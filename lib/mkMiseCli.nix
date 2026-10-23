@@ -14,7 +14,7 @@ let
 
   proxiedCases = lib.concatMapStringsSep "\n" (p: ''${p.sub}) exec ${p.target} "$@" ;;'') proxied;
 
-  specialCases = lib.concatMapStringsSep "\n" (s: ''${s.sub}) ${s.run} ;;'') specials;
+  specialCases = lib.concatMapStringsSep "\n" (s: "${s.sub}) ${s.run} ;;") specials;
 
   proxiedHelpLines = lib.concatMapStringsSep "\n" (
     p: ''echo "  ${p.sub}	${p.help or ("→ " + p.target)}"''

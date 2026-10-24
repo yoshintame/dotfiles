@@ -30,13 +30,17 @@
 
 `tailscale/policy.hujson` — tailnet ACL policy, synced to Tailscale on push to `master` via `.github/workflows/tailscale-acl.yml` (OAuth client, secrets `TS_OAUTH_CLIENT_ID`/`TS_OAUTH_SECRET`/`TS_TAILNET`). Tags go in `extraUpFlags` (not `extraSetFlags` — `tailscale set` does not support `--advertise-tags`). Changing port grants or adding tags requires editing the policy file; CI applies on push, tests on PR.
 
-## Скиллы через APM
+## Скиллы и MCP через APM
 
 Скиллы Claude Code и Codex доставляет APM, а не Nix/nix-link. Глобальный manifest и lock живут в `modules/home/apm/config/`; project-зависимости — в `apm.yml` и `apm.lock.yaml` корня соответствующего репозитория. В dotfiles project manifest подключает ровно `lasthaze-edge-ops` и `lasthaze-edge-decoy-site` из versioned-пакета `lasthaze-edge` и разворачивает их в `.claude/skills/` и `.agents/skills/`.
 
 Для любых запросов пользователя, связанных с прокси, используй `lasthaze-edge-ops` или `lasthaze-edge-decoy-site` по контексту.
 
 Восстановить project deployment: `apm install --frozen`; проверить: `apm audit --ci --no-policy`. Каталоги `.claude/skills/`, `.agents/skills/` и `apm_modules/` сгенерированы и в Git не попадают. Глобальные mutating-команды запускаются через `mise run dot:apm`, чтобы сохранить lock в dotfiles и восстановить Home Manager-ссылку.
+
+Смена пакета, который поставляет скил с тем же именем, требует полного `mise run dot:apm install`, а не scoped `apm update <pkg>`: scoped update удаляет файлы старого провайдера, но не разворачивает ранее затенённый новый, и скил молча пропадает до полного install. Глобальный `apm audit` на этом наборе зависает, а `apm outdated` для range-зависимости показывает `unknown` — глобальный слой проверяй через `update --dry-run` и дифф lock.
+
+Глобальные MCP-серверы Claude Code и Codex объявлены в том же глобальном `apm.yml` (`dependencies.mcp`) и применяются `mise run dot:mcp`, который подаёт секреты из SOPS только в env install. Устройство и грабли — заметка `mcp-secrets-delivery` в vault.
 
 ## Коммит-дисциплина (три независимых репозитория)
 

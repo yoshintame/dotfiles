@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BASE_IMAGE="ghcr.io/cirruslabs/macos-sequoia-vanilla:latest"
-BASE_VM="bootstrap-base"
+BASE_VM="bootstrap-base-sequoia-vanilla"
 RUN_VM="bootstrap-run"
 HOST="lasthaze-mbp"
 REPO_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"

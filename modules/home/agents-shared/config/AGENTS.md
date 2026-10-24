@@ -42,9 +42,7 @@
 
 ## Agent configs & skills
 
-All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-dotbot symlinks from `~/.dotfiles`. Edit the **original in the repo**, never the `~/.claude/` copy. For the full path map and linking mechanics — what is live immediately vs. needs `mise run dot:rebuild` — see `~/.dotfiles/CLAUDE.md`.
-
-Switching which APM package provides a given skill (same skill name, different source) needs a full `apm install` (`mise run dot:apm install`), not a scoped `apm update <pkg>`. A scoped update deletes the old provider's files but does not redeploy the new, previously shadowed provider, so the skill silently disappears until a full install re-resolves every provider.
+All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-dotbot symlinks from `~/.dotfiles`. Edit the **original in the repo**, never the `~/.claude/` copy. For the full path map, linking mechanics — what is live immediately vs. needs `mise run dot:rebuild` — and global skills/MCP via APM, see `~/.dotfiles/CLAUDE.md`.
 
 ## Pasted images
 

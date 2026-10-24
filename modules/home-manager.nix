@@ -70,6 +70,7 @@
       ./home/plannotator
       ./home/pnpm
       ./home/python
+      ./home/quitall
       ./home/rclone
       ./home/resticprofile
       ./home/serena

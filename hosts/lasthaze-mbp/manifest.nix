@@ -44,6 +44,7 @@
     "plannotator"
     "pnpm"
     "python"
+    "quitall"
     "rclone"
     "resticprofile"
     "serena"

@@ -128,38 +128,9 @@
             "command": "jq -c --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" '{ts: $ts, tool: .tool_name, input: .tool_input, session: .session_id, mode: .permission_mode, suggestions: .permission_suggestions}' >> \"$HOME/.claude/permission-requests.jsonl\""
           }
         ]
-      },
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --completed"
-          }
-        ]
       }
     ],
     "UserPromptSubmit": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --dismiss"
-          }
-        ]
-      },
       {
         "matcher": "",
         "hooks": [
@@ -209,15 +180,6 @@
         ]
       },
       {
-        "matcher": "AskUserQuestion|ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
-          }
-        ]
-      },
-      {
         "matcher": "Read|Edit|Write",
         "hooks": [
           {
@@ -248,49 +210,6 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/session-start.sh",
             "timeout": 30
-          }
-        ]
-      }
-    ],
-    "Elicitation": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\""
-          }
-        ]
-      }
-    ],
-    "StopFailure": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --failed"
-          }
-        ]
-      }
-    ],
-    "PostToolBatch": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --tooldone"
-          }
-        ]
-      }
-    ],
-    "ElicitationResult": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/yoshintame/.vscode/extensions/mayerwin.ai-agent-sound-notification-1.1.1/scripts/claude-hook.js\" --tooldone"
           }
         ]
       }

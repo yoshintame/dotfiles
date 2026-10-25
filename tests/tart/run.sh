@@ -42,6 +42,7 @@ done
 WORK="$(mktemp -d)"
 SSH_OPTS=(-F /dev/null -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5)
 IP=""
+TART_PID=""
 
 cleanup() {
   if [ "${KEEP}" = "1" ]; then
@@ -59,6 +60,7 @@ user_ssh() { ssh "${SSH_OPTS[@]}" -i "${WORK}/id" "yoshintame@${IP}" "$@"; }
 
 start_vm() {
   tart run --no-graphics "${RUN_VM}" >"${WORK}/tart.log" 2>&1 &
+  TART_PID=$!
   IP="$(tart ip --wait 300 "${RUN_VM}")"
   until nc -z "${IP}" 22 2>/dev/null; do sleep 2; done
   log "VM ${RUN_VM} is up at ${IP}"
@@ -79,9 +81,17 @@ admin_ssh "cat > /tmp/preflight.sh" <"${HERE}/preflight.sh"
 admin_ssh "bash /tmp/preflight.sh '$(openssl rand -hex 12)' '$(cat "${WORK}/id.pub")'"
 
 log "Rebooting into the yoshintame GUI session"
-tart stop "${RUN_VM}"
+admin_ssh "sudo shutdown -h now" || true
+wait "${TART_PID}" || true
 start_vm
-until user_ssh 'launchctl print gui/$(id -u) >/dev/null 2>&1'; do sleep 3; done
+for attempt in $(seq 1 100); do
+  user_ssh 'launchctl print gui/$(id -u) >/dev/null 2>&1' && break
+  if [ "${attempt}" = "100" ]; then
+    err "yoshintame has no GUI session after reboot: autologin did not take effect"
+    exit 1
+  fi
+  sleep 3
+done
 
 if [ "${WITH_AGE_KEY}" = "1" ]; then
   log "Copying the SOPS age key"

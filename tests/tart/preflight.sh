@@ -28,3 +28,5 @@ perl -e '
 ' "${PASSWORD}" | sudo tee /etc/kcpassword >/dev/null
 sudo chmod 600 /etc/kcpassword
 sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser "${USER_NAME}"
+test "$(sudo defaults read /Library/Preferences/com.apple.loginwindow autoLoginUser)" = "${USER_NAME}"
+sync

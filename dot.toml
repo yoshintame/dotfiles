@@ -17,7 +17,7 @@ depends = ["dot:proxy-bindings"]
 # b2.env, hc.env, repo.key) silently disappear from new sops-nix generations.
 run = '''
 git add -A
-sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_BREW_NO_CASKS="${DOT_BREW_NO_CASKS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
 mise run dot:sops-bootstrap
 mise run dot:mcp
 '''
@@ -28,7 +28,7 @@ dir = "{{env.DOTFILES}}"
 depends = ["dot:proxy-bindings"]
 run = '''
 git add -A
-sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_FULL=1 DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_FULL=1 DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_BREW_NO_CASKS="${DOT_BREW_NO_CASKS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
 mise run dot:sops-bootstrap
 mise run dot:mcp
 '''

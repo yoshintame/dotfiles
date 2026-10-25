@@ -13,6 +13,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ./zfs.nix
     ./deploy.nix
     ./manifest.nix
   ];

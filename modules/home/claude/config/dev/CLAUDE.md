@@ -14,3 +14,10 @@ Dev-серверы (`wt dev`, `wt dev:local`, `bun run dev`, `vite`) всегд�
 - Для проектов на JavaScript и TypeScript предпочитай `bun` вместо `npm` и `yarn`: `bun install`, `bun run X`, `bun test`, `bunx X`.
 - Для Python предпочитай `uv` вместо `pip` и `pip3`: `uv pip install X`, а для установки в venv — `uv pip install --python /path/to/venv/bin/python X`.
 - Общие хуки политики Bash могут блокировать голые команды `npm`, `yarn` и `pip`, если не задан обходной флаг: `FORCE_NPM=1`, `FORCE_YARN=1`, `FORCE_PIP=1`.
+
+## Скилы-знания
+
+- TypeScript и React — `/ts-react-style`.
+- Пишешь или правишь тесты — `/test-discipline`.
+- Рефакторинг и чистка кода — `/refactor`.
+- Воркдеревья и worktrunk — `/wt-workflow`.

@@ -30,6 +30,7 @@ myLib.mkModule config "claude" {
   nixLink.links = {
     "~/.claude/settings.json" = "modules/home/claude/config/settings.json";
     "~/.claude/CLAUDE.md" = "modules/home/agents-shared/config/AGENTS.md";
+    "~/.claude/rules" = "modules/home/claude/config/rules";
     "~/.claude/hooks/" = {
       path = "modules/home/agents-shared/config/hooks/**";
       glob = true;

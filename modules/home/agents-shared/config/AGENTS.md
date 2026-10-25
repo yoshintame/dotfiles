@@ -1,4 +1,4 @@
-# Global Rules
+# Глобальные правила
 
 ## Язык общения с пользователем
 
@@ -7,10 +7,10 @@
 
 ## *Bash*
 
-- *Prefer absolute paths or tool-specific flags (`git -C /path`, `bun run --cwd /path`). Use `cd /path && cmd` when the tool requires cwd context (e.g. worktrunk aliases, branch-relative commands) or when it's simpler than the absolute-path alternative.*
-- *The Bash tool runs a POSIX shell (zsh), not fish. Use POSIX syntax for every command you execute via the tool, e.g. `export NAME=value`.*
-- *The user's own interactive terminal is fish. ONLY when writing a command for the user to copy and run there, use fish syntax, e.g. `set -x NAME value` instead of `export NAME=value`. Default everywhere else is POSIX.*
-- *Dev servers (`wt dev`, `wt dev:local`, `bun run dev`, `vite`) — always launch with `dangerouslyDisableSandbox: true`. Inside the sandbox external hostnames do not resolve (`getaddrinfo ENOTFOUND`) and Vite's proxy ignores `HTTP(S)_PROXY`, so every `/api` request to a remote backend (dev stand) fails with 500. Do not rely on `sandbox.excludedCommands` — matching commands were observed to still run fully sandboxed.*
+- *Предпочитай абсолютные пути или флаги самого инструмента (`git -C /path`, `bun run --cwd /path`). `cd /path && cmd` используй, когда инструменту нужен контекст cwd (например, алиасы worktrunk или команды, зависящие от ветки) или когда так проще, чем с абсолютным путём.*
+- *Bash-инструмент запускает POSIX-шелл (zsh), а не fish. Во всех командах, которые выполняешь через инструмент, используй POSIX-синтаксис, например `export NAME=value`.*
+- *Интерактивный терминал пользователя — fish. ТОЛЬКО когда пишешь команду, которую пользователь скопирует и запустит там, используй синтаксис fish, например `set -x NAME value` вместо `export NAME=value`. Во всех остальных случаях — POSIX.*
+- *Dev-серверы (`wt dev`, `wt dev:local`, `bun run dev`, `vite`) всегда запускай с `dangerouslyDisableSandbox: true`. В песочнице внешние хосты не резолвятся (`getaddrinfo ENOTFOUND`), а прокси Vite игнорирует `HTTP(S)_PROXY`, поэтому каждый запрос `/api` к удалённому бэкенду (дев-стенду) падает с 500. На `sandbox.excludedCommands` не полагайся: подходящие под него команды всё равно запускались полностью в песочнице.*
 
 ## Контекст инструментов
 
@@ -19,10 +19,10 @@
 - *Для диагностических команд задавай консервативный лимит вывода инструмента (`max_output_tokens`, если доступен) и увеличивай его только по необходимости.*
 - *Если вывод оказался усечён, продолжай с точки усечения или уточни запрос; не повторяй уже полученную часть.*
 
-## Code
+## Код
 
-- *NEVER add comments to code unless explicitly asked. No docstrings, no inline comments, no JSDoc, no TODO comments unless the user requests them.*
-- *NEVER touch existing comments written by others peoples: do not delete, rewrite, translate, or "improve" them, even when refactoring the code around them. Move a comment only when the code it belongs to moves.*
+- *НИКОГДА не добавляй комментарии в код без явной просьбы. Никаких docstring, inline-комментариев, JSDoc и TODO, если пользователь их не просил.*
+- *НИКОГДА не трогай существующие комментарии, написанные другими людьми: не удаляй, не переписывай, не переводи и не «улучшай» их, даже при рефакторинге окружающего кода. Переноси комментарий только вместе с кодом, к которому он относится.*
 
 ## Git
 
@@ -32,26 +32,26 @@
 - *Push по явной просьбе — через `git sp` (`git-sign-push`: переподписывает непушнутые коммиты и пушит) и только с `dangerouslyDisableSandbox: true`. Подпись идёт через сокет агента (Secretive, fallback 1Password), из песочницы он недоступен: `git sp` падает посреди sign-rebase и оставляет дерево в rebase с автостэшем. Тогда сразу `git rebase --abort` — автостэш вернётся сам.*
 - *Режим коммита `/git-commit` выбирает сам по дереву: linked-worktree (путь под `~/.local/share/worktrees` / `git-dir` под `.../worktrees/…`; сессия почти всегда одна) → auto + прогон всех git-хуков (`--no-edit`, неинтерактивно, unsigned); главное/общее дерево (возможны параллельные сессии) → auto без хуков (`--auto`, CAS-race-safe). Тебе достаточно вызвать `/git-commit`, флаг вручную не выбирай. Интерактивный editor-коммит с ревью и подписью — только по явной просьбе: `/git-commit manual`.*
 
-## File references
+## Ссылки на файлы
 
-- *When linking to a file in a response, always use markdown link syntax with the file's **absolute path** as the target, without the `file://` scheme: `[name](/Users/.../file.ts)`. VSCode Claude Code extension renders bare absolute paths as clickable links; `file://` URIs and relative paths to files outside the open workspace do not open.*
+- *Ссылаясь на файл в ответе, всегда используй markdown-ссылку с **абсолютным путём** к файлу в качестве цели, без схемы `file://`: `[name](/Users/.../file.ts)`. Расширение Claude Code для VSCode делает голые абсолютные пути кликабельными; URI `file://` и относительные пути к файлам вне открытого воркспейса не открываются.*
 
-## Agent memory
+## Память агента
 
-- *NEVER create or write files under `~/.claude/projects/*/memory/` (Claude Code auto-memory storage). Auto-memory is disabled (`autoMemoryEnabled: false`) and the store stays closed until the rules from the vault idea `agent-memory-meta-only-policy` are implemented (what qualifies, source tracing, expiry). When asked to remember something durable, put it in its typed home instead: an agent behavior rule → this file or the relevant skill; knowledge → a typed note in the Obsidian vault.*
+- *НИКОГДА не создавай и не пиши файлы в `~/.claude/projects/*/memory/` (хранилище auto-memory Claude Code). Auto-memory отключена (`autoMemoryEnabled: false`), и хранилище закрыто, пока не реализованы правила из идеи vault `agent-memory-meta-only-policy` (что туда попадает, трассировка источника, срок жизни). Когда просят запомнить что-то надолго, клади это в его типизированное место: правило поведения агента — в этот файл или в соответствующий скил, знание — в типизированную заметку в Obsidian vault.*
 
-## Agent configs & skills
+## Конфиги агентов и скилы
 
-All agent configs (this file, `~/.claude/settings.json`, hooks, skills) are nix-dotbot symlinks from `~/.dotfiles`. Edit the **original in the repo**, never the `~/.claude/` copy. For the full path map, linking mechanics — what is live immediately vs. needs `mise run dot:rebuild` — and global skills/MCP via APM, see `~/.dotfiles/CLAUDE.md`.
+Все конфиги агентов (этот файл, `~/.claude/settings.json`, хуки, скилы) — симлинки nix-dotbot из `~/.dotfiles`. Правь **оригинал в репозитории**, никогда не копию в `~/.claude/`. Полная карта путей, механика линковки (что применяется сразу, а что требует `mise run dot:rebuild`) и глобальные скилы и MCP через APM описаны в `~/.dotfiles/CLAUDE.md`.
 
-## Pasted images
+## Вставленные изображения
 
-Images pasted into a chat message are never exposed to the agent as files — they persist as base64 image blocks in the session transcript. Recover the bytes (byte-for-byte identical to the original, no re-encoding) with `extract-images` (on `PATH`; run `extract-images --help`): it discovers the current session's transcript and decodes images from the most recent image-bearing user message to files on disk. Reach for it whenever you need a pasted screenshot as a real file — bug-report assets, saving an attachment, diffing an image.
+Картинки, вставленные в сообщение чата, агенту как файлы не доступны никогда: они хранятся base64-блоками изображений в транскрипте сессии. Байты (побайтно идентичные оригиналу, без перекодирования) восстанавливает `extract-images` (есть в `PATH`; см. `extract-images --help`): он находит транскрипт текущей сессии и декодирует в файлы на диске картинки из последнего сообщения пользователя, где они есть. Используй его всякий раз, когда вставленный скриншот нужен как настоящий файл: ассеты баг-репорта, сохранение вложения, сравнение изображений.
 
-## Package managers
+## Пакетные менеджеры
 
-- Prefer `bun` over `npm` and `yarn` for JavaScript and TypeScript projects. Use `bun install`, `bun run X`, `bun test`, `bunx X`.
-- Prefer `uv` over `pip` and `pip3` for Python. Use `uv pip install X`, or `uv pip install --python /path/to/venv/bin/python X` for venv installs.
-- Shared Bash policy hooks may block raw `npm`, `yarn`, or `pip` commands unless the escape hatch is used: `FORCE_NPM=1`, `FORCE_YARN=1`, `FORCE_PIP=1`.
+- Для проектов на JavaScript и TypeScript предпочитай `bun` вместо `npm` и `yarn`: `bun install`, `bun run X`, `bun test`, `bunx X`.
+- Для Python предпочитай `uv` вместо `pip` и `pip3`: `uv pip install X`, а для установки в venv — `uv pip install --python /path/to/venv/bin/python X`.
+- Общие хуки политики Bash могут блокировать голые команды `npm`, `yarn` и `pip`, если не задан обходной флаг: `FORCE_NPM=1`, `FORCE_YARN=1`, `FORCE_PIP=1`.
 
   .

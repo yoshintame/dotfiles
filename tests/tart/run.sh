@@ -75,6 +75,7 @@ tart clone "${BASE_VM}" "${RUN_VM}"
 
 ssh-keygen -q -t ed25519 -N '' -f "${WORK}/id"
 start_vm
+until admin_ssh true 2>/dev/null; do sleep 5; done
 
 log "Preflight: user yoshintame with passwordless sudo and autologin"
 admin_ssh "cat > /tmp/preflight.sh" <"${HERE}/preflight.sh"

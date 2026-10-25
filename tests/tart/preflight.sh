@@ -14,6 +14,10 @@ fi
 echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/${USER_NAME}" >/dev/null
 sudo chmod 440 "/etc/sudoers.d/${USER_NAME}"
 
+if dscl . -read /Groups/com.apple.access_ssh >/dev/null 2>&1; then
+  sudo dseditgroup -o edit -a "${USER_NAME}" -t user com.apple.access_ssh
+fi
+
 sudo mkdir -p "${HOME_DIR}/.ssh"
 echo "${PUBLIC_KEY}" | sudo tee "${HOME_DIR}/.ssh/authorized_keys" >/dev/null
 sudo chown -R "${USER_NAME}:staff" "${HOME_DIR}/.ssh"

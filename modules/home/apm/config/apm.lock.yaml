@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 8e5ea829fff9e83c46d685278f7b3f873fca8ae6
-  resolved_ref: v1.12.0+8e5ea82
-  version: 1.12.0+8e5ea82
+  resolved_commit: 1d473c296c803fb64d765bd6157d330aaeaf1951
+  resolved_ref: v1.13.0+1d473c2
+  version: 1.13.0+1d473c2
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -921,6 +921,12 @@ dependencies:
   - .agents/skills/cc-fork/SKILL.md
   - .agents/skills/cc-model-reset
   - .agents/skills/cc-model-reset/SKILL.md
+  - .agents/skills/chromatic
+  - .agents/skills/chromatic/SKILL.md
+  - .agents/skills/chromatic/scripts/build.ts
+  - .agents/skills/chromatic/scripts/chromatic.ts
+  - .agents/skills/chromatic/scripts/login.ts
+  - .agents/skills/chromatic/scripts/pairs.ts
   - .agents/skills/create-skill
   - .agents/skills/create-skill/SKILL.md
   - .agents/skills/create-skill/scripts/slop-lint.ts
@@ -1094,6 +1100,12 @@ dependencies:
   - .claude/skills/cc-fork/SKILL.md
   - .claude/skills/cc-model-reset
   - .claude/skills/cc-model-reset/SKILL.md
+  - .claude/skills/chromatic
+  - .claude/skills/chromatic/SKILL.md
+  - .claude/skills/chromatic/scripts/build.ts
+  - .claude/skills/chromatic/scripts/chromatic.ts
+  - .claude/skills/chromatic/scripts/login.ts
+  - .claude/skills/chromatic/scripts/pairs.ts
   - .claude/skills/create-skill
   - .claude/skills/create-skill/SKILL.md
   - .claude/skills/create-skill/scripts/slop-lint.ts
@@ -1259,6 +1271,11 @@ dependencies:
     .agents/skills/cc-fork-recover/SKILL.md: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
     .agents/skills/cc-fork/SKILL.md: sha256:34d0a6c1472352d48cb4c933788a2a06858224e703ff412a6098269b4511969c
     .agents/skills/cc-model-reset/SKILL.md: sha256:94917e1e2363efdecf7e8069cfca7ebb9ee4df436fdfda39b2ec2d959d9e10a7
+    .agents/skills/chromatic/SKILL.md: sha256:2bc299293e0da93daa5d9f43ee0b807c939ae72231ec0ed5aa2848625be2672a
+    .agents/skills/chromatic/scripts/build.ts: sha256:320be93892b52543cc868fb5ba6fa1312482adf659289d50a7f82fe51a00222f
+    .agents/skills/chromatic/scripts/chromatic.ts: sha256:9f5b0b4afe8e66e8f512fa4f43f5f6bdea0bb401f9876bfeab1a48a53d477ccd
+    .agents/skills/chromatic/scripts/login.ts: sha256:88701cf7b8c0ebe4a6ee7303ceb24d4b2372b38b856e33327817e7782470911c
+    .agents/skills/chromatic/scripts/pairs.ts: sha256:2c07f4420b8935a400c652471c453d7b1597b966d6e7e42a7381b0fee8fa7553
     .agents/skills/create-skill/SKILL.md: sha256:f6fb83408529d0e8ebd697ef803f61e45bf368d2eebcc8e31ebd31eed78deadd
     .agents/skills/create-skill/scripts/slop-lint.ts: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
     .agents/skills/deep-research/SKILL.md: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
@@ -1377,6 +1394,11 @@ dependencies:
     .claude/skills/cc-fork-recover/SKILL.md: sha256:b3c0c9055e3ae2b3ac3b3c9110717046a08b03a443ab051a058241a2ce3d9aa1
     .claude/skills/cc-fork/SKILL.md: sha256:34d0a6c1472352d48cb4c933788a2a06858224e703ff412a6098269b4511969c
     .claude/skills/cc-model-reset/SKILL.md: sha256:94917e1e2363efdecf7e8069cfca7ebb9ee4df436fdfda39b2ec2d959d9e10a7
+    .claude/skills/chromatic/SKILL.md: sha256:2bc299293e0da93daa5d9f43ee0b807c939ae72231ec0ed5aa2848625be2672a
+    .claude/skills/chromatic/scripts/build.ts: sha256:320be93892b52543cc868fb5ba6fa1312482adf659289d50a7f82fe51a00222f
+    .claude/skills/chromatic/scripts/chromatic.ts: sha256:9f5b0b4afe8e66e8f512fa4f43f5f6bdea0bb401f9876bfeab1a48a53d477ccd
+    .claude/skills/chromatic/scripts/login.ts: sha256:88701cf7b8c0ebe4a6ee7303ceb24d4b2372b38b856e33327817e7782470911c
+    .claude/skills/chromatic/scripts/pairs.ts: sha256:2c07f4420b8935a400c652471c453d7b1597b966d6e7e42a7381b0fee8fa7553
     .claude/skills/create-skill/SKILL.md: sha256:f6fb83408529d0e8ebd697ef803f61e45bf368d2eebcc8e31ebd31eed78deadd
     .claude/skills/create-skill/scripts/slop-lint.ts: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
     .claude/skills/deep-research/SKILL.md: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
@@ -1481,10 +1503,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:7c7b0b4e3ef4dbbb4a5600030c0eb0d14daf4046669d7e89d790def2bd6b559d
+  content_hash: sha256:56745ad29df2bfd3dc72052487eeca764e2dd4e206b6be7a64e04d48cbbc7d4e
   constraint: ^1.0.0
-  resolved_tag: v1.12.0+8e5ea82
-  resolved_at: '2026-10-18T15:35:43+00:00'
+  resolved_tag: v1.13.0+1d473c2
+  resolved_at: '2026-10-25T08:42:35+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -1685,6 +1707,60 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:94917e1e2363efdecf7e8069cfca7ebb9ee4df436fdfda39b2ec2d959d9e10a7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/chromatic
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/chromatic/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:2bc299293e0da93daa5d9f43ee0b807c939ae72231ec0ed5aa2848625be2672a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/chromatic/scripts/build.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:320be93892b52543cc868fb5ba6fa1312482adf659289d50a7f82fe51a00222f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/chromatic/scripts/chromatic.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:9f5b0b4afe8e66e8f512fa4f43f5f6bdea0bb401f9876bfeab1a48a53d477ccd
+- kind: project-relative
+  target: claude
+  value: .claude/skills/chromatic/scripts/login.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:88701cf7b8c0ebe4a6ee7303ceb24d4b2372b38b856e33327817e7782470911c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/chromatic/scripts/pairs.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:2c07f4420b8935a400c652471c453d7b1597b966d6e7e42a7381b0fee8fa7553
 - kind: project-relative
   target: claude
   value: .claude/skills/create-skill
@@ -5258,6 +5334,60 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:94917e1e2363efdecf7e8069cfca7ebb9ee4df436fdfda39b2ec2d959d9e10a7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/chromatic
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/chromatic/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:2bc299293e0da93daa5d9f43ee0b807c939ae72231ec0ed5aa2848625be2672a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/chromatic/scripts/build.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:320be93892b52543cc868fb5ba6fa1312482adf659289d50a7f82fe51a00222f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/chromatic/scripts/chromatic.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:9f5b0b4afe8e66e8f512fa4f43f5f6bdea0bb401f9876bfeab1a48a53d477ccd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/chromatic/scripts/login.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:88701cf7b8c0ebe4a6ee7303ceb24d4b2372b38b856e33327817e7782470911c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/chromatic/scripts/pairs.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:2c07f4420b8935a400c652471c453d7b1597b966d6e7e42a7381b0fee8fa7553
 - kind: project-relative
   target: legacy
   value: .agents/skills/create-skill

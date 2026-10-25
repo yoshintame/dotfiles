@@ -40,7 +40,7 @@ while [ $# -gt 0 ]; do
 done
 
 WORK="$(mktemp -d)"
-SSH_OPTS=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5)
+SSH_OPTS=(-F /dev/null -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5)
 IP=""
 
 cleanup() {
@@ -54,7 +54,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-admin_ssh() { nix run nixpkgs#sshpass -- -p admin ssh "${SSH_OPTS[@]}" "admin@${IP}" "$@"; }
+admin_ssh() { nix run nixpkgs#sshpass -- -p admin ssh "${SSH_OPTS[@]}" -o PubkeyAuthentication=no "admin@${IP}" "$@"; }
 user_ssh() { ssh "${SSH_OPTS[@]}" -i "${WORK}/id" "yoshintame@${IP}" "$@"; }
 
 start_vm() {

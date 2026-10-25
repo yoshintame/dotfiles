@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 1d473c296c803fb64d765bd6157d330aaeaf1951
-  resolved_ref: v1.13.0+1d473c2
-  version: 1.13.0+1d473c2
+  resolved_commit: e4e2b49acfc9f45b5447739241670ab0985d1e67
+  resolved_ref: v1.13.1+e4e2b49
+  version: 1.13.1+e4e2b49
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1319,8 +1319,8 @@ dependencies:
     .agents/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
     .agents/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
     .agents/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
-    .agents/skills/homelab-add-service/SKILL.md: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
-    .agents/skills/homelab-add-service/references/examples.md: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
+    .agents/skills/homelab-add-service/SKILL.md: sha256:0c95a4ec5184b69137083a2c8c33d63b145d74e5870cc022f8698bc2152a148f
+    .agents/skills/homelab-add-service/references/examples.md: sha256:abc689bfa64554546323385bdb93a1b89c50e710738d9c5a444278bdf931055f
     .agents/skills/homelab-add-service/scripts/compose-to-homelab.ts: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
     .agents/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .agents/skills/homelab-deploy/SKILL.md: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
@@ -1442,8 +1442,8 @@ dependencies:
     .claude/skills/handoff-create/scripts/handoff-create.ts: sha256:706b41212808be3ec9333f8f61a3ad69d32b28dd36b21615df7caee05f4f369d
     .claude/skills/handoff-pickup/SKILL.md: sha256:5b67cd3c11d1f45345cf7257015957dd7248348a5563da751dd3ce24d37e4fd5
     .claude/skills/handoff-pickup/scripts/handoff-pickup.ts: sha256:f2d99a24a9634aa2239c7f612ea3a23e7d0184bd29af478dcb697e3fce450e0b
-    .claude/skills/homelab-add-service/SKILL.md: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
-    .claude/skills/homelab-add-service/references/examples.md: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
+    .claude/skills/homelab-add-service/SKILL.md: sha256:0c95a4ec5184b69137083a2c8c33d63b145d74e5870cc022f8698bc2152a148f
+    .claude/skills/homelab-add-service/references/examples.md: sha256:abc689bfa64554546323385bdb93a1b89c50e710738d9c5a444278bdf931055f
     .claude/skills/homelab-add-service/scripts/compose-to-homelab.ts: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
     .claude/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .claude/skills/homelab-deploy/SKILL.md: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
@@ -1503,10 +1503,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:56745ad29df2bfd3dc72052487eeca764e2dd4e206b6be7a64e04d48cbbc7d4e
+  content_hash: sha256:9ae323cc995d48723fb3a4e0e8e98fa29f642dbeaef7f8d616a1f97efad5095a
   constraint: ^1.0.0
-  resolved_tag: v1.13.0+1d473c2
-  resolved_at: '2026-10-25T08:42:35+00:00'
+  resolved_tag: v1.13.1+e4e2b49
+  resolved_at: '2026-10-25T09:57:28+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -2867,7 +2867,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
+  content_hash: sha256:0c95a4ec5184b69137083a2c8c33d63b145d74e5870cc022f8698bc2152a148f
 - kind: project-relative
   target: claude
   value: .claude/skills/homelab-add-service/references/examples.md
@@ -2876,7 +2876,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
+  content_hash: sha256:abc689bfa64554546323385bdb93a1b89c50e710738d9c5a444278bdf931055f
 - kind: project-relative
   target: claude
   value: .claude/skills/homelab-add-service/scripts/compose-to-homelab.ts
@@ -6494,7 +6494,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9fd468731753368e284e4e97d0dd24d144e943061f8dedcf30f84d5a8b99c996
+  content_hash: sha256:0c95a4ec5184b69137083a2c8c33d63b145d74e5870cc022f8698bc2152a148f
 - kind: project-relative
   target: legacy
   value: .agents/skills/homelab-add-service/references/examples.md
@@ -6503,7 +6503,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:7d005b255609ea9be77466e71cbe4ca932564497a84ea5f0c5314a777dc6094a
+  content_hash: sha256:abc689bfa64554546323385bdb93a1b89c50e710738d9c5a444278bdf931055f
 - kind: project-relative
   target: legacy
   value: .agents/skills/homelab-add-service/scripts/compose-to-homelab.ts

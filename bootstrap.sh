@@ -70,7 +70,7 @@ wait_for_enter() {
 
 keep_sudo_alive() {
   log "Caching sudo credentials"
-  sudo -v
+  sudo -n true 2>/dev/null || sudo -v
   while true; do
     sudo -n true
     sleep 50

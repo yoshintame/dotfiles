@@ -7,7 +7,9 @@
 }:
 let
   brewFull = builtins.getEnv "DOT_BREW_FULL" == "1";
-  noMas = builtins.getEnv "DOT_BREW_NO_MAS" == "1";
+  skippedKinds =
+    lib.optional (builtins.getEnv "DOT_BREW_NO_MAS" == "1") "mas "
+    ++ lib.optional (builtins.getEnv "DOT_BREW_NO_CASKS" == "1") "cask ";
   brewfile = builtins.readFile hostFacts.brewfile;
 in
 myLib.mkModule config "homebrew" {
@@ -20,13 +22,11 @@ myLib.mkModule config "homebrew" {
       extraFlags = [ "--force-cleanup" ];
     };
     global.brewfile = false;
-    extraConfig =
-      if noMas then
-        lib.concatStringsSep "\n" (
-          builtins.filter (line: !lib.hasPrefix "mas " line) (lib.splitString "\n" brewfile)
-        )
-      else
-        brewfile;
+    extraConfig = lib.concatStringsSep "\n" (
+      builtins.filter (line: !lib.any (kind: lib.hasPrefix kind line) skippedKinds) (
+        lib.splitString "\n" brewfile
+      )
+    );
   };
 
   environment.variables = {

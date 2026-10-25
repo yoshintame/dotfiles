@@ -10,5 +10,6 @@
     ~/AppData/Roaming/Zed/keymap.json: modules/home/zed/config/keymap.json
     ~/AppData/Roaming/Zed/themes: modules/home/zed/config/themes
     ~/.config/mise/config.toml: modules/windows/mise/config/config.toml
+    ~/AppData/Roaming/ludusavi/config.yaml: modules/windows/ludusavi/config/config.yaml
     ~/.gitconfig: modules/windows/git/config/.gitconfig
     ~/.wslconfig: hosts/lasthaze-gaming/windows/.wslconfig

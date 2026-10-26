@@ -31,7 +31,7 @@ Hosts:
 
 Options:
   --test   unattended run for a VM: skips App Store and Full Disk Access
-           checks, mas and cask entries of the Brewfile and TCC-protected defaults
+           checks, Brewfile entries other than formulae and TCC-protected defaults
 
 Environment:
   BOOTSTRAP_NIX=upstream   install upstream Nix instead of Determinate Nix
@@ -59,7 +59,7 @@ parse_args() {
     exit 1
   fi
   if [ "${TEST_MODE}" = "1" ]; then
-    export DOT_BREW_NO_MAS=1 DOT_BREW_NO_CASKS=1 DOT_SKIP_TCC_DEFAULTS=1 BOOTSTRAP_OPEN_PANELS=0
+    export DOT_BREW_ONLY_FORMULAE=1 DOT_SKIP_TCC_DEFAULTS=1 BOOTSTRAP_OPEN_PANELS=0
   fi
 }
 
@@ -191,7 +191,7 @@ run_first_switch() {
   for attempt in 1 2; do
     log "First switch for ${HOST} (attempt ${attempt})"
     if sudo env PATH="${PATH}" NIX_CONFIG="${NIX_CONFIG}" NIX_PATH="nixpkgs=flake:nixpkgs" \
-      DOT_BREW_FULL=1 DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_BREW_NO_CASKS="${DOT_BREW_NO_CASKS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" \
+      DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" \
       "${darwin_rebuild}/bin/darwin-rebuild" switch --impure --flake "${REPO_DIR}#${HOST}" 2>&1 | tee "${log_file}"; then
       return 0
     fi
@@ -205,6 +205,11 @@ run_first_switch() {
     err "First switch failed, see output above"
     exit 1
   done
+}
+
+install_brewfile() {
+  log "Installing the Brewfile"
+  (cd "${REPO_DIR}" && mise run dot:brew)
 }
 
 setup_toolchains() {
@@ -301,6 +306,7 @@ main() {
   # wired up yet.
   run_first_switch
   use_system_path
+  install_brewfile
   setup_toolchains
 
   bootstrap_age_key

@@ -82,7 +82,7 @@ admin_ssh "cat > /tmp/preflight.sh" <"${HERE}/preflight.sh"
 admin_ssh "bash /tmp/preflight.sh '$(openssl rand -hex 12)' '$(cat "${WORK}/id.pub")'"
 
 log "Rebooting into the yoshintame GUI session"
-admin_ssh "sudo shutdown -h now" || true
+user_ssh "sudo shutdown -h now" || true
 wait "${TART_PID}" || true
 start_vm
 for attempt in $(seq 1 100); do

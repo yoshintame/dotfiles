@@ -23,7 +23,8 @@ function brew --wraps='command brew' --description 'Wrapper for the brew command
                     find ~/Library/Caches/Homebrew/downloads -maxdepth 1 -name '*.incomplete' -delete 2>/dev/null
                     # Serial downloads so subprocesses don't contend on the same bottle lock
                     set -lx HOMEBREW_DOWNLOAD_CONCURRENCY 1
-                    command brew bundle install --cleanup --file=~/.config/packages/Brewfile $flags
+                    mise run dot:brew
+                    command brew bundle cleanup --force --file=~/.config/packages/Brewfile
                 else
                     command brew install $args[2..-1]
                     /bin/sh ~/.dotfiles/modules/home/resticprofile/config/dump-brewfile.sh ~/.config/packages/Brewfile

@@ -217,7 +217,11 @@ setup_toolchains() {
   mise install uv
   mise install
   log "Installing bun dependencies of the repo"
-  (cd "${REPO_DIR}" && mise exec -- bun install)
+  for dir in "${REPO_DIR}" "${REPO_DIR}"/packages/*; do
+    if [ -f "${dir}/package.json" ]; then
+      (cd "${dir}" && mise exec -- bun install)
+    fi
+  done
 }
 
 bootstrap_age_key() {

@@ -17,7 +17,7 @@ depends = ["dot:proxy-bindings"]
 # b2.env, hc.env, repo.key) silently disappear from new sops-nix generations.
 run = '''
 git add -A
-sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_BREW_NO_CASKS="${DOT_BREW_NO_CASKS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
+sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
 mise run dot:sops-bootstrap
 mise run dot:mcp
 '''
@@ -25,12 +25,35 @@ mise run dot:mcp
 ["dot:rebuild-full"]
 description = "Rebuild AND converge Homebrew to the Brewfile (install missing + uninstall extras)"
 dir = "{{env.DOTFILES}}"
-depends = ["dot:proxy-bindings"]
 run = '''
-git add -A
-sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_BREW_FULL=1 DOT_BREW_NO_MAS="${DOT_BREW_NO_MAS:-}" DOT_BREW_NO_CASKS="${DOT_BREW_NO_CASKS:-}" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
-mise run dot:sops-bootstrap
-mise run dot:mcp
+mise run dot:rebuild
+mise run dot:brew
+brew bundle cleanup --file=hosts/lasthaze-mbp/packages/Brewfile --force
+'''
+
+["dot:brew"]
+description = "Install the Brewfile minus Brewfile.skip plus Brewfile.extra; report entries that failed instead of aborting"
+dir = "{{env.DOTFILES}}"
+run = '''
+set -uo pipefail
+dir=hosts/lasthaze-mbp/packages
+brewfile="$(mktemp)"
+log="$(mktemp)"
+trap 'rm -f "$brewfile" "$log"' EXIT
+awk -v formulae_only="${DOT_BREW_ONLY_FORMULAE:-}" '
+  FILENAME == ARGV[1] { skip[$0] = 1; next }
+  skip[$0] { next }
+  formulae_only == "1" && !/^(tap|brew) / { next }
+  { print }
+' "$dir/Brewfile.skip" "$dir/Brewfile" > "$brewfile"
+cat "$dir/Brewfile.extra" >> "$brewfile"
+brew bundle install --file="$brewfile" --no-upgrade 2>&1 | tee "$log"
+failed="$(sed -n 's/^Installing \(.*\) has failed!$/\1/p' "$log")"
+if [ -n "$failed" ]; then
+  printf '\n\033[1;33m!!\033[0m Not installed from the Brewfile:\n'
+  printf '%s\n' "$failed" | sed 's/^/   /'
+  grep -E '^Error: ' "$log" | sed 's/^/   /'
+fi
 '''
 
 ["dot:link"]

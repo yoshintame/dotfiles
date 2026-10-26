@@ -43,5 +43,4 @@ in
     sharedEnv
     sharedPath
     ;
-  brewfile = ./packages/Brewfile;
 }

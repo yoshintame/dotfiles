@@ -1,0 +1,2 @@
+brew "openai/tools/tart", trusted: true
+vscode "yoshintame.inlinemd-claude-bridge"

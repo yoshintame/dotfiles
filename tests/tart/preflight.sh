@@ -24,6 +24,10 @@ sudo chown -R "${USER_NAME}:staff" "${HOME_DIR}/.ssh"
 sudo chmod 700 "${HOME_DIR}/.ssh"
 sudo chmod 600 "${HOME_DIR}/.ssh/authorized_keys"
 
+networksetup -listallnetworkservices | tail -n +2 | while read -r service; do
+  sudo networksetup -setv6off "${service}"
+done
+
 perl -e '
   my @key = (125, 137, 82, 35, 210, 188, 221, 234, 163, 185, 31);
   my @bytes = unpack("C*", $ARGV[0]);

@@ -1,9 +1,11 @@
 {
 	"tagOwners": {
-		"tag:homelab":   ["m.ivanov0427@gmail.com"],
-		"tag:edge":      ["m.ivanov0427@gmail.com"],
-		"tag:ru-exit":   ["m.ivanov0427@gmail.com"],
-		"tag:proxy-vps": ["m.ivanov0427@gmail.com"],
+		"tag:homelab":        ["m.ivanov0427@gmail.com"],
+		"tag:edge":           ["m.ivanov0427@gmail.com"],
+		"tag:ru-exit":        ["m.ivanov0427@gmail.com"],
+		"tag:proxy-vps":      ["m.ivanov0427@gmail.com"],
+		"tag:reinstall-test": ["m.ivanov0427@gmail.com"],
+		"tag:ci":             ["m.ivanov0427@gmail.com"],
 	},
 
 	"autoApprovers": {
@@ -37,6 +39,16 @@
 			"dst": ["tag:homelab"],
 			"ip":  ["tcp:22"],
 		},
+		{
+			"src": ["tag:homelab"],
+			"dst": ["tag:reinstall-test"],
+			"ip":  ["tcp:22"],
+		},
+		{
+			"src": ["tag:ci"],
+			"dst": ["tag:homelab"],
+			"ip":  ["tcp:22"],
+		},
 	],
 
 	"ssh": [
@@ -51,6 +63,43 @@
 			"src":    ["m.ivanov0427@gmail.com"],
 			"dst":    ["tag:homelab"],
 			"users":  ["yoshintame", "root"],
+		},
+		{
+			"action": "accept",
+			"src":    ["tag:ci"],
+			"dst":    ["tag:homelab"],
+			"users":  ["reinstall-ci"],
+		},
+	],
+
+	"tests": [
+		{
+			"src":    "tag:homelab",
+			"accept": ["tag:reinstall-test:22"],
+			"deny":   ["tag:reinstall-test:3389"],
+		},
+		{
+			"src":  "tag:reinstall-test",
+			"deny": ["tag:homelab:22", "tag:homelab:443", "tag:edge:8080", "tag:ci:22"],
+		},
+		{
+			"src":    "tag:ci",
+			"accept": ["tag:homelab:22"],
+			"deny": [
+				"tag:homelab:443",
+				"tag:homelab:9090",
+				"tag:edge:22",
+				"tag:reinstall-test:22",
+			],
+		},
+	],
+
+	"sshTests": [
+		{
+			"src":    "tag:ci",
+			"dst":    ["tag:homelab"],
+			"accept": ["reinstall-ci"],
+			"deny":   ["root", "yoshintame"],
 		},
 	],
 }

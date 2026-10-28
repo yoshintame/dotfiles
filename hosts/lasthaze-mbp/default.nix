@@ -101,10 +101,12 @@ in
       programs.zsh.envExtra = ''
         autoload -Uz add-zsh-hook
         _vtb_tz() {
+          local tz
           case "$PWD" in
-            "$HOME"/Development/work/vtb/*) export TZ=Europe/Moscow ;;
-            *) unset TZ ;;
+            "$HOME"/Development/work/vtb/*) tz=Europe/Moscow ;;
+            *) tz=$(command git config --get vtb.tz 2>/dev/null) ;;
           esac
+          if [ -n "$tz" ]; then export TZ=$tz; else unset TZ; fi
         }
         add-zsh-hook chpwd _vtb_tz
         _vtb_tz

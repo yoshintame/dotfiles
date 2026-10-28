@@ -145,6 +145,9 @@
 [includeIf "gitdir:~/Development/work/vtb/"]
     path = ~/.config/git/config-vtb
 
+[includeIf "hasconfig:remote.*.url:https://github.com/stainwood/**"]
+    path = ~/.config/git/config-vtb
+
 [alias]
     # used the most by me
     aa          = add --all

@@ -8,6 +8,7 @@ includes = [
 "pipx:apm-cli" = "0.29.1"
 bun = "latest"
 go = "latest"
+hk = "2.6.0"
 node = "lts"
 npm = "latest"
 pnpm = "latest"

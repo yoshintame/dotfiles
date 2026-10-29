@@ -42,6 +42,7 @@
 
       ./home/aerospace
       ./home/apm
+      ./home/app-state
       ./home/atuin
       ./home/bat
       ./home/brew

@@ -114,7 +114,7 @@ resources:
         $ErrorActionPreference = 'Continue'
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
         $repo = Join-Path $env:USERPROFILE '.dotfiles'
-        & $mise exec uv@0.13.1 -- uv tool run dotbot==1.24.0 -d $repo -c (Join-Path $repo 'hosts\lasthaze-gaming\windows\links.yaml')
+        & $mise exec uv@0.13.1 -- uv tool run --python 3.14 dotbot==1.24.0 -d $repo -c (Join-Path $repo 'hosts\lasthaze-gaming\windows\links.yaml')
         if ($LASTEXITCODE -ne 0) { throw "dotbot exited with $LASTEXITCODE" }
 
   - name: MiseTools

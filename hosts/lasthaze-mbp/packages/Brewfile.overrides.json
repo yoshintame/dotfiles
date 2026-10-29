@@ -1,0 +1,8 @@
+{
+  "skip": [
+    { "kind": "vscode", "name": "yoshintame.inlinemd-claude-bridge" }
+  ],
+  "args": [
+    { "kind": "brew", "name": "openai/tools/tart", "args": ["ignore-dependencies"] }
+  ]
+}

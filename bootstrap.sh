@@ -59,13 +59,16 @@ parse_args() {
     exit 1
   fi
   if [ "${TEST_MODE}" = "1" ]; then
-    export DOT_BREW_ONLY_FORMULAE=1 DOT_SKIP_TCC_DEFAULTS=1 BOOTSTRAP_OPEN_PANELS=0
+    export DOT_SKIP_TCC_DEFAULTS=1
   fi
 }
 
 wait_for_enter() {
   printf '%s\n' "$1"
-  read -r _ </dev/tty
+  if ! read -r _ </dev/tty; then
+    err "This step needs an interactive terminal: run bootstrap.sh from Terminal.app"
+    exit 1
+  fi
 }
 
 keep_sudo_alive() {
@@ -111,17 +114,11 @@ ensure_rosetta() {
 }
 
 check_app_store() {
-  if [ "${TEST_MODE}" = "1" ]; then
-    return 0
-  fi
   open -a "App Store" || true
   wait_for_enter "Sign in to the App Store (needed by mas in the Brewfile), then press Enter…"
 }
 
 check_full_disk_access() {
-  if [ "${TEST_MODE}" = "1" ]; then
-    return 0
-  fi
   if defaults write com.apple.Safari BootstrapFullDiskAccessProbe -bool true 2>/dev/null; then
     defaults delete com.apple.Safari BootstrapFullDiskAccessProbe 2>/dev/null || true
     log "Terminal has Full Disk Access"
@@ -146,6 +143,11 @@ ensure_homebrew() {
 ensure_repo_cloned() {
   if [ -d "${REPO_DIR}/.git" ]; then
     log "Repo already present at ${REPO_DIR}"
+    if [ -z "$(git -C "${REPO_DIR}" status --porcelain)" ]; then
+      git -C "${REPO_DIR}" pull --ff-only || warn "Could not fast-forward ${REPO_DIR}; continuing with the local checkout"
+    else
+      warn "${REPO_DIR} has local changes; running it without pulling"
+    fi
     git -C "${REPO_DIR}" submodule update --init --recursive
     return 0
   fi
@@ -174,7 +176,6 @@ source_nix_env() {
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   fi
   export NIX_CONFIG="experimental-features = nix-command flakes"
-  export FLAKE_ROOT="${REPO_DIR}"
 }
 
 use_system_path() {
@@ -193,10 +194,11 @@ run_first_switch() {
     if sudo env PATH="${PATH}" NIX_CONFIG="${NIX_CONFIG}" NIX_PATH="nixpkgs=flake:nixpkgs" \
       DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" \
       "${darwin_rebuild}/bin/darwin-rebuild" switch --impure --flake "${REPO_DIR}#${HOST}" 2>&1 | tee "${log_file}"; then
+      rm -f "${log_file}"
       return 0
     fi
     if [ "${attempt}" = "1" ] && grep -q 'Unexpected files in /etc' "${log_file}"; then
-      grep -E '^[[:space:]]+/etc/' "${log_file}" | while read -r file; do
+      awk '/Unexpected files in \/etc/ { block = 1 } block && /^Please/ { exit } block && /^[[:space:]]+\/etc\// { print $1 }' "${log_file}" | while read -r file; do
         log "Moving ${file} → ${file}.before-nix-darwin"
         sudo mv "${file}" "${file}.before-nix-darwin"
       done
@@ -209,7 +211,11 @@ run_first_switch() {
 
 install_brewfile() {
   log "Installing the Brewfile"
-  (cd "${REPO_DIR}" && mise run dot:brew)
+  if [ "${TEST_MODE}" = "1" ]; then
+    (cd "${REPO_DIR}" && mise run dot:brew --formulae-only)
+  elif ! (cd "${REPO_DIR}" && mise run dot:brew); then
+    warn "Some Brewfile entries did not install (listed above); continuing"
+  fi
 }
 
 setup_toolchains() {
@@ -229,20 +235,22 @@ bootstrap_age_key() {
     log "SOPS age key already present at ${AGE_KEY}"
     return 0
   fi
-  if [ "${TEST_MODE}" = "1" ]; then
-    warn "Test mode: no age key at ${AGE_KEY}, secrets stay unrendered"
+  if [ ! -x /opt/homebrew/bin/op ]; then
+    warn "1Password CLI is not installed (see the Brewfile report); run 'dot bootstrap-age-key' once it is"
     return 0
   fi
   open -a 1Password || true
-  until (cd "${REPO_DIR}" && mise run dot:bootstrap-age-key); do
+  for attempt in 1 2 3 4 5; do
+    if (cd "${REPO_DIR}" && mise run dot:bootstrap-age-key); then
+      return 0
+    fi
+    [ "${attempt}" = "5" ] && break
     wait_for_enter "Sign in to 1Password and enable Settings → Developer → Integrate with 1Password CLI, then press Enter to retry…"
   done
+  warn "Could not read the age key from 1Password; run 'dot bootstrap-age-key' later"
 }
 
 bootstrap_ssh() {
-  if [ "${TEST_MODE}" = "1" ]; then
-    return 0
-  fi
   log "Configuring 1Password SSH Agent"
   if ! (cd "${REPO_DIR}" && mise run dot:bootstrap-ssh); then
     warn "dot:bootstrap-ssh failed — enable Settings → Developer → Use the SSH agent in 1Password, then run: dot bootstrap-ssh"
@@ -296,8 +304,12 @@ main() {
     BOOTSTRAP_REEXEC=1 exec bash "${REPO_DIR}/bootstrap.sh" "$@"
   fi
 
-  check_full_disk_access
-  check_app_store
+  if [ "${TEST_MODE}" != "1" ]; then
+    check_full_disk_access
+    if [ ! -e /run/current-system ]; then
+      check_app_store
+    fi
+  fi
   keep_sudo_alive
   ensure_rosetta
   ensure_homebrew
@@ -310,15 +322,23 @@ main() {
   # wired up yet.
   run_first_switch
   use_system_path
-  install_brewfile
   setup_toolchains
+  install_brewfile
 
-  bootstrap_age_key
-  bootstrap_ssh
+  if [ "${TEST_MODE}" = "1" ]; then
+    if [ ! -f "${AGE_KEY}" ]; then
+      warn "Test mode: no age key at ${AGE_KEY}, secrets stay unrendered"
+    fi
+  else
+    bootstrap_age_key
+    bootstrap_ssh
+  fi
   run_second_switch
 
   print_next_steps
-  open_permission_panels
+  if [ "${TEST_MODE}" != "1" ]; then
+    open_permission_panels
+  fi
 }
 
 main "$@"

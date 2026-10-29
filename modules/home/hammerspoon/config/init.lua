@@ -11,5 +11,3 @@ if not ok then
     hs.notify.new({ title = "Hammerspoon config error", informativeText = tostring(err) }):send()
     hs.console.printStyledtext("Hammerspoon config error: " .. tostring(err))
 end
-
-

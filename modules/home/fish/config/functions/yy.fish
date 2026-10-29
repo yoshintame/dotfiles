@@ -11,4 +11,3 @@ function yy --description "Run yazi and cd to the directory it returns"
 	end
 	command rm -f -- "$tmp"
 end
-

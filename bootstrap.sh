@@ -178,8 +178,11 @@ source_nix_env() {
   export NIX_CONFIG="experimental-features = nix-command flakes"
 }
 
-use_system_path() {
-  export PATH="/run/current-system/sw/bin:/etc/profiles/per-user/${USER}/bin:${HOME}/.local/share/mise/shims:${PATH}"
+load_session_env() {
+  set +u
+  # shellcheck disable=SC1090
+  . "/etc/profiles/per-user/${USER}/etc/profile.d/hm-session-vars.sh"
+  set -u
   export DOTFILES="${REPO_DIR}"
 }
 
@@ -321,7 +324,7 @@ main() {
   # a fresh machine succeeds without secrets — sops-install-secrets is not
   # wired up yet.
   run_first_switch
-  use_system_path
+  load_session_env
   setup_toolchains
   install_brewfile
 

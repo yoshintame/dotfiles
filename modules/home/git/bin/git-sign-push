@@ -37,26 +37,39 @@ fi
 
 # No upstream (first push of a new branch): sign everything not reachable from
 # any remote-tracking ref.
-root_rebase=0
-if [ -z "$base" ]; then
-    oldest=$(git rev-list --reverse HEAD --not --remotes | head -n1)
-    if [ -n "$oldest" ]; then
-        if parent=$(git rev-parse --verify --quiet "${oldest}^"); then
-            base="$parent"
-        else
-            root_rebase=1
-        fi
-    fi
-fi
-
-sign_exec='git commit --amend --allow-empty --no-edit --no-verify -S'
-
-if [ "$root_rebase" -eq 1 ]; then
-    git rebase --root --rebase-merges --exec "$sign_exec" || die "sign rebase failed"
-elif [ -n "$base" ] && [ -n "$(git rev-list "$base"..HEAD)" ]; then
-    git rebase --rebase-merges --exec "$sign_exec" "$base" || die "sign rebase failed"
+if [ -n "$base" ]; then
+    commits=$(git rev-list --reverse --topo-order HEAD --not "$base" --remotes)
 else
-    echo "git-sign-push: nothing local to sign" >&2
+    commits=$(git rev-list --reverse --topo-order HEAD --not --remotes)
 fi
+
+if [ -z "$commits" ]; then
+    echo "git-sign-push: nothing local to sign" >&2
+    exec git push "$@"
+fi
+
+ref=$(git symbolic-ref -q HEAD || echo HEAD)
+head=$(git rev-parse HEAD)
+
+for commit in $commits; do
+    parents=()
+    for parent in $(git rev-parse "$commit^@"); do
+        signed_var="signed_$parent"
+        parents+=(-p "${!signed_var:-$parent}")
+    done
+    signed=$(
+        export GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_AUTHOR_DATE
+        GIT_AUTHOR_NAME=$(git show -s --format=%an "$commit")
+        GIT_AUTHOR_EMAIL=$(git show -s --format=%ae "$commit")
+        GIT_AUTHOR_DATE=$(git show -s --format=%ad --date=raw "$commit")
+        git cat-file commit "$commit" | sed '1,/^$/d' |
+            git commit-tree -S ${parents[@]+"${parents[@]}"} "$commit^{tree}"
+    ) || die "signing $commit failed; nothing changed"
+    printf -v "signed_$commit" %s "$signed"
+done
+
+signed_var="signed_$head"
+git update-ref -m "git-sign-push" "$ref" "${!signed_var}" "$head" ||
+    die "HEAD moved while signing; nothing changed"
 
 exec git push "$@"

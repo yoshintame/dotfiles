@@ -5,8 +5,8 @@ BASE_IMAGE="ghcr.io/cirruslabs/macos-sequoia-vanilla:latest"
 BASE_VM="bootstrap-base-sequoia-vanilla"
 RUN_VM="bootstrap-run"
 HOST="lasthaze-mbp"
-REPO_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${DOTFILES_DIR:-$(cd "${HERE}/../.." && pwd)}"
 AGE_KEY="${HOME}/.config/sops/age/keys.txt"
 
 WITH_AGE_KEY=0
@@ -55,14 +55,29 @@ cleanup() {
 }
 trap cleanup EXIT
 
-admin_ssh() { nix run nixpkgs#sshpass -- -p admin ssh "${SSH_OPTS[@]}" -o PubkeyAuthentication=no "admin@${IP}" "$@"; }
+SSHPASS="$(nix build --no-link --print-out-paths --inputs-from "${REPO_DIR}" nixpkgs#sshpass)/bin/sshpass"
+
+retry() {
+  local attempts="$1" delay="$2" what="$3"
+  shift 3
+  for attempt in $(seq 1 "${attempts}"); do
+    "$@" && return 0
+    if [ "${attempt}" = "${attempts}" ]; then
+      err "Gave up waiting for ${what}"
+      exit 1
+    fi
+    sleep "${delay}"
+  done
+}
+
+admin_ssh() { "${SSHPASS}" -p admin ssh "${SSH_OPTS[@]}" -o PubkeyAuthentication=no "admin@${IP}" "$@"; }
 user_ssh() { ssh "${SSH_OPTS[@]}" -i "${WORK}/id" "yoshintame@${IP}" "$@"; }
 
 start_vm() {
   tart run --no-graphics "${RUN_VM}" >"${WORK}/tart.log" 2>&1 &
   TART_PID=$!
   IP="$(tart ip --wait 300 "${RUN_VM}")"
-  until nc -z "${IP}" 22 2>/dev/null; do sleep 2; done
+  retry 150 2 "port 22 on ${IP}" nc -z "${IP}" 22
   log "VM ${RUN_VM} is up at ${IP}"
 }
 
@@ -75,7 +90,7 @@ tart clone "${BASE_VM}" "${RUN_VM}"
 
 ssh-keygen -q -t ed25519 -N '' -f "${WORK}/id"
 start_vm
-until admin_ssh true 2>/dev/null; do sleep 5; done
+retry 60 5 "admin SSH login" admin_ssh true
 
 log "Preflight: user yoshintame with passwordless sudo and autologin"
 admin_ssh "cat > /tmp/preflight.sh" <"${HERE}/preflight.sh"
@@ -85,14 +100,7 @@ log "Rebooting into the yoshintame GUI session"
 user_ssh "sudo shutdown -h now" || true
 wait "${TART_PID}" || true
 start_vm
-for attempt in $(seq 1 100); do
-  user_ssh 'launchctl print gui/$(id -u) >/dev/null 2>&1' && break
-  if [ "${attempt}" = "100" ]; then
-    err "yoshintame has no GUI session after reboot: autologin did not take effect"
-    exit 1
-  fi
-  sleep 3
-done
+retry 100 3 "the yoshintame GUI session after reboot (autologin)" user_ssh 'launchctl print gui/$(id -u) >/dev/null 2>&1'
 
 if [ "${WITH_AGE_KEY}" = "1" ]; then
   log "Copying the SOPS age key"

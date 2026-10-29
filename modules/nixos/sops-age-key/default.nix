@@ -13,7 +13,7 @@ let
 in
 myLib.mkModule config "sops-age-key" {
   systemd.services.sops-age-key-bootstrap = {
-    description = "Derive user-level age key from SSH host key for sops-templates (Variant A)";
+    description = "Derive user-level age key from SSH host key for sops-nix (Variant A)";
     wantedBy = [ "multi-user.target" ];
     after = [
       "sshd.service"

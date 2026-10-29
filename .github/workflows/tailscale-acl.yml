@@ -8,13 +8,23 @@ on:
     branches: [master]
     paths: [tailscale/policy.hujson]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: tailscale-acl-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   acls:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: ./version-cache.json
           key: version-cache-${{ github.run_id }}
@@ -22,7 +32,7 @@ jobs:
 
       - name: Deploy ACL
         if: github.event_name == 'push'
-        uses: tailscale/gitops-acl-action@v1
+        uses: tailscale/gitops-acl-action@5a4a17f5708e9bf96f4ee915a95e9f83c2eebe1a
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -32,7 +42,7 @@ jobs:
 
       - name: Test ACL
         if: github.event_name == 'pull_request'
-        uses: tailscale/gitops-acl-action@v1
+        uses: tailscale/gitops-acl-action@5a4a17f5708e9bf96f4ee915a95e9f83c2eebe1a
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}

@@ -76,4 +76,3 @@ local LeaderFlow = {}
 ipc = {}
 
 keyNone = nil
-

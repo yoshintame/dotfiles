@@ -120,4 +120,3 @@ export default defineMigration({
 - Convergence при `--semantic`: отсутствующее required-поле вставляется пустым стабом → следующий `validate` даёт `required-field-no-default` → заполнить значение (или `default:` в `.type`); повторный прогон сходится. Это ожидаемое поведение, не баг.
 - Перемещения файлов — за отдельными флагами `--move-files` / `--rename-files` (или `fixer.renameFiles` в конфиге).
 - Тумблеры `fixer.*` и секция `serialization` (минимальные диффы) — в `.vault-types.config.ts`; сигнатуры в `node_modules/vault-types/src/public/config.ts`.
-

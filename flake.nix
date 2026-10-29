@@ -14,11 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    git-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -63,7 +58,6 @@
       inputs.home-manager.follows = "home-manager";
       inputs.flake-parts.follows = "flake-parts";
       inputs.treefmt-nix.follows = "treefmt-nix";
-      inputs.git-hooks.follows = "git-hooks";
     };
 
     homelab = {
@@ -87,7 +81,6 @@
       flake-parts,
       easy-hosts,
       treefmt-nix,
-      git-hooks,
       ...
     }:
     let
@@ -126,7 +119,6 @@
       imports = [
         easy-hosts.flakeModule
         treefmt-nix.flakeModule
-        git-hooks.flakeModule
         ./parts/dev.nix
         ./parts/edge.nix
         ./parts/lasthaze-ru.nix

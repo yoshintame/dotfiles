@@ -93,8 +93,12 @@ async function run(command: string[], env?: Record<string, string | undefined>) 
 	return child.exited
 }
 
-async function decrypt(path: string) {
+async function decrypt(path: string, home: string) {
+	const ageKeyFile =
+		Bun.env.SOPS_AGE_KEY_FILE ??
+		join(Bun.env.XDG_CONFIG_HOME ?? join(home, '.config'), 'sops/age/keys.txt')
 	const child = Bun.spawn(['sops', '-d', '--output-type', 'json', path], {
+		env: { ...Bun.env, SOPS_AGE_KEY_FILE: ageKeyFile },
 		stderr: 'inherit',
 		stdin: 'ignore',
 		stdout: 'pipe',
@@ -124,7 +128,10 @@ async function main() {
 		dependencies?: { mcp?: Dependency[] }
 	}
 	const dependencies = manifest.dependencies?.mcp ?? []
-	const secrets = await decrypt(join(dotfiles, 'modules/home/apm/secrets.yaml'))
+	const secrets = await decrypt(
+		join(dotfiles, 'modules/home/apm/secrets.yaml'),
+		home,
+	)
 	const missing = [...new Set(dependencies.flatMap(references))].filter(
 		(name) => !secrets[name],
 	)

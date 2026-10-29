@@ -365,7 +365,9 @@
         "easy-hosts": "easy-hosts_2",
         "flake-parts": "flake-parts_3",
         "git-hooks": "git-hooks_2",
-        "nix-stencil": "nix-stencil",
+        "nix-stencil": [
+          "nix-stencil"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -436,37 +438,35 @@
     "nix-stencil": {
       "inputs": {
         "flake-parts": [
-          "homelab",
           "flake-parts"
         ],
         "git-hooks": [
-          "homelab",
           "git-hooks"
         ],
+        "home-manager": [
+          "home-manager"
+        ],
         "nixpkgs": [
-          "homelab",
           "nixpkgs"
         ],
         "sops-nix": [
-          "homelab",
           "sops-nix"
         ],
         "treefmt-nix": [
-          "homelab",
           "treefmt-nix"
         ]
       },
       "locked": {
-        "lastModified": 1792579838,
-        "narHash": "sha256-LC3NO9IfrDMFgTRWupc4UPWHhaTiIOpHYfbvfns64vo=",
+        "lastModified": 1793248532,
+        "narHash": "sha256-I61DFx6oczDbfkOAYWpiqgOVNmjUw1yjxBrliUOQzMU=",
         "owner": "yoshintame",
         "repo": "nix-stencil",
-        "rev": "6fc9f0fc935f33772d13ccc7d63621ee73e2e034",
+        "rev": "8148c11985eac466fc56e03db61e100b930e057a",
         "type": "github"
       },
       "original": {
         "owner": "yoshintame",
-        "ref": "v0.2.1",
+        "ref": "v0.3.0",
         "repo": "nix-stencil",
         "type": "github"
       }
@@ -678,6 +678,7 @@
         "home-manager": "home-manager",
         "homelab": "homelab",
         "nix-darwin": "nix-darwin",
+        "nix-stencil": "nix-stencil",
         "nix-win": "nix-win",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",

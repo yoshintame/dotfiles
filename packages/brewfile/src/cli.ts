@@ -98,7 +98,7 @@ const install = defineCommand({
 
     const path = join(tmpdir(), `Brewfile.${process.pid}`);
     await Bun.write(path, brewfile);
-    const result = await run(["brew", "bundle", "install", `--file=${path}`, "--no-upgrade"], true);
+    const result = await run(["brew", "bundle", "install", `--file=${path}`, "--no-upgrade", "--verbose"], true);
     await Bun.file(path).delete();
 
     const failed = result.output.split("\n").flatMap((line) => line.match(FAILED)?.[1] ?? []);

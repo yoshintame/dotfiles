@@ -1,0 +1,28 @@
+amends "package://github.com/yoshintame/hk-config/releases/download/v0.6.0/hk-config@0.6.0#/presets/nix.pkl"
+
+local generated =
+  List(
+    "hosts/*/packages/**",
+    "hosts/lasthaze-gaming/windows/autounattend*.xml",
+    "modules/home/bat/config/theme/**",
+    "modules/home/hammerspoon/config/Spoons/**",
+    "modules/home/resticprofile/config/repo.key.tmpl",
+    "modules/home/vscode/dump/**",
+    "modules/home/warp/config/workflows/**",
+    "modules/windows/windows-terminal/config/settings.json",
+    "os/windows/packages/**",
+  )
+
+exclude = List("archive/**")
+
+steps {
+  ["trailing_whitespace"] {
+    exclude = generated
+  }
+  ["newlines"] {
+    exclude = generated
+  }
+  ["flake"] {
+    check = "nix flake check --impure"
+  }
+}

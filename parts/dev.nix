@@ -15,7 +15,6 @@ in
 {
   perSystem =
     {
-      config,
       pkgs,
       system,
       ...
@@ -40,13 +39,7 @@ in
         };
       };
 
-      pre-commit.settings.hooks.treefmt = {
-        enable = true;
-        package = config.treefmt.build.wrapper;
-      };
-
       devShells.default = pkgs.mkShell {
-        inputsFrom = [ config.pre-commit.devShell ];
         packages = [
           pkgs.nixd
           pkgs.just

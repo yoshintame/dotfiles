@@ -142,7 +142,10 @@
 [includeIf "gitdir:~/Development/work/sber/"]
     path = ~/.config/git/config-sber
 
-[includeIf "gitdir:~/Development/work/vtb/"]
+[includeIf "gitdir:~/Development/work/vtb/repos/"]
+    path = ~/.config/git/config-vtb
+
+[includeIf "gitdir:~/Development/work/vtb/libs/"]
     path = ~/.config/git/config-vtb
 
 [includeIf "hasconfig:remote.*.url:https://github.com/stainwood/**"]

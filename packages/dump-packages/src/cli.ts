@@ -8,7 +8,6 @@ import { loadIgnore } from "./ignore.ts";
 const { values } = parseArgs({
   options: {
     "out-dir": { type: "string", short: "o" },
-    brewfile: { type: "string", short: "b" },
     "apps-dir": { type: "string", short: "a" },
     "setapp-dir": { type: "string", short: "s" },
     "ignore-file": { type: "string", short: "i" },
@@ -28,7 +27,6 @@ if (values.help) {
 
   Options:
     -o, --out-dir <path>      Output directory (default: <dotfiles>/hosts/lasthaze-mbp/packages)
-    -b, --brewfile <path>     Path to Brewfile for MAS app detection
     -a, --apps-dir <path>     Applications directory (default: /Applications)
     -s, --setapp-dir <path>   Setapp directory (default: /Applications/Setapp)
     -i, --ignore-file <path>  Ignore file with app names to skip (default: <out-dir>/.appsignore)
@@ -50,11 +48,10 @@ if (values.help) {
 
 const dotfilesRoot = join(import.meta.dir, "../../..");
 const outDir = values["out-dir"] ?? join(dotfilesRoot, "hosts/lasthaze-mbp/packages");
-const brewfile = values.brewfile ?? join(outDir, "Brewfile");
 const appsDir = values["apps-dir"] ?? "/Applications";
 const setappDir = values["setapp-dir"] ?? "/Applications/Setapp";
 const ignoreFile = values["ignore-file"] ?? join(outDir, ".appsignore");
 
 const ignore = await loadIgnore(ignoreFile);
 
-await dump({ outDir, brewfile, appsDir, setappDir, ignore });
+await dump({ outDir, appsDir, setappDir, ignore });

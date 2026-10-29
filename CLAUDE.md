@@ -2,13 +2,13 @@
 
 ## Архитектура (кратко)
 
-Декларативный конфиг macOS/Linux в три слоя: **Nix** (nix-darwin + home-manager, пакеты и системные настройки) + **nix-link** (нативные живые симлинки конфигов, `lib/nix-link.nix`) + **sops-templates** (секреты). Реально активен только хост `lasthaze-mbp` (aarch64-darwin); прочие хосты в README — планы.
+Декларативный конфиг macOS/Linux в три слоя: **Nix** (nix-darwin + home-manager, пакеты и системные настройки) + **nix-link** (нативные живые симлинки конфигов, `lib/nix-link.nix`) + **nix-stencil** (секреты). Реально активен только хост `lasthaze-mbp` (aarch64-darwin); прочие хосты в README — планы.
 
 - **Модуль** = `modules/{home,darwin,nixos}/<name>/default.nix`, обёрнут в `myLib.mkModule config "<name>" { … }`: объявляет `my.<name>.enable`, а тело (пакеты + `nixLink.links` вида `"~/.config/x" = "modules/home/x/config"`, glob — `{ path = "...**"; glob = true; }`) активно только при `my.<name>.enable = true`. Импорт инертен; включает модуль манифест хоста `hosts/<host>/manifest.nix` (`myLib.enableList [ … ]`). Опция линков — `nixLink.links` (модуль `lib/nix-link.nix`).
 - **Симлинки живые и двусторонние:** настоящий файл лежит в репо, путь в системе (`~/.config/<x>`) — симлинк на него. Правишь конфиг инструмента → правишь файл репозитория, и наоборот.
 - **Применить изменения:** `mise run dot:rebuild` (= `git add -A && sudo darwin-rebuild switch --impure --flake .#lasthaze-mbp`). Два неочевидных момента: (1) флейк видит только **git-tracked** файлы — новый файл без `git add` не подхватится (для этого в задаче есть `git add -A`); (2) `--impure` **обязателен** — иначе sops-секреты молча не рендерятся (гейт по наличию age-ключа на диске).
-- **Секреты:** `lib/sops-templates` рендерит `*.tmpl` → файл, подставляя `${VAR}` из sops-зашифрованного `secrets.yaml` (age). Декларируется через опцию `sopsTemplates.render`.
-- **Прочее:** `packages/` — bun/TS-тулинг (proxy-bindings, btt-gestures, dump-packages), запуск через `dot:*` mise-задачи; `lib/` — Nix-хелперы (`myLib`/`mk-module`, `sopsRefs`) и инфраструктурные HM-модули (nix-link, sops-templates); `modules/shared/` — cross-scope конфиг-реестры под codegen (не тул-модули; `proxy-bindings.yaml`); `archive/` — старое; karabiner-config (`modules/home/karabiner/config`), vscode-тема (`modules/home/vscode/theme/…`) и dotbot (vestigial) — git-сабмодули.
+- **Секреты:** input [nix-stencil](https://github.com/yoshintame/nix-stencil) рендерит `*.tmpl` → файл, подставляя `${VAR}` из sops-зашифрованного `secrets.yaml` (age), а `@var@` — из Nix. Декларируется через `stencil.files."<путь назначения>" = { template; sopsFile; }`, пути отдельных секретов — `stencil.namespaces.<ns>` + `config.stencil.refs.<ns>.<KEY>`.
+- **Прочее:** `packages/` — bun/TS-тулинг (proxy-bindings, btt-gestures, dump-packages), запуск через `dot:*` mise-задачи; `lib/` — Nix-хелперы (`myLib`/`mk-module`) и инфраструктурный HM-модуль nix-link; `modules/shared/` — cross-scope конфиг-реестры под codegen (не тул-модули; `proxy-bindings.yaml`); `archive/` — старое; karabiner-config (`modules/home/karabiner/config`), vscode-тема (`modules/home/vscode/theme/…`) и dotbot (vestigial) — git-сабмодули.
 
 ## Правка симлинкнутых конфигов
 
@@ -55,7 +55,7 @@
 
 ## Гейты качества (flake-parts)
 
-Флейк собран на **flake-parts + easy-hosts**; хосты перечислены таблицей `easy-hosts.hosts` в `flake.nix` (`lasthaze-mbp` aarch64/darwin, `lasthaze-homelab` x86_64/nixos). Общая home-manager-обвязка (`extraSpecialArgs` `flakeRoot`/`pkgs-unstable`/`myLib`/`sopsRefs`, `sharedModules` nix-link/sops/sops-templates + все тул-модули `modules/home/*`) — в `modules/home-manager.nix`; per-система glue гейтов — в `parts/dev.nix`. Поверх — слой гейтов:
+Флейк собран на **flake-parts + easy-hosts**; хосты перечислены таблицей `easy-hosts.hosts` в `flake.nix` (`lasthaze-mbp` aarch64/darwin, `lasthaze-homelab` x86_64/nixos). Общая home-manager-обвязка (`extraSpecialArgs` `flakeRoot`/`pkgs-unstable`/`myLib`, `sharedModules` nix-link/sops/nix-stencil + все тул-модули `modules/home/*`) — в `modules/home-manager.nix`; per-система glue гейтов — в `parts/dev.nix`. Поверх — слой гейтов:
 
 - **`just`** — дискаверабельный вход (`just --list`): `just check` (= `nix flake check --impure`), `just fmt` (= `nix fmt`), `just rebuild` / `just link` (обёртки над `dot:*`), `just update`.
 - **Форматирование — только treefmt** (`nixfmt-rfc-style` + `deadnix` + `statix`), не руками: `nix fmt` / `just fmt`. Сходится за два прохода (deadnix `{ ... }:` → `_:` + nixfmt). Тот же набор — pre-commit-хуком (git-hooks.nix) и как `checks.treefmt`.

@@ -23,11 +23,9 @@ myLib.mkModule config "apm" {
     "~/.apm/apm.yml" = "modules/home/apm/config/apm.yml";
   };
 
-  sopsTemplates.render = {
-    "~/.config/fish/conf.d/mcp-secrets.fish" = {
-      template = ./config/mcp-secrets.fish.tmpl;
-      secretsFile = ./secrets.yaml;
-    };
+  stencil.files."~/.config/fish/conf.d/mcp-secrets.fish" = {
+    template = ./config/mcp-secrets.fish.tmpl;
+    sopsFile = ./secrets.yaml;
   };
 
 }

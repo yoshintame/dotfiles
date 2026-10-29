@@ -17,7 +17,7 @@ This will:
 1. Install Xcode Command Line Tools (interactive) and clone this repo with submodules to `~/.dotfiles`
 2. Check Full Disk Access of the terminal and wait for the App Store sign-in that `mas` needs
 3. Install Rosetta, Homebrew and Nix (Determinate Nix; `BOOTSTRAP_NIX=upstream` for upstream Nix)
-4. Run the first `darwin-rebuild switch` with the Brewfile, using the nix-darwin revision pinned in `flake.lock`. The [sops-templates](lib/sops-templates) module gates secret rendering on the age key, so the first switch on a fresh machine succeeds without it
+4. Run the first `darwin-rebuild switch` with the Brewfile, using the nix-darwin revision pinned in `flake.lock`. The [nix-stencil](https://github.com/yoshintame/nix-stencil) secrets layer is gated on the age key (`stencil.enable`), so the first switch on a fresh machine succeeds without it
 5. Install mise toolchains and the repo's bun dependencies
 6. Restore the SOPS age key from 1Password (`op read`) — waits until 1Password is signed in with CLI integration enabled
 7. Wire `~/.ssh/config` to the 1Password SSH Agent
@@ -56,7 +56,7 @@ Three-layer hybrid approach:
 
 - **Nix layer** — packages and system defaults via nix-darwin / NixOS + home-manager
 - **nix-link layer** — live symlinks from [modules/](modules) into `~/.config` so edits apply both ways
-- **sops-templates layer** — templated configs rendered with decrypted secrets at activation time
+- **nix-stencil layer** — templated configs rendered with decrypted secrets at activation time, through [nix-stencil](https://github.com/yoshintame/nix-stencil) over sops-nix
 
 Documentation lives in the Obsidian vault (`~/Documents/obsidian/yoshintame/`), entry point `areas/dotfiles.md`; the repo keeps only code artefacts.
 

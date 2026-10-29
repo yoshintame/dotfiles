@@ -327,10 +327,10 @@ main() {
   ensure_nix_installed
   source_nix_env
 
-  # The sops-templates wrapper around sops-nix declares its config inside a
-  # mkIf gated on the age-key file existing on disk, so this first switch on
-  # a fresh machine succeeds without secrets — sops-install-secrets is not
-  # wired up yet.
+  # Secrets are gated on the age-key file existing on disk (my.sops.ready drives
+  # stencil.enable and the sops kill-switch in modules/home-manager.nix), so this
+  # first switch on a fresh machine succeeds without secrets — sops-install-secrets
+  # is not wired up yet.
   run_first_switch
   load_session_env
   setup_toolchains

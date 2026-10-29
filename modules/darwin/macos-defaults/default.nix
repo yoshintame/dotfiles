@@ -416,7 +416,7 @@ myLib.mkModule config "macos-defaults" {
         ];
       };
 
-      "com.apple.universalaccess" = {
+      "com.apple.universalaccess" = lib.mkIf tccDefaults {
         HIDScrollZoomModifierMask = 262144;
       };
 

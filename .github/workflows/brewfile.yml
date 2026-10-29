@@ -5,7 +5,7 @@ on:
     branches: [master]
     paths:
       - hosts/lasthaze-mbp/packages/Brewfile*
-      - packages/brewfile-lint/**
+      - packages/brewfile/**
       - .github/workflows/brewfile.yml
   schedule:
     - cron: "0 19 * * 6"
@@ -32,4 +32,4 @@ jobs:
       - run: bun install --frozen-lockfile
 
       - name: Check Brewfile entries a clean Mac would install
-        run: bun run packages/brewfile-lint/src/cli.ts --trust-taps
+        run: bun run packages/brewfile/src/cli.ts lint --trust-taps

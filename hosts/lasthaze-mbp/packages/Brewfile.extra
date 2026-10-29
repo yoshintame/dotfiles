@@ -1,1 +1,0 @@
-brew "openai/tools/tart", trusted: true, args: ["ignore-dependencies"]

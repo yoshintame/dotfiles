@@ -3,7 +3,6 @@ import { $ } from "bun";
 
 export interface DumpOptions {
   outDir: string;
-  brewfile: string;
   appsDir: string;
   setappDir: string;
   ignore: Set<string>;
@@ -20,7 +19,8 @@ async function readdirApps(dir: string): Promise<string[]> {
 
 interface BrewManaged {
   names: Set<string>;
-  receiptIds: Set<string>;
+  quitBundleIds: Set<string>;
+  pkgIdPatterns: string[];
 }
 
 function asStrings(value: unknown): string[] {
@@ -32,7 +32,8 @@ function asStrings(value: unknown): string[] {
 
 async function getBrewManagedApps(): Promise<BrewManaged> {
   const names = new Set<string>();
-  const receiptIds = new Set<string>();
+  const quitBundleIds = new Set<string>();
+  const pkgIdPatterns: string[] = [];
   try {
     const raw =
       await $`brew info --cask --json=v2 --installed 2>/dev/null`.text();
@@ -62,9 +63,8 @@ async function getBrewManagedApps(): Promise<BrewManaged> {
             []) {
             if (typeof step !== "object" || step === null) continue;
             const { quit, pkgutil } = step as Record<string, unknown>;
-            for (const id of [...asStrings(quit), ...asStrings(pkgutil)]) {
-              receiptIds.add(id);
-            }
+            for (const id of asStrings(quit)) quitBundleIds.add(id);
+            pkgIdPatterns.push(...asStrings(pkgutil));
           }
         }
 
@@ -75,50 +75,47 @@ async function getBrewManagedApps(): Promise<BrewManaged> {
       }
     }
   } catch {}
-  return { names, receiptIds };
+  return { names, quitBundleIds, pkgIdPatterns };
 }
 
-async function appIds(appPath: string): Promise<string[]> {
-  const ids: string[] = [];
+function matchesPattern(id: string, pattern: string): boolean {
+  if (!pattern.includes("*")) return id === pattern;
+  const regex = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replaceAll("*", ".*");
+  return new RegExp(`^${regex}$`).test(id);
+}
+
+async function appIds(
+  appPath: string,
+): Promise<{ bundleId: string; pkgIds: string[] }> {
   const bundleId = (
     await $`/usr/bin/defaults read ${join(appPath, "Contents/Info")} CFBundleIdentifier`
       .quiet()
       .nothrow()
       .text()
   ).trim();
-  if (bundleId) ids.push(bundleId);
   const fileInfo = await $`/usr/sbin/pkgutil --file-info ${appPath}`
     .quiet()
     .nothrow()
     .text();
-  for (const match of fileInfo.matchAll(/^pkgid: (.+)$/gm)) ids.push(match[1]);
-  return ids;
+  const pkgIds = [...fileInfo.matchAll(/^pkgid: (.+)$/gm)].map((m) => m[1]);
+  return { bundleId, pkgIds };
 }
 
 async function isBrewOrMasManaged(
   appPath: string,
-  receiptIds: Set<string>,
+  brew: BrewManaged,
 ): Promise<boolean> {
   if (await Bun.file(join(appPath, "Contents/_MASReceipt/receipt")).exists())
     return true;
-  return (await appIds(appPath)).some((id) => receiptIds.has(id));
-}
-
-async function getMasApps(brewfilePath: string): Promise<Set<string>> {
-  const names = new Set<string>();
-  const brewfile = Bun.file(brewfilePath);
-  if (!(await brewfile.exists())) return names;
-  const content = await brewfile.text();
-  for (const line of content.split("\n")) {
-    if (!line.startsWith("mas ")) continue;
-    const match = line.match(/^mas "([^"]+)"/);
-    if (match) names.add(match[1]);
-  }
-  return names;
+  const { bundleId, pkgIds } = await appIds(appPath);
+  if (bundleId && brew.quitBundleIds.has(bundleId)) return true;
+  return pkgIds.some((id) =>
+    brew.pkgIdPatterns.some((pattern) => matchesPattern(id, pattern)),
+  );
 }
 
 export async function dump(opts: DumpOptions) {
-  const { outDir, brewfile, appsDir, setappDir, ignore } = opts;
+  const { outDir, appsDir, setappDir, ignore } = opts;
 
   await $`mkdir -p ${outDir}`.quiet();
 
@@ -131,17 +128,16 @@ export async function dump(opts: DumpOptions) {
     console.log(`setapp: ${setappApps.length} apps`);
   }
 
-  const { names: managed, receiptIds } = await getBrewManagedApps();
-  for (const name of await getMasApps(brewfile)) managed.add(name);
-  for (const name of ignore) managed.add(name);
+  const brew = await getBrewManagedApps();
+  const managed = new Set([...brew.names, ...ignore]);
 
   const managedLower = new Set([...managed].map((n) => n.toLowerCase()));
 
   const all = await readdirApps(appsDir);
   const unmanaged: string[] = [];
   for (const name of all) {
-    if (managed.has(name) || managedLower.has(name.toLowerCase())) continue;
-    if (await isBrewOrMasManaged(join(appsDir, `${name}.app`), receiptIds))
+    if (managedLower.has(name.toLowerCase())) continue;
+    if (await isBrewOrMasManaged(join(appsDir, `${name}.app`), brew))
       continue;
     unmanaged.push(name);
   }

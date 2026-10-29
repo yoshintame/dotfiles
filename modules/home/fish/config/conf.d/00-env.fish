@@ -6,7 +6,8 @@ set -gx grc_plugin_ignore_execs ls
 
 function __vtb_tz --on-variable PWD
     set -l tz
-    if string match -q -- "$HOME/Development/work/vtb/*" $PWD
+    if string match -q -- "$HOME/Development/work/vtb/repos/*" $PWD
+        or string match -q -- "$HOME/Development/work/vtb/libs/*" $PWD
         set tz Europe/Moscow
     else
         set tz (command git config --get vtb.tz 2>/dev/null)

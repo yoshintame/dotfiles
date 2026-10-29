@@ -76,6 +76,7 @@ Invoke-Step 'winget' {
         Start-Sleep -Seconds 10
     }
     Invoke-Native "$env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe" @('--version')
+    Invoke-Native "$env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe" @('configure', '--enable')
 }
 
 Invoke-Step 'windows-rebuild' {

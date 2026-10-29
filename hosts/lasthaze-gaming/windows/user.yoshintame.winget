@@ -111,6 +111,7 @@ resources:
       testScript: |
         $false
       setScript: |
+        $ErrorActionPreference = 'Continue'
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
         $repo = Join-Path $env:USERPROFILE '.dotfiles'
         & $mise exec uv@0.13.1 -- uv tool run dotbot==1.24.0 -d $repo -c (Join-Path $repo 'hosts\lasthaze-gaming\windows\links.yaml')
@@ -122,14 +123,17 @@ resources:
       - Dotbot
     properties:
       getScript: |
+        $ErrorActionPreference = 'Continue'
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
         @{ missing = if (Test-Path $mise) { @(& $mise ls --global --missing 2>$null) } else { $null } }
       testScript: |
+        $ErrorActionPreference = 'Continue'
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
         if (-not (Test-Path $mise)) { return $false }
         $missing = & $mise ls --global --missing 2>$null
         -not $missing
       setScript: |
+        $ErrorActionPreference = 'Continue'
         $mise = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links\mise.exe'
         & $mise install --yes
         if ($LASTEXITCODE -ne 0) { throw "mise install exited with $LASTEXITCODE" }

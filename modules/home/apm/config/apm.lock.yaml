@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: e4e2b49acfc9f45b5447739241670ab0985d1e67
-  resolved_ref: v1.13.1+e4e2b49
-  version: 1.13.1+e4e2b49
+  resolved_commit: 70ad971c2d806efa5b542c7e82aea1791cd53500
+  resolved_ref: v1.13.3+70ad971
+  version: 1.13.3+70ad971
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1261,7 +1261,7 @@ dependencies:
     .agents/skills/actualize/SKILL.md: sha256:34c619c0fb744f7f97aeaeb0e917217500b0c3eb9b49bdd5ddcf54772ae1f2fe
     .agents/skills/ai-attack-audit/SKILL.md: sha256:1604e8859fc020a6096d28ecdbf8592b5257d6db7421b5a35e248dcccc827a16
     .agents/skills/ai-attack-audit/scripts/scan.ts: sha256:13c60d04f88cef1dc7f13526cf8348751477290057b727d437c93a1b4054c059
-    .agents/skills/analyze-friction/SKILL.md: sha256:2b981ff55b21503c32d9a28225466ff187a4ff5c0105118f12ec273c50b422ba
+    .agents/skills/analyze-friction/SKILL.md: sha256:31ea57b4cfcbf1a97593fe2e69fff99ec3feb4576b84b0252a42fcbe28588fe0
     .agents/skills/analyze-friction/assets/friction.sql: sha256:7d2d487b12a2c3dc1d4d33620c8d1c9dc7cc598908915bf0cdf8fd48089231d4
     .agents/skills/analyze-friction/scripts/decompose.py: sha256:ee177cae8c825d5686d96d85f4dc7e476cd0c51e7f3deb66f214f330f2d24ecf
     .agents/skills/analyze-friction/scripts/miner.ts: sha256:7f1b7bb4ba30599395040d26c78fef89cb2f250bdb4473b5f44dff97dd08abcc
@@ -1328,7 +1328,7 @@ dependencies:
     .agents/skills/keyswitcher-update/SKILL.md: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
     .agents/skills/keyswitcher-update/references/signing-cert.md: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
     .agents/skills/keyswitcher-update/references/threat-model.md: sha256:b8894f811078a1b0c16acb7c635b661561befe078bcfdf50b06220c20d097a25
-    .agents/skills/keyswitcher-update/scripts/build-verify-install.sh: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
+    .agents/skills/keyswitcher-update/scripts/build-verify-install.sh: sha256:0f1a74773c3698995d2062d2f115757015699141d8d89a59af5653ff9b304526
     .agents/skills/keyswitcher-update/scripts/check-update.sh: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
     .agents/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:ebd1f2baa97c25d0fad275bb9e046543381c72658c09bfcfdd3560389916f17d
     .agents/skills/keyswitcher-update/scripts/prepare-diff.sh: sha256:6e7d2e791f599f0fc6bbdd2dbeb284a25290a149eaab3af964127ae8f0f3a2df
@@ -1384,7 +1384,7 @@ dependencies:
     .claude/skills/actualize/SKILL.md: sha256:34c619c0fb744f7f97aeaeb0e917217500b0c3eb9b49bdd5ddcf54772ae1f2fe
     .claude/skills/ai-attack-audit/SKILL.md: sha256:1604e8859fc020a6096d28ecdbf8592b5257d6db7421b5a35e248dcccc827a16
     .claude/skills/ai-attack-audit/scripts/scan.ts: sha256:13c60d04f88cef1dc7f13526cf8348751477290057b727d437c93a1b4054c059
-    .claude/skills/analyze-friction/SKILL.md: sha256:2b981ff55b21503c32d9a28225466ff187a4ff5c0105118f12ec273c50b422ba
+    .claude/skills/analyze-friction/SKILL.md: sha256:31ea57b4cfcbf1a97593fe2e69fff99ec3feb4576b84b0252a42fcbe28588fe0
     .claude/skills/analyze-friction/assets/friction.sql: sha256:7d2d487b12a2c3dc1d4d33620c8d1c9dc7cc598908915bf0cdf8fd48089231d4
     .claude/skills/analyze-friction/scripts/decompose.py: sha256:ee177cae8c825d5686d96d85f4dc7e476cd0c51e7f3deb66f214f330f2d24ecf
     .claude/skills/analyze-friction/scripts/miner.ts: sha256:7f1b7bb4ba30599395040d26c78fef89cb2f250bdb4473b5f44dff97dd08abcc
@@ -1451,7 +1451,7 @@ dependencies:
     .claude/skills/keyswitcher-update/SKILL.md: sha256:0e638b56056a34710a5406f1d8bbd2bc00b47ea865d75e89d0beea9794ef9919
     .claude/skills/keyswitcher-update/references/signing-cert.md: sha256:4553a2bdeaeafcb77aed40455e47349ae797a78ccd4a3aa56950a1236752e447
     .claude/skills/keyswitcher-update/references/threat-model.md: sha256:b8894f811078a1b0c16acb7c635b661561befe078bcfdf50b06220c20d097a25
-    .claude/skills/keyswitcher-update/scripts/build-verify-install.sh: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
+    .claude/skills/keyswitcher-update/scripts/build-verify-install.sh: sha256:0f1a74773c3698995d2062d2f115757015699141d8d89a59af5653ff9b304526
     .claude/skills/keyswitcher-update/scripts/check-update.sh: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
     .claude/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:ebd1f2baa97c25d0fad275bb9e046543381c72658c09bfcfdd3560389916f17d
     .claude/skills/keyswitcher-update/scripts/prepare-diff.sh: sha256:6e7d2e791f599f0fc6bbdd2dbeb284a25290a149eaab3af964127ae8f0f3a2df
@@ -1503,10 +1503,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:9ae323cc995d48723fb3a4e0e8e98fa29f642dbeaef7f8d616a1f97efad5095a
+  content_hash: sha256:6ed223e753eb3ca8e01b71d8f2d944f55d88934fd31ff5ea4a2bd5af2238235e
   constraint: ^1.0.0
-  resolved_tag: v1.13.1+e4e2b49
-  resolved_at: '2026-10-25T09:57:28+00:00'
+  resolved_tag: v1.13.3+70ad971
+  resolved_at: '2026-10-29T05:18:13+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -1580,7 +1580,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:2b981ff55b21503c32d9a28225466ff187a4ff5c0105118f12ec273c50b422ba
+  content_hash: sha256:31ea57b4cfcbf1a97593fe2e69fff99ec3feb4576b84b0252a42fcbe28588fe0
 - kind: project-relative
   target: claude
   value: .claude/skills/analyze-friction/assets/friction.sql
@@ -2975,7 +2975,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
+  content_hash: sha256:0f1a74773c3698995d2062d2f115757015699141d8d89a59af5653ff9b304526
 - kind: project-relative
   target: claude
   value: .claude/skills/keyswitcher-update/scripts/check-update.sh
@@ -5207,7 +5207,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:2b981ff55b21503c32d9a28225466ff187a4ff5c0105118f12ec273c50b422ba
+  content_hash: sha256:31ea57b4cfcbf1a97593fe2e69fff99ec3feb4576b84b0252a42fcbe28588fe0
 - kind: project-relative
   target: legacy
   value: .agents/skills/analyze-friction/assets/friction.sql
@@ -6602,7 +6602,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:a435c5b2705a1ccde47bfaf3d6e8df8fe0f5ad6cb5f5a52252a2a01aa46e2a6b
+  content_hash: sha256:0f1a74773c3698995d2062d2f115757015699141d8d89a59af5653ff9b304526
 - kind: project-relative
   target: legacy
   value: .agents/skills/keyswitcher-update/scripts/check-update.sh

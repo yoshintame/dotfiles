@@ -38,6 +38,13 @@ resources:
       source: winget
       acceptAgreements: true
 
+  - name: Rclone
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Rclone.Rclone
+      source: winget
+      acceptAgreements: true
+
   - name: Zed
     type: Microsoft.WinGet/Package
     properties:

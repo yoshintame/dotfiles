@@ -109,8 +109,16 @@ ensure_rosetta() {
     log "Rosetta already installed"
     return 0
   fi
-  log "Installing Rosetta"
-  softwareupdate --install-rosetta --agree-to-license
+  for attempt in 1 2 3; do
+    log "Installing Rosetta (attempt ${attempt})"
+    softwareupdate --install-rosetta --agree-to-license || true
+    if /usr/bin/arch -x86_64 /usr/bin/true 2>/dev/null; then
+      return 0
+    fi
+    [ "${attempt}" = "3" ] || sleep 30
+  done
+  err "Rosetta did not install; re-run bootstrap.sh ${HOST} later"
+  exit 1
 }
 
 check_app_store() {

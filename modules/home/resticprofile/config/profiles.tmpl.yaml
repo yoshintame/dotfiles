@@ -59,13 +59,13 @@ profiles:
     backup:
       send-after: &gatus-after
         - method: POST
-          url: "${GATUS_BACKUP_ENDPOINT}-$PROFILE_NAME-$PROFILE_COMMAND/external?success=true"
+          url: "@gatusBackupEndpoint@-$PROFILE_NAME-$PROFILE_COMMAND/external?success=true"
           headers: &gatus-auth
             - name: Authorization
               value: "Bearer ${GATUS_BACKUP_TOKEN}"
       send-after-fail: &gatus-fail
         - method: POST
-          url: "${GATUS_BACKUP_ENDPOINT}-$PROFILE_NAME-$PROFILE_COMMAND/external?success=false&error=$ERROR"
+          url: "@gatusBackupEndpoint@-$PROFILE_NAME-$PROFILE_COMMAND/external?success=false&error=$ERROR"
           headers: *gatus-auth
       group-by: "host,tags"
       exclude:

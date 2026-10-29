@@ -15,13 +15,12 @@
     extraSpecialArgs = {
       inherit flakeRoot myLib;
       pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-      sopsRefs = import ../lib/sopsRefs.nix { inherit lib; };
     };
 
     sharedModules = [
       ../lib/nix-link.nix
       inputs.sops-nix.homeManagerModules.sops
-      ../lib/sops-templates
+      inputs.nix-stencil.homeManagerModules.default
       (
         { config, lib, ... }:
         {
@@ -33,6 +32,8 @@
           };
           config = {
             sops.age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+            sops.defaultSecretsMountPoint = "${config.home.homeDirectory}/.local/state/sops-nix/secrets.d";
+            stencil.enable = config.my.sops.ready;
             sops.secrets = lib.mkIf (!config.my.sops.ready) (lib.mkForce { });
             sops.templates = lib.mkIf (!config.my.sops.ready) (lib.mkForce { });
           };

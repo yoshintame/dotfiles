@@ -56,10 +56,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-stencil = {
+      url = "github:yoshintame/nix-stencil/v0.3.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.sops-nix.follows = "sops-nix";
+      inputs.home-manager.follows = "home-manager";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.git-hooks.follows = "git-hooks";
+    };
+
     homelab = {
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-prod.follows = "nixpkgs";
+      inputs.nix-stencil.follows = "nix-stencil";
     };
 
     edge = {

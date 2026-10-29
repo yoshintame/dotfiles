@@ -55,23 +55,23 @@ lib.recursiveUpdate
       "~/.config/mise/tasks/rp.toml" = "modules/home/resticprofile/config/rp.toml";
     };
 
-    sopsTemplates.render = {
+    stencil.files = {
       "~/.config/resticprofile/profiles.yaml" = {
         template = ./config/profiles.tmpl.yaml;
-        secretsFile = ./secrets.yaml;
-        vars.GATUS_BACKUP_ENDPOINT = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
+        sopsFile = ./secrets.yaml;
+        vars.gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
       };
       "~/.config/resticprofile/hc.env" = {
         template = ./config/hc.env.tmpl;
-        secretsFile = ./secrets.yaml;
+        sopsFile = ./secrets.yaml;
       };
       "~/.config/resticprofile/b2.env" = {
         template = ./config/b2.env.tmpl;
-        secretsFile = ./secrets.yaml;
+        sopsFile = ./secrets.yaml;
       };
       "~/.config/resticprofile/repo.key" = {
         template = ./config/repo.key.tmpl;
-        secretsFile = ./secrets.yaml;
+        sopsFile = ./secrets.yaml;
       };
     };
 

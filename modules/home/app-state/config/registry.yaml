@@ -9,20 +9,14 @@ exclude:
   - "**/*.sock"
 
 apps:
-  # Karabiner-VirtualHIDDevice-Manager 6.8.0, containers 0 B
-  karabiner-virtualhiddevice-manager:
-    ids:
-      - org.pqrs.Karabiner-VirtualHIDDevice-Manager
-  # 1Password for Safari 8.12.42, containers 4.0 KB
-  1password-for-safari:
-    ids:
-      - com.1password.safari
   # 1Password 8.12.42, preferences 4.0 KB, ~/Library/Application Support/1Password 7.6 MB
   1password:
     ids:
       - com.1password.1password
-    paths:
-      - ~/Library/Application Support/1Password
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Actual 26.5.2, preferences 4.0 KB, ~/Library/Application Support/Actual 3.0 MB
   actual:
     ids:
@@ -47,22 +41,34 @@ apps:
   arc:
     ids:
       - company.thebrowser.Browser
-    paths:
-      - ~/Library/Application Support/Arc
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # ChatGPT 26.915.31029, preferences 4.0 KB, application-support 4.0 KB
   chatgpt:
     ids:
       - com.openai.codex
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Claude 4.29.0, preferences 4.0 KB, ~/Library/Application Support/Claude 13.8 GB
   claude:
     ids:
       - com.anthropic.claudefordesktop
-    paths:
-      - ~/Library/Application Support/Claude
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Cotypist 0.21, preferences 4.0 KB, application-support 1.0 GB
   cotypist:
     ids:
       - app.cotypist.Cotypist
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # DaisyDisk 4.33.1, preferences 4.0 KB, ~/Library/Application Support/DaisyDisk 8.0 KB
   daisydisk:
     ids:
@@ -73,8 +79,10 @@ apps:
   discord:
     ids:
       - com.hnc.Discord
-    paths:
-      - ~/Library/Application Support/Discord
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Dropover 5.3.1, containers 6.2 MB, group-containers 1.8 MB
   dropover:
     ids:
@@ -87,8 +95,10 @@ apps:
   figma:
     ids:
       - com.figma.Desktop
-    paths:
-      - ~/Library/Application Support/Figma
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Fork 2.71.1, preferences 8.0 KB, application-support 36.0 KB
   fork:
     ids:
@@ -103,6 +113,10 @@ apps:
   chrome:
     ids:
       - com.google.Chrome
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Hammerspoon 1.1.1, preferences 4.0 KB
   hammerspoon:
     ids:
@@ -131,10 +145,6 @@ apps:
   karabiner-elements:
     ids:
       - org.pqrs.Karabiner-Elements.Settings
-  # Karabiner-EventViewer 15.9.0, preferences 4.0 KB
-  karabiner-eventviewer:
-    ids:
-      - org.pqrs.Karabiner-EventViewer
   # Klack 2.1.4, containers 4.0 KB
   klack:
     ids:
@@ -143,6 +153,10 @@ apps:
   line:
     ids:
       - jp.naver.line.mac
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Ledger Wallet 4.21.1, preferences 4.0 KB, ~/Library/Application Support/Ledger Wallet 0 B
   ledger-wallet:
     ids:
@@ -153,8 +167,10 @@ apps:
   linear:
     ids:
       - com.linear
-    paths:
-      - ~/Library/Application Support/Linear
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # MediaMate 3.5.1, preferences 4.0 KB
   mediamate:
     ids:
@@ -163,26 +179,42 @@ apps:
   excel:
     ids:
       - com.microsoft.Excel
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # PowerPoint 16.114, containers 3.1 MB
   powerpoint:
     ids:
       - com.microsoft.Powerpoint
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Word 16.114
   word:
     ids:
       - com.microsoft.Word
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Notion Calendar 1.133.0, preferences 4.0 KB, ~/Library/Application Support/Notion Calendar 199.5 MB
   notion-calendar:
     ids:
       - com.cron.electron
-    paths:
-      - ~/Library/Application Support/Notion Calendar
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Notion 7.34.0, preferences 4.0 KB, ~/Library/Application Support/Notion 2.6 GB
   notion:
     ids:
       - notion.id
-    paths:
-      - ~/Library/Application Support/Notion
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # NuPhyIO 2.2.2, preferences 4.0 KB, ~/Library/Application Support/NuPhyIO 2.3 MB
   nuphyio:
     ids:
@@ -193,18 +225,24 @@ apps:
   obs:
     ids:
       - com.obsproject.obs-studio
+    paths:
+      - ~/Library/Application Support/obs-studio/basic
   # Obsidian 1.12.4, preferences 4.0 KB, ~/Library/Application Support/Obsidian 196.7 MB
   obsidian:
     ids:
       - md.obsidian
-    paths:
-      - ~/Library/Application Support/Obsidian
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # OneDrive 26.173.0906, ~/Library/Application Support/OneDrive 716.0 KB
   onedrive:
     ids:
       - com.microsoft.OneDrive
-    paths:
-      - ~/Library/Application Support/OneDrive
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # OrbStack 2.2.5, preferences 8.0 KB
   orbstack:
     ids:
@@ -221,8 +259,10 @@ apps:
   paseo:
     ids:
       - sh.paseo.desktop
-    paths:
-      - ~/Library/Application Support/Paseo
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Pearcleaner 4.4.2, preferences 44.0 KB, containers 0 B, ~/Library/Application Support/Pearcleaner 0 B
   pearcleaner:
     ids:
@@ -233,30 +273,42 @@ apps:
   plex:
     ids:
       - tv.plex.desktop
-    paths:
-      - ~/Library/Application Support/Plex
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Raindrop.io 5.7.7, preferences 4.0 KB, ~/Library/Application Support/Raindrop.io 1.0 GB
   raindrop-io:
     ids:
       - io.raindrop.macapp
-    paths:
-      - ~/Library/Application Support/Raindrop.io
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Raycast 1.104.32, preferences 68.0 KB, application-support 468.6 MB
   raycast:
     ids:
       - com.raycast.macos
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # RemNote 1.28.21, preferences 4.0 KB, ~/Library/Application Support/RemNote 62.6 MB
   remnote:
     ids:
       - io.remnote
-    paths:
-      - ~/Library/Application Support/RemNote
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # ResponsivelyApp 1.18.0, preferences 4.0 KB, ~/Library/Application Support/ResponsivelyApp 326.9 MB
   responsivelyapp:
     ids:
       - app.responsively
-    paths:
-      - ~/Library/Application Support/ResponsivelyApp
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # RewriteBar 2.35.0, preferences 432.0 KB
   rewritebar:
     ids:
@@ -265,10 +317,8 @@ apps:
   rustdesk:
     ids:
       - com.carriez.rustdesk
-  # Safari 18.6, containers 107.7 MB
-  safari:
-    ids:
-      - com.apple.Safari
+    paths:
+      - ~/Library/Preferences/com.carriez.RustDesk
   # Secretive 3.0.4, containers 24.0 KB
   secretive:
     ids:
@@ -277,8 +327,10 @@ apps:
   setapp:
     ids:
       - com.setapp.DesktopClient
-    paths:
-      - ~/Library/Application Support/Setapp
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Shottr 1.9.1, containers 16.0 KB
   shottr:
     ids:
@@ -287,46 +339,58 @@ apps:
   signal:
     ids:
       - org.whispersystems.signal-desktop
-    paths:
-      - ~/Library/Application Support/Signal
-  # Simulator 16.0, preferences 4.0 KB
-  simulator:
-    ids:
-      - com.apple.iphonesimulator
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Slack 4.46.104, preferences 4.0 KB, ~/Library/Application Support/Slack 1.1 GB
   slack:
     ids:
       - com.tinyspeck.slackmacgap
-    paths:
-      - ~/Library/Application Support/Slack
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Spotify 1.3.6.1921, preferences 4.0 KB, ~/Library/Application Support/Spotify 457.3 MB
   spotify:
     ids:
       - com.spotify.client
-    paths:
-      - ~/Library/Application Support/Spotify
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Steam, ~/Library/Application Support/Steam 2.4 GB
   steam:
     ids:
       - com.valvesoftware.steam
-    paths:
-      - ~/Library/Application Support/Steam
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Stremio 5.1.26
   stremio:
     ids:
       - com.westbridge.stremio5-mac
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Tailscale 1.104.2, preferences 4.0 KB, group-containers 4.0 KB, ~/Library/Application Support/Tailscale 4.0 KB
   tailscale:
     ids:
       - io.tailscale.ipn.macsys
-    paths:
-      - ~/Library/Application Support/Tailscale
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Tana Outliner 1.531.0, preferences 4.0 KB, ~/Library/Application Support/Tana Outliner 1.8 GB
   tana-outliner:
     ids:
       - inc.tana.desktop
-    paths:
-      - ~/Library/Application Support/Tana Outliner
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # TaskForge 3.0.2, containers 1.2 MB, group-containers 16.0 KB
   taskforge:
     ids:
@@ -338,21 +402,37 @@ apps:
     paths:
       - ~/Library/Application Support/TeamSpeak 3
   # Telegram 7.2.5, preferences 4.0 KB
-  telegram:
+  telegram-desktop:
     ids:
       - com.tdesktop.Telegram
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Telegram 13.1.0, preferences 8.0 KB, application-support 4.0 KB, group-containers 3.3 GB
-  telegram-2:
+  telegram:
     ids:
       - ru.keepcoder.Telegram
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Things3 3.20.9, containers 916.0 KB, group-containers 4.5 MB
   things3:
     ids:
       - com.culturedcode.ThingsMac
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # TickTick 8.0.60, preferences 20.0 KB, group-containers 8.8 MB
   ticktick:
     ids:
       - com.TickTick.task.mac
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Tower 17.3, preferences 8.0 KB, application-support 3.9 MB
   tower:
     ids:
@@ -365,14 +445,16 @@ apps:
   code:
     ids:
       - com.microsoft.VSCode
-    paths:
-      - ~/Library/Application Support/Code
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # VoiceInk 2.21, preferences 288.0 KB, application-support 10.3 GB, ~/Library/Application Support/VoiceInk 0 B
   voiceink:
     ids:
       - com.prakashjoshipax.VoiceInk
-    paths:
-      - ~/Library/Application Support/VoiceInk
+    exclude:
+      - WhisperModels
   # Vorssaint 3.4.1, preferences 8.0 KB
   vorssaint:
     ids:
@@ -389,12 +471,16 @@ apps:
   whatsapp:
     ids:
       - net.whatsapp.WhatsApp
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Xcode 16.2, preferences 16.0 KB, ~/Library/Application Support/Xcode 0 B
   xcode:
     ids:
       - com.apple.dt.Xcode
     paths:
-      - ~/Library/Application Support/Xcode
+      - ~/Library/Developer/Xcode/UserData
   # Yubico Authenticator 7.4.1, containers 360.0 KB
   yubico-authenticator:
     ids:
@@ -403,14 +489,16 @@ apps:
   zed:
     ids:
       - dev.zed.Zed
-    paths:
-      - ~/Library/Application Support/Zed
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # iloader 2.3.8, application-support 2.5 MB
   iloader:
     ids:
       - me.nabdev.iloader
   # Q*Й 0.1.0, preferences 4.0 KB
-  q:
+  keyswitcher:
     ids:
       - com.granin.keyswitcher
   # macshot 4.2.1, containers 2.7 MB
@@ -433,12 +521,17 @@ apps:
       - dev.serafim.fast
     paths:
       - ~/Library/Application Support/Yab
+    exclude:
+      - Shield
+      - ExtensionRules
   # zoom.us 7.1.9 (88375), preferences 4.0 KB, ~/Library/Application Support/zoom.us 657.2 MB
   zoom-us:
     ids:
       - us.zoom.xos
-    paths:
-      - ~/Library/Application Support/zoom.us
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # BetterTouchTool 6.954, preferences 76.0 KB, application-support 236.0 KB, ~/Library/Application Support/BetterTouchTool 6.3 MB
   bettertouchtool:
     ids:
@@ -473,6 +566,10 @@ apps:
   paste:
     ids:
       - com.wiheads.paste-setapp
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # Permute 3.14.8, containers 1.2 MB, group-containers 32.0 KB
   permute:
     ids:
@@ -493,8 +590,10 @@ apps:
   spark-mail:
     ids:
       - com.readdle.SparkDesktop-setapp
-    paths:
-      - ~/Library/Application Support/Spark Mail
+    skip:
+      - application-support
+      - containers
+      - group-containers
   # TablePlus 27.2.0, preferences 8.0 KB, application-support 912.0 KB
   tableplus:
     ids:
@@ -507,25 +606,24 @@ apps:
   timing:
     ids:
       - info.eurocomp.Timing-setapp
+      - info.eurocomp.Timing-setapp.TimingHelper
+      - info.eurocomp.Timing2
+    exclude:
+      - backups
   # Usage 2.16.3, preferences 4.0 KB, containers 580.0 KB
   usage:
     ids:
       - pro.usage.mac-setapp
-  # Claude Code URL Handler
-  claude-code-url-handler:
-    ids:
-      - com.anthropic.claude-code-url-handler
-  # CrossOver 25.1.1, preferences 8.0 KB, ~/Library/Application Support/CrossOver 3.6 GB
-  crossover:
-    ids:
-      - com.codeweavers.CrossOver
-    paths:
-      - ~/Library/Application Support/CrossOver
-  # Jira 1.0, preferences 4.0 KB
-  jira:
-    ids:
-      - com.apple.Safari.WebApp.0A28922F-7726-4149-B9E1-4CDF8B271F1A
   # Tart 2.32.1, preferences 4.0 KB
   tart:
     ids:
       - com.github.cirruslabs.tart
+ignored:
+  - org.pqrs.Karabiner-VirtualHIDDevice-Manager
+  - org.pqrs.Karabiner-EventViewer
+  - com.1password.safari
+  - com.anthropic.claude-code-url-handler
+  - com.apple.iphonesimulator
+  - com.apple.Safari
+  - com.apple.Safari.WebApp.0A28922F-7726-4149-B9E1-4CDF8B271F1A
+  - com.codeweavers.CrossOver

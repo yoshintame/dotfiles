@@ -8,6 +8,9 @@ let
   myLib = import ../lib { inherit lib; };
   monitorCases = import ../modules/nixos/monitor/tests.nix { inherit inputs lib myLib; };
   failedMonitorCases = lib.filter (c: c.actual != c.expected) monitorCases;
+  channelOf = lock: input: lock.nodes.${lock.nodes.root.inputs.${input}}.original.ref or "unpinned";
+  hostChannel = channelOf (builtins.fromJSON (builtins.readFile ../flake.lock)) "nixpkgs";
+  homelabChannel = channelOf (builtins.fromJSON (builtins.readFile "${inputs.homelab}/flake.lock")) "nixpkgs-prod";
 in
 {
   perSystem =
@@ -73,6 +76,11 @@ in
                   "- ${c.name}\n    expected: ${builtins.toJSON c.expected}\n    actual:   ${builtins.toJSON c.actual}"
                 ) failedMonitorCases
               }";
+          homelab-channel =
+            if homelabChannel == hostChannel then
+              pkgs.runCommandLocal "homelab-channel" { } "touch $out"
+            else
+              throw "lasthaze-homelab checks its modules against nixpkgs-prod ${homelabChannel}, the hosts run ${hostChannel}: move nixpkgs-prod in lasthaze-homelab/flake.nix to ${hostChannel}";
           image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;
         }
         // lib.optionalAttrs (system == "aarch64-darwin") (

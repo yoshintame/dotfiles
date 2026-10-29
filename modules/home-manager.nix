@@ -24,14 +24,18 @@
       ../lib/sops-templates
       (
         { config, lib, ... }:
-        let
-          ageKeyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-          hasAgeKey = builtins.pathExists ageKeyFile;
-        in
         {
-          sops.age.keyFile = lib.mkDefault ageKeyFile;
-          sops.secrets = lib.mkIf (!hasAgeKey) (lib.mkForce { });
-          sops.templates = lib.mkIf (!hasAgeKey) (lib.mkForce { });
+          options.my.sops.ready = lib.mkOption {
+            type = lib.types.bool;
+            readOnly = true;
+            default = builtins.pathExists config.sops.age.keyFile;
+            description = "Whether the SOPS age key exists on disk at evaluation time (needs --impure).";
+          };
+          config = {
+            sops.age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+            sops.secrets = lib.mkIf (!config.my.sops.ready) (lib.mkForce { });
+            sops.templates = lib.mkIf (!config.my.sops.ready) (lib.mkForce { });
+          };
         }
       )
 

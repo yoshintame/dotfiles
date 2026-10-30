@@ -72,7 +72,6 @@ const enabledFlags = [
   "ShowEndTask",
   "DisableWidgets",
   "HideTaskViewButton",
-  "ShowAllTrayIcons",
   "DisableBingResults",
   "DisableSac",
   "DisableFastStartup",

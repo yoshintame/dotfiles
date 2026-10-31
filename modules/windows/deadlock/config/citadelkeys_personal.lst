@@ -100,7 +100,7 @@
 		}
 		"Scoreboard"
 		{
-			"Key"		"TAB"
+			"Key"		"L"
 		}
 		"Reload"
 		{
@@ -109,7 +109,7 @@
 		}
 		"ExtraInfo"
 		{
-			"Key"		"L"
+			"Key"		"ALT"
 		}
 		"AltCast"
 		{
@@ -215,22 +215,26 @@
 		}
 		"AbilityUpgrade1"
 		{
-			"Key"		"1"
+			"Key"		"H"
+			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgrade2"
 		{
-			"Key"		"2"
+			"Key"		"Z"
+			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgrade3"
 		{
-			"Key"		"3"
+			"Key"		"J"
+			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgrade4"
 		{
-			"Key"		"4"
+			"Key"		"Q"
+			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgradeRadial"
@@ -891,6 +895,18 @@
 			"Ability3"
 			{
 				"Key"		"H"
+				"Key2"		"NONE"
+			}
+			"AbilityUpgrade1"
+			{
+				"Key"		"J"
+				"Modifier"		"ALT"
+				"Key2"		"NONE"
+			}
+			"AbilityUpgrade3"
+			{
+				"Key"		"H"
+				"Modifier"		"ALT"
 				"Key2"		"NONE"
 			}
 		}

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Write the diff from the installed tag to <new_tag> (default: latest release) for the audit,
 # list red-flag lines, and record what is under audit for `desvio run approve`.
-# With --branch <name>: the diff <audited-tag>...<name> of that patch branch, nothing recorded.
+# With --branch <name>: the diff <audited-tag>...<name> of that patch branch, recorded for
+# `desvio run approve -- --branch <name>`.
 set -euo pipefail
 USAGE="desvio run diff [-- <tag> | -- --branch <name>]"
 : "${DESVIO_REPO:?run this with: $USAGE}" "${DESVIO_STATE:?}"
@@ -14,6 +15,7 @@ has() { repo rev-parse --verify --quiet "$1^{commit}" >/dev/null; }
 
 [ "${1:-}" != -- ] || shift
 new_commit=
+branch_commit=
 case "${1:-}" in
   --branch)
     [ $# -eq 2 ] && [ -n "$2" ] || die "usage: $USAGE"
@@ -22,6 +24,7 @@ case "${1:-}" in
     [ -n "$base" ] || die "no audited tag in $KSW_STATE/audited-tag to diff from"
     has "refs/tags/$base" || die "audited tag $base not found in $DESVIO_REPO"
     has "refs/heads/$branch" || die "no branch $branch in $DESVIO_REPO"
+    branch_commit="$(repo rev-parse "refs/heads/$branch^{commit}")"
     SHOWN="$base...$branch"
     RANGE="refs/tags/$base...refs/heads/$branch"
     DIFF="$DESVIO_STATE/audit/$base...${branch//\//-}.patch"
@@ -66,12 +69,14 @@ if [ -n "$new_commit" ]; then
   mkdir -p "$KSW_STATE"
   printf '%s %s %s\n' "$NEW" "$new_commit" "$DIFF" > "$KSW_STATE/pending-audit"
 fi
+if [ -n "$branch_commit" ]; then
+  mkdir -p "$KSW_STATE"
+  printf '%s %s %s %s\n' "$branch" "$branch_commit" "$base" "$DIFF" > "$KSW_STATE/pending-branch-review"
+fi
 
 echo "range=$SHOWN"
 [ -z "$new_commit" ] || echo "new_commit=$new_commit"
-if [ -z "$new_commit" ] && [ -s "$KSW_STATE/pending-audit" ]; then
-  echo "pending-audit=$(cut -d' ' -f1 "$KSW_STATE/pending-audit") (still under audit: approve targets that release, not this branch)"
-fi
+[ -z "$branch_commit" ] || echo "branch_commit=$branch_commit"
 echo "diff=$DIFF"
 echo "--- changed files ---"
 [ -s "$DIFF" ] || echo "(no changes)"

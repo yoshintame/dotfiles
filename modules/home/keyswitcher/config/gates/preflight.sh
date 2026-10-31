@@ -13,7 +13,7 @@ audited_commit="$(cat "$KSW_STATE/audited-commit" 2>/dev/null || true)"
 [ "$base_ref" = "$audited" ] || { echo "BLOCK: base $base_ref is not the audited tag $audited" >&2; exit 1; }
 
 echo "→ verify: base tag $audited matches upstream"
-local_commit="$(git -C "$DESVIO_REPO" rev-parse "$audited^{commit}")"
+local_commit="$(git -C "$DESVIO_REPO" rev-parse "refs/tags/$audited^{commit}")"
 upstream_commit="$(git ls-remote "$UPSTREAM" "refs/tags/$audited" "refs/tags/$audited^{}" | sort -k2 | tail -1 | cut -f1)"
 [ "$local_commit" = "$audited_commit" ] || {
   echo "BLOCK: $audited is $local_commit here, but the audit covered $audited_commit" >&2
@@ -26,5 +26,5 @@ upstream_commit="$(git ls-remote "$UPSTREAM" "refs/tags/$audited" "refs/tags/$au
 
 echo "→ local commits on top of $audited (review them against the threat model):"
 sed 's/#.*//' "$DESVIO_MANIFEST" | awk 'NF { print $1 }' | while read -r branch; do
-  git -C "$DESVIO_REPO" log --oneline "$audited..$branch" | sed "s/^/   $branch  /"
+  git -C "$DESVIO_REPO" log --oneline "refs/tags/$audited..refs/heads/$branch" | sed "s/^/   $branch  /"
 done

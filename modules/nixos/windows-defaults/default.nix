@@ -71,5 +71,10 @@ myLib.mkModule config "windows-defaults" {
       MenuShowDelay = "20";
       JPEGImportQuality = 100;
     };
+    HKCU."Software\\Microsoft\\Clipboard".EnableClipboardHistory = 1;
+    HKCU."Console\\%%Startup" = {
+      DelegationConsole = "{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}";
+      DelegationTerminal = "{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}";
+    };
   };
 }

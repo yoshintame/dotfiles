@@ -60,6 +60,7 @@ cd /mnt/c
 ["dot:deadlock-binds"]
 description = "Sync Deadlock keybinds in WSL: pull copies the game's file into the repo, push copies the repo's file into the game"
 dir = "{{env.DOTFILES}}"
+usage = 'arg "<action>" help="pull (game → repo) or push (repo → game)"'
 run = '''
 set -eu
 game="/mnt/c/Program Files (x86)/Steam/userdata/21602665/1422450/remote/cfg/citadelkeys_personal.lst"
@@ -67,7 +68,7 @@ repo="modules/windows/deadlock/config/citadelkeys_personal.lst"
 stamp="${XDG_STATE_HOME:-$HOME/.local/state}/deadlock-binds.sha256"
 sha() { sha256sum "$1" | cut -d' ' -f1; }
 mkdir -p "$(dirname "$stamp")"
-case "${1:-}" in
+case "$usage_action" in
   pull)
     cp "$game" "$repo"
     sha "$game" > "$stamp"

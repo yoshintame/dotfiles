@@ -51,6 +51,3 @@ bindings:
   pasteHistory3: cmd alt ctrl shift f15
   pasteHistory4: cmd alt ctrl shift f16
   pasteHistory5: cmd alt ctrl shift f17
-
-  # AI autocomplete (Cotabby / Cotypist) — accept-word key, fired by Karabiner on solo Tab tap
-  aiAccept: f19

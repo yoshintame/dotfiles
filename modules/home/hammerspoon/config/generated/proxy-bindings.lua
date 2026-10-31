@@ -25,6 +25,5 @@ M.paste_history2 = "cmd alt ctrl shift f14"
 M.paste_history3 = "cmd alt ctrl shift f15"
 M.paste_history4 = "cmd alt ctrl shift f16"
 M.paste_history5 = "cmd alt ctrl shift f17"
-M.ai_accept = "f19"
 
 return M

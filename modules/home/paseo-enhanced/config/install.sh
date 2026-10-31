@@ -1,0 +1,259 @@
+#!/usr/bin/env bash
+#
+# Install the bundle `desvio run package` built, and pin the settings it needs.
+#
+# Separate from packaging on purpose. This half fails for its own reasons — the
+# app is running, /Applications says no — and none of them should cost you a
+# five-minute rebuild. It also writes into the REAL userData directory, which is
+# a thing you should have to ask for rather than get as a side effect.
+#
+# Usage:  desvio run install
+# Env:    PASEO_APP_DEST=/Applications
+#         PASEO_PRODUCT_NAME="Paseo Plus"
+#         PASEO_USER_DATA="$HOME/Library/Application Support/Paseo"
+#
+set -euo pipefail
+
+: "${DESVIO_WORKTREE:?run this with: desvio run install}"
+BUILD_DIR="$DESVIO_WORKTREE"
+
+# Paseo's own settings live beside this script, not in desvio.conf: desvio is a
+# generic tool and where an app gets installed is none of its business. `if`, not
+# `&&`, because under `set -e` a false test as the last command kills the script.
+PASEO_CONF="${PASEO_CONF:-$(dirname "$DESVIO_CONFIG_FILE")/paseo.conf}"
+if [ -f "$PASEO_CONF" ]; then
+  # shellcheck disable=SC1090
+  . "$PASEO_CONF"
+fi
+
+DEST_DIR="${PASEO_APP_DEST:-/Applications}"
+
+# Must match what package.sh built, which is why both read the same paseo.conf.
+PRODUCT_NAME="${PASEO_PRODUCT_NAME:-Paseo}"
+APP_NAME="$PRODUCT_NAME.app"
+BUILT_APP="$BUILD_DIR/packages/desktop/release/mac-arm64/$APP_NAME"
+
+# NOT "$PRODUCT_NAME": userData comes from app.setName(), which main.ts hardcodes
+# to "Paseo" whatever the bundle is called. A renamed build reads and writes the
+# stock directory, which is the point — same hosts, same settings, same history.
+USER_DATA="${PASEO_USER_DATA:-$HOME/Library/Application Support/Paseo}"
+
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) sed -n '2,12p' "$0"; exit 0 ;;
+    *) printf 'unknown option: %s\n' "$arg" >&2; exit 2 ;;
+  esac
+done
+
+log(){  printf '\n\033[1;34m[install]\033[0m %s\n' "$*"; }
+warn(){ printf '\033[1;33m[install]\033[0m %s\n' "$*"; }
+die(){  printf '\n\033[1;31m[install] ERROR:\033[0m %s\n' "$*" >&2; exit 1; }
+
+# $APP_NAME is built from PRODUCT_NAME and ends up as the target of the
+# `rm -rf` below, against $DEST_DIR — /Applications by default. A slash in the
+# name would aim that at a directory nobody asked for. Your own config value,
+# so this is a typo guard rather than a security boundary, but it guards a line
+# that deletes things.
+case "$PRODUCT_NAME" in
+  ""|.|..) die "PASEO_PRODUCT_NAME cannot be '$PRODUCT_NAME'" ;;
+  */*)     die "PASEO_PRODUCT_NAME cannot contain a slash: '$PRODUCT_NAME'
+  It names one bundle in $DEST_DIR, so it becomes one path component." ;;
+  -*)      die "PASEO_PRODUCT_NAME cannot start with a dash: '$PRODUCT_NAME'" ;;
+  *..*)    die "PASEO_PRODUCT_NAME cannot contain '..': '$PRODUCT_NAME'" ;;
+esac
+
+[ -d "$BUILT_APP" ] || die "no bundle at $BUILT_APP
+  Build one first:  desvio run package"
+
+# /Applications always exists; a PASEO_APP_DEST that does not should say so here
+# rather than as a bare `cp:` after the script has already claimed to install.
+[ -d "$DEST_DIR" ] || die "no such directory: $DEST_DIR  (PASEO_APP_DEST)"
+
+# What it actually is, read from the bundle rather than recomputed — this script
+# may run days after the build, and guessing the version would be a lie.
+VERSION=$(plutil -extract CFBundleShortVersionString raw "$BUILT_APP/Contents/Info.plist" 2>/dev/null || echo unknown)
+
+# The executable inside keeps its own name — electron-builder.yml pins
+# executableName: Paseo and productName does not override it — so the full path
+# is what tells this bundle apart from a stock one running next to it.
+if pgrep -f "$DEST_DIR/$APP_NAME/Contents/MacOS/Paseo" >/dev/null 2>&1; then
+  die "$PRODUCT_NAME is running from $DEST_DIR. Quit it first — replacing a
+  running bundle leaves the live process reading files that no longer exist."
+fi
+
+# The app quit does not mean its daemon did. keepRunningAfterQuit — pinned by
+# this very script, further down — reparents the supervisor to launchd, so it
+# keeps serving from inside the bundle this is about to replace. It also
+# rewrites its own argv to "Paseo Daemon" once it is up (process.title in
+# supervisor-entrypoint.ts), so the pgrep check above never catches it — only
+# the pidfile does. The packaged app always uses the real ~/.paseo, regardless
+# of PASEO_REAL_HOME — that only governs the dev daemon `desvio run start` uses.
+DPIDFILE="$HOME/.paseo/paseo.pid"
+if [ -f "$DPIDFILE" ]; then
+  DPID=$(sed -n 's/.*"pid"[[:space:]]*:[[:space:]]*\([0-9]*\).*/\1/p' "$DPIDFILE" | head -1)
+  if [ -n "${DPID:-}" ] && kill -0 "$DPID" 2>/dev/null; then
+    # -a: lsof ORs selection types without it, matching any process's txt
+    # mapping rather than just this pid's — see the cwd lookup below for the
+    # idiom done right.
+    DTXT=$(lsof -a -p "$DPID" -d txt -Fn 2>/dev/null | sed -n 's/^n//p')
+    # A herestring, not a pipe: `| grep -qF` under `set -o pipefail` can report
+    # failure on a MATCH — grep exits on the first line and SIGPIPEs lsof, and
+    # pipefail then reports the pipeline's status as that SIGPIPE, not the match.
+    if grep -qF "$DEST_DIR/$APP_NAME/" <<<"$DTXT"; then
+      die "the daemon this app installed (pid $DPID) is still running from
+    $DEST_DIR/$APP_NAME
+  Quitting the window leaves it up — keepRunningAfterQuit is on, by this script.
+  Replacing the bundle underneath it leaves it reading files that are gone, and
+  it holds every agent it started. Stop it first, with either:
+
+    desvio run stop
+    PASEO_HOME=$HOME/.paseo $BUILD_DIR/packages/cli/bin/paseo daemon stop"
+    fi
+  fi
+fi
+
+# A stock Paseo.app already here means the settings pin below reaches it too:
+# manageBuiltInDaemon and keepRunningAfterQuit are pinned in the shared
+# desktop-settings.json (see USER_DATA above), not in a directory keyed to this
+# bundle's name. A reader who only asked to install $PRODUCT_NAME gets the
+# other bundle's daemon behaviour quietly changed as a side effect.
+if [ "$PRODUCT_NAME" != "Paseo" ] && [ -d "$DEST_DIR/Paseo.app" ]; then
+  warn "$DEST_DIR/Paseo.app is also installed. It reads the same
+         $USER_DATA/desktop-settings.json this script is about to pin
+         manageBuiltInDaemon and keepRunningAfterQuit into — both bundles will
+         run their own background daemon and keep it up after you quit the window."
+fi
+
+# A daemon started from the tree owns port 6767 and would block the app's own.
+# Two daemons, one port: the app's silently loses.
+if lsof -nP -iTCP:6767 -sTCP:LISTEN -t >/dev/null 2>&1; then
+  DPID=$(lsof -nP -iTCP:6767 -sTCP:LISTEN -t | head -1)
+  DCWD=$(lsof -a -p "$DPID" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | head -1)
+  # Not fatal — installing is copying a bundle, and you may well be doing it
+  # while the old app runs. But having gone and looked up who holds the port,
+  # say so in every case rather than only the one we can name.
+  case "${DCWD:-}" in
+    "$BUILD_DIR"|"$BUILD_DIR"/*)
+      warn "a tree daemon (pid $DPID) holds 6767. The packaged app manages its own."
+      warn "Stop it first: PASEO_HOME=\$HOME/.paseo $BUILD_DIR/packages/cli/bin/paseo daemon stop" ;;
+    *)
+      warn "something already holds 6767 (pid $DPID, cwd ${DCWD:-unknown})."
+      warn "The app starts its own daemon on that port and will silently lose to it." ;;
+  esac
+fi
+
+#
+# Copy first, delete last. The copy is the slow part and the part that fails —
+# a full disk, a permission you do not have, an external volume that went away —
+# and doing it after the `rm` means every one of those leaves you with no app at
+# all. Stage beside the target, then swap with two renames, which are atomic and
+# instant because they are on the same filesystem.
+log "installing $VERSION to $DEST_DIR/$APP_NAME"
+STAGE="$DEST_DIR/.$APP_NAME.incoming.$$"
+PREVIOUS="$DEST_DIR/.$APP_NAME.previous.$$"
+trap 'rm -rf "$STAGE"' EXIT
+
+# -Rc clones on APFS: near-instant, no extra space. Falls back for other filesystems.
+cp -Rc "$BUILT_APP" "$STAGE" 2>/dev/null || cp -R "$BUILT_APP" "$STAGE" ||
+  die "could not stage the bundle in $DEST_DIR — $DEST_DIR/$APP_NAME is untouched.
+  Usually a full disk or a directory you cannot write to."
+
+# A copy that returned 0 having produced something unrunnable is the case worth
+# catching here, while the old app is still in place to fall back on.
+[ -x "$STAGE/Contents/MacOS/Paseo" ] ||
+  die "the staged bundle has no executable at Contents/MacOS/Paseo.
+  $DEST_DIR/$APP_NAME is untouched. The bundle at $BUILT_APP looks broken —
+  rebuild it with: desvio run package"
+
+if [ -e "$DEST_DIR/$APP_NAME" ]; then
+  mv "$DEST_DIR/$APP_NAME" "$PREVIOUS" ||
+    die "could not move the existing app aside — nothing was changed."
+fi
+if ! mv "$STAGE" "$DEST_DIR/$APP_NAME"; then
+  # Put the old one back rather than leaving the slot empty. `if`, not `&&`:
+  # under `set -e` a false test as a bare command would exit before the die.
+  if [ -e "$PREVIOUS" ]; then mv "$PREVIOUS" "$DEST_DIR/$APP_NAME"; fi
+  die "could not move the new bundle into place — the previous app was restored."
+fi
+rm -rf "$PREVIOUS"
+
+# ---------- pin the desktop settings ----------
+# The packaged app uses the REAL userData dir — PASEO_HOME and PASEO_LISTEN do
+# not isolate it. Both migration flags must be pre-applied or coerceDocument
+# resets keepRunningAfterQuit to its default on first read.
+#
+# manageBuiltInDaemon TRUE here, the opposite of desktop.sh: for the dev app the
+# point is that it must never touch the real daemon; for the packaged app,
+# running its own bundled daemon IS the point.
+#
+# Pin those keys, not the file. This is the REAL userData directory — the same
+# one a stock Paseo writes — so it holds settings this script has never heard of,
+# including any a newer Paseo added after this script was written. Overwriting
+# the document to pin six keys throws all of them away.
+log "pinning $USER_DATA/desktop-settings.json"
+mkdir -p "$USER_DATA"
+python3 - "$USER_DATA/desktop-settings.json" <<'PY' || die "could not update desktop-settings.json"
+import json, os, shutil, sys, tempfile
+
+path = sys.argv[1]
+doc = {}
+if os.path.exists(path):
+    shutil.copy2(path, path + ".bak")
+    try:
+        with open(path) as fh:
+            doc = json.load(fh)
+    except (ValueError, OSError):
+        # Unreadable is not the same as absent: the backup above is the only
+        # copy now, so say where it went rather than silently starting fresh.
+        print("existing settings are not valid JSON — kept at %s.bak" % path,
+              file=sys.stderr)
+        doc = {}
+if not isinstance(doc, dict):
+    doc = {}
+
+doc.setdefault("version", 1)
+
+settings = doc.setdefault("settings", {})
+settings["releaseChannel"] = "stable"
+daemon = settings.setdefault("daemon", {})
+daemon["manageBuiltInDaemon"] = True
+daemon["keepRunningAfterQuit"] = True
+
+# Both flags, or coerceDocument resets keepRunningAfterQuit on first read.
+migrations = doc.setdefault("migrations", {})
+migrations["legacyRendererSettingsImported"] = True
+migrations["daemonStopOnQuitDefaultApplied"] = True
+
+# Write-then-rename: a crash mid-write must not leave a truncated settings file
+# that the app then refuses to start against.
+fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path) or ".")
+try:
+    with os.fdopen(fd, "w") as fh:
+        json.dump(doc, fh, indent=2)
+        fh.write("\n")
+    os.replace(tmp, path)
+except BaseException:
+    os.path.exists(tmp) and os.unlink(tmp)
+    raise
+PY
+
+PARALLEL_NOTE=""
+if [ "$PRODUCT_NAME" != "Paseo" ]; then
+  PARALLEL_NOTE="
+A stock Paseo.app can sit beside this one, and both read that same userData dir.
+Run ONE at a time: Electron's single-instance lock lives there too, so launching
+the second while the first is up just brings the first forward."
+fi
+
+cat <<EOF
+
+$(printf '\033[1;34m[install]\033[0m') installed $DEST_DIR/$APP_NAME
+       version: $VERSION
+
+Launch it:  open -n "$DEST_DIR/$APP_NAME"
+
+The host registry lives in the same userData dir, so the hosts you already added
+are still there. The daemon this app starts is its own, on 6767, against
+\$HOME/.paseo — do not also run \`desvio run start\`, or they fight over the port.
+$PARALLEL_NOTE
+EOF

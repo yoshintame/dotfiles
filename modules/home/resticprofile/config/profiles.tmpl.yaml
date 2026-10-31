@@ -228,7 +228,6 @@ profiles:
         - "Library/Keychains/login.keychain-db"
         - "Library/Preferences"
         - ".local/state/app-state"
-        - ".local/state/keyswitcher-update"
       files-from-verbatim: "{{ .Env.HOME }}/.local/state/app-state/files-from"
       exclude-file: "{{ .Env.HOME }}/.local/state/app-state/exclude"
       exclude...:

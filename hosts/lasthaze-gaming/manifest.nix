@@ -9,6 +9,7 @@
     "windows-power"
     "windows-nilesoft-shell"
     "windows-windhawk"
+    "windows-cursor"
   ];
 
   home-manager.users.yoshintame.my = myLib.enableList [

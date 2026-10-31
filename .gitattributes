@@ -1,1 +1,2 @@
 encrypted/*.{yaml,json,ini,env} diff=sopsdiffer
+modules/windows/deadlock/config/*.lst text eol=lf

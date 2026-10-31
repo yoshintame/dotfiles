@@ -25,4 +25,13 @@ steps {
   ["flake"] {
     check = "nix flake check --impure"
   }
+  ["darwin"] {
+    check =
+      "nix eval --impure --raw --option allow-import-from-derivation false .#darwinConfigurations.lasthaze-mbp.system.drvPath > /dev/null"
+    profiles = List("slow")
+  }
+  ["shellcheck"] {
+    glob = List("bootstrap.sh", "tests/tart/*.sh")
+    check = "shellcheck --severity=warning {{ files }}"
+  }
 }

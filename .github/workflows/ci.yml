@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    uses: yoshintame/workflows/.github/workflows/ci.yml@a2dd939289d450e122f98ce19f3ccca6e58c4654 # v1.3.0
+    permissions:
+      contents: read
+    secrets:
+      flake_inputs_token: ${{ secrets.FLAKE_INPUTS_TOKEN }}

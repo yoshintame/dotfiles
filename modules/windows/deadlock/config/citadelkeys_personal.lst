@@ -7,32 +7,32 @@
 	{
 		"AbilityMelee"
 		{
-			"Key"		"Q"
+			"Key"		"MOUSE5"
 			"Key2"		"NONE"
 		}
 		"Ability1"
 		{
-			"Key"		"1"
+			"Key"		"H"
 			"Key2"		"NONE"
 		}
 		"Ability2"
 		{
-			"Key"		"2"
+			"Key"		"J"
 			"Key2"		"NONE"
 		}
 		"Ability3"
 		{
-			"Key"		"3"
+			"Key"		"L"
 			"Key2"		"NONE"
 		}
 		"Ability4"
 		{
-			"Key"		"4"
+			"Key"		"Q"
 			"Key2"		"NONE"
 		}
 		"Item1"
 		{
-			"Key"		"Z"
+			"Key"		"W"
 			"Key2"		"NONE"
 		}
 		"Item2"
@@ -52,7 +52,7 @@
 		}
 		"Mantle"
 		{
-			"Key"		"SPACE"
+			"Key"		"MOUSE1"
 			"Key2"		"NONE"
 		}
 		"OpenHeroSheet"
@@ -62,12 +62,12 @@
 		}
 		"PurchaseQuickbuy"
 		{
-			"Key"		"G"
+			"Key"		"5"
 			"Key2"		"NONE"
 		}
 		"Roll"
 		{
-			"Key"		"SHIFT"
+			"Key"		"A"
 			"Key2"		"NONE"
 		}
 		"Crouch"
@@ -82,7 +82,7 @@
 		}
 		"MoveUp"
 		{
-			"Key"		"SHIFT"
+			"Key"		"A"
 		}
 		"MoveDown"
 		{
@@ -109,7 +109,7 @@
 		}
 		"ExtraInfo"
 		{
-			"Key"		"ALT"
+			"Key"		"Z"
 		}
 		"AltCast"
 		{
@@ -121,27 +121,27 @@
 		}
 		"MoveForward"
 		{
-			"Key"		"W"
+			"Key"		"E"
 			"Key2"		"NONE"
 		}
 		"MoveBackwards"
 		{
-			"Key"		"S"
+			"Key"		"D"
 			"Key2"		"NONE"
 		}
 		"MoveLeft"
 		{
-			"Key"		"A"
+			"Key"		"S"
 			"Key2"		"NONE"
 		}
 		"MoveRight"
 		{
-			"Key"		"D"
+			"Key"		"F"
 			"Key2"		"NONE"
 		}
 		"Attack"
 		{
-			"Key"		"MOUSE1"
+			"Key"		"SPACE"
 			"Key2"		"NONE"
 		}
 		"ADS"
@@ -185,7 +185,7 @@
 		}
 		"HeldItem"
 		{
-			"Key"		"F"
+			"Key"		"MOUSE4"
 			"Key2"		"NONE"
 		}
 		"SwitchPlayerCam1"
@@ -216,25 +216,21 @@
 		"AbilityUpgrade1"
 		{
 			"Key"		"1"
-			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgrade2"
 		{
 			"Key"		"2"
-			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgrade3"
 		{
 			"Key"		"3"
-			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgrade4"
 		{
 			"Key"		"4"
-			"Modifier"		"ALT"
 			"Key2"		"NONE"
 		}
 		"AbilityUpgradeRadial"
@@ -383,15 +379,15 @@
 		}
 		"Zipline"
 		{
-			"Key"		"SPACE"
+			"Key"		"MOUSE1"
 		}
 		"CancelAbility"
 		{
-			"Key"		"SPACE"
+			"Key"		"NONE"
 		}
 		"HideoutUse"
 		{
-			"Key"		"E"
+			"Key"		"G"
 		}
 		"HideoutNews"
 		{
@@ -495,8 +491,8 @@
 		}
 		"Cosmetic1"
 		{
-			"Key"		"E"
-			"Key2"		"5"
+			"Key"		"NONE"
+			"Key2"		"NONE"
 		}
 		"ToggleSpectatorPlayerPerspective"
 		{
@@ -515,12 +511,12 @@
 		}
 		"Interact"
 		{
-			"Key"		"E"
+			"Key"		"G"
 			"Key2"		"NONE"
 		}
 		"CosmeticMenu"
 		{
-			"Key"		"5"
+			"Key"		"NONE"
 			"Key2"		"NONE"
 		}
 		"SpectatorPlayer1"
@@ -722,7 +718,7 @@
 		}
 		"DownDash"
 		{
-			"Key"		"NONE"
+			"Key"		"SHIFT"
 			"Key2"		"NONE"
 		}
 	}

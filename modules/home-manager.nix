@@ -75,6 +75,7 @@
       ./home/nvim
       ./home/op
       ./home/ouch
+      ./home/paseo-enhanced
       ./home/plannotator
       ./home/pnpm
       ./home/python

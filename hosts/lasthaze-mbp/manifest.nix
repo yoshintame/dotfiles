@@ -44,6 +44,7 @@
     "nvim"
     "op"
     "ouch"
+    "paseo-enhanced"
     "plannotator"
     "pnpm"
     "python"

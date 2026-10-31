@@ -22,7 +22,7 @@
 		}
 		"Ability3"
 		{
-			"Key"		"L"
+			"Key"		"G"
 			"Key2"		"NONE"
 		}
 		"Ability4"
@@ -90,7 +90,7 @@
 		}
 		"PushToTalk"
 		{
-			"Key"		"T"
+			"Key"		"F8"
 			"Key2"		"NONE"
 		}
 		"PushToTalkParty"
@@ -387,7 +387,7 @@
 		}
 		"HideoutUse"
 		{
-			"Key"		"G"
+			"Key"		"L"
 		}
 		"HideoutNews"
 		{
@@ -511,7 +511,7 @@
 		}
 		"Interact"
 		{
-			"Key"		"G"
+			"Key"		"L"
 			"Key2"		"NONE"
 		}
 		"CosmeticMenu"

@@ -59,7 +59,10 @@ lib.recursiveUpdate
       "~/.config/resticprofile/profiles.yaml" = {
         template = ./config/profiles.tmpl.yaml;
         sopsFile = ./secrets.yaml;
-        vars.gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
+        vars = {
+          gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
+          appState = lib.getExe' config.home.path "app-state";
+        };
       };
       "~/.config/resticprofile/hc.env" = {
         template = ./config/hc.env.tmpl;

@@ -174,7 +174,7 @@ profiles:
       run-before:
         - "/usr/bin/env PATH=/opt/homebrew/bin:/usr/bin:/bin HOMEBREW_NO_AUTO_UPDATE=1 {{ .Env.HOME }}/.local/share/mise/shims/bun run {{ .Env.HOME }}/.dotfiles/packages/dump-packages/src/cli.ts"
         - "/bin/sh {{ .Env.HOME }}/.dotfiles/modules/home/resticprofile/config/dump-brewfile.sh {{ .Env.HOME }}/.dotfiles/hosts/lasthaze-mbp/packages/Brewfile"
-        - "/usr/bin/env PATH=/usr/bin:/bin:/usr/sbin {{ .Env.HOME }}/.local/share/mise/shims/bun {{ .Env.HOME }}/.cache/.bun/bin/app-state prepare"
+        - "/usr/bin/env PATH=/usr/bin:/bin:/usr/sbin @appState@ prepare"
       source-base: "{{ .Env.HOME }}"
       source:
         - ".ssh"

@@ -1,0 +1,1 @@
+exec "$APP_STATE_BUN" "$APP_STATE_MAIN" "$@"

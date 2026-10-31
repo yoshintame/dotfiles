@@ -57,6 +57,42 @@ cd /mnt/c
   --accept-configuration-agreements </dev/null
 '''
 
+["dot:deadlock-binds"]
+description = "Sync Deadlock keybinds in WSL: pull copies the game's file into the repo, push copies the repo's file into the game"
+dir = "{{env.DOTFILES}}"
+run = '''
+set -eu
+game="/mnt/c/Program Files (x86)/Steam/userdata/21602665/1422450/remote/cfg/citadelkeys_personal.lst"
+repo="modules/windows/deadlock/config/citadelkeys_personal.lst"
+stamp="${XDG_STATE_HOME:-$HOME/.local/state}/deadlock-binds.sha256"
+sha() { sha256sum "$1" | cut -d' ' -f1; }
+mkdir -p "$(dirname "$stamp")"
+case "${1:-}" in
+  pull)
+    cp "$game" "$repo"
+    sha "$game" > "$stamp"
+    git diff --stat -- "$repo"
+    ;;
+  push)
+    if /mnt/c/Windows/System32/tasklist.exe /FI "IMAGENAME eq deadlock.exe" </dev/null | grep -qi deadlock.exe; then
+      echo "Deadlock is running: close it first, it rewrites the file on exit" >&2
+      exit 1
+    fi
+    if [ "$(sha "$game")" != "$(cat "$stamp" 2>/dev/null)" ] && ! cmp -s "$game" "$repo"; then
+      echo "The game changed its keybinds since the last sync: run 'dot deadlock-binds pull' first" >&2
+      exit 1
+    fi
+    cp "$repo" "$game"
+    sha "$game" > "$stamp"
+    echo "pushed $repo"
+    ;;
+  *)
+    echo "usage: dot deadlock-binds pull|push" >&2
+    exit 2
+    ;;
+esac
+'''
+
 ["dot:brew"]
 description = "Install the Brewfile with Brewfile.overrides.json applied; report entries that failed (--cleanup, --formulae-only, --dry-run)"
 dir = "{{env.DOTFILES}}"

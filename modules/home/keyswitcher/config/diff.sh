@@ -8,7 +8,7 @@ USAGE="desvio run diff [-- <tag> | -- --branch <name>]"
 : "${DESVIO_REPO:?run this with: $USAGE}" "${DESVIO_STATE:?}"
 KSW_STATE="${KSW_STATE:-$HOME/.local/state/keyswitcher-update}"
 UPSTREAM="https://github.com/graninilya/keyswitcher"
-RED_FLAGS='URLSession|URLRequest|URL\(string|https?://|NWConnection|getaddrinfo|SUPublicEDKey|SUFeedURL|SUAutomaticallyUpdate|listenOnly|tapCreate|CGEventMask|keyUp|IsSecureEventInputEnabled|SecureInput|Process\(|NSTask|system\(|popen|NSAppleScript|dlopen|dlsym|NSClassFromString|LaunchDaemon|LaunchAgent|SMAppService|\.package\(|binaryTarget|\.entitlements|com\.apple\.security|UsageDescription|CFBundleIdentifier|privacy: \.public|FileManager|write\(to:|kSecAttr|curl|wget|secrets\.'
+RED_FLAGS='URLSession|URLRequest|URL\(string|https?://|NWConnection|getaddrinfo|SUPublicEDKey|SUFeedURL|SUAutomaticallyUpdate|listenOnly|tapCreate|CGEventMask|keyUp|IsSecureEventInputEnabled|SecureInput|Process\(|NSTask|system\(|popen|NSAppleScript|dlopen|dlsym|NSClassFromString|LaunchDaemon|LaunchAgent|SMAppService|\.package\(|binaryTarget|\.entitlements|com\.apple\.security|UsageDescription|CFBundleIdentifier|privacy: \.public|FileManager|write\(to:|kSecAttr|curl|wget|secrets\.|\.post\(tap|keyboardSetUnicodeString|eventSourceUserData|NSPasteboard|setString\(|writeObjects|AXUIElementSetAttributeValue|kAXValueAttribute|TISSelectInputSource|addGlobalMonitor|addLocalMonitor|RegisterEventHotKey'
 repo() { git -C "$DESVIO_REPO" "$@"; }
 die() { echo "ERROR: $*" >&2; exit 1; }
 has() { repo rev-parse --verify --quiet "$1^{commit}" >/dev/null; }

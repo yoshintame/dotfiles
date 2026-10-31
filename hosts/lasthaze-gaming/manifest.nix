@@ -7,6 +7,8 @@
     "windows-defaults"
     "windows-openssh"
     "windows-power"
+    "windows-nilesoft-shell"
+    "windows-windhawk"
   ];
 
   home-manager.users.yoshintame.my = myLib.enableList [

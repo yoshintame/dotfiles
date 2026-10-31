@@ -31,7 +31,7 @@ for name in $manifest; do
     continue
   fi
   old="$(git -C "$DESVIO_REPO" rev-parse --verify --quiet "${entry#*@}^{commit}" || echo "${entry#*@}")"
-  now="$(git -C "$DESVIO_REPO" rev-parse --verify --quiet "$name^{commit}" || echo missing)"
+  now="$(git -C "$DESVIO_REPO" rev-parse --verify --quiet "refs/heads/$name^{commit}" || echo missing)"
   [ "$now" = "$old" ] || echo "branch-moved=$name ${old:0:9}..${now:0:9}"
 done
 for entry in $pinned; do

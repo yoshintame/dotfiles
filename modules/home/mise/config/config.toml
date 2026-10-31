@@ -17,6 +17,7 @@ rust = "latest"
 uv = "latest"
 
 [settings]
+all_compile = false
 python.uv_venv_auto = true
 color_theme = "catppuccin"
 trusted_config_paths = ["~/Development/work", "~/Development/projects", "~/Development/yoshintame", "~/.paseo/worktrees"]

@@ -8,7 +8,7 @@ dir = "{{env.DOTFILES}}"
 run = '${EDITOR:-code} .'
 
 ["dot:rebuild"]
-description = "Rebuild the host: nix-darwin on macOS; nix-win and the user's winget configuration in WSL"
+description = "Rebuild the host: nix-darwin on macOS; NixOS-WSL, nix-win and the user's winget configuration in WSL"
 dir = "{{env.DOTFILES}}"
 # --impure: my.sops.ready gates stencil.enable and the sops wiring on
 # `builtins.pathExists` of the age key, which only works under --impure. Without it
@@ -17,6 +17,7 @@ dir = "{{env.DOTFILES}}"
 # sops-nix generations.
 run = '''
 if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+  sudo nixos-rebuild switch --impure --flake ".#$(hostname)"
   windows-rebuild switch
   mise run dot:winget-user
   exit
@@ -33,6 +34,7 @@ description = "Rebuild AND converge packages: Homebrew to the Brewfile on macOS,
 dir = "{{env.DOTFILES}}"
 run = '''
 if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+  sudo nixos-rebuild switch --impure --flake ".#$(hostname)"
   windows-rebuild switch --winget
   mise run dot:winget-user
   exit

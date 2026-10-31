@@ -108,6 +108,13 @@ resources:
       source: msstore
       acceptAgreements: true
 
+  - name: NvidiaControlPanel
+    type: Microsoft.WinGet/Package
+    properties:
+      id: 9NF8H0H7WMLT
+      source: msstore
+      acceptAgreements: true
+
   - name: HackNerdFont
     type: Microsoft.DSC.Transitional/WindowsPowerShellScript
     properties:

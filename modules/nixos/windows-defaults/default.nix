@@ -63,4 +63,13 @@ myLib.mkModule config "windows-defaults" {
       deviceMetadataDownload = false;
     };
   };
+
+  windows.registry = {
+    HKLM."SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System".ConsentPromptBehaviorAdmin =
+      0;
+    HKCU."Control Panel\\Desktop" = {
+      MenuShowDelay = "20";
+      JPEGImportQuality = 100;
+    };
+  };
 }

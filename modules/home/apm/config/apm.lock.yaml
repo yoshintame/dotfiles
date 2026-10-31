@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 4a3be14e92421fa10906a1aa2d99e2eafcce8b34
-  resolved_ref: v1.16.0+4a3be14
-  version: 1.16.0+4a3be14
+  resolved_commit: 6737efc7e413fc78a4baa65d2bb7ae15a19b1420
+  resolved_ref: v1.16.1+6737efc
+  version: 1.16.1+6737efc
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1338,7 +1338,7 @@ dependencies:
     .agents/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
     .agents/skills/keyswitcher-update/SKILL.md: sha256:c235872627c60a4d8c38516f94eb40a8b16325c5c2db550c9c80134947366580
     .agents/skills/keyswitcher-update/references/signing-cert.md: sha256:ccc28a89411fe8de367c1b57cf3f1fc392ae41c0367d58855b1856231cc89e2d
-    .agents/skills/keyswitcher-update/references/threat-model.md: sha256:243ff7ba983c89811ea7c44f766c3c041d2e2f2b7435781685e114846ff80499
+    .agents/skills/keyswitcher-update/references/threat-model.md: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
     .agents/skills/keyswitcher-update/scripts/build-verify-install.sh: sha256:0f1a74773c3698995d2062d2f115757015699141d8d89a59af5653ff9b304526
     .agents/skills/keyswitcher-update/scripts/check-update.sh: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
     .agents/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:6664217d4da2c7d716e10726cabbec1abc0e025cd3644e1c60acce5fc477cf35
@@ -1347,7 +1347,7 @@ dependencies:
     .agents/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
     .agents/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
     .agents/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
-    .agents/skills/nix-style/SKILL.md: sha256:e258ec62c8a9ecd3f396539e10629e4b179a0f89e2f615366bc21b7cba4c0e35
+    .agents/skills/nix-style/SKILL.md: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
     .agents/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
     .agents/skills/op-secrets/SKILL.md: sha256:582417430cac68fb998b62b7ed7c3c45844b9943a7cfaa5cf423342a49258ee4
     .agents/skills/op-secrets/scripts/op-meta.ts: sha256:d7e9b4bc981eb5e93689cd70facd73f47d5a8278c682a6762fbf791fec6b4749
@@ -1463,13 +1463,13 @@ dependencies:
     .claude/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
     .claude/skills/keyswitcher-update/SKILL.md: sha256:c235872627c60a4d8c38516f94eb40a8b16325c5c2db550c9c80134947366580
     .claude/skills/keyswitcher-update/references/signing-cert.md: sha256:ccc28a89411fe8de367c1b57cf3f1fc392ae41c0367d58855b1856231cc89e2d
-    .claude/skills/keyswitcher-update/references/threat-model.md: sha256:243ff7ba983c89811ea7c44f766c3c041d2e2f2b7435781685e114846ff80499
+    .claude/skills/keyswitcher-update/references/threat-model.md: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
     .claude/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:6664217d4da2c7d716e10726cabbec1abc0e025cd3644e1c60acce5fc477cf35
     .claude/skills/maintenance-cleanup/SKILL.md: sha256:895a377135aac799d308a5905e1c56f5db0fad4e5d7689850517bda84f1ed1d0
     .claude/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
     .claude/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
     .claude/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
-    .claude/skills/nix-style/SKILL.md: sha256:e258ec62c8a9ecd3f396539e10629e4b179a0f89e2f615366bc21b7cba4c0e35
+    .claude/skills/nix-style/SKILL.md: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
     .claude/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
     .claude/skills/op-secrets/SKILL.md: sha256:582417430cac68fb998b62b7ed7c3c45844b9943a7cfaa5cf423342a49258ee4
     .claude/skills/op-secrets/scripts/op-meta.ts: sha256:d7e9b4bc981eb5e93689cd70facd73f47d5a8278c682a6762fbf791fec6b4749
@@ -1514,10 +1514,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:b63ad152a8f827b42affe4ae2eee89166fa0d21525a3c2abf1380a8250744b42
+  content_hash: sha256:66e36d751b7cbc740bb53ce85945b0ac8dd3a728364ceffeb693bf14561b28de
   constraint: ^1.0.0
-  resolved_tag: v1.16.0+4a3be14
-  resolved_at: '2026-10-31T20:09:06+00:00'
+  resolved_tag: v1.16.1+6737efc
+  resolved_at: '2026-10-31T20:27:22+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -2995,7 +2995,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:243ff7ba983c89811ea7c44f766c3c041d2e2f2b7435781685e114846ff80499
+  content_hash: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
 - kind: project-relative
   target: claude
   value: .claude/skills/keyswitcher-update/scripts/create-signing-cert.sh
@@ -3085,7 +3085,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:e258ec62c8a9ecd3f396539e10629e4b179a0f89e2f615366bc21b7cba4c0e35
+  content_hash: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
 - kind: project-relative
   target: claude
   value: .claude/skills/obsidian-vault
@@ -6658,7 +6658,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:243ff7ba983c89811ea7c44f766c3c041d2e2f2b7435781685e114846ff80499
+  content_hash: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
 - kind: project-relative
   target: legacy
   value: .agents/skills/keyswitcher-update/scripts/build-verify-install.sh
@@ -6775,7 +6775,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:e258ec62c8a9ecd3f396539e10629e4b179a0f89e2f615366bc21b7cba4c0e35
+  content_hash: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
 - kind: project-relative
   target: legacy
   value: .agents/skills/obsidian-vault

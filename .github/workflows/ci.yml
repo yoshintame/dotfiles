@@ -14,8 +14,8 @@ concurrency:
 
 jobs:
   verify:
-    uses: yoshintame/workflows/.github/workflows/ci.yml@84f1facf82592c3e9ce82435ef95ef674d9b2419 # v1.2.0
+    uses: yoshintame/workflows/.github/workflows/ci.yml@a2dd939289d450e122f98ce19f3ccca6e58c4654 # v1.3.0
     permissions:
       contents: read
     secrets:
-      ssh_private_key: ${{ secrets.FLAKE_INPUTS_SSH_KEY }}
+      flake_inputs_token: ${{ secrets.FLAKE_INPUTS_TOKEN }}

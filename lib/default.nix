@@ -2,6 +2,8 @@
 {
   mkModule = import ./mk-module.nix { inherit lib; };
 
+  mkMiseCli = import ./mkMiseCli.nix;
+
   authorizedKeys = import ./authorized-keys.nix;
 
   enabled = {

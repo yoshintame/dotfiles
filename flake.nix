@@ -115,6 +115,7 @@
           ./modules/nixos/windows-nilesoft-shell
           ./modules/nixos/windows-windhawk
           ./modules/nixos/windows-cursor
+          ./modules/nixos/windows-paseo
         ];
       };
     in

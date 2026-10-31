@@ -30,6 +30,7 @@ in
     home.stateVersion = "25.05";
     home.username = username;
     home.homeDirectory = homeDir;
+    home.sessionVariables.DOTFILES = flakeRoot;
 
     nixLink = {
       enable = true;

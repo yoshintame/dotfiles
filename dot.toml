@@ -8,15 +8,20 @@ dir = "{{env.DOTFILES}}"
 run = '${EDITOR:-code} .'
 
 ["dot:rebuild"]
-description = "Rebuild nix-darwin configuration"
+description = "Rebuild the host: nix-darwin on macOS; nix-win and the user's winget configuration in WSL"
 dir = "{{env.DOTFILES}}"
-depends = ["dot:proxy-bindings"]
 # --impure: my.sops.ready gates stencil.enable and the sops wiring on
 # `builtins.pathExists` of the age key, which only works under --impure. Without it
 # the gate stays false, no secrets or templates are declared, and rendered secret
 # files (profiles.yaml, b2.env, hc.env, repo.key) silently disappear from new
 # sops-nix generations.
 run = '''
+if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+  windows-rebuild switch
+  mise run dot:winget-user
+  exit
+fi
+mise run dot:proxy-bindings
 git add -A
 sudo env NIX_PATH="nixpkgs=flake:nixpkgs" DOT_SKIP_TCC_DEFAULTS="${DOT_SKIP_TCC_DEFAULTS:-}" darwin-rebuild switch --impure --flake .#lasthaze-mbp
 mise run dot:sops-bootstrap
@@ -24,11 +29,30 @@ mise run dot:mcp
 '''
 
 ["dot:rebuild-full"]
-description = "Rebuild AND converge Homebrew to the Brewfile (install missing + uninstall extras)"
+description = "Rebuild AND converge packages: Homebrew to the Brewfile on macOS, the machine winget bundle in WSL"
 dir = "{{env.DOTFILES}}"
 run = '''
+if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+  windows-rebuild switch --winget
+  mise run dot:winget-user
+  exit
+fi
 mise run dot:rebuild
 mise run dot:brew --cleanup
+'''
+
+["dot:winget-user"]
+description = "Apply the current user's winget configuration from WSL: user packages, dotbot links, mise tools"
+run = '''
+set -eu
+if [ -z "${WSL_DISTRO_NAME:-}" ]; then
+  echo "dot:winget-user runs only in WSL" >&2
+  exit 1
+fi
+cd /mnt/c
+"/mnt/c/Users/$USER/AppData/Local/Microsoft/WindowsApps/winget.exe" configure \
+  -f "C:\\Users\\$USER\\.dotfiles\\hosts\\$(hostname)\\windows\\user.$USER.winget" \
+  --accept-configuration-agreements </dev/null
 '''
 
 ["dot:brew"]

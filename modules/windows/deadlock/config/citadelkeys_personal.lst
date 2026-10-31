@@ -17,12 +17,12 @@
 		}
 		"Ability2"
 		{
-			"Key"		"J"
+			"Key"		"Z"
 			"Key2"		"NONE"
 		}
 		"Ability3"
 		{
-			"Key"		"G"
+			"Key"		"J"
 			"Key2"		"NONE"
 		}
 		"Ability4"
@@ -109,7 +109,7 @@
 		}
 		"ExtraInfo"
 		{
-			"Key"		"Z"
+			"Key"		"L"
 		}
 		"AltCast"
 		{
@@ -387,7 +387,7 @@
 		}
 		"HideoutUse"
 		{
-			"Key"		"L"
+			"Key"		"G"
 		}
 		"HideoutNews"
 		{
@@ -511,7 +511,7 @@
 		}
 		"Interact"
 		{
-			"Key"		"L"
+			"Key"		"G"
 			"Key2"		"NONE"
 		}
 		"CosmeticMenu"

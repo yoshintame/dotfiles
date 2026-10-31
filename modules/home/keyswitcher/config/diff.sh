@@ -94,8 +94,10 @@ flags="$(gitdiff -U0 --inter-hunk-context=0 | RED_FLAGS="$RED_FLAGS" awk '
     if (p ~ /^".*"$/) p = unquote(p)
     return substr(p, length(prefix) + 1)
   }
-  function flag(sign, file, line, text) {
-    if (tolower(text) ~ re) print sign " " file ":" line ": " text
+  function flag(sign, file, line, text,   t) {
+    t = tolower(text)
+    gsub(/\.system\((size:|\.)/, "", t)
+    if (t ~ re) print sign " " file ":" line ": " text
   }
   /^diff --git / { hunk = 0; next }
   !hunk && /^--- / { old = path(substr($0, 5), "a/"); next }

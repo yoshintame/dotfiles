@@ -1,0 +1,1 @@
+local-fixes    # autoconvert fixes + smart layout-switch hotkey; review against the threat model before every install

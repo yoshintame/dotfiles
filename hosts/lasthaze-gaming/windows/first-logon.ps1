@@ -99,3 +99,32 @@ Invoke-Step 'tailscale' {
         Write-Log '  no auth key on the media, sign in to Tailscale by hand'
     }
 }
+
+Invoke-Step 'windows-update' {
+    $session = New-Object -ComObject Microsoft.Update.Session
+    $found = $session.CreateUpdateSearcher().Search("IsInstalled=0 and IsHidden=0 and BrowseOnly=0 and Type='Software'").Updates
+    $updates = New-Object -ComObject Microsoft.Update.UpdateColl
+    foreach ($update in $found) {
+        if ($update.InstallationBehavior.CanRequestUserInput) {
+            Write-Log "  skip, needs user input: $($update.Title)"
+            continue
+        }
+        if (-not $update.EulaAccepted) { $update.AcceptEula() }
+        [void]$updates.Add($update)
+        Write-Log "  $($update.Title)"
+    }
+    if ($updates.Count -eq 0) { return }
+    $downloader = $session.CreateUpdateDownloader()
+    $downloader.Updates = $updates
+    $download = $downloader.Download()
+    if ($download.ResultCode -notin 2, 3) { throw "Windows Update download finished with result $($download.ResultCode)" }
+    $installer = $session.CreateUpdateInstaller()
+    $installer.Updates = $updates
+    $result = $installer.Install()
+    for ($i = 0; $i -lt $updates.Count; $i++) {
+        $code = $result.GetUpdateResult($i).ResultCode
+        if ($code -ne 2) { Write-Log "  result $code for $($updates.Item($i).Title)" }
+    }
+    Write-Log "  result $($result.ResultCode), reboot required $($result.RebootRequired)"
+    if ($result.ResultCode -notin 2, 3) { throw "Windows Update finished with result $($result.ResultCode)" }
+}

@@ -65,3 +65,10 @@ resources:
       id: XP8CLZL93F5Z4P
       source: msstore
       acceptAgreements: true
+
+  - name: NvidiaControlPanel
+    type: Microsoft.WinGet/Package
+    properties:
+      id: 9NF8H0H7WMLT
+      source: msstore
+      acceptAgreements: true

@@ -13,3 +13,4 @@
     ~/AppData/Roaming/ludusavi/config.yaml: modules/windows/ludusavi/config/config.yaml
     ~/.gitconfig: modules/windows/git/config/.gitconfig
     ~/.wslconfig: hosts/lasthaze-gaming/windows/.wslconfig
+    "C:/Program Files (x86)/Steam/userdata/21602665/1422450/remote/cfg/citadelkeys_personal.lst": modules/windows/deadlock/config/citadelkeys_personal.lst

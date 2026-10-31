@@ -228,8 +228,8 @@ profiles:
         - "Library/Keychains/login.keychain-db"
         - "Library/Preferences"
         - ".local/state/app-state"
-      files-from-verbatim: "{{ .Env.HOME }}/.local/state/app-state/files-from.txt"
-      exclude-file: "{{ .Env.HOME }}/.local/state/app-state/exclude.txt"
+      files-from-verbatim: "{{ .Env.HOME }}/.local/state/app-state/files-from"
+      exclude-file: "{{ .Env.HOME }}/.local/state/app-state/exclude"
       exclude...:
         - "**/.paseo/models"
         - "**/.paseo/*.log"

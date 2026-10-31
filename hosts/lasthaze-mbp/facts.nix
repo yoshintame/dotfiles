@@ -6,6 +6,8 @@ let
     VISUAL = "zed --wait";
     GOPATH = "${homeDir}/go";
     PNPM_HOME = "${homeDir}/.local/share/pnpm";
+    BUN_INSTALL = "${homeDir}/.local/share/bun";
+    BUN_INSTALL_CACHE_DIR = "${homeDir}/.cache/.bun/install/cache";
     DOTFILES = "${homeDir}/.dotfiles";
     OBSIDIAN_VAULT = "${homeDir}/Documents/obsidian/yoshintame";
     XDG_CONFIG_HOME = "${homeDir}/.config";
@@ -25,7 +27,7 @@ let
     "/opt/homebrew/sbin"
     "${homeDir}/.local/share/mise/shims"
     "${homeDir}/.local/share/pnpm"
-    "${homeDir}/.bun/bin"
+    "${homeDir}/.local/share/bun/bin"
     "${homeDir}/go/bin"
     "${homeDir}/.local/bin"
     "${homeDir}/bin"

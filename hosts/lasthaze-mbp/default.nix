@@ -144,7 +144,7 @@ in
 
         links = {
           "~/.config/packages" = "hosts/lasthaze-mbp/packages";
-          "~/.cache/.bun/install/global/package.json" = "hosts/lasthaze-mbp/packages/package.json";
+          "~/.local/share/bun/install/global/package.json" = "hosts/lasthaze-mbp/packages/package.json";
         };
       };
     };

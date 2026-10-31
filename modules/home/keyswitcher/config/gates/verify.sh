@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-: "${DESVIO_WORKTREE:?}" "${DESVIO_STATE:?}" "${DESVIO_BASE:?}"
+: "${DESVIO_WORKTREE:?}" "${DESVIO_STATE:?}" "${DESVIO_BASE:?}" "${KSW_STATE:?}"
 APP="$DESVIO_WORKTREE/App/dist/keySwitcher.app"
 EXE="$APP/Contents/MacOS/keySwitcher"
 ALLOWED_HOSTS_RE='qkb-llm\.graninilya\.workers\.dev|github\.com/graninilya/keyswitcher|api\.openai\.com'
@@ -8,7 +8,7 @@ ALLOWED_LITERALS_RE='https://ya\.ru/a,b'
 EXPECTED_EDKEY='+VYV2MzhMzAQl+Qwb7wPPR4HldDmiINfqpiU8kva9Mo='
 tree() { git -C "$DESVIO_WORKTREE" "$@"; }
 
-echo "→ verify: every merge is the plain automatic merge, no recorded resolution"
+echo "→ verify: every merge is the plain automatic merge of a branch reviewed against $DESVIO_BASE"
 base="$(tree rev-parse "$DESVIO_BASE^{commit}")"
 for merge in $(tree rev-list --merges --first-parent "$base..HEAD"); do
   auto="$(tree merge-tree --write-tree --no-messages "$merge^1" "$merge^2")" || {
@@ -18,6 +18,13 @@ for merge in $(tree rev-list --merges --first-parent "$base..HEAD"); do
   [ "$auto" = "$(tree rev-parse "$merge^{tree}")" ] || {
     echo "BLOCK: $(tree log -1 --format='%h %s' "$merge") differs from the automatic merge" >&2
     exit 6
+  }
+  tip="$(tree rev-parse "$merge^2")"
+  awk -v t="$tip" -v b="$DESVIO_BASE" '$2 == t && $3 == b { ok = 1 } END { exit !ok }' \
+    "$KSW_STATE/reviewed-branches" 2>/dev/null || {
+    echo "BLOCK: $(tree log -1 --format='%h %s' "$merge") brings in $tip, not approved against $DESVIO_BASE;" \
+      "run desvio run diff -- --branch <name>, audit it, then desvio run approve -- --branch <name>" >&2
+    exit 7
   }
 done
 

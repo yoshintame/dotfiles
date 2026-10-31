@@ -22,7 +22,7 @@ let
       check = "768h";
     };
   };
-  mkMiseCli = import ../../../lib/mkMiseCli.nix {
+  mkMiseCli = myLib.mkMiseCli {
     inherit pkgs;
     inherit (pkgs-unstable) mise;
   };

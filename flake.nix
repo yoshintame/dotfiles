@@ -112,6 +112,8 @@
           ./modules/nixos/windows-defaults
           ./modules/nixos/windows-openssh
           ./modules/nixos/windows-power
+          ./modules/nixos/windows-nilesoft-shell
+          ./modules/nixos/windows-windhawk
         ];
       };
     in

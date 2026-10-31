@@ -883,6 +883,16 @@
 				"Key"		"1"
 				"Key2"		"NONE"
 			}
+			"Ability1"
+			{
+				"Key"		"J"
+				"Key2"		"NONE"
+			}
+			"Ability3"
+			{
+				"Key"		"H"
+				"Key2"		"NONE"
+			}
 		}
 		"hero_viscous"
 		{

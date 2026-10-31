@@ -5,6 +5,7 @@ tap "creativeprojects/tap"
 tap "doron-cohen/tap"
 tap "dotenv-org/brew"
 tap "dsully/tap"
+tap "fujacob/cotabby", "https://github.com/FuJacob/homebrew-cotabby"
 tap "garethgeorge/backrest-tap"
 tap "gateway-of-last-resort/tap"
 tap "gu1llaum-3/sshm", "https://github.com/Gu1llaum-3/homebrew-sshm"
@@ -215,6 +216,8 @@ cask "codex"
 cask "codex-app"
 # Visual diff tool for Git changes
 cask "nkzw-tech/tap/codiff", trusted: true
+# On-device inline autocomplete in any text field
+cask "fujacob/cotabby/cotabby", trusted: true
 cask "cotypist"
 # Disk space visualiser
 cask "daisydisk"
@@ -268,6 +271,8 @@ cask "insomnia"
 cask "jordanbaird-ice"
 # Keyboard customiser
 cask "karabiner-elements"
+# Open-source on-device AI tab-autocomplete in any text field
+cask "yoshintame/cask/keytype", trusted: true
 # Terminal UI for SSH keys, ~/.ssh/config, security audits, and encrypted backups
 cask "gateway-of-last-resort/tap/keyward", trusted: true
 # Wallet desktop application to maintain multiple cryptocurrencies
@@ -359,6 +364,8 @@ cask "telegram"
 cask "ticktick"
 # Git client focusing on power and productivity
 cask "tower"
+# On-device AI autocomplete for every text field
+cask "yoshintame/cask/typeseer", trusted: true
 # Configurable document editor that supports Markdown
 cask "typora"
 # Open-source code editor

@@ -54,6 +54,7 @@
       ./home/claude-code-patch
       ./home/claude-rc
       ./home/codex
+      ./home/desvio
       ./home/docker
       ./home/eza
       ./home/file-associations
@@ -66,6 +67,7 @@
       ./home/hammerspoon
       ./home/iina
       ./home/karabiner
+      ./home/keyswitcher
       ./home/kitty
       ./home/lazygit
       ./home/mise

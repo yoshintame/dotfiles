@@ -8911,34 +8911,7 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
-  value: raindrop
-  runtime: claude
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
   value: tana-local
-  runtime: claude
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
-  value: ticktick
-  runtime: claude
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
-  value: ynab
   runtime: claude
   scope: project
   owners:
@@ -9001,34 +8974,7 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
-  value: raindrop
-  runtime: codex
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
   value: tana-local
-  runtime: codex
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
-  value: ticktick
-  runtime: codex
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: uri
-  target: mcp
-  value: ynab
   runtime: codex
   scope: project
   owners:
@@ -9042,10 +8988,7 @@ mcp_servers:
 - grafana-monitor
 - linear
 - metabase
-- raindrop
 - tana-local
-- ticktick
-- ynab
 mcp_configs:
   answeroverflow:
     name: answeroverflow
@@ -9091,16 +9034,6 @@ mcp_configs:
     transport: http
     registry: false
     url: https://mb.senateexchange.com/api/metabase-mcp
-  raindrop:
-    name: raindrop
-    transport: stdio
-    env:
-      RAINDROP_ACCESS_TOKEN: ${RAINDROP_ACCESS_TOKEN}
-    args:
-    - -y
-    - '@adeze/raindrop-mcp'
-    registry: false
-    command: bunx
   tana-local:
     name: tana-local
     transport: http
@@ -9109,30 +9042,6 @@ mcp_configs:
       Authorization: Bearer ${TANA_MCP_TOKEN}
     url: http://127.0.0.1:8262/mcp
     bearer_token_env_var: TANA_MCP_TOKEN
-  ticktick:
-    name: ticktick
-    transport: stdio
-    env:
-      TICKTICK_CLIENT_ID: ${TICKTICK_CLIENT_ID}
-      TICKTICK_CLIENT_SECRET: ${TICKTICK_CLIENT_SECRET}
-      TICKTICK_ACCESS_TOKEN: ${TICKTICK_ACCESS_TOKEN}
-    args:
-    - -y
-    - '@alexarevalo.ai/mcp-server-ticktick'
-    registry: false
-    command: bunx
-  ynab:
-    name: ynab
-    transport: stdio
-    env:
-      YNAB_ACCESS_TOKEN: ${YNAB_ACCESS_TOKEN}
-      YNAB_MCP_ENABLE_DELTA: 'true'
-      YNAB_MCP_CACHE_DEFAULT_TTL_MS: '300000'
-    args:
-    - -y
-    - '@dizzlkheinz/ynab-mcpb@0.26.7'
-    registry: false
-    command: bunx
 mcp_target_servers:
   claude:
   - answeroverflow
@@ -9141,10 +9050,7 @@ mcp_target_servers:
   - grafana-monitor
   - linear
   - metabase
-  - raindrop
   - tana-local
-  - ticktick
-  - ynab
   codex:
   - answeroverflow
   - chrome-devtools
@@ -9152,7 +9058,4 @@ mcp_target_servers:
   - grafana-monitor
   - linear
   - metabase
-  - raindrop
   - tana-local
-  - ticktick
-  - ynab

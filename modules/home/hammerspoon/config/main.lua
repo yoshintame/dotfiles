@@ -55,8 +55,13 @@ local function toggleHyperSetup()
 end
 
 local keySwitcherId = "com.granin.keyswitcher"
+local keySwitcherRestart = nil
 
 local function toggleKeySwitcherLog()
+    if keySwitcherRestart then
+        hs.alert.show("keySwitcher ещё перезапускается")
+        return
+    end
     local verbose = hs.execute("/usr/bin/defaults read " .. keySwitcherId .. " QKBVerboseLogging 2>/dev/null"):match("1") ~= nil
     if verbose then
         hs.execute("/usr/bin/defaults delete " .. keySwitcherId .. " QKBVerboseLogging")
@@ -65,20 +70,23 @@ local function toggleKeySwitcherLog()
     end
     local label = verbose and "keySwitcher: журнал обезличенный" or "keySwitcher: журнал ПОДРОБНЫЙ (текст открыто)"
     local app = hs.application.get(keySwitcherId)
-    if app then app:kill() end
-    local tries = 0
-    local relaunch
-    relaunch = hs.timer.doEvery(0.2, function()
-        tries = tries + 1
-        if hs.application.get(keySwitcherId) and tries < 25 then return end
-        relaunch:stop()
+    if not app then
+        hs.alert.show(label .. " — со следующего запуска")
+        return
+    end
+    app:kill()
+    local deadline = hs.timer.secondsSinceEpoch() + 5
+    keySwitcherRestart = hs.timer.waitUntil(function()
+        return hs.application.get(keySwitcherId) == nil or hs.timer.secondsSinceEpoch() > deadline
+    end, function()
+        keySwitcherRestart = nil
         if hs.application.get(keySwitcherId) then
             hs.alert.show("keySwitcher не закрылся, флаг сменится после перезапуска")
             return
         end
         hs.execute("/usr/bin/open -g -b " .. keySwitcherId)
         hs.alert.show(label)
-    end)
+    end, 0.2)
 end
 
 hs.loadSpoon("LeaderFlow")

@@ -1,1 +1,0 @@
-SKILL.v6.md

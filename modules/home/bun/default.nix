@@ -14,12 +14,15 @@ myLib.mkModule config "bun" {
     ncc = "bun create yoshintame/template-bun-cli";
     ncr = "bun create yoshintame/template-bun-react";
     ni = "bun install";
-    nig = "bun install --global";
+    nig = {
+      expansion = "mise use -g npm:%";
+      setCursor = true;
+    };
     nd = "bun remove";
     nu = "bun update";
     nb = "bun build";
     nl = "bun pm ls";
-    nlg = "bun pm ls -g";
+    nlg = "mise ls --global";
     nt = "bun test";
     nr = "bun run";
     nrd = "bun run dev";

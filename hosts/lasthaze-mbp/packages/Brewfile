@@ -22,6 +22,7 @@ tap "osx-cross/avr"
 tap "peterldowns/tap"
 tap "qmk/qmk"
 tap "raine/claude-history"
+tap "teamookla/speedtest"
 tap "umlx5h/tap"
 tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew"
 tap "xwjdsh/tap"
@@ -104,8 +105,6 @@ brew "jqp"
 brew "just"
 # Simple terminal UI for git commands
 brew "lazygit"
-# TUI for Jujutsu/jj
-brew "lazyjj"
 # Terminal-based SSH manager
 brew "lazyssh"
 # Postgres C API library
@@ -156,8 +155,8 @@ brew "ripgrep"
 brew "sevenzip"
 # Editor of encrypted files
 brew "sops"
-# Command-line interface for https://speedtest.net bandwidth tests
-brew "speedtest-cli"
+# Ookla Speedtest
+brew "teamookla/speedtest/speedtest"
 # Add a public key to a remote machine's authorized_keys file
 brew "ssh-copy-id"
 # Graphical command-line client for SSH
@@ -208,6 +207,8 @@ cask "alt-tab"
 cask "altserver"
 # Chromium based browser
 cask "arc"
+# Web browser
+cask "thebrowsercompany-dia"
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
 # Anthropic's official Claude AI desktop app
@@ -216,8 +217,6 @@ cask "claude"
 cask "claude-code@latest"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
-# OpenAI's Codex desktop app for managing coding agents
-cask "codex-app"
 # Visual diff tool for Git changes
 cask "nkzw-tech/tap/codiff", trusted: true
 # System-wide AI autocomplete

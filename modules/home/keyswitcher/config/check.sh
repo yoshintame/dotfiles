@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Is there a newer upstream release, and which patch branches moved, appeared in or left
-# the manifest since the install.
 set -euo pipefail
 : "${DESVIO_REPO:?run this with: desvio run check}" "${DESVIO_MANIFEST:?}"
 # shellcheck source=lib/ksw.sh

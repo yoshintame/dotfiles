@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Approve exactly the release `desvio run diff` prepared: write audited-tag and audited-commit.
-# With --branch <name>: approve the patch branch `desvio run diff -- --branch` prepared.
-# Run only after a clean audit and the user's explicit go-ahead.
 set -euo pipefail
 : "${DESVIO_REPO:?run this with: desvio run approve}"
 # shellcheck source=lib/ksw.sh

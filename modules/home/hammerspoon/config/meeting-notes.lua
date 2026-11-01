@@ -18,7 +18,7 @@ end
 local function resolveBun()
   local found = trim(hs.execute("/bin/sh -lc 'command -v bun'") or "")
   if found ~= "" then return found end
-  return os.getenv("HOME") .. "/.bun/bin/bun"
+  return os.getenv("HOME") .. "/.local/share/mise/shims/bun"
 end
 
 local function runScript(args, onDone)

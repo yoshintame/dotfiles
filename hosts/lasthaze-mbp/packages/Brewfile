@@ -1,31 +1,31 @@
-tap "ajayrmk/tap"
-tap "asmvik/formulae"
-tap "bellicose100xp/tap"
-tap "creativeprojects/tap"
-tap "doron-cohen/tap"
-tap "dotenv-org/brew"
-tap "dsully/tap"
-tap "garethgeorge/backrest-tap"
-tap "gateway-of-last-resort/tap"
-tap "gu1llaum-3/sshm", "https://github.com/Gu1llaum-3/homebrew-sshm"
-tap "hongkongkiwi/vsix-cli"
-tap "josephyaduvanshi/chronicle"
-tap "koekeishiya/formulae", "https://github.com/asmvik/homebrew-formulae.git"
-tap "lusingander/tap"
-tap "madzarm/tap"
-tap "mylee04/tools"
-tap "nikitabobko/tap"
-tap "nkzw-tech/tap"
-tap "openai/tools", trusted: { formulae: ["softnet"] }
-tap "osx-cross/arm"
-tap "osx-cross/avr"
-tap "peterldowns/tap"
-tap "qmk/qmk"
-tap "raine/claude-history"
-tap "teamookla/speedtest"
-tap "umlx5h/tap"
-tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew"
-tap "xwjdsh/tap"
+tap "ajayrmk/tap", trusted: true
+tap "asmvik/formulae", trusted: true
+tap "bellicose100xp/tap", trusted: true
+tap "creativeprojects/tap", trusted: true
+tap "doron-cohen/tap", trusted: true
+tap "dotenv-org/brew", trusted: true
+tap "dsully/tap", trusted: true
+tap "garethgeorge/backrest-tap", trusted: true
+tap "gateway-of-last-resort/tap", trusted: true
+tap "gu1llaum-3/sshm", "https://github.com/Gu1llaum-3/homebrew-sshm", trusted: true
+tap "hongkongkiwi/vsix-cli", trusted: true
+tap "josephyaduvanshi/chronicle", trusted: true
+tap "koekeishiya/formulae", "https://github.com/asmvik/homebrew-formulae.git", trusted: true
+tap "lusingander/tap", trusted: true
+tap "madzarm/tap", trusted: true
+tap "mylee04/tools", trusted: true
+tap "nikitabobko/tap", trusted: true
+tap "nkzw-tech/tap", trusted: true
+tap "openai/tools", trusted: true
+tap "osx-cross/arm", trusted: true
+tap "osx-cross/avr", trusted: true
+tap "peterldowns/tap", trusted: true
+tap "qmk/qmk", trusted: true
+tap "raine/claude-history", trusted: true
+tap "teamookla/speedtest", trusted: true
+tap "umlx5h/tap", trusted: true
+tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew", trusted: true
+tap "xwjdsh/tap", trusted: true
 tap "yoshintame/cask", trusted: true
 # Search tool like grep, but optimized for programmers
 brew "ack"
@@ -155,8 +155,6 @@ brew "ripgrep"
 brew "sevenzip"
 # Editor of encrypted files
 brew "sops"
-# Ookla Speedtest
-brew "teamookla/speedtest/speedtest"
 # Add a public key to a remote machine's authorized_keys file
 brew "ssh-copy-id"
 # Graphical command-line client for SSH
@@ -185,12 +183,36 @@ brew "worktrunk"
 brew "yazi"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# Offline meeting transcription for macOS — auto-detects meetings, transcribes locally, saves to Claude Desktop via MCP
+brew "ajayrmk/tap/trnscrb"
+# Cleans up your $HOME from those pesky dotfiles
+brew "doron-cohen/tap/antidot"
+# Defaults setting for macOS
+brew "dsully/tap/macos-defaults"
 # A modern SSH connection manager for your terminal
 brew "gu1llaum-3/sshm/sshm", trusted: true
+# Download VS Code extensions (.vsix files) from official or open-source marketplaces
+brew "hongkongkiwi/vsix-cli/vsix-cli"
+# A rich git commit graph in your terminal, like magic
+brew "lusingander/tap/serie"
 # Hybrid search CLI for Claude Code chat sessions (BM25 + vector + RRF)
 brew "madzarm/tap/ccsearch", trusted: true
+# Cross-platform desktop notifications for AI coding tools
+brew "mylee04/tools/code-notify"
 # Run macOS and Linux VMs on Apple Hardware
 brew "openai/tools/tart", trusted: true
+# Localias is a tool for developers to securely manage local aliases for development servers.
+brew "peterldowns/tap/localias"
+# Fuzzy-search Claude Code conversation history from the terminal
+brew "raine/claude-history/claude-history"
+# Ookla Speedtest
+brew "teamookla/speedtest/speedtest", trusted: true
+# A Trash CLI manager written in Go
+brew "umlx5h/tap/gtrash"
+# Modern TUI for managing Homebrew packages and casks on macOS and Linux
+brew "valkyrie00/bbrew/bbrew"
+# Manage your ssh alias configs easily
+brew "xwjdsh/tap/manssh"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
@@ -207,8 +229,6 @@ cask "alt-tab"
 cask "altserver"
 # Chromium based browser
 cask "arc"
-# Web browser
-cask "thebrowsercompany-dia"
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
 # Anthropic's official Claude AI desktop app
@@ -362,6 +382,8 @@ cask "teamspeak-client"
 cask "telegram"
 # Desktop client for Telegram messenger
 cask "telegram-desktop"
+# Web browser
+cask "thebrowsercompany-dia"
 # To-do & task list manager
 cask "ticktick"
 # Git client focusing on power and productivity

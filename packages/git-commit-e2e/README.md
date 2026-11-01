@@ -1,6 +1,6 @@
 # git-commit e2e
 
-Автотесты для `git commit-context` и `git commit-edit`.
+Автотесты для `git-commit-atomic`.
 
 Запуск:
 

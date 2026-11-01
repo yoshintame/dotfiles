@@ -231,12 +231,18 @@ install_brewfile() {
 
 setup_toolchains() {
   log "Installing mise toolchains"
-  mise install uv
-  mise install
+  if ! mise install uv; then
+    warn "uv did not install; continuing"
+  fi
+  if ! mise install; then
+    warn "Some mise tools did not install (listed above); continuing"
+  fi
   log "Installing bun dependencies of the repo"
   for dir in "${REPO_DIR}" "${REPO_DIR}"/packages/*; do
     if [ -f "${dir}/package.json" ]; then
-      (cd "${dir}" && mise exec -- bun install)
+      if ! (cd "${dir}" && mise install bun && MISE_EXEC_AUTO_INSTALL=false mise exec -- bun install); then
+        warn "bun install failed in ${dir}; continuing"
+      fi
     fi
   done
 }

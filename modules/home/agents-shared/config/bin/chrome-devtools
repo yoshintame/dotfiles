@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${SANDBOX_RUNTIME:-}" || -n "${CODEX_SANDBOX:-}" ]]; then
+  echo "chrome-devtools: refusing to run inside the agent sandbox — it would break the shared daemon for every session. Run it as a plain 'chrome-devtools …' command so the harness lifts the sandbox." >&2
+  exit 1
+fi
+
+root="$(cd "$(dirname "$(readlink -f "$0")")/../../../../.." && pwd)"
+cli="$root/node_modules/.bin/chrome-devtools"
+if [[ ! -x "$cli" ]]; then
+  echo "chrome-devtools: $cli is missing; run 'bun install' in $root" >&2
+  exit 1
+fi
+
+command="${1:-}"
+
+case "$command" in
+  start | stop)
+    if [[ -z "${CHROME_DEVTOOLS_ALLOW_RESTART:-}" ]] && "$cli" status 2>/dev/null | grep -q 'is running'; then
+      echo "chrome-devtools: the daemon is shared by every agent session; '$command' would reset their pages and state. Set CHROME_DEVTOOLS_ALLOW_RESTART=1 if that is intended." >&2
+      exit 1
+    fi
+    ;;
+  status | --help | --version | "") ;;
+  *) "$HOME/.local/bin/chrome-cdp" up >/dev/null 2>&1 || true ;;
+esac
+
+absolute() {
+  if [[ -z "$1" || "$1" == /* || "$1" == -* ]]; then
+    printf '%s' "$1"
+  else
+    printf '%s/%s' "$PWD" "$1"
+  fi
+}
+
+args=()
+path_flag=0
+for arg in "$@"; do
+  if ((path_flag)); then
+    args+=("$(absolute "$arg")")
+    path_flag=0
+  elif [[ "$arg" =~ ^(--[A-Za-z]*Path)=(.*)$ ]]; then
+    args+=("${BASH_REMATCH[1]}=$(absolute "${BASH_REMATCH[2]}")")
+  elif [[ "$arg" =~ ^--[A-Za-z]*Path$ ]]; then
+    args+=("$arg")
+    path_flag=1
+  elif [[ "$command" == *heapsnapshot* && "$arg" == *.heapsnapshot ]]; then
+    args+=("$(absolute "$arg")")
+  else
+    args+=("$arg")
+  fi
+done
+
+exec "$cli" "${args[@]}"

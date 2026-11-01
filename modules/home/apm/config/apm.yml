@@ -16,15 +16,10 @@ dependencies:
     - pdf
     - pptx
     - xlsx
+  - git: https://github.com/ChromeDevTools/chrome-devtools-mcp.git
+    path: skills/chrome-devtools-cli
+    ref: chrome-devtools-mcp-v1.12.0
   mcp:
-  - name: chrome-devtools
-    registry: false
-    transport: stdio
-    command: bunx
-    args:
-    - -y
-    - chrome-devtools-mcp@latest
-    - --browser-url=http://127.0.0.1:9222
   - name: answeroverflow
     registry: false
     transport: http

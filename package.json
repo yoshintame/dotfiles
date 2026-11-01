@@ -2,6 +2,7 @@
   "name": "dotfiles-scripts",
   "private": true,
   "dependencies": {
+    "chrome-devtools-mcp": "1.12.0",
     "citty": "^0.2.2",
     "dax-sh": "^0.42.0",
     "zod": "4.6.5"

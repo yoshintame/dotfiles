@@ -31,10 +31,6 @@ let
             "git-clone-layout.sh"
           ];
         }
-        {
-          matcher = "^mcp__chrome-devtools__.*";
-          hooks = [ (command "chrome-cdp-ensure.sh" { timeout = 30; }) ];
-        }
       ];
     };
   };

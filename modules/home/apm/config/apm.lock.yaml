@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 97729cfad77f5e4f1a52f157ad39e6bf4c4bbb69
-  resolved_ref: v1.16.2+97729cf
-  version: 1.16.2+97729cf
+  resolved_commit: 6f0c2403c8d802ad7a980eb98d1d7f0ddadaa24e
+  resolved_ref: v1.16.3+6f0c240
+  version: 1.16.3+6f0c240
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1336,9 +1336,9 @@ dependencies:
     .agents/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .agents/skills/homelab-deploy/SKILL.md: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
     .agents/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
-    .agents/skills/keyswitcher-update/SKILL.md: sha256:c235872627c60a4d8c38516f94eb40a8b16325c5c2db550c9c80134947366580
+    .agents/skills/keyswitcher-update/SKILL.md: sha256:2f7a416b4717ae2b248cdf4a0fca4e486acbcebefb27935a96ed241b0fe728d8
     .agents/skills/keyswitcher-update/references/signing-cert.md: sha256:ccc28a89411fe8de367c1b57cf3f1fc392ae41c0367d58855b1856231cc89e2d
-    .agents/skills/keyswitcher-update/references/threat-model.md: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
+    .agents/skills/keyswitcher-update/references/threat-model.md: sha256:898a0a5c906ab485ef170c19ce6f2c7284d4cd16ff4319283e4d32024ba5a9ca
     .agents/skills/keyswitcher-update/scripts/build-verify-install.sh: sha256:0f1a74773c3698995d2062d2f115757015699141d8d89a59af5653ff9b304526
     .agents/skills/keyswitcher-update/scripts/check-update.sh: sha256:b787f07d2762613f4b3b02db9a664d3708a168e08c7365c0ae3c4511cbd20d92
     .agents/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:6664217d4da2c7d716e10726cabbec1abc0e025cd3644e1c60acce5fc477cf35
@@ -1347,7 +1347,7 @@ dependencies:
     .agents/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
     .agents/skills/meeting-transcribe/SKILL.md: sha256:268a9710d9321e381e1d44ed78dbe3924d9354f0377bf12a9c9614353ce66202
     .agents/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
-    .agents/skills/nix-style/SKILL.md: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
+    .agents/skills/nix-style/SKILL.md: sha256:b1471fc9389401d6d30796676fe943d0981bbeb3dba32d11ece407c9b36fd03a
     .agents/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
     .agents/skills/op-secrets/SKILL.md: sha256:582417430cac68fb998b62b7ed7c3c45844b9943a7cfaa5cf423342a49258ee4
     .agents/skills/op-secrets/scripts/op-meta.ts: sha256:d7e9b4bc981eb5e93689cd70facd73f47d5a8278c682a6762fbf791fec6b4749
@@ -1461,15 +1461,15 @@ dependencies:
     .claude/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .claude/skills/homelab-deploy/SKILL.md: sha256:4bc77fe7311861a5e3140a4a134f570892e5b088589bae39a8acffa43af2f1cc
     .claude/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
-    .claude/skills/keyswitcher-update/SKILL.md: sha256:c235872627c60a4d8c38516f94eb40a8b16325c5c2db550c9c80134947366580
+    .claude/skills/keyswitcher-update/SKILL.md: sha256:2f7a416b4717ae2b248cdf4a0fca4e486acbcebefb27935a96ed241b0fe728d8
     .claude/skills/keyswitcher-update/references/signing-cert.md: sha256:ccc28a89411fe8de367c1b57cf3f1fc392ae41c0367d58855b1856231cc89e2d
-    .claude/skills/keyswitcher-update/references/threat-model.md: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
+    .claude/skills/keyswitcher-update/references/threat-model.md: sha256:898a0a5c906ab485ef170c19ce6f2c7284d4cd16ff4319283e4d32024ba5a9ca
     .claude/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:6664217d4da2c7d716e10726cabbec1abc0e025cd3644e1c60acce5fc477cf35
     .claude/skills/maintenance-cleanup/SKILL.md: sha256:895a377135aac799d308a5905e1c56f5db0fad4e5d7689850517bda84f1ed1d0
     .claude/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
     .claude/skills/meeting-transcribe/SKILL.md: sha256:268a9710d9321e381e1d44ed78dbe3924d9354f0377bf12a9c9614353ce66202
     .claude/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
-    .claude/skills/nix-style/SKILL.md: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
+    .claude/skills/nix-style/SKILL.md: sha256:b1471fc9389401d6d30796676fe943d0981bbeb3dba32d11ece407c9b36fd03a
     .claude/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
     .claude/skills/op-secrets/SKILL.md: sha256:582417430cac68fb998b62b7ed7c3c45844b9943a7cfaa5cf423342a49258ee4
     .claude/skills/op-secrets/scripts/op-meta.ts: sha256:d7e9b4bc981eb5e93689cd70facd73f47d5a8278c682a6762fbf791fec6b4749
@@ -1514,10 +1514,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:3d98ca7487bae9e93f8f48177ef45afe4dade63df81f1764451a249482d5186a
+  content_hash: sha256:c4aa62c24779f5f0c7226a8d06d09310acf727c1a0482bda96384407f9e13a1c
   constraint: ^1.0.0
-  resolved_tag: v1.16.2+97729cf
-  resolved_at: '2026-11-01T10:29:49+00:00'
+  resolved_tag: v1.16.3+6f0c240
+  resolved_at: '2026-11-01T10:36:25+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -2977,7 +2977,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c235872627c60a4d8c38516f94eb40a8b16325c5c2db550c9c80134947366580
+  content_hash: sha256:2f7a416b4717ae2b248cdf4a0fca4e486acbcebefb27935a96ed241b0fe728d8
 - kind: project-relative
   target: claude
   value: .claude/skills/keyswitcher-update/references/signing-cert.md
@@ -2995,7 +2995,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
+  content_hash: sha256:898a0a5c906ab485ef170c19ce6f2c7284d4cd16ff4319283e4d32024ba5a9ca
 - kind: project-relative
   target: claude
   value: .claude/skills/keyswitcher-update/scripts/create-signing-cert.sh
@@ -3085,7 +3085,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
+  content_hash: sha256:b1471fc9389401d6d30796676fe943d0981bbeb3dba32d11ece407c9b36fd03a
 - kind: project-relative
   target: claude
   value: .claude/skills/obsidian-vault
@@ -6640,7 +6640,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c235872627c60a4d8c38516f94eb40a8b16325c5c2db550c9c80134947366580
+  content_hash: sha256:2f7a416b4717ae2b248cdf4a0fca4e486acbcebefb27935a96ed241b0fe728d8
 - kind: project-relative
   target: legacy
   value: .agents/skills/keyswitcher-update/references/signing-cert.md
@@ -6658,7 +6658,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:61daf6e7911d2db8b49d03a92279d8c6b4edce545e30d07cc38e34a7ecb9727f
+  content_hash: sha256:898a0a5c906ab485ef170c19ce6f2c7284d4cd16ff4319283e4d32024ba5a9ca
 - kind: project-relative
   target: legacy
   value: .agents/skills/keyswitcher-update/scripts/build-verify-install.sh
@@ -6775,7 +6775,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
+  content_hash: sha256:b1471fc9389401d6d30796676fe943d0981bbeb3dba32d11ece407c9b36fd03a
 - kind: project-relative
   target: legacy
   value: .agents/skills/obsidian-vault

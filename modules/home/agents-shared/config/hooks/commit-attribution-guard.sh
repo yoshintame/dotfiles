@@ -15,7 +15,7 @@ fi
 
 # Only guard commands that actually create a commit or a PR / PR body.
 is_commit=0
-if echo "$cmd" | grep -qE 'git-commit-atomic|git-commit-edit'; then is_commit=1; fi
+if echo "$cmd" | grep -qE 'git-commit-atomic'; then is_commit=1; fi
 if echo "$cmd" | grep -qE '(^|[;&|`(]\s*)git([[:space:]]+-C[[:space:]]+[^[:space:]]+)?[[:space:]]+commit([[:space:]]|-tree|$)'; then is_commit=1; fi
 if echo "$cmd" | grep -qE '(^|[;&|`(]\s*)gh[[:space:]]+pr[[:space:]]+(create|edit)([[:space:]]|$)'; then is_commit=1; fi
 

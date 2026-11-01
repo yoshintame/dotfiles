@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Write the diff from the installed tag to <new_tag> (default: latest release) for the audit,
-# list red-flag lines, and record what is under audit for `desvio run approve`.
-# With --branch <name>: the diff <audited-tag>...<name> of that patch branch, recorded for
-# `desvio run approve -- --branch <name>`.
 set -euo pipefail
 USAGE="desvio run diff [-- <tag> | -- --branch <name>]"
 : "${DESVIO_REPO:?run this with: $USAGE}" "${DESVIO_STATE:?}"

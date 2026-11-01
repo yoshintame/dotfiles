@@ -54,6 +54,33 @@ local function toggleHyperSetup()
     end
 end
 
+local keySwitcherId = "com.granin.keyswitcher"
+
+local function toggleKeySwitcherLog()
+    local verbose = hs.execute("/usr/bin/defaults read " .. keySwitcherId .. " QKBVerboseLogging 2>/dev/null"):match("1") ~= nil
+    if verbose then
+        hs.execute("/usr/bin/defaults delete " .. keySwitcherId .. " QKBVerboseLogging")
+    else
+        hs.execute("/usr/bin/defaults write " .. keySwitcherId .. " QKBVerboseLogging -bool YES")
+    end
+    local label = verbose and "keySwitcher: журнал обезличенный" or "keySwitcher: журнал ПОДРОБНЫЙ (текст открыто)"
+    local app = hs.application.get(keySwitcherId)
+    if app then app:kill() end
+    local tries = 0
+    local relaunch
+    relaunch = hs.timer.doEvery(0.2, function()
+        tries = tries + 1
+        if hs.application.get(keySwitcherId) and tries < 25 then return end
+        relaunch:stop()
+        if hs.application.get(keySwitcherId) then
+            hs.alert.show("keySwitcher не закрылся, флаг сменится после перезапуска")
+            return
+        end
+        hs.execute("/usr/bin/open -g -b " .. keySwitcherId)
+        hs.alert.show(label)
+    end)
+end
+
 hs.loadSpoon("LeaderFlow")
 
 local proxy = require("generated.proxy-bindings")
@@ -338,6 +365,7 @@ spoon.LeaderFlow:setup({
             { "e", "Emojis", raycast("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols") },
             { "k", "Kill Process", raycast("raycast://extensions/rolandleth/kill-process/index") },
             { "h", "Hyper Setup ⇄", toggleHyperSetup },
+            { "l", "keySwitcher log ⇄", toggleKeySwitcherLog },
         }},
 
         { "l", "[links]", {

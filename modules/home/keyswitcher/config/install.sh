@@ -31,7 +31,9 @@ echo "→ Sparkle auto-install off (update checks stay on)"
 if $was_running; then open "$DEST"; fi
 
 branches="$(sed 's/#.*//' "$DESVIO_MANIFEST" | awk 'NF { print $1 }' | while read -r b; do
-  printf '%s@%s\n' "$b" "$(git -C "$DESVIO_REPO" rev-parse --short "refs/heads/$b")"
+  merged="$(git -C "$DESVIO_WORKTREE" log --first-parent --merges -F --grep="merge $b into ${DESVIO_BRANCH:?}" \
+    -n 1 --format=%P "$DESVIO_BASE..HEAD" | awk '{ print $2 }')"
+  printf '%s@%s\n' "$b" "$([ -n "$merged" ] && git -C "$DESVIO_WORKTREE" rev-parse --short "$merged" || echo none)"
 done | paste -sd, -)"
 mkdir -p "$(dirname "$PIN")"
 printf '%s\n' "$DESVIO_BASE $head ${branches:-upstream} tree=$(git -C "$DESVIO_WORKTREE" rev-parse --short "HEAD^{tree}")" > "$PIN"

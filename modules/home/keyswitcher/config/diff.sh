@@ -6,8 +6,8 @@
 set -euo pipefail
 USAGE="desvio run diff [-- <tag> | -- --branch <name>]"
 : "${DESVIO_REPO:?run this with: $USAGE}" "${DESVIO_STATE:?}"
-KSW_STATE="${KSW_STATE:-$HOME/.local/state/keyswitcher-update}"
-UPSTREAM="https://github.com/graninilya/keyswitcher"
+# shellcheck source=lib/ksw.sh
+. "$(dirname "$0")/lib/ksw.sh"
 RED_FLAGS='URLSession|URLRequest|URL\(string|https?://|NWConnection|getaddrinfo|SUPublicEDKey|SUFeedURL|SUAutomaticallyUpdate|listenOnly|tapCreate|CGEventMask|keyUp|IsSecureEventInputEnabled|SecureInput|Process\(|NSTask|system\(|popen|NSAppleScript|dlopen|dlsym|NSClassFromString|LaunchDaemon|LaunchAgent|SMAppService|\.package\(|binaryTarget|\.entitlements|com\.apple\.security|UsageDescription|CFBundleIdentifier|privacy: \.public|FileManager|write\(to:|kSecAttr|curl|wget|secrets\.|\.post\(tap|keyboardSetUnicodeString|eventSourceUserData|NSPasteboard|setString\(|writeObjects|AXUIElementSetAttributeValue|kAXValueAttribute|TISSelectInputSource|addGlobalMonitor|addLocalMonitor|RegisterEventHotKey'
 repo() { git -C "$DESVIO_REPO" "$@"; }
 die() { echo "ERROR: $*" >&2; exit 1; }
@@ -33,14 +33,14 @@ case "${1:-}" in
   *)
     [ $# -le 1 ] || die "usage: $USAGE"
     repo fetch --quiet --tags "${DESVIO_REMOTE:-origin}"
-    NEW="${1:-$(repo tag --list 'v*' | { grep -E '^v[0-9]+(\.[0-9]+)*$' || true; } | sort -V | tail -1)}"
-    OLD="$(awk 'NR==1{print $1}' "$KSW_STATE/pinned.txt" 2>/dev/null || true)"
-    [ -n "$OLD" ] || die "no pin in $KSW_STATE/pinned.txt to diff from"
+    NEW="${1:-$(repo tag --list 'v*' | ksw_latest_release)}"
+    OLD="$(awk 'NR==1{print $1}' "$KSW_PIN" 2>/dev/null || true)"
+    [ -n "$OLD" ] || die "no pin in $KSW_PIN to diff from"
     [ -n "$NEW" ] || die "no release tags in $DESVIO_REPO"
     has "refs/tags/$OLD" || die "pinned tag $OLD not found in $DESVIO_REPO"
     has "refs/tags/$NEW" || die "no tag $NEW in $DESVIO_REPO"
     new_commit="$(repo rev-parse "refs/tags/$NEW^{commit}")"
-    upstream_commit="$(git ls-remote "$UPSTREAM" "refs/tags/$NEW" "refs/tags/$NEW^{}" | sort -k2 | tail -1 | cut -f1)"
+    upstream_commit="$(ksw_upstream_tag_commit "$NEW")"
     [ "$new_commit" = "$upstream_commit" ] || {
       echo "BLOCK: $NEW is $new_commit here, ${upstream_commit:-missing} upstream" >&2
       exit 1

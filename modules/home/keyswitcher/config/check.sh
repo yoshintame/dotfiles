@@ -3,14 +3,15 @@
 # the manifest since the install.
 set -euo pipefail
 : "${DESVIO_REPO:?run this with: desvio run check}" "${DESVIO_MANIFEST:?}"
-UPSTREAM="https://github.com/graninilya/keyswitcher"
-PIN="$HOME/.local/state/keyswitcher-update/pinned.txt"
+# shellcheck source=lib/ksw.sh
+. "$(dirname "$0")/lib/ksw.sh"
 
-current="$(awk 'NR==1{print $1}' "$PIN" 2>/dev/null || true)"
-commit="$(awk 'NR==1{print $2}' "$PIN" 2>/dev/null || true)"
-local_ref="$(awk 'NR==1{print $3}' "$PIN" 2>/dev/null || true)"
-latest="$(git ls-remote --tags --refs "$UPSTREAM" 'v*' | awk -F/ '{print $NF}' | grep -E '^v[0-9]+(\.[0-9]+)*$' | sort -V | tail -1)"
-[ -n "$latest" ] || { echo "ERROR: no release tags from $UPSTREAM" >&2; exit 1; }
+current="$(awk 'NR==1{print $1}' "$KSW_PIN" 2>/dev/null || true)"
+commit="$(awk 'NR==1{print $2}' "$KSW_PIN" 2>/dev/null || true)"
+local_ref="$(awk 'NR==1{print $3}' "$KSW_PIN" 2>/dev/null || true)"
+tags="$(git ls-remote --tags --refs "$KSW_UPSTREAM" 'v*')" || { echo "ERROR: cannot list tags of $KSW_UPSTREAM" >&2; exit 1; }
+latest="$(printf '%s\n' "$tags" | awk -F/ '{print $NF}' | ksw_latest_release)"
+[ -n "$latest" ] || { echo "ERROR: no release tags from $KSW_UPSTREAM" >&2; exit 1; }
 
 newer=false
 if [ "$current" != "$latest" ] && \
@@ -22,7 +23,7 @@ echo "current=${current:-<none>} ${commit:-}${local_ref:+ local=$local_ref}"
 echo "latest=$latest"
 echo "newer=$newer"
 
-manifest="$(sed 's/#.*//' "$DESVIO_MANIFEST" | awk 'NF { print $1 }')"
+manifest="$(ksw_manifest_branches "$DESVIO_MANIFEST")"
 pinned="$(printf '%s\n' "$local_ref" | tr , '\n' | grep @ || true)"
 for name in $manifest; do
   entry="$(printf '%s\n' "$pinned" | grep "^$name@" || true)"

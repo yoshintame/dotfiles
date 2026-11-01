@@ -1000,9 +1000,6 @@ dependencies:
   - .agents/skills/git-commit
   - .agents/skills/git-commit/SKILL.md
   - .agents/skills/git-commit/scripts/gather-context.sh
-  - .agents/skills/git-ref
-  - .agents/skills/git-ref/SKILL.md
-  - .agents/skills/git-ref/scripts/git-ref.ts
   - .agents/skills/git-review
   - .agents/skills/git-review/SKILL.md
   - .agents/skills/git-review/scripts/git-review.ts
@@ -1344,8 +1341,6 @@ dependencies:
     .agents/skills/find-skills/scripts/list-skills.ts: sha256:4cc5c7212e721ab5e8d50b7f88c5a8f26a66726e85788703c970a84747d81fe0
     .agents/skills/git-commit/SKILL.md: sha256:781afe7329ea0d02e336d5fb4315c92064a5fa6a0a0d989dad5b1c6f0c73e4ad
     .agents/skills/git-commit/scripts/gather-context.sh: sha256:5084a571b338e79234b5376fb7f1ae3f639130b1513284102a040098335ac9ce
-    .agents/skills/git-ref/SKILL.md: sha256:311ddbf898f9f9fa3f5766eacdfac4258b0561fa41a85bab67af12e75ce0d0da
-    .agents/skills/git-ref/scripts/git-ref.ts: sha256:110238d272d49240d8676855a9c5720b542f37356e0c689ff771053796a7c71c
     .agents/skills/git-review/SKILL.md: sha256:9d5da2b8fdc3711b6d4b701c54d3bffae3ca077fc9eb21158f6006c6e1bcf350
     .agents/skills/git-review/scripts/git-review.ts: sha256:e55b54a42f630574b4742a94f7d272d4890a7d8ab53791f44b6ac0ca51736e5c
     .agents/skills/handoff-create-independent-deep-research/SKILL.md: sha256:1e1c18f5ae63e8868edcbec3c532f5eee999f0338408d637b9198369c477264b
@@ -8878,33 +8873,6 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/git-ref
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: null
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/git-ref/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:311ddbf898f9f9fa3f5766eacdfac4258b0561fa41a85bab67af12e75ce0d0da
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/git-ref/scripts/git-ref.ts
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:110238d272d49240d8676855a9c5720b542f37356e0c689ff771053796a7c71c
 - kind: project-relative
   target: legacy
   value: .agents/skills/keyswitcher-update/scripts/build-verify-install.sh

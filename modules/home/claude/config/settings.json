@@ -26,7 +26,6 @@
       "Skill(update-config)",
       "Skill(update-docs-from-changes)",
       "Skill(vscode-marketplace)",
-      "Bash(chrome-devtools *)",
       "mcp__claude_ai_Atlassian__atlassianUserInfo",
       "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
       "mcp__claude_ai_Atlassian__getJiraIssue",

@@ -895,9 +895,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 6737efc7e413fc78a4baa65d2bb7ae15a19b1420
-  resolved_ref: v1.16.1+6737efc
-  version: 1.16.1+6737efc
+  resolved_commit: 97729cfad77f5e4f1a52f157ad39e6bf4c4bbb69
+  resolved_ref: v1.16.2+97729cf
+  version: 1.16.2+97729cf
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1345,7 +1345,7 @@ dependencies:
     .agents/skills/keyswitcher-update/scripts/prepare-diff.sh: sha256:8dd0670dd9501161032ad7aefa4c4e7360b71a3c78a0fd3ac005521c201e1c73
     .agents/skills/maintenance-cleanup/SKILL.md: sha256:895a377135aac799d308a5905e1c56f5db0fad4e5d7689850517bda84f1ed1d0
     .agents/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
-    .agents/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
+    .agents/skills/meeting-transcribe/SKILL.md: sha256:268a9710d9321e381e1d44ed78dbe3924d9354f0377bf12a9c9614353ce66202
     .agents/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
     .agents/skills/nix-style/SKILL.md: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
     .agents/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
@@ -1467,7 +1467,7 @@ dependencies:
     .claude/skills/keyswitcher-update/scripts/create-signing-cert.sh: sha256:6664217d4da2c7d716e10726cabbec1abc0e025cd3644e1c60acce5fc477cf35
     .claude/skills/maintenance-cleanup/SKILL.md: sha256:895a377135aac799d308a5905e1c56f5db0fad4e5d7689850517bda84f1ed1d0
     .claude/skills/maintenance-cleanup/scripts/scan.ts: sha256:c9e2ecc277bd1792b8d3658ef920abf5dfab0bb6cdf78e25593f09f242402306
-    .claude/skills/meeting-transcribe/SKILL.md: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
+    .claude/skills/meeting-transcribe/SKILL.md: sha256:268a9710d9321e381e1d44ed78dbe3924d9354f0377bf12a9c9614353ce66202
     .claude/skills/mobx-keystone/SKILL.md: sha256:6b2595687624d0aa884e893c3f9c8809fe47424f616057ddd44afc30cd637d39
     .claude/skills/nix-style/SKILL.md: sha256:780ddfaa85e1f568bde9848fecb33f17549aa9daf64879a1bbae8be306108ba2
     .claude/skills/obsidian-vault/SKILL.md: sha256:df95e798cdded5a3b1e9d7a080373b63073d3a887dd140efdb1b2a3448cf9328
@@ -1514,10 +1514,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:66e36d751b7cbc740bb53ce85945b0ac8dd3a728364ceffeb693bf14561b28de
+  content_hash: sha256:3d98ca7487bae9e93f8f48177ef45afe4dade63df81f1764451a249482d5186a
   constraint: ^1.0.0
-  resolved_tag: v1.16.1+6737efc
-  resolved_at: '2026-10-31T20:27:22+00:00'
+  resolved_tag: v1.16.2+97729cf
+  resolved_at: '2026-11-01T10:29:49+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -3049,7 +3049,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
+  content_hash: sha256:268a9710d9321e381e1d44ed78dbe3924d9354f0377bf12a9c9614353ce66202
 - kind: project-relative
   target: claude
   value: .claude/skills/mobx-keystone
@@ -6739,7 +6739,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:c8c21b844618220eee74462a678b17c25c1cc78aa6e52c2e8589015a3b73674e
+  content_hash: sha256:268a9710d9321e381e1d44ed78dbe3924d9354f0377bf12a9c9614353ce66202
 - kind: project-relative
   target: legacy
   value: .agents/skills/mobx-keystone

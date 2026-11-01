@@ -16,6 +16,7 @@ tap "madzarm/tap"
 tap "mylee04/tools"
 tap "nikitabobko/tap"
 tap "nkzw-tech/tap"
+tap "openai/tools", trusted: { formulae: ["softnet"] }
 tap "osx-cross/arm"
 tap "osx-cross/avr"
 tap "peterldowns/tap"
@@ -24,7 +25,7 @@ tap "raine/claude-history"
 tap "umlx5h/tap"
 tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew"
 tap "xwjdsh/tap"
-tap "yoshintame/cask"
+tap "yoshintame/cask", trusted: true
 # Search tool like grep, but optimized for programmers
 brew "ack"
 # Run your GitHub Actions locally
@@ -117,6 +118,8 @@ brew "logrotate"
 brew "lolcat"
 # Mac App Store command-line interface
 brew "mas"
+# Mac command-line tool that automatically downloads macOS Firmwares / Installers
+brew "mist-cli"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # CLI for NextDNS's DNS-over-HTTPS (DoH)
@@ -187,6 +190,8 @@ brew "yq"
 brew "gu1llaum-3/sshm/sshm", trusted: true
 # Hybrid search CLI for Claude Code chat sessions (BM25 + vector + RRF)
 brew "madzarm/tap/ccsearch", trusted: true
+# Run macOS and Linux VMs on Apple Hardware
+brew "openai/tools/tart", trusted: true
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
@@ -215,6 +220,7 @@ cask "codex"
 cask "codex-app"
 # Visual diff tool for Git changes
 cask "nkzw-tech/tap/codiff", trusted: true
+# System-wide AI autocomplete
 cask "cotypist"
 # Disk space visualiser
 cask "daisydisk"
@@ -226,8 +232,6 @@ cask "discord"
 cask "dropbox"
 # Collaborative team software
 cask "figma"
-# Markdown text editor with productivity features
-cask "foldingtext"
 cask "font-cascadia-code"
 cask "font-cascadia-mono"
 cask "font-fira-code-nerd-font"
@@ -251,13 +255,12 @@ cask "gitkraken"
 cask "google-chrome"
 # Desktop automation application
 cask "hammerspoon"
-# All-in-one project management tool
-cask "height"
 # Link and retrieve key information
 cask "hookmark"
 # HTTP(S) debugging proxy, analyzer, and client
 cask "http-toolkit"
-cask "hyperswitch"
+# Keyboard-centric window switcher for macOS
+cask "yoshintame/cask/hyperswitch"
 # Free and open-source media player
 cask "iina"
 # iOS Sideloading Companion
@@ -315,11 +318,11 @@ cask "pearcleaner"
 # Home media player
 cask "plex"
 # Peer to peer Bitorrent client
-cask "qbittorrent"
+cask "yoshintame/cask/qbittorrent", trusted: true
 # All-in-one bookmark manager
 cask "raindropio"
 # Archive manager for data compression and backups
-cask "rar"
+cask "yoshintame/cask/rar", trusted: true
 # Control your tools with a few keystrokes
 cask "raycast"
 # Spaced-repetition powered note-taking tool
@@ -346,15 +349,20 @@ cask "sourcegit"
 cask "spotify"
 # Video game digital distribution service
 cask "steam"
+# Open-source media center
+cask "stremio"
 # Git client
 cask "sublime-merge"
 # Mesh VPN based on WireGuard
 cask "tailscale-app"
+# Knowledge management workspace with AI-powered outlining
 cask "tana"
 # Voice communication client
 cask "teamspeak-client"
 # Messaging app with a focus on speed and security
 cask "telegram"
+# Desktop client for Telegram messenger
+cask "telegram-desktop"
 # To-do & task list manager
 cask "ticktick"
 # Git client focusing on power and productivity
@@ -365,6 +373,10 @@ cask "typora"
 cask "visual-studio-code"
 # Voice to text app
 cask "voiceink"
+# Menu bar toolkit with keep-awake, system monitor and volume mixer
+cask "vorssaint"
+# App that provides drivers for older model scanners that are no longer supported
+cask "vuescan"
 # Rust-based terminal
 cask "warp"
 # Native desktop client for WhatsApp
@@ -377,6 +389,15 @@ cask "yubico-authenticator"
 cask "zed"
 # Video communication and virtual meeting platform
 cask "zoom"
+mas "1Password for Safari", id: 1569813296
+mas "Dropover", id: 1355679052
+mas "ExcalidrawZ", id: 6636493997
+mas "Happ", id: 6504287215
+mas "Klack", id: 6446206067
+mas "LINE", id: 539883307
+mas "PDFgear", id: 6469021132
+mas "TaskForge", id: 6744716215
+mas "Xcode", id: 497799835
 vscode "1password.op-vscode"
 vscode "aaron-bond.better-comments"
 vscode "advancer-limited.vscode-md-editor"

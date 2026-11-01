@@ -4,7 +4,8 @@
 # Run only after a clean audit and the user's explicit go-ahead.
 set -euo pipefail
 : "${DESVIO_REPO:?run this with: desvio run approve}"
-KSW_STATE="$HOME/.local/state/keyswitcher-update"
+# shellcheck source=lib/ksw.sh
+. "$(dirname "$0")/lib/ksw.sh"
 
 [ "${1:-}" != -- ] || shift
 if [ "${1:-}" = --branch ]; then
@@ -35,7 +36,7 @@ read -r tag commit _ 2>/dev/null < "$KSW_STATE/pending-audit" || {
   echo "ERROR: nothing under audit — run desvio run diff first" >&2
   exit 1
 }
-[ "$(git -C "$DESVIO_REPO" rev-parse "$tag^{commit}")" = "$commit" ] || {
+[ "$(git -C "$DESVIO_REPO" rev-parse --verify --quiet "refs/tags/$tag^{commit}")" = "$commit" ] || {
   echo "BLOCK: $tag no longer points at the audited $commit" >&2
   exit 1
 }

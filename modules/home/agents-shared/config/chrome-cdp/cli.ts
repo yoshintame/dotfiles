@@ -94,7 +94,7 @@ async function cdpBrowser(port: number, timeoutMs = 0): Promise<string | null> {
 }
 
 const up = defineCommand({
-  meta: { name: "up", description: "Launch (or reuse) a CDP Chrome on the debug port for chrome-devtools MCP to attach." },
+  meta: { name: "up", description: "Launch (or reuse) a CDP Chrome on the debug port for the chrome-devtools daemon to attach." },
   args: {
     profile: { type: "string", description: "override user-data-dir" },
     url: { type: "string", description: "URL to open (triggers dev autologin)" },
@@ -109,7 +109,7 @@ const up = defineCommand({
 
     const existing = await cdpBrowser(port)
     if (existing) {
-      console.log(`Already up: ${existing} on http://127.0.0.1:${port} — MCP can attach.`)
+      console.log(`Already up: ${existing} on http://127.0.0.1:${port} — chrome-devtools can attach.`)
       return
     }
 
@@ -138,7 +138,7 @@ const up = defineCommand({
     }
     writePid(child.pid)
     console.log(`Up: ${browser} on http://127.0.0.1:${port} (pid ${child.pid}, profile ${profile})`)
-    console.log("chrome-devtools MCP attaches via --browser-url=http://127.0.0.1:" + port + ". Run 'chrome-cdp down' to stop.")
+    console.log("chrome-devtools attaches via ~/.config/cd4a/config.json (browserUrl http://127.0.0.1:" + port + "). Run 'chrome-cdp down' to stop.")
   },
 })
 
@@ -179,7 +179,7 @@ runMain(
   defineCommand({
     meta: {
       name: "chrome-cdp",
-      description: "Reliable on-demand CDP Chrome for chrome-devtools MCP. Launch once; the MCP attaches to :9222.",
+      description: "Reliable on-demand CDP Chrome for the chrome-devtools CLI. Launch once; its daemon attaches to :9222.",
     },
     subCommands: { up, down, status },
   }),

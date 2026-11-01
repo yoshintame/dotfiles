@@ -26,15 +26,7 @@
       "Skill(update-config)",
       "Skill(update-docs-from-changes)",
       "Skill(vscode-marketplace)",
-      "mcp__chrome-devtools__get_network_request",
-      "mcp__chrome-devtools__list_console_messages",
-      "mcp__chrome-devtools__list_network_requests",
-      "mcp__chrome-devtools__list_pages",
-      "mcp__chrome-devtools__resize_page",
-      "mcp__chrome-devtools__select_page",
-      "mcp__chrome-devtools__take_screenshot",
-      "mcp__chrome-devtools__take_snapshot",
-      "mcp__chrome-devtools__wait_for",
+      "Bash(chrome-devtools *)",
       "mcp__claude_ai_Atlassian__atlassianUserInfo",
       "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
       "mcp__claude_ai_Atlassian__getJiraIssue",
@@ -166,16 +158,10 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/git-clone-layout.sh",
             "if": "Bash(git clone *)"
-          }
-        ]
-      },
-      {
-        "matcher": "mcp__chrome-devtools__.*",
-        "hooks": [
+          },
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/chrome-cdp-ensure.sh",
-            "timeout": 30
+            "command": "$HOME/.claude/hooks/chrome-devtools-unsandbox.sh"
           }
         ]
       },

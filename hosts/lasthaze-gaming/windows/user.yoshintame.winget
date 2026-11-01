@@ -115,6 +115,23 @@ resources:
       source: msstore
       acceptAgreements: true
 
+  - name: ClaudeCode
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Anthropic.ClaudeCode
+      source: winget
+      acceptAgreements: true
+
+  - name: PaseoAutostart
+    type: Microsoft.DSC.Transitional/WindowsPowerShellScript
+    properties:
+      getScript: |
+        @{ command = (Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name Paseo -ErrorAction SilentlyContinue).Paseo }
+      testScript: |
+        (Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name Paseo -ErrorAction SilentlyContinue).Paseo -eq ('"{0}"' -f (Join-Path $env:ProgramFiles 'Paseo\Paseo.exe'))
+      setScript: |
+        Set-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name Paseo -Value ('"{0}"' -f (Join-Path $env:ProgramFiles 'Paseo\Paseo.exe'))
+
   - name: HackNerdFont
     type: Microsoft.DSC.Transitional/WindowsPowerShellScript
     properties:

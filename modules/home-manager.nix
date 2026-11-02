@@ -76,6 +76,7 @@
       ./home/keyswitcher
       ./home/kitty
       ./home/lazygit
+      ./home/mac-metrics
       ./home/mise
       ./home/npm
       ./home/nvim

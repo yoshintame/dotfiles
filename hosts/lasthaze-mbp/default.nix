@@ -96,6 +96,10 @@ in
 
     users.${hostFacts.username} = {
       my.resticprofile.monitor = edgeFacts.monitor;
+      my.mac-metrics = {
+        host = "lasthaze-mbp";
+        remoteWriteUrl = "http://lasthaze-homelab:9090/api/v1/write";
+      };
       programs.bash.enable = true;
       programs.zsh.enable = true;
       programs.zsh.envExtra = ''

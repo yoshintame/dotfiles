@@ -10,6 +10,9 @@ project_doc_fallback_filenames = ["CLAUDE.md"]
 
 notify = ["/Users/yoshintame/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 
+[shell_environment_policy]
+set = { AGENT_ZSH_COMPAT = "1" }
+
 [sandbox_workspace_write]
 network_access = false
 writable_roots = [

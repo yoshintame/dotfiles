@@ -200,18 +200,7 @@
           },
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/vtb-tz-env.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "CwdChanged": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/vtb-tz-env.sh",
+            "command": "$HOME/.claude/hooks/agent-env.sh",
             "timeout": 10
           }
         ]

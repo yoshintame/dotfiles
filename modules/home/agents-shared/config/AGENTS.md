@@ -7,7 +7,7 @@
 ## *Bash*
 
 - *Предпочитай абсолютные пути или флаги самого инструмента (`git -C /path`, `bun run --cwd /path`). `cd /path && cmd` используй, когда инструменту нужен контекст cwd (например, алиасы worktrunk или команды, зависящие от ветки) или когда так проще, чем с абсолютным путём.*
-- *Bash-инструмент запускает не fish: в Claude Code — GNU bash 5.3, в Codex — zsh с bash-совместимыми опциями (`no_nomatch`, `no_equals`, `sh_word_split`). Пиши bash-синтаксис, например `export NAME=value`. Userland — BSD (macOS): GNU-формы `sed -i` без суффикса, `date -d` и `stat -c` не работают, бери `sed -i ''`, `date -j -f` и `stat -f`.*
+- *Bash-инструмент запускает не fish: в Claude Code — GNU bash, в Codex — zsh с bash-совместимыми опциями (`no_nomatch`, `no_equals`, `sh_word_split`). Пиши bash-синтаксис, например `export NAME=value`. Userland — BSD (macOS): GNU-формы `sed -i` без суффикса, `date -d` и `stat -c` не работают, бери `sed -i ''`, `date -j -f` и `stat -f`.*
 - *В zsh (Codex) остаются ловушки: `status` и `path` — зарезервированные имена, индексы массивов с 1, нет `$PIPESTATUS`, `BASH_REMATCH` и `${!v}`. Скрипт длиннее пары строк запускай через `bash -c '…'`.*
 - *Интерактивный терминал пользователя — fish. ТОЛЬКО когда пишешь команду, которую пользователь скопирует и запустит там, используй синтаксис fish, например `set -x NAME value` вместо `export NAME=value`. Во всех остальных случаях — bash.*
 

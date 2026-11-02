@@ -39,6 +39,7 @@
     "keyswitcher"
     "kitty"
     "lazygit"
+    "mac-metrics"
     "mise"
     "npm"
     "nvim"

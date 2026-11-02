@@ -24,11 +24,11 @@ let
   };
 
   exporter = pkgs.buildGoModule {
-    pname = "mac-metrics-exporter";
+    pname = "mac-metrics";
     version = "0.1.0";
     src = ./exporter;
     vendorHash = null;
-    meta.mainProgram = "mac-metrics-exporter";
+    meta.mainProgram = "mac-metrics";
   };
 
   alloyConfig = pkgs.writeText "mac-metrics.alloy" ''
@@ -97,6 +97,8 @@ let
 in
 lib.recursiveUpdate
   (myLib.mkModule config "mac-metrics" {
+    home.packages = [ exporter ];
+
     home.activation.macMetricsState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       /bin/mkdir -p "${stateDir}/alloy" "${textfileDir}"
       /bin/rm -f "${textfileDir}/browsers.prom" "${stateDir}/browsers-state.json"
@@ -141,6 +143,7 @@ lib.recursiveUpdate
       config = {
         ProgramArguments = [
           (lib.getExe exporter)
+          "serve"
           "-listen"
           exporterAddress
         ];

@@ -154,14 +154,14 @@ type proc struct {
 	browser key
 }
 
-func takeSample() ([]proc, int) {
+func takeSample() ([]proc, []int) {
 	paths := map[int]string{}
 	var procs []proc
-	inaccessible := 0
+	var inaccessible []int
 	for _, pid := range listPids() {
 		u, ok := pidUsage(pid)
 		if !ok {
-			inaccessible++
+			inaccessible = append(inaccessible, pid)
 			continue
 		}
 		app, browser := classify(pid, paths)
@@ -299,7 +299,17 @@ func (e *exporter) collect(w io.Writer) {
 
 	writeFamilies(w, "mac_app", "app", "kind", appGauges, e.appTotals)
 	writeFamilies(w, "mac_browser", "browser", "process_type", browserGauges, e.browserTotals)
-	fmt.Fprintf(w, "# HELP mac_apps_processes_inaccessible Processes whose usage cannot be read without root.\n# TYPE mac_apps_processes_inaccessible gauge\nmac_apps_processes_inaccessible %d\n", inaccessible)
+	fmt.Fprintf(w, "# HELP mac_apps_processes_inaccessible Processes whose usage cannot be read without root.\n# TYPE mac_apps_processes_inaccessible gauge\nmac_apps_processes_inaccessible %d\n", len(inaccessible))
+	if vm, ok := readVM(); ok {
+		fmt.Fprintf(w, "# HELP mac_vm_paging_bytes_total Bytes moved by the compressor, swap and file paging.\n# TYPE mac_vm_paging_bytes_total counter\n")
+		paging := vm.paging()
+		for _, event := range []string{"compress", "decompress", "pagein", "pageout", "swapin", "swapout"} {
+			fmt.Fprintf(w, "mac_vm_paging_bytes_total{event=\"%s\"} %d\n", event, paging[event])
+		}
+	}
+	if level, ok := thermalPressure(); ok {
+		fmt.Fprintf(w, "# HELP mac_thermal_pressure_level Thermal pressure: 0 nominal, 1 moderate, 2 heavy, 3 trapping, 4 sleeping.\n# TYPE mac_thermal_pressure_level gauge\nmac_thermal_pressure_level %d\n", level)
+	}
 	fmt.Fprintf(w, "# HELP mac_apps_collect_duration_seconds Time spent reading all processes.\n# TYPE mac_apps_collect_duration_seconds gauge\nmac_apps_collect_duration_seconds %s\n", formatFloat(time.Since(began).Seconds()))
 }
 

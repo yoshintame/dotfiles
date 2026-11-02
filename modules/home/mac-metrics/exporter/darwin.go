@@ -5,6 +5,7 @@ package main
 #include <libproc.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
+#include <notify.h>
 #include <stdlib.h>
 #include <sys/resource.h>
 #include <sys/sysctl.h>
@@ -33,6 +34,7 @@ static int pid_args(pid_t pid, char *buf, size_t *size) {
 
 typedef struct {
 	uint64_t free, active, inactive, wired, compressed, internal, external, purgeable, speculative, page_size;
+	uint64_t compressions, decompressions, swapins, swapouts, pageins, pageouts;
 } vm_snapshot;
 
 static int read_vm(vm_snapshot *out) {
@@ -56,7 +58,23 @@ static int read_vm(vm_snapshot *out) {
 	out->purgeable = vm.purgeable_count;
 	out->speculative = vm.speculative_count;
 	out->page_size = page_size;
+	out->compressions = vm.compressions;
+	out->decompressions = vm.decompressions;
+	out->swapins = vm.swapins;
+	out->swapouts = vm.swapouts;
+	out->pageins = vm.pageins;
+	out->pageouts = vm.pageouts;
 	return 0;
+}
+
+static int thermal_pressure(uint64_t *level) {
+	int token;
+	if (notify_register_check("com.apple.system.thermalpressurelevel", &token) != NOTIFY_STATUS_OK) {
+		return -1;
+	}
+	uint32_t status = notify_get_state(token, level);
+	notify_cancel(token);
+	return status == NOTIFY_STATUS_OK ? 0 : -1;
 }
 
 static int read_cpu_ticks(uint64_t out[4]) {
@@ -202,6 +220,7 @@ func pidArgs(pid int) []string {
 
 type vmStats struct {
 	free, active, inactive, wired, compressed, internal, external, purgeable, speculative, pageSize uint64
+	compressions, decompressions, swapins, swapouts, pageins, pageouts                              uint64
 }
 
 func readVM() (vmStats, bool) {
@@ -213,7 +232,10 @@ func readVM() (vmStats, bool) {
 		free: uint64(v.free), active: uint64(v.active), inactive: uint64(v.inactive),
 		wired: uint64(v.wired), compressed: uint64(v.compressed), internal: uint64(v.internal),
 		external: uint64(v.external), purgeable: uint64(v.purgeable), speculative: uint64(v.speculative),
-		pageSize: uint64(v.page_size),
+		pageSize:     uint64(v.page_size),
+		compressions: uint64(v.compressions), decompressions: uint64(v.decompressions),
+		swapins: uint64(v.swapins), swapouts: uint64(v.swapouts),
+		pageins: uint64(v.pageins), pageouts: uint64(v.pageouts),
 	}, true
 }
 
@@ -257,4 +279,25 @@ func loadAverage() [3]float64 {
 
 func machAbsoluteTime() uint64 {
 	return uint64(C.mach_absolute_time())
+}
+
+var thermalNames = map[uint64]string{0: "nominal", 1: "moderate", 2: "heavy", 3: "trapping", 4: "sleeping"}
+
+func thermalPressure() (uint64, bool) {
+	var level C.uint64_t
+	if C.thermal_pressure(&level) != 0 {
+		return 0, false
+	}
+	return uint64(level), true
+}
+
+func (v vmStats) paging() map[string]uint64 {
+	return map[string]uint64{
+		"compress":   v.compressions * v.pageSize,
+		"decompress": v.decompressions * v.pageSize,
+		"swapin":     v.swapins * v.pageSize,
+		"swapout":    v.swapouts * v.pageSize,
+		"pagein":     v.pageins * v.pageSize,
+		"pageout":    v.pageouts * v.pageSize,
+	}
 }

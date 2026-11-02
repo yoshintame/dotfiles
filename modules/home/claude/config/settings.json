@@ -4,7 +4,9 @@
     "BUN_TMPDIR": "/tmp",
     "BUN_INSTALL_CACHE_DIR": "/Users/yoshintame/.bun/install/cache",
     "CLAUDE_TRUSTED_DIRS_MODE": "prefix",
-    "GIT_CONFIG_GLOBAL": "/Users/yoshintame/.dotfiles/modules/home/claude/config/agent.gitconfig"
+    "GIT_CONFIG_GLOBAL": "/Users/yoshintame/.dotfiles/modules/home/claude/config/agent.gitconfig",
+    "CLAUDE_CODE_SHELL": "/run/current-system/sw/bin/bash",
+    "SHELL": "/run/current-system/sw/bin/bash"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -195,6 +197,22 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/session-start.sh",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/vtb-tz-env.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/vtb-tz-env.sh",
+            "timeout": 10
           }
         ]
       }

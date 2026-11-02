@@ -103,6 +103,9 @@ in
       programs.bash.enable = true;
       programs.zsh.enable = true;
       programs.zsh.envExtra = ''
+        if [[ -n $ZSH_EXECUTION_STRING && ! -o interactive ]]; then
+          setopt no_nomatch no_equals sh_word_split
+        fi
         autoload -Uz add-zsh-hook
         _vtb_tz() {
           local tz

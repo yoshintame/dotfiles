@@ -4,14 +4,11 @@ tap "bellicose100xp/tap", trusted: true
 tap "creativeprojects/tap", trusted: true
 tap "doron-cohen/tap", trusted: true
 tap "dotenv-org/brew", trusted: true
-tap "dsully/tap", trusted: true
 tap "garethgeorge/backrest-tap", trusted: true
 tap "gateway-of-last-resort/tap", trusted: true
 tap "gu1llaum-3/sshm", "https://github.com/Gu1llaum-3/homebrew-sshm", trusted: true
 tap "hongkongkiwi/vsix-cli", trusted: true
-tap "josephyaduvanshi/chronicle", trusted: true
 tap "koekeishiya/formulae", "https://github.com/asmvik/homebrew-formulae.git", trusted: true
-tap "lusingander/tap", trusted: true
 tap "madzarm/tap", trusted: true
 tap "mylee04/tools", trusted: true
 tap "nikitabobko/tap", trusted: true
@@ -151,6 +148,8 @@ brew "restic"
 brew "resticprofile"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# A rich git commit graph in your terminal, like magic
+brew "serie"
 # 7-Zip is a file archiver with a high compression ratio
 brew "sevenzip"
 # Editor of encrypted files
@@ -187,14 +186,10 @@ brew "yq"
 brew "ajayrmk/tap/trnscrb"
 # Cleans up your $HOME from those pesky dotfiles
 brew "doron-cohen/tap/antidot"
-# Defaults setting for macOS
-brew "dsully/tap/macos-defaults"
 # A modern SSH connection manager for your terminal
 brew "gu1llaum-3/sshm/sshm", trusted: true
 # Download VS Code extensions (.vsix files) from official or open-source marketplaces
 brew "hongkongkiwi/vsix-cli/vsix-cli"
-# A rich git commit graph in your terminal, like magic
-brew "lusingander/tap/serie"
 # Hybrid search CLI for Claude Code chat sessions (BM25 + vector + RRF)
 brew "madzarm/tap/ccsearch", trusted: true
 # Cross-platform desktop notifications for AI coding tools

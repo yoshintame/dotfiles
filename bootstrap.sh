@@ -31,7 +31,7 @@ Hosts:
 
 Options:
   --test   unattended run for a VM: skips App Store and Full Disk Access
-           checks, Brewfile entries other than formulae and TCC-protected defaults
+           checks, the Brewfile and TCC-protected defaults
 
 Environment:
   BOOTSTRAP_NIX=upstream   install upstream Nix instead of Determinate Nix
@@ -221,10 +221,12 @@ run_first_switch() {
 }
 
 install_brewfile() {
-  log "Installing the Brewfile"
   if [ "${TEST_MODE}" = "1" ]; then
-    (cd "${REPO_DIR}" && mise run dot:brew --formulae-only)
-  elif ! (cd "${REPO_DIR}" && mise run dot:brew); then
+    log "Test mode: skipping the Brewfile, it installs apps rather than the setup"
+    return 0
+  fi
+  log "Installing the Brewfile"
+  if ! (cd "${REPO_DIR}" && mise run dot:brew); then
     warn "Some Brewfile entries did not install (listed above); continuing"
   fi
 }

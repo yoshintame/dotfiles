@@ -26,7 +26,7 @@ This will:
 
 The remaining manual steps are in the reinstall runbook of the Obsidian vault: `projects/mbp-clean-reinstall/knowledge/mbp-reinstall-runbook.md`.
 
-`bootstrap.sh --test lasthaze-mbp` is the unattended mode for a Tart VM: it skips the App Store and Full Disk Access checks, `mas` entries of the Brewfile and TCC-protected defaults.
+`bootstrap.sh --test lasthaze-mbp` is the unattended mode for a Tart VM: it skips the App Store and Full Disk Access checks, the Brewfile and TCC-protected defaults. The test checks that the system installs and configures itself; the Brewfile installs apps and is checked by the brewfile CI lint.
 
 ### Already-cloned repo
 

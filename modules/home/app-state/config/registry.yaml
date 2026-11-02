@@ -175,26 +175,10 @@ apps:
   mediamate:
     ids:
       - com.tweety.MediaMate
-  # Excel 16.114
-  excel:
-    ids:
-      - com.microsoft.Excel
-    skip:
-      - application-support
-      - containers
-      - group-containers
   # PowerPoint 16.114, containers 3.1 MB
   powerpoint:
     ids:
       - com.microsoft.Powerpoint
-    skip:
-      - application-support
-      - containers
-      - group-containers
-  # Word 16.114
-  word:
-    ids:
-      - com.microsoft.Word
     skip:
       - application-support
       - containers
@@ -235,14 +219,6 @@ apps:
       - application-support
       - containers
       - group-containers
-  # OneDrive 26.173.0906, ~/Library/Application Support/OneDrive 716.0 KB
-  onedrive:
-    ids:
-      - com.microsoft.OneDrive
-    skip:
-      - application-support
-      - containers
-      - group-containers
   # OrbStack 2.2.5, preferences 8.0 KB
   orbstack:
     ids:
@@ -269,14 +245,6 @@ apps:
       - com.alienator88.Pearcleaner
     paths:
       - ~/Library/Application Support/Pearcleaner
-  # Plex 1.105.2, ~/Library/Application Support/Plex 4.3 MB
-  plex:
-    ids:
-      - tv.plex.desktop
-    skip:
-      - application-support
-      - containers
-      - group-containers
   # Raindrop.io 5.7.7, preferences 4.0 KB, ~/Library/Application Support/Raindrop.io 1.0 GB
   raindrop-io:
     ids:
@@ -355,22 +323,6 @@ apps:
   spotify:
     ids:
       - com.spotify.client
-    skip:
-      - application-support
-      - containers
-      - group-containers
-  # Steam, ~/Library/Application Support/Steam 2.4 GB
-  steam:
-    ids:
-      - com.valvesoftware.steam
-    skip:
-      - application-support
-      - containers
-      - group-containers
-  # Stremio 5.1.26
-  stremio:
-    ids:
-      - com.westbridge.stremio5-mac
     skip:
       - application-support
       - containers
@@ -627,3 +579,9 @@ ignored:
   - com.apple.Safari
   - com.apple.Safari.WebApp.0A28922F-7726-4149-B9E1-4CDF8B271F1A
   - com.codeweavers.CrossOver
+  - com.microsoft.Excel
+  - com.microsoft.Word
+  - com.microsoft.OneDrive
+  - tv.plex.desktop
+  - com.valvesoftware.steam
+  - com.westbridge.stremio5-mac

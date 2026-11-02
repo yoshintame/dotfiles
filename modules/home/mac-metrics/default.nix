@@ -22,6 +22,10 @@ let
     text = builtins.readFile ./collect.sh;
   };
 
+  browsers = pkgs.writers.writePython3Bin "mac-metrics-browsers" {
+    flakeIgnore = [ "E501" ];
+  } (builtins.readFile ./browsers.py);
+
   alloyConfig = pkgs.writeText "mac-metrics.alloy" ''
     logging {
       level = "warn"
@@ -107,6 +111,22 @@ lib.recursiveUpdate
         RunAtLoad = true;
         StandardOutPath = "/tmp/mac-metrics-collect.log";
         StandardErrorPath = "/tmp/mac-metrics-collect.err";
+      };
+    };
+
+    launchd.agents.mac-metrics-browsers = {
+      enable = true;
+      config = {
+        ProgramArguments = [
+          (lib.getExe browsers)
+          textfileDir
+          "${stateDir}/browsers-state.json"
+        ];
+        EnvironmentVariables = launchdEnv;
+        StartInterval = 30;
+        RunAtLoad = true;
+        StandardOutPath = "/tmp/mac-metrics-browsers.log";
+        StandardErrorPath = "/tmp/mac-metrics-browsers.err";
       };
     };
   })

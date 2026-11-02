@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -145,11 +146,28 @@ func browserProcessType(path string, args []string, isMain bool) string {
 	}
 }
 
-type sample struct {
+type proc struct {
 	pid     int
+	path    string
 	usage   usage
 	app     key
 	browser key
+}
+
+func takeSample() ([]proc, int) {
+	paths := map[int]string{}
+	var procs []proc
+	inaccessible := 0
+	for _, pid := range listPids() {
+		u, ok := pidUsage(pid)
+		if !ok {
+			inaccessible++
+			continue
+		}
+		app, browser := classify(pid, paths)
+		procs = append(procs, proc{pid, paths[pid], u, app, browser})
+	}
+	return procs, inaccessible
 }
 
 func classify(pid int, paths map[int]string) (app, browser key) {
@@ -215,22 +233,16 @@ func (e *exporter) collect(w io.Writer) {
 
 	began := time.Now()
 	elapsed := began.Sub(e.lastSample).Seconds()
-	paths := map[int]string{}
 	current := map[int]usage{}
 	appGauges := map[key]*gauges{}
 	appDeltas := map[key]*counters{}
 	browserGauges := map[key]*gauges{}
-	inaccessible := 0
 
-	for _, pid := range listPids() {
-		u, ok := pidUsage(pid)
-		if !ok {
-			inaccessible++
-			continue
-		}
-		current[pid] = u
-		app, browser := classify(pid, paths)
-		before, seen := e.previous[pid]
+	procs, inaccessible := takeSample()
+	for _, p := range procs {
+		u, app, browser := p.usage, p.app, p.browser
+		current[p.pid] = u
+		before, seen := e.previous[p.pid]
 		d := delta(u, before, seen)
 
 		if appGauges[app] == nil {
@@ -341,9 +353,10 @@ func sortedKeys[V any](m map[key]V) []key {
 	return keys
 }
 
-func main() {
-	listen := flag.String("listen", "127.0.0.1:9184", "address to serve /metrics on")
-	flag.Parse()
+func serve(args []string) {
+	flags := flag.NewFlagSet("serve", flag.ExitOnError)
+	listen := flags.String("listen", "127.0.0.1:9184", "address to serve /metrics on")
+	flags.Parse(args)
 
 	e := newExporter()
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, _ *http.Request) {
@@ -351,4 +364,20 @@ func main() {
 		e.collect(w)
 	})
 	log.Fatal(http.ListenAndServe(*listen, nil))
+}
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Fprintln(os.Stderr, "usage: mac-metrics serve [-listen addr] | snapshot [-interval 1s] [-top 15] [-json]")
+		os.Exit(2)
+	}
+	switch os.Args[1] {
+	case "serve":
+		serve(os.Args[2:])
+	case "snapshot":
+		snapshot(os.Args[2:])
+	default:
+		fmt.Fprintf(os.Stderr, "unknown command %q\n", os.Args[1])
+		os.Exit(2)
+	}
 }

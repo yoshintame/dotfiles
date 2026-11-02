@@ -1,3 +1,3 @@
-module mac-metrics-exporter
+module mac-metrics
 
 go 1.26

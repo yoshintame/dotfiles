@@ -11,6 +11,7 @@ let
   home = config.home.homeDirectory;
   stateDir = "${home}/.local/state/mac-metrics";
   textfileDir = "${stateDir}/textfile";
+  exporterAddress = "127.0.0.1:9184";
 
   collect = pkgs.writeShellApplication {
     name = "mac-metrics-collect";
@@ -22,9 +23,13 @@ let
     text = builtins.readFile ./collect.sh;
   };
 
-  browsers = pkgs.writers.writePython3Bin "mac-metrics-browsers" {
-    flakeIgnore = [ "E501" ];
-  } (builtins.readFile ./browsers.py);
+  exporter = pkgs.buildGoModule {
+    pname = "mac-metrics-exporter";
+    version = "0.1.0";
+    src = ./exporter;
+    vendorHash = null;
+    meta.mainProgram = "mac-metrics-exporter";
+  };
 
   alloyConfig = pkgs.writeText "mac-metrics.alloy" ''
     logging {
@@ -46,8 +51,24 @@ let
     prometheus.scrape "node" {
       targets         = prometheus.exporter.unix.node.targets
       forward_to      = [prometheus.relabel.node.receiver]
-      scrape_interval = "30s"
+      scrape_interval = "15s"
       job_name        = "node"
+    }
+
+    prometheus.scrape "apps" {
+      targets         = [{"__address__" = "${exporterAddress}"}]
+      forward_to      = [prometheus.relabel.apps.receiver]
+      scrape_interval = "15s"
+      job_name        = "mac-apps"
+    }
+
+    prometheus.relabel "apps" {
+      forward_to = [prometheus.remote_write.homelab.receiver]
+
+      rule {
+        target_label = "instance"
+        replacement  = "${cfg.host}"
+      }
     }
 
     prometheus.relabel "node" {
@@ -78,6 +99,7 @@ lib.recursiveUpdate
   (myLib.mkModule config "mac-metrics" {
     home.activation.macMetricsState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       /bin/mkdir -p "${stateDir}/alloy" "${textfileDir}"
+      /bin/rm -f "${textfileDir}/browsers.prom" "${stateDir}/browsers-state.json"
     '';
 
     launchd.agents.mac-metrics-alloy = {
@@ -107,26 +129,26 @@ lib.recursiveUpdate
           textfileDir
         ];
         EnvironmentVariables = launchdEnv;
-        StartInterval = 60;
+        StartInterval = 15;
         RunAtLoad = true;
         StandardOutPath = "/tmp/mac-metrics-collect.log";
         StandardErrorPath = "/tmp/mac-metrics-collect.err";
       };
     };
 
-    launchd.agents.mac-metrics-browsers = {
+    launchd.agents.mac-metrics-exporter = {
       enable = true;
       config = {
         ProgramArguments = [
-          (lib.getExe browsers)
-          textfileDir
-          "${stateDir}/browsers-state.json"
+          (lib.getExe exporter)
+          "-listen"
+          exporterAddress
         ];
         EnvironmentVariables = launchdEnv;
-        StartInterval = 30;
         RunAtLoad = true;
-        StandardOutPath = "/tmp/mac-metrics-browsers.log";
-        StandardErrorPath = "/tmp/mac-metrics-browsers.err";
+        KeepAlive = true;
+        StandardOutPath = "/tmp/mac-metrics-exporter.log";
+        StandardErrorPath = "/tmp/mac-metrics-exporter.err";
       };
     };
   })

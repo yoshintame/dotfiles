@@ -22,7 +22,12 @@
       inputs.sops-nix.homeManagerModules.sops
       inputs.nix-stencil.homeManagerModules.default
       (
-        { config, lib, ... }:
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
         {
           options.my.sops.ready = lib.mkOption {
             type = lib.types.bool;
@@ -31,6 +36,7 @@
             description = "Whether the SOPS age key exists on disk at evaluation time (needs --impure).";
           };
           config = {
+            home.packages = [ pkgs.sops ];
             sops.age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
             sops.defaultSecretsMountPoint = "${config.home.homeDirectory}/.local/state/sops-nix/secrets.d";
             stencil.enable = config.my.sops.ready;

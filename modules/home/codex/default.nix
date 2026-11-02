@@ -1,4 +1,9 @@
-{ config, myLib, ... }:
+{
+  config,
+  lib,
+  myLib,
+  ...
+}:
 myLib.mkModule config "codex" {
   nixLink.links = {
     "~/.codex/AGENTS.md" = "modules/home/agents-shared/config/AGENTS.md";
@@ -7,4 +12,10 @@ myLib.mkModule config "codex" {
   };
 
   home.file.".codex/config.toml".force = true;
+
+  programs.zsh.envExtra = lib.mkBefore ''
+    if [[ -n $AGENT_ZSH_COMPAT ]]; then
+      setopt no_nomatch no_equals sh_word_split
+    fi
+  '';
 }

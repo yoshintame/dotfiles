@@ -106,10 +106,7 @@ in
         autoload -Uz add-zsh-hook
         _vtb_tz() {
           local tz
-          case "$PWD" in
-            "$HOME"/Development/work/vtb/repos/* | "$HOME"/Development/work/vtb/libs/*) tz=Europe/Moscow ;;
-            *) tz=$(command git config --get vtb.tz 2>/dev/null) ;;
-          esac
+          tz=$(command git config --get vtb.tz 2>/dev/null)
           if [ -n "$tz" ]; then export TZ=$tz; else unset TZ; fi
         }
         add-zsh-hook chpwd _vtb_tz

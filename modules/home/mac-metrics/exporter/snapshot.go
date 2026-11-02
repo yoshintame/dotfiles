@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 	"text/tabwriter"
 	"time"
@@ -45,7 +47,15 @@ type procRow struct {
 	Browser    string  `json:"browser,omitempty"`
 	Type       string  `json:"process_type,omitempty"`
 	AgeSeconds float64 `json:"age_seconds"`
+	AvgCPU     float64 `json:"avg_cpu_percent_since_start"`
 	rates
+}
+
+type hiddenRow struct {
+	PID         int     `json:"pid"`
+	Command     string  `json:"command"`
+	CPUPercent  float64 `json:"cpu_percent"`
+	MemoryBytes uint64  `json:"memory_bytes"`
 }
 
 type browserRow struct {
@@ -80,17 +90,20 @@ type memoryInfo struct {
 }
 
 type report struct {
-	Time                  time.Time    `json:"time"`
-	IntervalSeconds       float64      `json:"interval_seconds"`
-	UptimeSeconds         int64        `json:"uptime_seconds"`
-	CPU                   cpuInfo      `json:"cpu"`
-	Memory                memoryInfo   `json:"memory"`
-	InaccessibleProcesses int          `json:"inaccessible_processes"`
-	AppsByMemory          []appRow     `json:"apps_by_memory"`
-	AppsByCPU             []appRow     `json:"apps_by_cpu"`
-	ProcessesByMemory     []procRow    `json:"processes_by_memory"`
-	ProcessesByCPU        []procRow    `json:"processes_by_cpu"`
-	Browsers              []browserRow `json:"browsers"`
+	Time                  time.Time          `json:"time"`
+	IntervalSeconds       float64            `json:"interval_seconds"`
+	UptimeSeconds         int64              `json:"uptime_seconds"`
+	CPU                   cpuInfo            `json:"cpu"`
+	Memory                memoryInfo         `json:"memory"`
+	Paging                map[string]float64 `json:"paging_bytes_per_s"`
+	Thermal               string             `json:"thermal_pressure"`
+	InaccessibleProcesses int                `json:"inaccessible_processes"`
+	HiddenByCPU           []hiddenRow        `json:"hidden_processes_by_cpu"`
+	AppsByMemory          []appRow           `json:"apps_by_memory"`
+	AppsByCPU             []appRow           `json:"apps_by_cpu"`
+	ProcessesByMemory     []procRow          `json:"processes_by_memory"`
+	ProcessesByCPU        []procRow          `json:"processes_by_cpu"`
+	Browsers              []browserRow       `json:"browsers"`
 }
 
 var pressureNames = map[uint64]string{1: "normal", 2: "warning", 4: "critical"}
@@ -151,7 +164,71 @@ func top[T any](rows []T, n int, less func(a, b T) bool) []T {
 	return sorted[:min(n, len(sorted))]
 }
 
+func parseTopMemory(field string) uint64 {
+	field = strings.TrimRight(field, "+-")
+	if field == "" {
+		return 0
+	}
+	multiplier := uint64(1)
+	switch field[len(field)-1] {
+	case 'K':
+		multiplier = 1 << 10
+	case 'M':
+		multiplier = 1 << 20
+	case 'G':
+		multiplier = 1 << 30
+	}
+	value, err := strconv.ParseFloat(strings.TrimRight(field, "BKMG"), 64)
+	if err != nil {
+		return 0
+	}
+	return uint64(value * float64(multiplier))
+}
+
+func runTop(seconds int) <-chan map[int]hiddenRow {
+	result := make(chan map[int]hiddenRow, 1)
+	go func() {
+		rows := map[int]hiddenRow{}
+		var out strings.Builder
+		cmd := exec.Command("/usr/bin/top", "-l", "2", "-s", strconv.Itoa(seconds), "-o", "cpu", "-n", "60",
+			"-stats", "pid,command,cpu,mem")
+		cmd.Stdout = &out
+		if err := cmd.Start(); err != nil {
+			result <- rows
+			return
+		}
+		if cmd.Wait() == nil {
+			headers := 0
+			for line := range strings.SplitSeq(out.String(), "\n") {
+				fields := strings.Fields(line)
+				if len(fields) > 0 && fields[0] == "PID" {
+					headers++
+					continue
+				}
+				if headers < 2 || len(fields) < 4 {
+					continue
+				}
+				pid, err := strconv.Atoi(fields[0])
+				if err != nil || pid == cmd.Process.Pid {
+					continue
+				}
+				cpu, _ := strconv.ParseFloat(fields[len(fields)-2], 64)
+				rows[pid] = hiddenRow{
+					PID:         pid,
+					Command:     strings.Join(fields[1:len(fields)-2], " "),
+					CPUPercent:  cpu,
+					MemoryBytes: parseTopMemory(fields[len(fields)-1]),
+				}
+			}
+		}
+		result <- rows
+	}()
+	return result
+}
+
 func buildReport(interval time.Duration, n int) report {
+	topRows := runTop(max(1, int(interval.Round(time.Second).Seconds())))
+	vmBefore, _ := readVM()
 	ticksBefore, _ := readCPUTicks()
 	first, _ := takeSample()
 	started := time.Now()
@@ -159,6 +236,32 @@ func buildReport(interval time.Duration, n int) report {
 	second, inaccessible := takeSample()
 	seconds := time.Since(started).Seconds()
 	ticksAfter, _ := readCPUTicks()
+	vmAfter, _ := readVM()
+
+	paging := map[string]float64{}
+	before, after := vmBefore.paging(), vmAfter.paging()
+	for event, value := range after {
+		if value >= before[event] {
+			paging[event] = float64(value-before[event]) / seconds
+		}
+	}
+	thermal := "unknown"
+	if level, ok := thermalPressure(); ok {
+		thermal = thermalNames[level]
+	}
+
+	readable := make(map[int]bool, len(first)+len(second))
+	for _, p := range append(first, second...) {
+		readable[p.pid] = true
+	}
+	var hidden []hiddenRow
+	for pid, row := range <-topRows {
+		if !readable[pid] {
+			hidden = append(hidden, row)
+		}
+	}
+	sort.Slice(hidden, func(i, j int) bool { return hidden[i].CPUPercent > hidden[j].CPUPercent })
+	hidden = hidden[:min(n, len(hidden))]
 	nowTicks := float64(machAbsoluteTime())
 
 	previous := make(map[int]usage, len(first))
@@ -194,6 +297,9 @@ func buildReport(interval time.Duration, n int) report {
 			AgeSeconds: max(nowTicks-float64(p.usage.start), 0) * nanosPerTick / 1e9,
 			rates:      r,
 		}
+		if row.AgeSeconds > 0 {
+			row.AvgCPU = 100 * p.usage.cpuNanos / 1e9 / row.AgeSeconds
+		}
 		procRows = append(procRows, row)
 
 		if p.browser.a != "" && p.browser.b != "mcp" {
@@ -225,7 +331,10 @@ func buildReport(interval time.Duration, n int) report {
 		UptimeSeconds:         time.Now().Unix() - bootTime(),
 		CPU:                   readCPU(ticksBefore, ticksAfter),
 		Memory:                readMemory(),
-		InaccessibleProcesses: inaccessible,
+		Paging:                paging,
+		Thermal:               thermal,
+		InaccessibleProcesses: len(inaccessible),
+		HiddenByCPU:           hidden,
 		AppsByMemory:          top(appRows, n, func(a, b appRow) bool { return byMemory(a.rates, b.rates) }),
 		AppsByCPU:             top(appRows, n, func(a, b appRow) bool { return byCPU(a.rates, b.rates) }),
 		ProcessesByMemory:     top(procRows, n, func(a, b procRow) bool { return byMemory(a.rates, b.rates) }),
@@ -270,7 +379,11 @@ func writeText(w io.Writer, r report) {
 		bytesText(m.CompressedBytes), bytesText(m.CachedBytes), bytesText(m.FreeBytes))
 	fmt.Fprintf(w, "Pressure  %s (kernel free level %d%%), swap %s of %s\n",
 		m.Pressure, m.KernelFreeLevel, bytesText(m.SwapUsedBytes), bytesText(m.SwapTotalBytes))
-	fmt.Fprintf(w, "Hidden    %d processes of root and other users are not readable without root (WindowServer, kernel_task, system daemons)\n", r.InaccessibleProcesses)
+	fmt.Fprintf(w, "Paging    decompress %s/s, compress %s/s, swapin %s/s, swapout %s/s, pagein %s/s\n",
+		bytesText(uint64(r.Paging["decompress"])), bytesText(uint64(r.Paging["compress"])), bytesText(uint64(r.Paging["swapin"])),
+		bytesText(uint64(r.Paging["swapout"])), bytesText(uint64(r.Paging["pagein"])))
+	fmt.Fprintf(w, "Thermal   %s\n", r.Thermal)
+	fmt.Fprintf(w, "Hidden    %d processes of root and other users have no per-app data; the busiest of them from top are listed below\n", r.InaccessibleProcesses)
 
 	appTable := func(title string, rows []appRow) {
 		fmt.Fprintf(w, "\n%s\n", title)
@@ -285,7 +398,7 @@ func writeText(w io.Writer, r report) {
 	procTable := func(title string, rows []procRow) {
 		fmt.Fprintf(w, "\n%s\n", title)
 		tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', tabwriter.AlignRight)
-		fmt.Fprintln(tw, "PID\tMEMORY\tCPU%\tWAKEUPS/s\tAGE\t  PROCESS\t")
+		fmt.Fprintln(tw, "PID\tMEMORY\tCPU%\tAVG CPU%\tWAKEUPS/s\tAGE\t  PROCESS\t")
 		for _, p := range rows {
 			label := p.Name
 			if p.App != p.Name {
@@ -294,8 +407,18 @@ func writeText(w io.Writer, r report) {
 			if p.Type != "" {
 				label += " " + p.Type
 			}
-			fmt.Fprintf(tw, "%d\t%s\t%.1f\t%.0f\t%s\t  %s\t\n", p.PID, bytesText(p.FootprintBytes), p.CPUPercent,
-				p.WakeupsPerSecond, durationText(p.AgeSeconds), label)
+			fmt.Fprintf(tw, "%d\t%s\t%.1f\t%.1f\t%.0f\t%s\t  %s\t\n", p.PID, bytesText(p.FootprintBytes), p.CPUPercent,
+				p.AvgCPU, p.WakeupsPerSecond, durationText(p.AgeSeconds), label)
+		}
+		tw.Flush()
+	}
+
+	if len(r.HiddenByCPU) > 0 {
+		fmt.Fprintf(w, "\nHidden processes by CPU (from top)\n")
+		tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', tabwriter.AlignRight)
+		fmt.Fprintln(tw, "PID\tMEMORY\tCPU%\t  COMMAND\t")
+		for _, h := range r.HiddenByCPU {
+			fmt.Fprintf(tw, "%d\t%s\t%.1f\t  %s\t\n", h.PID, bytesText(h.MemoryBytes), h.CPUPercent, h.Command)
 		}
 		tw.Flush()
 	}

@@ -1,5 +1,4 @@
 {
-  config,
   flakeRoot,
   pkgs,
   edgeFacts,
@@ -67,12 +66,7 @@ in
   homelab.infra.authelia.enable = true;
   homelab.infra.cloudflared.enable = true;
   homelab.infra.adguard.enable = true;
-  assertions = [
-    {
-      assertion = config.services.prometheus.port == homelabFacts.prometheus.port;
-      message = "hosts/lasthaze-homelab/facts.nix: prometheus.port must match services.prometheus.port.";
-    }
-  ];
+  services.prometheus.port = homelabFacts.prometheus.port;
 
   homelab.monitoring = {
     enable = true;

@@ -230,6 +230,7 @@ func buildReport(interval time.Duration, n int) report {
 	topRows := runTop(max(1, int(interval.Round(time.Second).Seconds())))
 	vmBefore, _ := readVM()
 	ticksBefore, _ := readCPUTicks()
+	firstTicks := machAbsoluteTime()
 	first, _ := takeSample()
 	started := time.Now()
 	time.Sleep(interval)
@@ -274,7 +275,7 @@ func buildReport(interval time.Duration, n int) report {
 	var procRows []procRow
 	for _, p := range second {
 		before, seen := previous[p.pid]
-		r := toRates(p.usage, delta(p.usage, before, seen), seconds)
+		r := toRates(p.usage, delta(p.usage, before, seen, firstTicks), seconds)
 
 		a := apps[p.app]
 		if a == nil {

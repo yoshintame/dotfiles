@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -40,6 +42,7 @@ var utilitySubtypes = map[string]string{
 const (
 	graduateFootprint = 64 << 20
 	graduateCPUShare  = 0.05
+	pruneAfterSamples = 40
 )
 
 type key struct{ a, b string }
@@ -76,8 +79,12 @@ func (g *gauges) add(u usage) {
 
 type exporter struct {
 	mu            sync.Mutex
+	rendered      []byte
 	previous      map[int]usage
+	sinceTicks    uint64
 	lastSample    time.Time
+	samples       int
+	lastSeen      map[key]int
 	graduated     map[key]bool
 	appTotals     map[key]*counters
 	browserTotals map[key]*counters
@@ -86,6 +93,8 @@ type exporter struct {
 func newExporter() *exporter {
 	return &exporter{
 		previous:      map[int]usage{},
+		sinceTicks:    math.MaxUint64,
+		lastSeen:      map[key]int{},
 		graduated:     map[key]bool{},
 		appTotals:     map[key]*counters{},
 		browserTotals: map[key]*counters{},
@@ -99,13 +108,6 @@ func outerBundle(path string) string {
 		}
 	}
 	return ""
-}
-
-func commandName(pid int, path string) string {
-	if args := pidArgs(pid); len(args) > 0 {
-		return filepath.Base(args[0])
-	}
-	return filepath.Base(path)
 }
 
 func browserProcessType(path string, args []string, isMain bool) string {
@@ -164,17 +166,23 @@ func takeSample() ([]proc, []int) {
 			inaccessible = append(inaccessible, pid)
 			continue
 		}
-		app, browser := classify(pid, paths)
+		app, browser, ok := classify(pid, paths)
+		if !ok {
+			continue
+		}
 		procs = append(procs, proc{pid, paths[pid], u, app, browser})
 	}
 	return procs, inaccessible
 }
 
-func classify(pid int, paths map[int]string) (app, browser key) {
-	path, ok := paths[pid]
-	if !ok {
+func classify(pid int, paths map[int]string) (app, browser key, ok bool) {
+	path, cached := paths[pid]
+	if !cached {
 		path = pidPath(pid)
 		paths[pid] = path
+	}
+	if path == "" {
+		return key{}, key{}, false
 	}
 	own := outerBundle(path)
 	ownerBundle := ""
@@ -193,7 +201,7 @@ func classify(pid int, paths map[int]string) (app, browser key) {
 	case strings.Contains(path, ".xpc/") && ownerBundle != "":
 		app = key{strings.TrimSuffix(ownerBundle, ".app"), "app"}
 	default:
-		app = key{commandName(pid, path), "command"}
+		app = key{filepath.Base(path), "command"}
 	}
 
 	name, ok := browsers[own]
@@ -204,12 +212,16 @@ func classify(pid int, paths map[int]string) (app, browser key) {
 		isMain := own != "" && strings.Count(path, ".app/") == 1 && strings.Contains(path, "/Contents/MacOS/")
 		browser = key{name, browserProcessType(path, pidArgs(pid), isMain)}
 	}
-	return app, browser
+	return app, browser, true
 }
 
-func delta(now usage, before usage, seen bool) counters {
-	if !seen || before.start != now.start {
+func delta(now usage, before usage, seen bool, sinceTicks uint64) counters {
+	switch {
+	case seen && before.start == now.start:
+	case now.start >= sinceTicks:
 		before = usage{}
+	default:
+		return counters{}
 	}
 	diff := func(a, b uint64) float64 {
 		if a < b {
@@ -227,23 +239,22 @@ func delta(now usage, before usage, seen bool) counters {
 	}
 }
 
-func (e *exporter) collect(w io.Writer) {
-	e.mu.Lock()
-	defer e.mu.Unlock()
-
+func (e *exporter) sample() {
 	began := time.Now()
+	nowTicks := machAbsoluteTime()
 	elapsed := began.Sub(e.lastSample).Seconds()
 	current := map[int]usage{}
 	appGauges := map[key]*gauges{}
 	appDeltas := map[key]*counters{}
 	browserGauges := map[key]*gauges{}
+	e.samples++
 
 	procs, inaccessible := takeSample()
 	for _, p := range procs {
 		u, app, browser := p.usage, p.app, p.browser
 		current[p.pid] = u
 		before, seen := e.previous[p.pid]
-		d := delta(u, before, seen)
+		d := delta(u, before, seen, e.sinceTicks)
 
 		if appGauges[app] == nil {
 			appGauges[app] = &gauges{}
@@ -261,6 +272,7 @@ func (e *exporter) collect(w io.Writer) {
 				e.browserTotals[browser] = &counters{}
 			}
 			e.browserTotals[browser].add(d)
+			e.lastSeen[browser] = e.samples
 		}
 	}
 
@@ -273,6 +285,7 @@ func (e *exporter) collect(w io.Writer) {
 		}
 		if g.footprint >= graduateFootprint || cpuShare >= graduateCPUShare {
 			e.graduated[app] = true
+			e.lastSeen[app] = e.samples
 		}
 		target := app
 		if !e.graduated[app] {
@@ -281,39 +294,79 @@ func (e *exporter) collect(w io.Writer) {
 			otherGauges.footprint += g.footprint
 			otherGauges.resident += g.resident
 			otherGauges.maxFootprint = max(otherGauges.maxFootprint, g.maxFootprint)
+			delete(appGauges, app)
 		}
 		if e.appTotals[target] == nil {
 			e.appTotals[target] = &counters{}
 		}
 		e.appTotals[target].add(*appDeltas[app])
 	}
-	for app := range appGauges {
-		if !e.graduated[app] {
-			delete(appGauges, app)
-		}
-	}
 	appGauges[other] = otherGauges
+	e.prune()
 
 	e.previous = current
+	e.sinceTicks = nowTicks
 	e.lastSample = began
 
-	writeFamilies(w, "mac_app", "app", "kind", appGauges, e.appTotals)
-	writeFamilies(w, "mac_browser", "browser", "process_type", browserGauges, e.browserTotals)
-	fmt.Fprintf(w, "# HELP mac_apps_processes_inaccessible Processes whose usage cannot be read without root.\n# TYPE mac_apps_processes_inaccessible gauge\nmac_apps_processes_inaccessible %d\n", len(inaccessible))
+	var buf bytes.Buffer
+	writeFamilies(&buf, "mac_app", "app", "kind", appGauges, e.appTotals)
+	writeFamilies(&buf, "mac_browser", "browser", "process_type", browserGauges, e.browserTotals)
+	writeSystem(&buf)
+	writeScalar(&buf, "mac_apps_processes_inaccessible", "gauge", "Processes whose usage cannot be read without root.", float64(len(inaccessible)))
+	writeScalar(&buf, "mac_apps_collect_duration_seconds", "gauge", "Time spent reading all processes.", time.Since(began).Seconds())
+
+	e.mu.Lock()
+	e.rendered = buf.Bytes()
+	e.mu.Unlock()
+}
+
+func (e *exporter) prune() {
+	for k, seen := range e.lastSeen {
+		if e.samples-seen < pruneAfterSamples {
+			continue
+		}
+		delete(e.lastSeen, k)
+		delete(e.graduated, k)
+		delete(e.appTotals, k)
+		delete(e.browserTotals, k)
+	}
+}
+
+var pagingEvents = []string{"compress", "decompress", "pagein", "pageout", "swapin", "swapout"}
+
+func writeSystem(w io.Writer) {
+	if level, ok := sysctlUint("kern.memorystatus_vm_pressure_level"); ok {
+		writeScalar(w, "mac_memory_pressure_level", "gauge", "Kernel memory pressure level: 1 normal, 2 warning, 4 critical.", float64(level))
+	}
+	if level, ok := sysctlUint("kern.memorystatus_level"); ok {
+		writeScalar(w, "mac_memory_free_ratio", "gauge", "Share of memory the kernel considers available.", float64(level)/100)
+	}
 	if vm, ok := readVM(); ok {
-		fmt.Fprintf(w, "# HELP mac_vm_paging_bytes_total Bytes moved by the compressor, swap and file paging.\n# TYPE mac_vm_paging_bytes_total counter\n")
 		paging := vm.paging()
-		for _, event := range []string{"compress", "decompress", "pagein", "pageout", "swapin", "swapout"} {
+		fmt.Fprintf(w, "# HELP mac_vm_paging_bytes_total Bytes moved by the compressor, swap and file paging.\n# TYPE mac_vm_paging_bytes_total counter\n")
+		for _, event := range pagingEvents {
 			fmt.Fprintf(w, "mac_vm_paging_bytes_total{event=\"%s\"} %d\n", event, paging[event])
 		}
 	}
 	if level, ok := thermalPressure(); ok {
-		fmt.Fprintf(w, "# HELP mac_thermal_pressure_level Thermal pressure: 0 nominal, 1 moderate, 2 heavy, 3 trapping, 4 sleeping.\n# TYPE mac_thermal_pressure_level gauge\nmac_thermal_pressure_level %d\n", level)
+		writeScalar(w, "mac_thermal_pressure_level", "gauge", "Thermal pressure: 0 nominal, 1 moderate, 2 heavy, 3 trapping, 4 sleeping.", float64(level))
 	}
-	fmt.Fprintf(w, "# HELP mac_apps_collect_duration_seconds Time spent reading all processes.\n# TYPE mac_apps_collect_duration_seconds gauge\nmac_apps_collect_duration_seconds %s\n", formatFloat(time.Since(began).Seconds()))
+	if b, ok := readBattery(); ok {
+		writeScalar(w, "mac_battery_cycle_count", "gauge", "Battery charge cycle count.", float64(b.cycles))
+		writeScalar(w, "mac_battery_full_charge_capacity_mah", "gauge", "Current full charge capacity.", float64(b.fullCapacity))
+		writeScalar(w, "mac_battery_design_capacity_mah", "gauge", "Design capacity.", float64(b.designCapacity))
+	}
+}
+
+func writeScalar(w io.Writer, name, kind, help string, value float64) {
+	fmt.Fprintf(w, "# HELP %s %s\n# TYPE %s %s\n%s %s\n", name, help, name, kind, name, formatFloat(value))
 }
 
 var labelEscaper = strings.NewReplacer(`\`, `\\`, `"`, `\"`, "\n", `\n`)
+
+func labelValue(v string) string {
+	return labelEscaper.Replace(strings.ToValidUTF8(v, "\uFFFD"))
+}
 
 func formatFloat(v float64) string {
 	return strconv.FormatFloat(v, 'g', -1, 64)
@@ -324,7 +377,7 @@ func writeFamilies(w io.Writer, prefix, labelA, labelB string, gs map[key]*gauge
 		fmt.Fprintf(w, "# HELP %s_%s %s\n# TYPE %s_%s %s\n", prefix, name, help, prefix, name, kind)
 		for _, k := range keys {
 			fmt.Fprintf(w, "%s_%s{%s=\"%s\",%s=\"%s\"} %s\n", prefix, name,
-				labelA, labelEscaper.Replace(k.a), labelB, labelEscaper.Replace(k.b), formatFloat(value(k)))
+				labelA, labelValue(k.a), labelB, labelValue(k.b), formatFloat(value(k)))
 		}
 	}
 	gaugeKeys := sortedKeys(gs)
@@ -339,7 +392,7 @@ func writeFamilies(w io.Writer, prefix, labelA, labelB string, gs map[key]*gauge
 		func(k key) float64 { return float64(gs[k].maxFootprint) })
 	series("cpu_seconds_total", "counter", "CPU time, user plus system.", counterKeys,
 		func(k key) float64 { return cs[k].cpuSeconds })
-	series("energy_joules_total", "counter", "Billed energy.", counterKeys,
+	series("energy_joules_total", "counter", "Energy used by the process itself.", counterKeys,
 		func(k key) float64 { return cs[k].energy })
 	series("wakeups_total", "counter", "Idle and interrupt wakeups.", counterKeys,
 		func(k key) float64 { return cs[k].wakeups })
@@ -366,12 +419,22 @@ func sortedKeys[V any](m map[key]V) []key {
 func serve(args []string) {
 	flags := flag.NewFlagSet("serve", flag.ExitOnError)
 	listen := flags.String("listen", "127.0.0.1:9184", "address to serve /metrics on")
+	interval := flags.Duration("interval", 15*time.Second, "time between process samples")
 	flags.Parse(args)
 
 	e := newExporter()
+	e.sample()
+	go func() {
+		for range time.Tick(*interval) {
+			e.sample()
+		}
+	}()
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, _ *http.Request) {
+		e.mu.Lock()
+		rendered := e.rendered
+		e.mu.Unlock()
 		w.Header().Set("Content-Type", "text/plain; version=0.0.4")
-		e.collect(w)
+		w.Write(rendered)
 	})
 	log.Fatal(http.ListenAndServe(*listen, nil))
 }

@@ -1,0 +1,45 @@
+logging {
+  level = "warn"
+}
+
+prometheus.exporter.unix "node" {
+  disable_collectors = ["thermal"]
+
+  filesystem {
+    mount_points_exclude = "^/(System/Volumes/(iSCPreboot|xarts|Hardware|Preboot|Update|VM)|Volumes/.+|Users/.+)$"
+  }
+}
+
+prometheus.scrape "node" {
+  targets         = prometheus.exporter.unix.node.targets
+  forward_to      = [prometheus.relabel.node.receiver]
+  scrape_interval = "15s"
+}
+
+prometheus.relabel "node" {
+  forward_to = [prometheus.remote_write.homelab.receiver]
+
+  rule {
+    target_label = "job"
+    replacement  = "node"
+  }
+}
+
+prometheus.scrape "apps" {
+  targets = [{
+    "__address__" = sys.env("MAC_METRICS_EXPORTER_ADDRESS"),
+    "instance"    = sys.env("MAC_METRICS_HOST"),
+  }]
+  forward_to      = [prometheus.remote_write.homelab.receiver]
+  scrape_interval = "15s"
+  job_name        = "mac-apps"
+}
+
+prometheus.remote_write "homelab" {
+  endpoint {
+    url = sys.env("MAC_METRICS_REMOTE_WRITE_URL")
+  }
+  external_labels = {
+    host = sys.env("MAC_METRICS_HOST"),
+  }
+}

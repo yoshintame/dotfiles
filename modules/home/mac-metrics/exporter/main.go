@@ -80,6 +80,7 @@ func (g *gauges) add(u usage) {
 type exporter struct {
 	mu            sync.Mutex
 	rendered      []byte
+	renderedAt    time.Time
 	previous      map[int]usage
 	sinceTicks    uint64
 	lastSample    time.Time
@@ -248,6 +249,7 @@ func (e *exporter) sample() {
 	appDeltas := map[key]*counters{}
 	browserGauges := map[key]*gauges{}
 	e.samples++
+	e.prune()
 
 	procs, inaccessible := takeSample()
 	for _, p := range procs {
@@ -302,7 +304,6 @@ func (e *exporter) sample() {
 		e.appTotals[target].add(*appDeltas[app])
 	}
 	appGauges[other] = otherGauges
-	e.prune()
 
 	e.previous = current
 	e.sinceTicks = nowTicks
@@ -317,6 +318,7 @@ func (e *exporter) sample() {
 
 	e.mu.Lock()
 	e.rendered = buf.Bytes()
+	e.renderedAt = time.Now()
 	e.mu.Unlock()
 }
 
@@ -431,8 +433,12 @@ func serve(args []string) {
 	}()
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, _ *http.Request) {
 		e.mu.Lock()
-		rendered := e.rendered
+		rendered, age := e.rendered, time.Since(e.renderedAt)
 		e.mu.Unlock()
+		if age > 3**interval {
+			http.Error(w, fmt.Sprintf("last sample is %s old", age.Round(time.Second)), http.StatusServiceUnavailable)
+			return
+		}
 		w.Header().Set("Content-Type", "text/plain; version=0.0.4")
 		w.Write(rendered)
 	})

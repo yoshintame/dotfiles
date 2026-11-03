@@ -6,7 +6,7 @@ prometheus.exporter.unix "node" {
   disable_collectors = ["thermal"]
 
   filesystem {
-    mount_points_exclude = "^/(System/Volumes/(iSCPreboot|xarts|Hardware|Preboot|Update|VM)|Volumes/.+|Users/.+)$"
+    mount_points_exclude = "^(/|/nix|/System/Volumes/(iSCPreboot|xarts|Hardware|Preboot|Update|VM)|/Volumes/.+|/Users/.+)$"
   }
 }
 
@@ -41,6 +41,5 @@ prometheus.remote_write "homelab" {
   }
   external_labels = {
     host = sys.env("MAC_METRICS_HOST"),
-    role = "workstation",
   }
 }

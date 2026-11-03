@@ -1,6 +1,9 @@
 package main
 
 /*
+#cgo LDFLAGS: -framework IOKit -framework CoreFoundation
+#include <CoreFoundation/CoreFoundation.h>
+#include <IOKit/IOKitLib.h>
 #include <dlfcn.h>
 #include <libproc.h>
 #include <mach/mach.h>
@@ -23,8 +26,8 @@ static pid_t responsible_pid(pid_t pid) {
 	return responsible_ptr ? responsible_ptr(pid) : -1;
 }
 
-static int pid_rusage(pid_t pid, struct rusage_info_v4 *info) {
-	return proc_pid_rusage(pid, RUSAGE_INFO_V4, (rusage_info_t *)info);
+static int pid_rusage(pid_t pid, struct rusage_info_v6 *info) {
+	return proc_pid_rusage(pid, RUSAGE_INFO_V6, (rusage_info_t *)info);
 }
 
 static int pid_args(pid_t pid, char *buf, size_t *size) {
@@ -93,13 +96,45 @@ static int read_cpu_ticks(uint64_t out[4]) {
 }
 
 static int sysctl_u64(const char *name, uint64_t *out) {
-	uint64_t value = 0;
+	union {
+		uint32_t u32;
+		uint64_t u64;
+	} value = {0};
 	size_t size = sizeof(value);
 	if (sysctlbyname(name, &value, &size, NULL, 0) != 0) {
 		return -1;
 	}
-	*out = value;
+	if (size == sizeof(uint32_t)) {
+		*out = value.u32;
+	} else if (size == sizeof(uint64_t)) {
+		*out = value.u64;
+	} else {
+		return -1;
+	}
 	return 0;
+}
+
+static int battery_property(io_service_t battery, const char *name, int64_t *out) {
+	CFStringRef key = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingUTF8);
+	CFTypeRef value = IORegistryEntryCreateCFProperty(battery, key, kCFAllocatorDefault, 0);
+	CFRelease(key);
+	if (value == NULL) {
+		return -1;
+	}
+	int ok = CFGetTypeID(value) == CFNumberGetTypeID() && CFNumberGetValue((CFNumberRef)value, kCFNumberSInt64Type, out);
+	CFRelease(value);
+	return ok ? 0 : -1;
+}
+
+static int read_battery(int64_t *cycles, int64_t *full, int64_t *design) {
+	io_service_t battery = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("AppleSmartBattery"));
+	if (battery == IO_OBJECT_NULL) {
+		return -1;
+	}
+	int status = battery_property(battery, "CycleCount", cycles) | battery_property(battery, "NominalChargeCapacity", full) |
+	             battery_property(battery, "DesignCapacity", design);
+	IOObjectRelease(battery);
+	return status;
 }
 
 static int read_swap(uint64_t *total, uint64_t *used) {
@@ -179,7 +214,7 @@ func responsiblePid(pid int) int {
 }
 
 func pidUsage(pid int) (usage, bool) {
-	var info C.struct_rusage_info_v4
+	var info C.struct_rusage_info_v6
 	if C.pid_rusage(C.pid_t(pid), &info) != 0 {
 		return usage{}, false
 	}
@@ -188,7 +223,7 @@ func pidUsage(pid int) (usage, bool) {
 		footprint: uint64(info.ri_phys_footprint),
 		resident:  uint64(info.ri_resident_size),
 		cpuNanos:  float64(info.ri_user_time+info.ri_system_time) * nanosPerTick,
-		energy:    uint64(info.ri_billed_energy),
+		energy:    uint64(info.ri_energy_nj),
 		wakeups:   uint64(info.ri_pkg_idle_wkups + info.ri_interrupt_wkups),
 		diskRead:  uint64(info.ri_diskio_bytesread),
 		diskWrite: uint64(info.ri_diskio_byteswritten),
@@ -206,16 +241,22 @@ func pidArgs(pid int) []string {
 	}
 	buf = buf[:size]
 	argc := int(binary.LittleEndian.Uint32(buf[:4]))
-	var parts []string
-	for _, part := range bytes.Split(buf[4:], []byte{0}) {
-		if len(part) > 0 {
-			parts = append(parts, string(part))
-		}
-	}
-	if len(parts) < 2 {
+	rest := buf[4:]
+	execEnd := bytes.IndexByte(rest, 0)
+	if execEnd < 0 {
 		return nil
 	}
-	return parts[1:min(argc+1, len(parts))]
+	rest = bytes.TrimLeft(rest[execEnd:], "\x00")
+	args := make([]string, 0, argc)
+	for len(args) < argc && len(rest) > 0 {
+		end := bytes.IndexByte(rest, 0)
+		if end < 0 {
+			end = len(rest)
+		}
+		args = append(args, string(rest[:end]))
+		rest = rest[min(end+1, len(rest)):]
+	}
+	return args
 }
 
 type vmStats struct {
@@ -300,4 +341,14 @@ func (v vmStats) paging() map[string]uint64 {
 		"pagein":     v.pageins * v.pageSize,
 		"pageout":    v.pageouts * v.pageSize,
 	}
+}
+
+type battery struct{ cycles, fullCapacity, designCapacity int64 }
+
+func readBattery() (battery, bool) {
+	var cycles, full, design C.int64_t
+	if C.read_battery(&cycles, &full, &design) != 0 {
+		return battery{}, false
+	}
+	return battery{int64(cycles), int64(full), int64(design)}, true
 }

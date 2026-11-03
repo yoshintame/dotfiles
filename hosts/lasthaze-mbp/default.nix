@@ -4,6 +4,7 @@
   flakeRoot,
   hostFacts,
   edgeFacts,
+  homelabFacts,
   ...
 }:
 let
@@ -98,7 +99,7 @@ in
       my.resticprofile.monitor = edgeFacts.monitor;
       my.mac-metrics = {
         host = "lasthaze-mbp";
-        remoteWriteUrl = "http://lasthaze-homelab:9090/api/v1/write";
+        inherit (homelabFacts) prometheus;
       };
       programs.bash.enable = true;
       programs.zsh.enable = true;

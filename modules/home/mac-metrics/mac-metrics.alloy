@@ -41,5 +41,6 @@ prometheus.remote_write "homelab" {
   }
   external_labels = {
     host = sys.env("MAC_METRICS_HOST"),
+    role = "workstation",
   }
 }

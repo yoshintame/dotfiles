@@ -6,14 +6,17 @@ spoon.AppLauncher:bindHotkeys({
     ["Warp"]               = { { "alt"                  }, "W", keyboardLayout = "ABC" },
     ["yazi"]               = { { "alt"                  }, "R", isWarp = true, keyboardLayout = "ABC" },
     ["btop"]               = { { "alt"                  }, "B", isWarp = true, keyboardLayout = "ABC" },
-    ["Kitty"]              = { { "alt", "shift"         }, "W", keyboardLayout = "ABC" },
+    ["Terminal"]           = { { "alt", "shift"         }, "W", keyboardLayout = "ABC" },
+    ["Zed"]                = { { "alt"                  }, "E", keyboardLayout = "ABC" },
     ["Finder"]             = { { "alt", "shift"         }, "E", keyboardLayout = "ABC" },
 
-    ["Arc"]                = { { "alt"                  }, "A" },
+    ["Dia"]                = { { "alt"                  }, "A" },
+    ["Safari"]             = { { "alt", "shift"         }, "A" },
     ["Spotify"]            = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
-    ["Visual Studio Code"] = { { "alt"                  }, "D" },
+    ["Paseo"]              = { { "alt"                  }, "D" },
     ["Jira"]               = { { "alt", "shift"         }, "D" },
+    ["Fork"]               = { { "alt"                  }, "G" },
 
     ["TickTick"]           = { { "alt"                  }, "T" },
     ["Claude"]             = { { "alt"                  }, "Z" },
@@ -213,8 +216,6 @@ local function joinMeeting(zoomUrl, mtype)
         hs.task.new("/usr/bin/open", nil, { zoomUrl }):start()
     end
 end
-
-hs.hotkey.bind({ "alt" }, "E", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D"))
 
 function switchCurrentAppWindows()
     local app = hs.application.frontmostApplication()

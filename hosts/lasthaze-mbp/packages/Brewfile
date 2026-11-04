@@ -210,6 +210,8 @@ brew "xwjdsh/tap/manssh"
 cask "1password"
 # Command-line interface for 1Password
 cask "1password-cli"
+# Time tracker
+cask "activitywatch"
 # Privacy-focused app for managing your finances
 cask "actual"
 # AeroSpace is an i3-like tiling window manager for macOS

@@ -16,11 +16,11 @@ spoon.AppLauncher:bindHotkeys({
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Paseo"]              = { { "alt"                  }, "D" },
     ["Jira"]               = { { "alt", "shift"         }, "D" },
-    ["Fork"]               = { { "alt"                  }, "G" },
+    ["Fork"]               = { { "alt"                  }, "X" },
 
     ["TickTick"]           = { { "alt"                  }, "T" },
     ["Claude"]             = { { "alt"                  }, "Z" },
-    ["yaak"]               = { { "alt"                  }, "X" },
+    ["yaak"]               = { { "alt"                  }, "G" },
     ["Discord"]            = { { "alt"                  }, "C" },
     ["Activity Monitor"]   = { { { "alt"                }, "V" },
                                { { "alt"                }, "escape" },

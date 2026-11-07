@@ -16,15 +16,11 @@ let
     home.backup = "14h";
     vault.backup = "9h";
     local-to-b2.copy = "13h";
-    local-to-onedrive.copy = "13h";
-    local-to-gdrive.copy = "13h";
+    local-to-homelab.copy = "13h";
     local-ops = {
       forget = "216h";
       check = "768h";
     };
-    b2-ops.check = "768h";
-    onedrive-ops.check = "768h";
-    gdrive-ops.check = "768h";
   };
   mkMiseCli = import ../../../lib/mkMiseCli.nix {
     inherit pkgs;
@@ -62,7 +58,12 @@ lib.recursiveUpdate
         vars = {
           gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
           appState = lib.getExe' config.home.path "app-state";
+          hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/lasthaze-mbp/mac";
         };
+      };
+      "~/.config/resticprofile/hub.env" = {
+        template = ./config/hub.env.tmpl;
+        sopsFile = ./secrets.yaml;
       };
       "~/.config/resticprofile/hc.env" = {
         template = ./config/hc.env.tmpl;
@@ -107,6 +108,14 @@ lib.recursiveUpdate
   {
     options.my.resticprofile = {
       monitor = mkOption {
+        type = types.submodule {
+          options = {
+            host = mkOption { type = types.str; };
+            port = mkOption { type = types.port; };
+          };
+        };
+      };
+      hub = mkOption {
         type = types.submodule {
           options = {
             host = mkOption { type = types.str; };

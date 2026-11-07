@@ -63,8 +63,6 @@ in
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
-  homelab.holdServices = true;
-
   homelab.infra.traefik.enable = true;
   homelab.infra.authelia.enable = true;
   homelab.infra.cloudflared.enable = true;

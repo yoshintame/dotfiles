@@ -24,7 +24,9 @@ mixins:
     default-vars:
       TARGET: ""
       REPOSITORY: ""
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/$TARGET.env"
     copy:
+      retry-lock: 1h
       initialize: true
       initialize-copy-chunker-params: true
       repository: "$REPOSITORY"
@@ -102,15 +104,10 @@ profiles:
     repository: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
     lock: "/tmp/resticprofile-b2.lock"
 
-  # Хаб на homelab: rest-server в append-only по tailnet. Удалить отсюда
-  # можно только локи: forget, prune, копии в OneDrive и Google Drive и
-  # проверки всех копий делает homelab (modules/infra/restic-hub.nix в
-  # lasthaze-homelab). Репозиторий создаёт только local-to-homelab, с
-  # параметрами чанкера локального.
   homelab:
     inherit: base
     initialize: false
-    env-file: "{{ .Env.HOME }}/.config/resticprofile/hub.env"
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/homelab.env"
     repository: "@hubRepository@"
     lock: "/tmp/resticprofile-homelab.lock"
 
@@ -234,7 +231,6 @@ profiles:
   local-to-b2:
     inherit: local
     lock: "/tmp/resticprofile-local-to-b2.lock"
-    env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     use:
       - name: remote-copy
         TARGET: b2
@@ -246,18 +242,14 @@ profiles:
       send-after-fail...:
         - url: "https://hc-ping.com/${HC_COPY_TO_B2_UUID}/fail"
 
-  # Обслуживание хаба на homelab может держать эксклюзивный лок, поэтому
-  # копия ждёт его, а не падает.
   local-to-homelab:
     inherit: local
     lock: "/tmp/resticprofile-local-to-homelab.lock"
-    env-file: "{{ .Env.HOME }}/.config/resticprofile/hub.env"
     use:
       - name: remote-copy
         TARGET: homelab
         REPOSITORY: "@hubRepository@"
     copy:
-      retry-lock: 1h
       schedule: "*:30"
 
   local-ops:
@@ -278,6 +270,7 @@ profiles:
       send-after-fail...:
         - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
     check:
+      retry-lock: 1h
       schedule: "*-*-01 6:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
       send-after...:

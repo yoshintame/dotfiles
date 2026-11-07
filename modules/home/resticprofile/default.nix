@@ -28,6 +28,10 @@ let
   };
 
   rpCli = mkMiseCli { name = "rp"; };
+  endpoint.options = {
+    host = mkOption { type = types.str; };
+    port = mkOption { type = types.port; };
+  };
   home = config.home.homeDirectory;
 in
 lib.recursiveUpdate
@@ -58,12 +62,13 @@ lib.recursiveUpdate
         vars = {
           gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
           appState = lib.getExe' config.home.path "app-state";
-          hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/lasthaze-mbp/mac";
+          hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/${cfg.hub.client}/mac";
         };
       };
-      "~/.config/resticprofile/hub.env" = {
-        template = ./config/hub.env.tmpl;
+      "~/.config/resticprofile/homelab.env" = {
+        template = ./config/homelab.env.tmpl;
         sopsFile = ./secrets.yaml;
+        vars.hubClient = cfg.hub.client;
       };
       "~/.config/resticprofile/hc.env" = {
         template = ./config/hc.env.tmpl;
@@ -107,21 +112,12 @@ lib.recursiveUpdate
   })
   {
     options.my.resticprofile = {
-      monitor = mkOption {
-        type = types.submodule {
-          options = {
-            host = mkOption { type = types.str; };
-            port = mkOption { type = types.port; };
-          };
-        };
-      };
+      monitor = mkOption { type = types.submodule endpoint; };
       hub = mkOption {
-        type = types.submodule {
-          options = {
-            host = mkOption { type = types.str; };
-            port = mkOption { type = types.port; };
-          };
-        };
+        type = types.submodule [
+          endpoint
+          { options.client = mkOption { type = types.str; }; }
+        ];
       };
       monitoringTargets = mkOption {
         type = types.raw;

@@ -7,5 +7,6 @@
   resticHub = {
     host = "lasthaze-homelab";
     port = 8000;
+    client = "lasthaze-mbp";
   };
 }

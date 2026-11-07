@@ -4,4 +4,8 @@
     host = "lasthaze-homelab";
     port = 9090;
   };
+  resticHub = {
+    host = "lasthaze-homelab";
+    port = 8000;
+  };
 }

@@ -13,6 +13,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ./zfs.nix
     ./deploy.nix
     ./manifest.nix
   ];
@@ -61,6 +62,8 @@ in
   system.stateVersion = "25.05";
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
+  homelab.holdServices = true;
 
   homelab.infra.traefik.enable = true;
   homelab.infra.authelia.enable = true;

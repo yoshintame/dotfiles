@@ -456,16 +456,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1793248532,
-        "narHash": "sha256-I61DFx6oczDbfkOAYWpiqgOVNmjUw1yjxBrliUOQzMU=",
+        "lastModified": 1793528865,
+        "narHash": "sha256-Jzt7QBqpHGiq3+z5oFh+Wc4HMziB0FyOX7ecQl9x7PI=",
         "owner": "yoshintame",
         "repo": "nix-stencil",
-        "rev": "8148c11985eac466fc56e03db61e100b930e057a",
+        "rev": "259f9f4c6b955b7de3b8c419158dec9781767db4",
         "type": "github"
       },
       "original": {
         "owner": "yoshintame",
-        "ref": "v0.3.0",
+        "ref": "v0.4.0",
         "repo": "nix-stencil",
         "type": "github"
       }

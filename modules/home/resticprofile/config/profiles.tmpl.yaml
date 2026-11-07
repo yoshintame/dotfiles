@@ -51,7 +51,7 @@ profiles:
           url: "@gatusBackupEndpoint@-$PROFILE_NAME-$PROFILE_COMMAND/external?success=true"
           headers: &gatus-auth
             - name: Authorization
-              value: "Bearer ${GATUS_BACKUP_TOKEN}"
+              value: "Bearer ~{{GATUS_BACKUP_TOKEN}}"
       send-after-fail: &gatus-fail
         - method: POST
           url: "@gatusBackupEndpoint@-$PROFILE_NAME-$PROFILE_COMMAND/external?success=false&error=$ERROR"
@@ -134,9 +134,9 @@ profiles:
       schedule: "*:15,45"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}"
+        - url: "https://hc-ping.com/~{{HC_DEVELOPMENT_BACKUP_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_DEVELOPMENT_BACKUP_UUID}}/fail"
 
   home:
     inherit: local
@@ -209,9 +209,9 @@ profiles:
       schedule: "1,7,13,19:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_HOME_BACKUP_UUID}"
+        - url: "https://hc-ping.com/~{{HC_HOME_BACKUP_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_HOME_BACKUP_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_HOME_BACKUP_UUID}}/fail"
 
   vault:
     inherit: local
@@ -238,9 +238,9 @@ profiles:
     copy:
       schedule: "*:00"
       send-after...:
-        - url: "https://hc-ping.com/${HC_COPY_TO_B2_UUID}"
+        - url: "https://hc-ping.com/~{{HC_COPY_TO_B2_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_COPY_TO_B2_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_COPY_TO_B2_UUID}}/fail"
 
   local-to-homelab:
     inherit: local
@@ -266,14 +266,14 @@ profiles:
       schedule: "Sun 05:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}/fail"
     check:
       retry-lock: 1h
       schedule: "*-*-01 6:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}/fail"

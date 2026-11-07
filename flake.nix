@@ -52,7 +52,7 @@
     };
 
     nix-stencil = {
-      url = "github:yoshintame/nix-stencil/v0.3.0";
+      url = "github:yoshintame/nix-stencil/v0.4.0";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.sops-nix.follows = "sops-nix";
       inputs.home-manager.follows = "home-manager";

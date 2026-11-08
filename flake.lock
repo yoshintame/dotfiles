@@ -380,11 +380,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1793738856,
-        "narHash": "sha256-zKs7FrblwYcOLyH/4qCyxucdqt2Iun3lE3GaboX6tUY=",
+        "lastModified": 1794151326,
+        "narHash": "sha256-rmKuHCV3asxUTO81CZYe4qf4Ng2OxM0PggNwl735LiU=",
         "ref": "refs/heads/main",
-        "rev": "8f66c2321c949ef5e388cf708f29ef3f0eaa7eb7",
-        "revCount": 193,
+        "rev": "c882ecd4fc9482ca4363a35bc523987a0b2f9a50",
+        "revCount": 195,
         "type": "git",
         "url": "ssh://git@github.com/yoshintame/lasthaze-homelab"
       },

@@ -2,10 +2,10 @@
   self,
   inputs,
   lib,
+  myLib,
   ...
 }:
 let
-  myLib = import ../lib { inherit lib; };
   monitorCases = import ../modules/nixos/monitor/tests.nix { inherit inputs lib myLib; };
   failedMonitorCases = lib.filter (c: c.actual != c.expected) monitorCases;
   channelOf = lock: input: lock.nodes.${lock.nodes.root.inputs.${input}}.original.ref or "unpinned";

@@ -67,6 +67,11 @@ in
   homelab.infra.authelia.enable = true;
   homelab.infra.cloudflared.enable = true;
   homelab.infra.adguard.enable = true;
+  homelab.infra.resticHub = {
+    enable = true;
+    dataDir = "/srv/restic";
+    inherit (homelabFacts.resticHub) port client repository;
+  };
   services.prometheus.port = homelabFacts.prometheus.port;
 
   homelab.monitoring = {

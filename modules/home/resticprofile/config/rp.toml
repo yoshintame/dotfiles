@@ -12,33 +12,33 @@ arg "<profile>" help="Backup profile" default="all" {
 run = 'resticprofile -n ${usage_profile?} backup'
 
 ["rp:push"]
-description = "Copy local repo to remote (B2 and/or Google Drive)"
+description = "Copy local repo to remote (B2 and/or homelab hub)"
 usage = '''
 arg "<target>" help="Target" default="all" {
-  choices "all" "b2" "gdrive"
+  choices "all" "b2" "homelab"
 }
 '''
 run = '''
 case "${usage_target?}" in
-    all)    resticprofile -n local-to-b2 copy && resticprofile -n local-to-gdrive copy ;;
-    b2)     resticprofile -n local-to-b2 copy ;;
-    gdrive) resticprofile -n local-to-gdrive copy ;;
+    all)     resticprofile -n local-to-b2 copy && resticprofile -n local-to-homelab copy ;;
+    b2)      resticprofile -n local-to-b2 copy ;;
+    homelab) resticprofile -n local-to-homelab copy ;;
 esac
 '''
 
 ["rp:backup-and-push"]
-description = "Full cycle: backup all + copy to B2 and Google Drive"
+description = "Full cycle: backup all + copy to B2 and homelab hub"
 run = [
   "resticprofile --lock-wait 15m -n all backup",
   "resticprofile --lock-wait 15m -n local-to-b2 copy",
-  "resticprofile --lock-wait 15m -n local-to-gdrive copy",
+  "resticprofile --lock-wait 15m -n local-to-homelab copy",
 ]
 
 ["rp:snapshots"]
 description = "List snapshots"
 usage = '''
 arg "<repo>" help="Repository" default="local" {
-  choices "local" "b2" "gdrive"
+  choices "local" "b2" "homelab"
 }
 arg "[tag]" help="Filter by tag"
 '''
@@ -54,16 +54,10 @@ fi
 description = "Repo stats"
 usage = '''
 arg "<profile>" help="Profile" default="dev" {
-  choices "dev" "home" "b2" "gdrive"
+  choices "dev" "home" "b2" "homelab"
 }
 '''
-run = '''
-case "${usage_profile?}" in
-    b2)     resticprofile -n b2-ops stats ;;
-    gdrive) resticprofile -n gdrive-ops stats ;;
-    *)      resticprofile -n ${usage_profile?} stats ;;
-esac
-'''
+run = 'resticprofile -n ${usage_profile?} stats'
 
 ["rp:maintenance"]
 description = "Forget + prune"
@@ -82,16 +76,13 @@ esac
 ["rp:check"]
 description = "Integrity check"
 usage = '''
-arg "<target>" help="Target" default="all" {
-  choices "all" "local" "b2" "gdrive" "full"
+arg "<target>" help="Target" default="local" {
+  choices "local" "full"
 }
 '''
 run = '''
 case "${usage_target?}" in
-    all)    resticprofile -n check check ;;
     local)  resticprofile -n local-ops check ;;
-    b2)     resticprofile -n b2-ops check ;;
-    gdrive) resticprofile -n gdrive-ops check ;;
     full)   resticprofile -n local-ops check --read-data ;;
 esac
 '''
@@ -152,12 +143,12 @@ run = 'resticprofile -n ${usage_profile?} restore ${usage_snapshot?} --include $
 ["rp:restore-from-b2"]
 description = "Restore latest home from B2"
 usage = 'arg "<target>" help="Target directory" default="/tmp/home-restore"'
-run = 'resticprofile -n b2-ops restore latest --tag home --target ${usage_target?}'
+run = 'resticprofile -n b2 restore latest --tag home --target ${usage_target?}'
 
-["rp:restore-from-gdrive"]
-description = "Restore latest home from Google Drive"
+["rp:restore-from-homelab"]
+description = "Restore latest home from the homelab hub"
 usage = 'arg "<target>" help="Target directory" default="/tmp/home-restore"'
-run = 'resticprofile -n gdrive-ops restore latest --tag home --target ${usage_target?}'
+run = 'resticprofile -n homelab restore latest --tag home --target ${usage_target?}'
 
 # --- Diff ---
 
@@ -187,7 +178,7 @@ arg "<type>" help="Ping type" default="success" {
   choices "success" "fail"
 }
 arg "[profile]" help="Profile to test" default="dev" {
-  choices "dev" "home" "local-to-b2" "local-to-gdrive" "local-ops" "b2-ops" "gdrive-ops"
+  choices "dev" "home" "local-to-b2" "local-ops"
 }
 '''
 run = '''
@@ -198,10 +189,7 @@ case "${usage_profile?}" in
     dev)             hc_uuid="$HC_DEVELOPMENT_BACKUP_UUID" ;;
     home)            hc_uuid="$HC_HOME_BACKUP_UUID" ;;
     local-to-b2)     hc_uuid="$HC_COPY_TO_B2_UUID" ;;
-    local-to-gdrive) hc_uuid="$HC_COPY_TO_GDRIVE_UUID" ;;
     local-ops)       hc_uuid="$HC_MAINT_LOCAL_UUID" ;;
-    b2-ops)          hc_uuid="$HC_MAINT_B2_UUID" ;;
-    gdrive-ops)      hc_uuid="$HC_MAINT_GDRIVE_UUID" ;;
 esac
 case "${usage_type?}" in
     success) curl -fsS -m 10 --retry 5 "https://hc-ping.com/$hc_uuid" && echo "OK: success ping sent" ;;
@@ -223,7 +211,7 @@ logrotate --state "$HOME/.local/share/resticprofile/logrotate.state" \
 description = "Tail profile log"
 usage = '''
 arg "<profile>" help="Log profile" default="dev" {
-  choices "dev" "home" "vault" "copy" "copy-gdrive" "local" "local-check" "b2-check" "gdrive-check"
+  choices "dev" "home" "vault" "copy-b2" "copy-homelab" "local" "local-check"
 }
 '''
 run = '''
@@ -231,11 +219,9 @@ case "${usage_profile?}" in
     dev)          tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-dev.log" ;;
     home)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-home.log" ;;
     vault)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-vault.log" ;;
-    copy)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
-    copy-gdrive)  tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-gdrive.log" ;;
+    copy-b2)      tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
+    copy-homelab) tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-homelab.log" ;;
     local)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log" ;;
     local-check)  tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-check.log" ;;
-    b2-check)     tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-b2-ops-check.log" ;;
-    gdrive-check) tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-gdrive-ops-check.log" ;;
 esac
 '''

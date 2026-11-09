@@ -16,22 +16,22 @@ let
     home.backup = "14h";
     vault.backup = "9h";
     local-to-b2.copy = "13h";
-    local-to-onedrive.copy = "13h";
-    local-to-gdrive.copy = "13h";
+    local-to-homelab.copy = "13h";
     local-ops = {
       forget = "216h";
       check = "768h";
     };
-    b2-ops.check = "768h";
-    onedrive-ops.check = "768h";
-    gdrive-ops.check = "768h";
   };
-  mkMiseCli = import ../../../lib/mkMiseCli.nix {
+  mkMiseCli = myLib.mkMiseCli {
     inherit pkgs;
     inherit (pkgs-unstable) mise;
   };
 
   rpCli = mkMiseCli { name = "rp"; };
+  endpoint.options = {
+    host = mkOption { type = types.str; };
+    port = mkOption { type = types.port; };
+  };
   home = config.home.homeDirectory;
 in
 lib.recursiveUpdate
@@ -62,7 +62,14 @@ lib.recursiveUpdate
         vars = {
           gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
           appState = lib.getExe' config.home.path "app-state";
+          b2Repository = "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main";
+          hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/${cfg.hub.client}/${cfg.hub.repository}";
         };
+      };
+      "~/.config/resticprofile/homelab.env" = {
+        template = ./config/homelab.env.tmpl;
+        sopsFile = ./secrets.yaml;
+        vars.hubClient = cfg.hub.client;
       };
       "~/.config/resticprofile/hc.env" = {
         template = ./config/hc.env.tmpl;
@@ -106,13 +113,17 @@ lib.recursiveUpdate
   })
   {
     options.my.resticprofile = {
-      monitor = mkOption {
-        type = types.submodule {
-          options = {
-            host = mkOption { type = types.str; };
-            port = mkOption { type = types.port; };
-          };
-        };
+      monitor = mkOption { type = types.submodule endpoint; };
+      hub = mkOption {
+        type = types.submodule [
+          endpoint
+          {
+            options = {
+              client = mkOption { type = types.str; };
+              repository = mkOption { type = types.str; };
+            };
+          }
+        ];
       };
       monitoringTargets = mkOption {
         type = types.raw;

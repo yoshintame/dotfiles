@@ -62,6 +62,7 @@ lib.recursiveUpdate
         vars = {
           gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
           appState = lib.getExe' config.home.path "app-state";
+          b2Repository = "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main";
           hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/${cfg.hub.client}/${cfg.hub.repository}";
         };
       };

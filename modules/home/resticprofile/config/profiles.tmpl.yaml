@@ -18,31 +18,20 @@ groups:
   maintenance:
     profiles:
       - local-ops
-  check:
-    profiles:
-      - local-ops
-      - b2-ops
-      - gdrive-ops
-      - onedrive-ops
 
 mixins:
   remote-copy:
     default-vars:
       TARGET: ""
       REPOSITORY: ""
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/$TARGET.env"
     copy:
+      retry-lock: 1h
       initialize: true
       initialize-copy-chunker-params: true
       repository: "$REPOSITORY"
       password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-$TARGET.log"
-
-  remote-ops:
-    default-vars:
-      TARGET: ""
-    check:
-      read-data-subset: "5%"
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-$TARGET-ops-check.log"
 
 profiles:
   default:
@@ -62,7 +51,7 @@ profiles:
           url: "@gatusBackupEndpoint@-$PROFILE_NAME-$PROFILE_COMMAND/external?success=true"
           headers: &gatus-auth
             - name: Authorization
-              value: "Bearer ${GATUS_BACKUP_TOKEN}"
+              value: "Bearer ~{{GATUS_BACKUP_TOKEN}}"
       send-after-fail: &gatus-fail
         - method: POST
           url: "@gatusBackupEndpoint@-$PROFILE_NAME-$PROFILE_COMMAND/external?success=false&error=$ERROR"
@@ -112,33 +101,15 @@ profiles:
   b2:
     inherit: base
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
-    repository: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
+    repository: "@b2Repository@"
     lock: "/tmp/resticprofile-b2.lock"
 
-  # rclone и его `[gdrive]` remote управляются декларативно через
-  # home-manager (programs.rclone в modules/rclone). OAuth-токен лежит
-  # в SOPS (modules/rclone/secrets.yaml). На новой машине после
-  # darwin-rebuild rclone сразу работает — без интерактивного `rclone config`.
-  # `rclone.program`: PATH планового задания — снимок на момент
-  # `rp schedule up`, restic может не найти rclone — указываем явный nix-путь.
-  gdrive:
+  homelab:
     inherit: base
-    repository: "rclone:gdrive:backups/restic/main"
-    lock: "/tmp/resticprofile-gdrive.lock"
-    option:
-      - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone"
-
-  # OneDrive намеренно отсутствует в programs.rclone: Microsoft ротирует
-  # refresh_token при каждом использовании, а home-manager перезаписывает
-  # rclone.conf целиком на каждой активации. Токен поэтому живёт в отдельном
-  # конфиге, которым владеет только rclone, и путь к нему указывается явно.
-  # Обоснование — decision `onedrive-token-outside-nix` в Obsidian vault.
-  onedrive:
-    inherit: base
-    repository: "rclone:onedrive:backups/restic/main"
-    lock: "/tmp/resticprofile-onedrive.lock"
-    option:
-      - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone --config {{ .Env.HOME }}/.config/rclone/onedrive.conf"
+    initialize: false
+    env-file: "{{ .Env.HOME }}/.config/resticprofile/homelab.env"
+    repository: "@hubRepository@"
+    lock: "/tmp/resticprofile-homelab.lock"
 
   quicksave:
     inherit: local
@@ -163,9 +134,9 @@ profiles:
       schedule: "*:15,45"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-dev.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}"
+        - url: "https://hc-ping.com/~{{HC_DEVELOPMENT_BACKUP_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_DEVELOPMENT_BACKUP_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_DEVELOPMENT_BACKUP_UUID}}/fail"
 
   home:
     inherit: local
@@ -238,9 +209,9 @@ profiles:
       schedule: "1,7,13,19:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-home.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_HOME_BACKUP_UUID}"
+        - url: "https://hc-ping.com/~{{HC_HOME_BACKUP_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_HOME_BACKUP_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_HOME_BACKUP_UUID}}/fail"
 
   vault:
     inherit: local
@@ -260,57 +231,26 @@ profiles:
   local-to-b2:
     inherit: local
     lock: "/tmp/resticprofile-local-to-b2.lock"
-    env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
     use:
       - name: remote-copy
         TARGET: b2
-        REPOSITORY: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
+        REPOSITORY: "@b2Repository@"
     copy:
-      schedule: "0,3,6,9,12,15,18,21:00"
+      schedule: "*:00"
       send-after...:
-        - url: "https://hc-ping.com/${HC_COPY_TO_B2_UUID}"
+        - url: "https://hc-ping.com/~{{HC_COPY_TO_B2_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_COPY_TO_B2_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_COPY_TO_B2_UUID}}/fail"
 
-  local-to-gdrive:
+  local-to-homelab:
     inherit: local
-    lock: "/tmp/resticprofile-local-to-gdrive.lock"
+    lock: "/tmp/resticprofile-local-to-homelab.lock"
     use:
       - name: remote-copy
-        TARGET: gdrive
-        REPOSITORY: "rclone:gdrive:backups/restic/main"
+        TARGET: homelab
+        REPOSITORY: "@hubRepository@"
     copy:
-      option:
-        - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone"
-      schedule: "1,4,7,10,13,16,19,22:30"
-      send-after...:
-        - url: "https://hc-ping.com/${HC_COPY_TO_GDRIVE_UUID}"
-      send-after-fail...:
-        - url: "https://hc-ping.com/${HC_COPY_TO_GDRIVE_UUID}/fail"
-
-  # Хуки Healthchecks здесь пока не заведены: чеки onedrive в HC не созданы, а
-  # сам канал оповещений сломан (см. problem `backup-failures-invisible`).
-  # Пустой UUID дал бы 404 на каждый пинг, то есть шум вместо сигнала. Перевести
-  # на mixin `remote-copy`/`remote-ops` вместе с починкой алертинга.
-  local-to-onedrive:
-    inherit: local
-    lock: "/tmp/resticprofile-local-to-onedrive.lock"
-    copy:
-      initialize: true
-      initialize-copy-chunker-params: true
-      repository: "rclone:onedrive:backups/restic/main"
-      password-file: "{{ .Env.HOME }}/.config/resticprofile/repo.key"
-      option:
-        - "rclone.program=/etc/profiles/per-user/yoshintame/bin/rclone --config {{ .Env.HOME }}/.config/rclone/onedrive.conf"
-      schedule: "2,5,8,11,14,17,20,23:00"
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-to-onedrive.log"
-
-  onedrive-ops:
-    inherit: onedrive
-    check:
-      read-data-subset: "5%"
-      schedule: "*-*-01 9:00"
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-onedrive-ops-check.log"
+      schedule: "*:30"
 
   local-ops:
     inherit: local
@@ -322,39 +262,18 @@ profiles:
       prune: true
       host: true
       tag: true
+      retry-lock: 1h
       schedule: "Sun 05:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}/fail"
     check:
+      retry-lock: 1h
       schedule: "*-*-01 6:00"
       schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-local-ops-check.log"
       send-after...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}"
       send-after-fail...:
-        - url: "https://hc-ping.com/${HC_MAINT_LOCAL_UUID}/fail"
-
-  b2-ops:
-    inherit: b2
-    use:
-      - name: remote-ops
-        TARGET: b2
-    check:
-      schedule: "*-*-01 7:00"
-      send-after...:
-        - url: "https://hc-ping.com/${HC_MAINT_B2_UUID}"
-      send-after-fail...:
-        - url: "https://hc-ping.com/${HC_MAINT_B2_UUID}/fail"
-
-  gdrive-ops:
-    inherit: gdrive
-    check:
-      read-data-subset: "5%"
-      schedule: "*-*-01 10:00"
-      schedule-log: "{{ .Env.HOME }}/.local/share/resticprofile/logs/resticprofile-gdrive-ops-check.log"
-      send-after...:
-        - url: "https://hc-ping.com/${HC_MAINT_GDRIVE_UUID}"
-      send-after-fail...:
-        - url: "https://hc-ping.com/${HC_MAINT_GDRIVE_UUID}/fail"
+        - url: "https://hc-ping.com/~{{HC_MAINT_LOCAL_UUID}}/fail"

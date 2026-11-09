@@ -97,6 +97,7 @@ in
 
     users.${hostFacts.username} = {
       my.resticprofile.monitor = edgeFacts.monitor;
+      my.resticprofile.hub = homelabFacts.resticHub;
       my.mac-metrics = {
         host = "lasthaze-mbp";
         inherit (homelabFacts) prometheus;

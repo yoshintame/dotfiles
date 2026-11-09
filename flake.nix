@@ -52,7 +52,7 @@
     };
 
     nix-stencil = {
-      url = "github:yoshintame/nix-stencil/v0.3.0";
+      url = "github:yoshintame/nix-stencil/v0.4.0";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.sops-nix.follows = "sops-nix";
       inputs.home-manager.follows = "home-manager";
@@ -85,6 +85,10 @@
     }:
     let
       myLib = import ./lib { inherit (inputs.nixpkgs) lib; };
+      flakeArgs = {
+        inherit inputs;
+        specialArgs = { inherit myLib; };
+      };
       edgeFacts = import ./hosts/lasthaze-edge/facts.nix;
       homelabFacts = import ./hosts/lasthaze-homelab/facts.nix;
       homeManagerModule = {
@@ -120,7 +124,7 @@
         ];
       };
     in
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    flake-parts.lib.mkFlake flakeArgs {
       imports = [
         easy-hosts.flakeModule
         treefmt-nix.flakeModule

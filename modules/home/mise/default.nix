@@ -7,7 +7,7 @@
   ...
 }:
 let
-  mkMiseCli = import ../../../lib/mkMiseCli.nix {
+  mkMiseCli = myLib.mkMiseCli {
     inherit pkgs;
     inherit (pkgs-unstable) mise;
   };

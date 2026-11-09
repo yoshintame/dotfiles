@@ -62,7 +62,7 @@ lib.recursiveUpdate
         vars = {
           gatusBackupEndpoint = "http://${cfg.monitor.host}:${toString cfg.monitor.port}/api/v1/endpoints/${heartbeatGroup}_${heartbeatPrefix}";
           appState = lib.getExe' config.home.path "app-state";
-          hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/${cfg.hub.client}/mac";
+          hubRepository = "rest:http://${cfg.hub.host}:${toString cfg.hub.port}/${cfg.hub.client}/${cfg.hub.repository}";
         };
       };
       "~/.config/resticprofile/homelab.env" = {
@@ -116,7 +116,12 @@ lib.recursiveUpdate
       hub = mkOption {
         type = types.submodule [
           endpoint
-          { options.client = mkOption { type = types.str; }; }
+          {
+            options = {
+              client = mkOption { type = types.str; };
+              repository = mkOption { type = types.str; };
+            };
+          }
         ];
       };
       monitoringTargets = mkOption {

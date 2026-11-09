@@ -70,7 +70,7 @@ in
   homelab.infra.resticHub = {
     enable = true;
     dataDir = "/srv/restic";
-    inherit (homelabFacts.resticHub) port client;
+    inherit (homelabFacts.resticHub) port client repository;
   };
   services.prometheus.port = homelabFacts.prometheus.port;
 

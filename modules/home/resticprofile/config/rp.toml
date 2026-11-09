@@ -211,7 +211,7 @@ logrotate --state "$HOME/.local/share/resticprofile/logrotate.state" \
 description = "Tail profile log"
 usage = '''
 arg "<profile>" help="Log profile" default="dev" {
-  choices "dev" "home" "vault" "copy" "copy-homelab" "local" "local-check"
+  choices "dev" "home" "vault" "copy-b2" "copy-homelab" "local" "local-check"
 }
 '''
 run = '''
@@ -219,7 +219,7 @@ case "${usage_profile?}" in
     dev)          tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-dev.log" ;;
     home)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-home.log" ;;
     vault)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-vault.log" ;;
-    copy)         tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
+    copy-b2)      tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-b2.log" ;;
     copy-homelab) tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-to-homelab.log" ;;
     local)        tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-forget.log" ;;
     local-check)  tail -f "$HOME/.local/share/resticprofile/logs/resticprofile-local-ops-check.log" ;;

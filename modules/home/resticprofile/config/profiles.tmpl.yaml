@@ -101,7 +101,7 @@ profiles:
   b2:
     inherit: base
     env-file: "{{ .Env.HOME }}/.config/resticprofile/b2.env"
-    repository: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
+    repository: "@b2Repository@"
     lock: "/tmp/resticprofile-b2.lock"
 
   homelab:
@@ -234,7 +234,7 @@ profiles:
     use:
       - name: remote-copy
         TARGET: b2
-        REPOSITORY: "s3:s3.eu-central-003.backblazeb2.com/yoshintame/restic/main"
+        REPOSITORY: "@b2Repository@"
     copy:
       schedule: "*:00"
       send-after...:

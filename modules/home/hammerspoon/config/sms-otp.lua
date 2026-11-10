@@ -2,24 +2,19 @@ local otp = require("otp-extract")
 
 local M = {}
 
-local MESSAGES_DIR = (os.getenv("HOME") or "") .. "/Library/Messages/"
-local DB_PATH = MESSAGES_DIR .. "chat.db"
+local DB_PATH = (os.getenv("HOME") or "") .. "/Library/Messages/chat.db"
 local APPLE_EPOCH = 978307200
 local MAX_AGE = 300
-local THROTTLE = 0.3
-local BUSY_TIMEOUT_MS = 1000
-local RETRY_DELAY = 2
-local MAX_RETRIES = 3
+local POLL_INTERVAL = 1.5
+local BUSY_TIMEOUT_MS = 200
 local CLEAR_AFTER = 90
 local CONCEALED = "org.nspasteboard.ConcealedType"
 local TRANSIENT = "org.nspasteboard.TransientType"
 
 local lastRowId
 local startedAt
-local retries = 0
 local warned = {}
-local watcher
-local scanTimer
+local poller
 local clearTimer
 
 local function warn(kind, message)
@@ -79,16 +74,8 @@ local function deliver(code, sender)
     }):send()
 end
 
-local schedule
-
-local function retry()
-    if retries >= MAX_RETRIES then return end
-    retries = retries + 1
-    schedule(RETRY_DELAY)
-end
-
 local function scan()
-    if not lastRowId and not initCursor() then return retry() end
+    if not lastRowId and not initCursor() then return end
     local rows, err = query(string.format([[
         SELECT m.ROWID AS id, m.date AS date, m.text AS text,
                m.attributedBody AS body, h.id AS sender
@@ -100,9 +87,8 @@ local function scan()
     ]], lastRowId))
     if not rows then
         warn("read", "Не читается chat.db: " .. tostring(err))
-        return retry()
+        return
     end
-    retries = 0
     warned = {}
     local freshSince = appleNanoseconds(os.time() - MAX_AGE)
     for _, row in ipairs(rows) do
@@ -116,24 +102,10 @@ local function scan()
     end
 end
 
-schedule = function(delay)
-    if scanTimer and scanTimer:running() then return end
-    scanTimer = hs.timer.doAfter(delay, scan)
-end
-
-local function touchesChatDb(paths)
-    for _, path in ipairs(paths) do
-        if path:find("/chat%.db[^/]*$") then return true end
-    end
-    return false
-end
-
 function M.start()
     startedAt = os.time()
     initCursor()
-    watcher = hs.pathwatcher.new(MESSAGES_DIR, function(paths)
-        if touchesChatDb(paths) then schedule(THROTTLE) end
-    end):start()
+    poller = hs.timer.doEvery(POLL_INTERVAL, scan)
     return M
 end
 

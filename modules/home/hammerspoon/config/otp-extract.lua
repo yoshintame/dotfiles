@@ -3,6 +3,7 @@ local M = {}
 local MIN_DIGITS, MAX_DIGITS = 4, 8
 local MAX_GAP = 12
 local FALLBACK_DIGITS = 6
+local TYPICAL_MAX_DIGITS = 6
 
 local KEYWORDS = {
     code = true, codes = true, otp = true, passcode = true, password = true,
@@ -13,7 +14,7 @@ local THAI_KEYWORD = "รหัส"
 local THAI_NOT_KEYWORDS = { "รหัสลูกค้า", "รหัสอ้างอิง" }
 local NOT_OTP_QUALIFIERS = {
     promo = true, promotional = true, coupon = true, discount = true, voucher = true, referral = true,
-    customer = true, client = true, ref = true, reference = true,
+    customer = true, client = true,
 }
 
 local UNIT_WORDS = {
@@ -207,7 +208,7 @@ function M.code(text)
     for i, token in ipairs(tokens) do
         if token.kind == "word" and isKeyword(tokens, i) then keywords[#keywords + 1] = i end
     end
-    local best, bestGap, fallback
+    local best, bestRank, fallback
     local k = 1
     while k <= #tokens do
         if tokens[k].kind == "num" then
@@ -219,10 +220,12 @@ function M.code(text)
                 if not fallback and #digits == FALLBACK_DIGITS and not parenthesized(tokens, k, j) then
                     fallback = digits
                 end
+                local preference = #digits <= TYPICAL_MAX_DIGITS and 0 or 1
                 for _, index in ipairs(keywords) do
                     local distance = index < k and gap(tokens, index, k) or gap(tokens, j, index)
-                    if distance <= MAX_GAP and (not bestGap or distance < bestGap) then
-                        best, bestGap = digits, distance
+                    local rank = preference * (MAX_GAP + 1) + distance
+                    if distance <= MAX_GAP and (not bestRank or rank < bestRank) then
+                        best, bestRank = digits, rank
                     end
                 end
             end

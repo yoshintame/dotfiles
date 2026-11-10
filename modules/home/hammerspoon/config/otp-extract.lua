@@ -2,10 +2,12 @@ local M = {}
 
 local MIN_DIGITS, MAX_DIGITS = 4, 8
 local MAX_GAP = 12
+local FALLBACK_DIGITS = 6
+local TYPICAL_MAX_DIGITS = 6
 
 local KEYWORDS = {
     code = true, codes = true, otp = true, passcode = true, password = true,
-    pin = true, verification = true, cod = true, ["пин"] = true,
+    pin = true, verification = true, verify = true, cod = true, ["пин"] = true,
 }
 local KEYWORD_PREFIXES = { "код", "парол", "kod", "parol" }
 local THAI_KEYWORD = "รหัส"
@@ -14,13 +16,6 @@ local NOT_OTP_QUALIFIERS = {
     promo = true, promotional = true, coupon = true, discount = true, voucher = true, referral = true,
     customer = true, client = true,
 }
-
-local NOT_CODE_BEFORE = {
-    ref = true, reference = true, order = true, zakaz = true, call = true, tel = true, hotline = true,
-    card = true, ["заказ"] = true, ["звоните"] = true, ["тел"] = true, ["карта"] = true, ["карты"] = true,
-    ["счет"] = true, ["счёт"] = true, ["โทร"] = true,
-}
-local REF_WORDS = { ref = true, reference = true }
 
 local UNIT_WORDS = {
     baht = true, thb = true, rub = true, usd = true, eur = true, gb = true, mb = true, points = true,
@@ -192,10 +187,9 @@ local function followedByUnit(tokens, j)
     return UNIT_WORDS[token.lower] == true or startsWithAny(token.lower, UNIT_PREFIXES)
 end
 
-local function precededByLabel(tokens, k)
-    local words = nearbyWords(tokens, k - 1, -1, 2)
-    if words[1] and NOT_CODE_BEFORE[words[1]] then return true end
-    return words[2] ~= nil and REF_WORDS[words[2]] == true
+local function parenthesized(tokens, k, j)
+    local before, after = tokens[k - 1], tokens[j + 1]
+    return before ~= nil and after ~= nil and before.raw == "(" and after.raw == ")"
 end
 
 local function gap(tokens, from, to)
@@ -214,8 +208,7 @@ function M.code(text)
     for i, token in ipairs(tokens) do
         if token.kind == "word" and isKeyword(tokens, i) then keywords[#keywords + 1] = i end
     end
-    if #keywords == 0 then return nil end
-    local best, bestGap
+    local best, bestRank, fallback
     local k = 1
     while k <= #tokens do
         if tokens[k].kind == "num" then
@@ -223,12 +216,16 @@ function M.code(text)
             if digits
                 and not attachedBefore(tokens, k)
                 and not attachedAfter(tokens, j)
-                and not followedByUnit(tokens, j)
-                and not precededByLabel(tokens, k) then
+                and not followedByUnit(tokens, j) then
+                if not fallback and #digits == FALLBACK_DIGITS and not parenthesized(tokens, k, j) then
+                    fallback = digits
+                end
+                local preference = #digits <= TYPICAL_MAX_DIGITS and 0 or 1
                 for _, index in ipairs(keywords) do
                     local distance = index < k and gap(tokens, index, k) or gap(tokens, j, index)
-                    if distance <= MAX_GAP and (not bestGap or distance < bestGap) then
-                        best, bestGap = digits, distance
+                    local rank = preference * (MAX_GAP + 1) + distance
+                    if distance <= MAX_GAP and (not bestRank or rank < bestRank) then
+                        best, bestRank = digits, rank
                     end
                 end
             end
@@ -237,7 +234,7 @@ function M.code(text)
             k = k + 1
         end
     end
-    return best
+    return best or fallback
 end
 
 local TYPEDSTREAM_STRING = "NSString"

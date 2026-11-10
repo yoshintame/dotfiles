@@ -1,0 +1,27 @@
+{
+  "digits": {
+    "min": 4,
+    "max": 8,
+    "typicalMax": 6,
+    "fallback": 6,
+    "maxGap": 12
+  },
+  "keywords": {
+    "exact": ["code", "codes", "cod", "otp", "passcode", "password", "pin", "verification", "verify", "пин"],
+    "prefixes": ["код", "парол", "kod", "parol"],
+    "substrings": {
+      "รหัส": ["รหัสลูกค้า", "รหัสอ้างอิง"]
+    }
+  },
+  "notOtpQualifiers": ["promo", "promotional", "coupon", "discount", "voucher", "referral", "customer", "client"],
+  "units": {
+    "words": ["baht", "thb", "rub", "usd", "eur", "gb", "mb", "points", "บาท", "บ", "руб", "р", "гб", "мб"],
+    "prefixes": ["бонус", "балл"],
+    "signs": ["%"]
+  },
+  "currencySigns": ["฿", "₽", "$", "€"],
+  "glue": {
+    "before": ["*", "+", "#", "/", "&", "?", "_", "@", "№"],
+    "after": ["*", "/", "%", "_", "&", "=", "@"]
+  }
+}

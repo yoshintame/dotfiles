@@ -1,14 +1,19 @@
 local otp = require("otp-extract")
+local json = require("dkjson")
+
+local rulesFile = assert(io.open("rules.json"))
+local code = otp.new(json.decode(rulesFile:read("a")))
+rulesFile:close()
 
 local function cases(list)
     for _, case in ipairs(list) do
         it(case[1], function()
-            assert.are.equal(case[2], otp.code(case[1]))
+            assert.are.equal(case[2], code(case[1]))
         end)
     end
 end
 
-describe("otp.code finds the code", function()
+describe("code finds the code", function()
     cases({
         { "Your Apple Account code is: 482913. Do not share it with anyone.", "482913" },
         { "482913 is your Link verification code.", "482913" },
@@ -44,7 +49,7 @@ describe("otp.code finds the code", function()
     })
 end)
 
-describe("otp.code falls back to a lone six-digit number", function()
+describe("code falls back to a lone six-digit number", function()
     cases({
         { "Use 482 913 to verify your Instagram account.", "482913" },
         { "Please enter 482913 into LINE within the next 30 mins.", "482913" },
@@ -54,7 +59,7 @@ describe("otp.code falls back to a lone six-digit number", function()
     })
 end)
 
-describe("otp.code ignores numbers that are not codes", function()
+describe("code ignores numbers that are not codes", function()
     cases({
         { "Your password was changed. If this wasn't you, call 02 1234 5678", nil },
         { "Пароль изменён. Если это не вы, звоните 8 800 2000 900", nil },
@@ -70,7 +75,7 @@ describe("otp.code ignores numbers that are not codes", function()
         { "", nil },
     })
     it("returns nil for nil", function()
-        assert.is_nil(otp.code(nil))
+        assert.is_nil(code(nil))
     end)
 end)
 

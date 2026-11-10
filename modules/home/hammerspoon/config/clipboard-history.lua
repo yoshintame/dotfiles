@@ -6,7 +6,20 @@ local POLL = 0.2
 local history = {}
 local lastChange = hs.pasteboard.changeCount()
 
+local PRIVATE_TYPES = {
+    ["org.nspasteboard.ConcealedType"] = true,
+    ["org.nspasteboard.TransientType"] = true,
+}
+
+local function isPrivate()
+    for _, uti in ipairs(hs.pasteboard.contentTypes() or {}) do
+        if PRIVATE_TYPES[uti] then return true end
+    end
+    return false
+end
+
 local function snapshot()
+    if isPrivate() then return nil end
     local img = hs.pasteboard.readImage()
     if img then
         return { kind = "image", data = img }

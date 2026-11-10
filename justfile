@@ -8,7 +8,7 @@ fmt:
     nix fmt
 
 test:
-    busted --lpath='modules/home/hammerspoon/config/?.lua' modules/home/hammerspoon/tests
+    cd modules/home/hammerspoon/config/Spoons/SmsOtp.spoon && busted
 
 rebuild:
     mise run dot:rebuild

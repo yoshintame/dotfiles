@@ -41,7 +41,18 @@ local _hs_notify_object = {}
 ---@field AppLauncher AppLauncher
 ---@field RecursiveBinder RecursiveBinder
 ---@field LeaderFlow LeaderFlow
+---@field SmsOtp SmsOtp
 spoon = {}
+
+---@class SmsOtp
+---@field dbPath string
+---@field pollInterval number
+---@field maxAge number
+---@field clearAfter number
+---@field busyTimeoutMs number
+---@field start fun(self: SmsOtp): SmsOtp
+---@field stop fun(self: SmsOtp): SmsOtp
+local SmsOtp = {}
 
 ---@class ReloadConfiguration
 ---@field watch_paths string[]

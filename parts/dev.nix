@@ -75,24 +75,15 @@ in
               pkgs.runCommandLocal "homelab-channel" { } "touch $out"
             else
               throw "lasthaze-homelab checks its modules against nixpkgs-prod ${homelabChannel}, the hosts run ${hostChannel}: move nixpkgs-prod in lasthaze-homelab/flake.nix to ${hostChannel}";
-          hammerspoon-lua =
-            let
-              root = ../modules/home/hammerspoon;
-            in
-            pkgs.runCommandLocal "hammerspoon-lua-tests"
+          sms-otp-spoon =
+            pkgs.runCommandLocal "sms-otp-spoon-tests"
               {
                 nativeBuildInputs = [ pkgs.lua54Packages.busted ];
-                src = lib.fileset.toSource {
-                  inherit root;
-                  fileset = lib.fileset.unions [
-                    (root + "/config/otp-extract.lua")
-                    (root + "/tests")
-                  ];
-                };
+                src = ../modules/home/hammerspoon/config/Spoons/SmsOtp.spoon;
               }
               ''
                 cd $src
-                busted --lpath='config/?.lua' --output=TAP tests
+                busted --output=TAP
                 touch $out
               '';
           image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;

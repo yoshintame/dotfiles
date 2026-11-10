@@ -7,6 +7,9 @@ check:
 fmt:
     nix fmt
 
+test:
+    busted --lpath='modules/home/hammerspoon/config/?.lua' modules/home/hammerspoon/tests
+
 rebuild:
     mise run dot:rebuild
 

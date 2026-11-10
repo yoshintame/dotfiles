@@ -13,16 +13,8 @@ local THAI_KEYWORD = "รหัส"
 local THAI_NOT_KEYWORDS = { "รหัสลูกค้า", "รหัสอ้างอิง" }
 local NOT_OTP_QUALIFIERS = {
     promo = true, promotional = true, coupon = true, discount = true, voucher = true, referral = true,
-    customer = true, client = true,
+    customer = true, client = true, ref = true, reference = true,
 }
-
-local NOT_CODE_BEFORE = {
-    ref = true, reference = true, order = true, zakaz = true, call = true, tel = true, hotline = true,
-    card = true, ["заказ"] = true, ["заказу"] = true, ["заказа"] = true, ["опс"] = true,
-    ["звоните"] = true, ["позвоните"] = true, ["тел"] = true, ["карта"] = true, ["карты"] = true,
-    ["счет"] = true, ["счёт"] = true, ["โทร"] = true,
-}
-local REF_WORDS = { ref = true, reference = true }
 
 local UNIT_WORDS = {
     baht = true, thb = true, rub = true, usd = true, eur = true, gb = true, mb = true, points = true,
@@ -194,12 +186,6 @@ local function followedByUnit(tokens, j)
     return UNIT_WORDS[token.lower] == true or startsWithAny(token.lower, UNIT_PREFIXES)
 end
 
-local function precededByLabel(tokens, k)
-    local words = nearbyWords(tokens, k - 1, -1, 2)
-    if words[1] and NOT_CODE_BEFORE[words[1]] then return true end
-    return words[2] ~= nil and REF_WORDS[words[2]] == true
-end
-
 local function parenthesized(tokens, k, j)
     local before, after = tokens[k - 1], tokens[j + 1]
     return before ~= nil and after ~= nil and before.raw == "(" and after.raw == ")"
@@ -229,8 +215,7 @@ function M.code(text)
             if digits
                 and not attachedBefore(tokens, k)
                 and not attachedAfter(tokens, j)
-                and not followedByUnit(tokens, j)
-                and not precededByLabel(tokens, k) then
+                and not followedByUnit(tokens, j) then
                 if not fallback and #digits == FALLBACK_DIGITS and not parenthesized(tokens, k, j) then
                     fallback = digits
                 end

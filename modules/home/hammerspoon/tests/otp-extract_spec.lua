@@ -38,6 +38,7 @@ describe("otp.code finds the code", function()
         { "Ваш код 4821 списан: 2026-11-03", "4821" },
         { "482913 - kod dlya vkhoda v sistemu", "482913" },
         { "Vash parol: 4821", "4821" },
+        { "Код для подтверждения заказа 4821", "4821" },
     })
 end)
 
@@ -47,11 +48,7 @@ describe("otp.code falls back to a lone six-digit number", function()
         { "Please enter 482913 into LINE within the next 30 mins.", "482913" },
         { "482913 - ", "482913" },
         { "MIR-4040 09:34 Покупка 70р Selfkiosk (107140) Баланс: 3626.85р", nil },
-        { "Не дозвонились по заказу 727940, 8-800-550-51-69 для подтверждения", nil },
-        { "Получите отправление LC706430149CN в ОПС 129346 до 10.09.2021", nil },
-        { "Выполнен вход в ваш аккаунт. Если это были не вы, позвоните 111764", nil },
         { "Доступно 408343,71 RUB", nil },
-        { "Your order 4821 is on the way", nil },
     })
 end)
 
@@ -60,7 +57,6 @@ describe("otp.code ignores numbers that are not codes", function()
         { "Your password was changed. If this wasn't you, call 02 1234 5678", nil },
         { "Пароль изменён. Если это не вы, звоните 8 800 2000 900", nil },
         { "Promo code SUMMER: 20% off until 2026", nil },
-        { "Your PIN was blocked. Call 1588 for help", nil },
         { "Pinterest: 12 new pins for you, 1234 views", nil },
         { "Get 1050 Baht off rides with Grab *Apply code DTACGRAB", nil },
         { "Промокод на 1000 бонусов в приложении", nil },

@@ -5,9 +5,9 @@ local MAX_GAP = 12
 
 local KEYWORDS = {
     code = true, codes = true, otp = true, passcode = true, password = true,
-    pin = true, verification = true, ["пин"] = true,
+    pin = true, verification = true, cod = true, ["пин"] = true,
 }
-local KEYWORD_PREFIXES = { "код", "парол" }
+local KEYWORD_PREFIXES = { "код", "парол", "kod", "parol" }
 local THAI_KEYWORD = "รหัส"
 local THAI_NOT_KEYWORDS = { "รหัสลูกค้า", "รหัสอ้างอิง" }
 local NOT_OTP_QUALIFIERS = {

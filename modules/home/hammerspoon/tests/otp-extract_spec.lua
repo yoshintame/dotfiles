@@ -36,6 +36,8 @@ describe("otp.code finds the code", function()
         { "Заказ 795876, 200 руб. Код получения: 0421", "0421" },
         { "Prefer code 482193? No.", "482193" },
         { "Ваш код 4821 списан: 2026-11-03", "4821" },
+        { "482913 - kod dlya vkhoda v sistemu", "482913" },
+        { "Vash parol: 4821", "4821" },
     })
 end)
 

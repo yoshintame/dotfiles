@@ -271,6 +271,7 @@ hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 require("raycast-nav").start()
 require("onepassword-focus-guard").start()
 require("afk-indicator").start()
+require("sms-otp").start()
 
 hs.hotkey.bind({"cmd", "shift"}, "C", function()
     local app = hs.application.frontmostApplication()

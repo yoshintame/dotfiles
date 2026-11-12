@@ -13,6 +13,7 @@ Consequence, and the reason this script exists: a fresh host needs one
 interactive browser authorization. Idempotent — exits early if the remote works.
 """
 
+import argparse
 import base64
 import hashlib
 import http.server
@@ -31,20 +32,35 @@ import urllib.request
 # client, so it has no usable client secret — PKCE authenticates the exchange.
 CLIENT_ID = "28321fbb-d634-4284-a108-0a46f4c6af0d"
 
-CONFIG = os.path.expanduser("~/.config/rclone/onedrive.conf")
-RCLONE = "/etc/profiles/per-user/yoshintame/bin/rclone"
+HOST = "root@lasthaze-homelab"
+BOX_CONFIG = "/var/lib/restic-hub-jobs/rclone-onedrive.conf"
+BOX_RCLONE_UNIT = "restic-hub-onedrive-copy.service"
+LOCAL_RCLONE = "/etc/profiles/per-user/yoshintame/bin/rclone"
 REDIRECT = "http://localhost:53682/"
 PORT = 53682
 SCOPE = "Files.ReadWrite.All offline_access User.Read"
 AUTHORITY = "https://login.microsoftonline.com/common/oauth2/v2.0"
 
 
-def already_working() -> bool:
-    if not os.path.exists(CONFIG):
+def on_box(script: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["tailscale", "ssh", HOST, "bash", "-s"],
+                          input=script, capture_output=True, text=True)
+
+
+def about(target: str | None) -> subprocess.CompletedProcess:
+    if target:
+        return subprocess.run([LOCAL_RCLONE, "--config", target, "about", "onedrive:"],
+                              capture_output=True, text=True)
+    return on_box(
+        f"test -f {BOX_CONFIG} || exit 1\n"
+        f"export $(systemctl show -p Environment --value {BOX_RCLONE_UNIT} | tr ' ' '\\n' | grep '^PATH=')\n"
+        f"rclone --config {BOX_CONFIG} about onedrive:\n")
+
+
+def already_working(target: str | None) -> bool:
+    if target and not os.path.exists(target):
         return False
-    r = subprocess.run([RCLONE, "--config", CONFIG, "about", "onedrive:"],
-                       capture_output=True, text=True)
-    return r.returncode == 0
+    return about(target).returncode == 0
 
 
 def authorize() -> dict:
@@ -112,7 +128,7 @@ def authorize() -> dict:
         sys.exit(f"token exchange failed: {e.read().decode()[:500]}")
 
 
-def write_config(token: dict) -> None:
+def write_config(token: dict, target: str | None) -> None:
     import datetime
     expiry = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
         seconds=int(token.get("expires_in", 3600)))).isoformat()
@@ -127,25 +143,44 @@ def write_config(token: dict) -> None:
         "https://graph.microsoft.com/v1.0/me/drive",
         headers={"Authorization": "Bearer " + token["access_token"]}), timeout=30).read())
 
-    os.makedirs(os.path.dirname(CONFIG), exist_ok=True)
-    with open(CONFIG, "w") as f:
-        f.write("[onedrive]\n")
-        f.write("type = onedrive\n")
-        f.write(f"client_id = {CLIENT_ID}\n")
-        f.write(f"drive_id = {drive['id']}\n")
-        f.write(f"drive_type = {drive.get('driveType', 'personal')}\n")
-        f.write(f"token = {blob}\n")
-    os.chmod(CONFIG, 0o600)
-    print(f"wrote {CONFIG}")
+    conf = (
+        "[onedrive]\n"
+        "type = onedrive\n"
+        f"client_id = {CLIENT_ID}\n"
+        f"drive_id = {drive['id']}\n"
+        f"drive_type = {drive.get('driveType', 'personal')}\n"
+        f"token = {blob}\n"
+    )
+
+    if target:
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, "w") as f:
+            f.write(conf)
+        os.chmod(target, 0o600)
+        print(f"wrote {target}")
+        return
+
+    r = on_box(
+        f"install -d -m 0700 {os.path.dirname(BOX_CONFIG)}\n"
+        f"install -m 0600 /dev/stdin {BOX_CONFIG} <<'RCLONE_CONF'\n{conf}RCLONE_CONF\n")
+    if r.returncode != 0:
+        sys.exit(f"install on {HOST} failed:\n{r.stderr}")
+    print(f"wrote {HOST}:{BOX_CONFIG}")
 
 
 def main() -> None:
-    if already_working():
-        print(f"{CONFIG} already authorized and reachable — nothing to do.")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--local", metavar="PATH",
+                        help=f"write the config to PATH on this machine instead of {HOST}:{BOX_CONFIG}")
+    local = parser.parse_args().local
+    target = os.path.abspath(os.path.expanduser(local)) if local else None
+    where = target or f"{HOST}:{BOX_CONFIG}"
+    if already_working(target):
+        print(f"{where} already authorized and reachable — nothing to do.")
         return
-    write_config(authorize())
-    r = subprocess.run([RCLONE, "--config", CONFIG, "about", "onedrive:"],
-                       capture_output=True, text=True)
+    write_config(authorize(), target)
+    r = about(target)
     if r.returncode != 0:
         sys.exit(f"remote still unreachable:\n{r.stderr}")
     print(r.stdout)

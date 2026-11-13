@@ -173,10 +173,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--local", metavar="PATH",
                         help=f"write the config to PATH on this machine instead of {HOST}:{BOX_CONFIG}")
-    local = parser.parse_args().local
+    parser.add_argument("--force", action="store_true",
+                        help="authorize again even if the current token still lists the drive")
+    args = parser.parse_args()
+    local = args.local
     target = os.path.abspath(os.path.expanduser(local)) if local else None
     where = target or f"{HOST}:{BOX_CONFIG}"
-    if already_working(target):
+    if not args.force and already_working(target):
         print(f"{where} already authorized and reachable — nothing to do.")
         return
     write_config(authorize(), target)

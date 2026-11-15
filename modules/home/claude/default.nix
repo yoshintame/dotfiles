@@ -30,6 +30,7 @@ myLib.mkModule config "claude" {
   nixLink.links = {
     "~/.claude/settings.json" = "modules/home/claude/config/settings.json";
     "~/.claude/CLAUDE.md" = "modules/home/agents-shared/config/AGENTS.md";
+    "~/.claude/agents" = "modules/home/claude/config/agents";
     "~/Development/CLAUDE.md" = "modules/home/claude/config/dev/CLAUDE.md";
     "~/.local/share/worktrees/CLAUDE.md" = "modules/home/claude/config/dev/CLAUDE.md";
     "~/.paseo/worktrees/CLAUDE.md" = "modules/home/claude/config/dev/CLAUDE.md";

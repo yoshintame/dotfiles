@@ -41,6 +41,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta, timezone
 from time import sleep, time as _now
 
 CLIENT_ID = "ohXpoqrZYub1kg"
@@ -53,7 +54,87 @@ TOKEN_CACHE = os.path.join(
     "search-reddit", "token.json",
 )
 TIMEOUT = 15
+ARCTIC_TIMEOUT = 30
+ARCTIC_UA = "search-reddit/1.1 (personal research CLI)"
+MAX_RETRY_WAIT = 10
 _ATOM = {"a": "http://www.w3.org/2005/Atom"}
+_TIME_RANGES = {
+    "hour": timedelta(hours=1), "day": timedelta(days=1), "week": timedelta(weeks=1),
+    "month": timedelta(days=31), "year": timedelta(days=366),
+}
+
+
+class Refused(Exception):
+    def __init__(self, code, why, retry_after=None, edge_block=False):
+        super().__init__(why)
+        self.code = code
+        self.retry_after = retry_after
+        self.edge_block = edge_block
+
+
+class ChannelError(Exception):
+    def __init__(self, op, failures, hint=None):
+        super().__init__(op)
+        self.op = op
+        self.failures = failures
+        self.hint = hint
+
+    def render(self):
+        lines = [f"search-reddit {self.op}: every stage failed"]
+        lines += [f"  {stage}: {why}" for stage, why in self.failures]
+        if self.hint:
+            lines.append(self.hint)
+        return "\n".join(lines)
+
+
+_STAGE_ERRORS = (Refused, OSError, RuntimeError, ValueError, KeyError, IndexError, ET.ParseError)
+
+
+def _seconds(value):
+    try:
+        return max(0, int(float(value)))
+    except (TypeError, ValueError):
+        return None
+
+
+def _refusal(e):
+    try:
+        body = e.read(1 << 20).decode("utf-8", "replace")
+    except Exception:
+        body = ""
+    headers = e.headers or {}
+    retry_after = _seconds(headers.get("Retry-After")) or _seconds(headers.get("x-ratelimit-reset"))
+    if "blocked by network security" in body:
+        return Refused(e.code, f"HTTP {e.code} edge block: Reddit refuses this network "
+                               f"(\"blocked by network security\")", edge_block=True)
+    remaining = _seconds(headers.get("x-ratelimit-remaining"))
+    if e.code == 429 or remaining == 0:
+        wait = f", resets in {retry_after}s" if retry_after else ""
+        return Refused(e.code, f"HTTP {e.code} rate limited{wait}", retry_after)
+    m = re.search(r'"error"\s*:\s*"([^"]+)"', body)
+    return Refused(e.code, f"HTTP {e.code} {m.group(1) if m else e.reason}", retry_after)
+
+
+def _open(req, timeout=TIMEOUT):
+    for attempt in (0, 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.headers, r.read()
+        except urllib.error.HTTPError as e:
+            refused = _refusal(e)
+        if (attempt == 0 and refused.code == 429 and refused.retry_after is not None
+                and refused.retry_after <= MAX_RETRY_WAIT):
+            sleep(refused.retry_after + 1)
+            continue
+        raise refused
+
+
+def _describe(exc):
+    if isinstance(exc, Refused):
+        return str(exc)
+    if isinstance(exc, urllib.error.URLError):
+        return f"network error: {exc.reason}"
+    return f"{type(exc).__name__}: {exc}"
 
 
 def _user_agent():
@@ -76,11 +157,14 @@ def _fetch_token():
         "User-Agent": _user_agent(),
         "Content-Type": "application/x-www-form-urlencoded",
     })
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        payload = json.loads(r.read())
+    try:
+        _, raw = _open(req)
+    except Refused as e:
+        raise Refused(e.code, f"token request: {e}", e.retry_after, e.edge_block) from None
+    payload = json.loads(raw)
     token = payload.get("access_token")
     if not token:
-        raise RuntimeError(f"no access_token in response: {payload}")
+        raise RuntimeError(f"token request: no access_token, got keys {sorted(payload)}")
     expires_at = _now() + payload.get("expires_in", 86400)
     try:
         os.makedirs(os.path.dirname(TOKEN_CACHE), exist_ok=True)
@@ -113,14 +197,9 @@ def _oauth_get(url, _state={}, _retry=True):
         "User-Agent": _state.setdefault("ua", _user_agent()),
     })
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-            ct = r.headers.get("Content-Type", "")
-            raw = r.read()
-        if "json" not in ct:
-            raise RuntimeError("non-JSON response (edge block)")
-        return json.loads(raw)
-    except urllib.error.HTTPError as e:
-        if e.code in (401, 403) and _retry:
+        headers, raw = _open(req)
+    except Refused as e:
+        if e.code in (401, 403) and not e.edge_block and _retry:
             _state.pop("token", None)
             try:
                 os.remove(TOKEN_CACHE)
@@ -128,6 +207,9 @@ def _oauth_get(url, _state={}, _retry=True):
                 pass
             return _oauth_get(url, _state, _retry=False)
         raise
+    if "json" not in headers.get("Content-Type", ""):
+        raise RuntimeError("non-JSON response (edge block)")
+    return json.loads(raw)
 
 
 def _norm_sub(sub):
@@ -179,10 +261,8 @@ def _search_oauth(query, sub, sort, time_range, limit, strict):
 
 def _json_get(url):
     req = urllib.request.Request(url, headers={"User-Agent": _user_agent()})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        ct = r.headers.get("Content-Type", "")
-        raw = r.read()
-    if "json" not in ct:
+    headers, raw = _open(req)
+    if "json" not in headers.get("Content-Type", ""):
         raise RuntimeError("non-JSON response (edge block)")
     return json.loads(raw)
 
@@ -207,8 +287,8 @@ def _strip_html(s):
 
 def _rss(url):
     req = urllib.request.Request(url, headers={"User-Agent": _user_agent()})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return ET.fromstring(r.read())
+    _, raw = _open(req)
+    return ET.fromstring(raw)
 
 
 def _search_rss(query, sub, sort, time_range, limit, strict):
@@ -238,42 +318,76 @@ def _search_rss(query, sub, sort, time_range, limit, strict):
     return results
 
 
+def _search_arctic(query, sub, sort, time_range, limit, strict):
+    words = re.sub(r"\b(?:author|subreddit|self|site|url|flair|nsfw):\S+", " ", query)
+    words = re.sub(r"\b\w+:", " ", words)
+    words = re.sub(r'[+"()]', " ", words)
+    words = " ".join(w for w in words.split() if w.upper() not in ("AND", "OR", "NOT") and not w.startswith("-"))
+    if not words:
+        raise ValueError("nothing left to match on titles after stripping Reddit syntax")
+    after = None
+    if time_range in _TIME_RANGES:
+        after = (datetime.now(timezone.utc) - _TIME_RANGES[time_range]).strftime("%Y-%m-%d")
+    return arctic(sub, title=words, after=after, sort="desc", limit=limit)
+
+
+_SEARCH_NOTES = {
+    "json": "anonymous .json endpoint",
+    "rss": "RSS feed, no scores or comment counts",
+    "arctic": "Arctic Shift archive: title-only match, newest first regardless of --sort, "
+              "scores are archive snapshots",
+}
+
+
 def search(query, sub=None, sort="relevance", time_range="all", limit=20, strict=True):
     args = (query, sub, sort, time_range, limit, strict)
-    for method in (_search_oauth, _search_json):
+    failures = []
+    for stage, method in (("oauth", _search_oauth), ("json", _search_json), ("rss", _search_rss)):
         try:
-            return method(*args)
-        except (urllib.error.URLError, RuntimeError, ValueError, KeyError):
-            continue
-    return _search_rss(*args)
+            return method(*args), stage, failures
+        except _STAGE_ERRORS as e:
+            failures.append((stage, _describe(e)))
+    if not sub:
+        raise ChannelError("search", failures,
+                           "No archive fallback without --sub: Arctic Shift title search is "
+                           "subreddit-scoped, and its full-text search times out.")
+    try:
+        return _search_arctic(*args), "arctic", failures
+    except _STAGE_ERRORS as e:
+        failures.append(("arctic", _describe(e)))
+    raise ChannelError("search", failures)
 
 
-def _arctic_get(url, _tries=3):
+def _arctic_get(path, params, _tries=3):
+    url = f"{ARCTIC_BASE}/{path}?{urllib.parse.urlencode(params)}"
+    req = urllib.request.Request(url, headers={"User-Agent": ARCTIC_UA})
     for attempt in range(_tries):
-        req = urllib.request.Request(url, headers={"User-Agent": _user_agent()})
         try:
-            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-                payload = json.loads(r.read())
+            _, raw = _open(req, timeout=ARCTIC_TIMEOUT)
+            payload = json.loads(raw)
             if payload.get("error"):
-                raise RuntimeError(payload["error"])
+                raise RuntimeError(f"Arctic Shift: {payload['error']}")
             return payload.get("data") or []
-        except (urllib.error.HTTPError, urllib.error.URLError):
-            if attempt == _tries - 1:
+        except (Refused, OSError) as e:
+            if attempt == _tries - 1 or (isinstance(e, Refused) and e.code in (400, 404)):
                 raise
-            sleep(1.5 * (attempt + 1))
+            wait = 2 * (attempt + 1)
+            if isinstance(e, Refused) and e.retry_after is not None:
+                wait = min(max(wait, e.retry_after), MAX_RETRY_WAIT)
+            sleep(wait)
 
 
-def arctic(sub, after=None, before=None, sort="desc", limit=25):
+def arctic(sub, title=None, after=None, before=None, sort="desc", limit=25):
     if not sub:
         raise ValueError("arctic requires a subreddit")
-    sub = _norm_sub(sub)
-    params = {"subreddit": sub, "sort": sort, "limit": str(limit)}
+    params = {"subreddit": _norm_sub(sub), "sort": sort, "limit": str(limit)}
+    if title:
+        params["title"] = title
     if after:
         params["after"] = after
     if before:
         params["before"] = before
-    url = f"{ARCTIC_BASE}/posts/search?{urllib.parse.urlencode(params)}"
-    return [_post_dict(p) for p in _arctic_get(url)]
+    return [_post_dict(p) for p in _arctic_get("posts/search", params)]
 
 
 def _extract_comments(items, depth=0, max_depth=2, max_per_level=10):
@@ -357,16 +471,65 @@ def _fetch_rss(path):
     }
 
 
+def _by_score(items):
+    items = sorted(items, key=lambda c: c.get("data", {}).get("score") or 0, reverse=True)
+    for c in items:
+        replies = c.get("data", {}).get("replies")
+        if isinstance(replies, dict):
+            children = replies.get("data", {}).get("children", [])
+            replies["data"]["children"] = _by_score(children)
+    return items
+
+
+def _fetch_arctic(path):
+    m = re.search(r"/comments/([a-z0-9]+)", path) or re.fullmatch(r"/([a-z0-9]+)", path)
+    if not m:
+        raise ValueError(f"no post id in {path}")
+    post_id = m.group(1)
+    posts = _arctic_get("posts/ids", {"ids": post_id})
+    if not posts:
+        raise RuntimeError(f"post {post_id} is not in the archive")
+    post = posts[0]
+    tree = _arctic_get("comments/tree", {"link_id": post_id, "limit": "500"})
+    return {
+        "title": post.get("title"),
+        "subreddit": post.get("subreddit"),
+        "score": post.get("score"),
+        "num_comments": post.get("num_comments"),
+        "url": WWW_BASE + post.get("permalink", path),
+        "author": post.get("author"),
+        "selftext": post.get("selftext", ""),
+        "top_comments": _extract_comments(_by_score(tree)),
+    }
+
+
+_FETCH_NOTES = {
+    "json": "anonymous .json endpoint",
+    "rss": "RSS feed, no scores, comments flattened",
+    "arctic": "Arctic Shift archive, scores are archive snapshots",
+}
+
+
 def fetch(url):
     path = urllib.parse.urlparse(url).path.split("?")[0].rstrip("/")
     if not path:
         raise ValueError(f"Cannot parse a Reddit path from: {url}")
-    for method in (_fetch_oauth, _fetch_json):
+    failures = []
+    for stage, method in (("oauth", _fetch_oauth), ("json", _fetch_json),
+                          ("arctic", _fetch_arctic), ("rss", _fetch_rss)):
         try:
-            return method(path)
-        except (urllib.error.URLError, RuntimeError, ValueError, KeyError, IndexError):
-            continue
-    return _fetch_rss(path)
+            return method(path), stage, failures
+        except _STAGE_ERRORS as e:
+            failures.append((stage, _describe(e)))
+    raise ChannelError("fetch", failures)
+
+
+def _note_fallback(stage, failures, notes):
+    if not failures:
+        return
+    print(f"note: served by {stage} ({notes.get(stage, stage)}); earlier stages failed:", file=sys.stderr)
+    for s, why in failures:
+        print(f"  {s}: {why}", file=sys.stderr)
 
 
 def _fmt_score(v):
@@ -428,6 +591,7 @@ def main():
 
     ap = sub.add_parser("arctic", help="List a subreddit chronologically via the Arctic Shift archive (no auth)")
     ap.add_argument("subreddit", help="Subreddit name (e.g. rust, ClaudeAI)")
+    ap.add_argument("--title", help="Only posts whose title matches these words (archive-side title search)")
     ap.add_argument("--after", help="Only posts on/after this date (YYYY-MM-DD)")
     ap.add_argument("--before", help="Only posts before this date (YYYY-MM-DD)")
     ap.add_argument("--sort", default="desc", choices=["desc", "asc"],
@@ -439,28 +603,33 @@ def main():
 
     try:
         if args.cmd == "search":
-            results = search(args.query, sub=args.sub, sort=args.sort,
-                             time_range=args.time_range, limit=args.limit,
-                             strict=not args.loose)
+            results, stage, failures = search(args.query, sub=args.sub, sort=args.sort,
+                                              time_range=args.time_range, limit=args.limit,
+                                              strict=not args.loose)
+            _note_fallback(stage, failures, _SEARCH_NOTES)
             if args.json:
                 print(json.dumps(results, indent=2, ensure_ascii=False))
             else:
                 print_search_md(results)
         elif args.cmd == "fetch":
-            result = fetch(args.url)
+            result, stage, failures = fetch(args.url)
+            _note_fallback(stage, failures, _FETCH_NOTES)
             if args.json:
                 print(json.dumps(result, indent=2, ensure_ascii=False))
             else:
                 print_fetch_md(result)
         elif args.cmd == "arctic":
-            results = arctic(args.subreddit, after=args.after, before=args.before,
-                             sort=args.sort, limit=args.limit)
+            results = arctic(args.subreddit, title=args.title, after=args.after,
+                             before=args.before, sort=args.sort, limit=args.limit)
             if args.json:
                 print(json.dumps(results, indent=2, ensure_ascii=False))
             else:
                 print_search_md(results)
-    except urllib.error.HTTPError as e:
-        print(f"HTTP Error {e.code}: {e.reason}", file=sys.stderr)
+    except ChannelError as e:
+        print(e.render(), file=sys.stderr)
+        sys.exit(1)
+    except Refused as e:
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

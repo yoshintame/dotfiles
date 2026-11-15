@@ -936,9 +936,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 81024b011cc4c1e6baac0c66bbb64958699876b5
-  resolved_ref: v1.17.0+81024b0
-  version: 1.17.0+81024b0
+  resolved_commit: 249ea826ee32e0f6e70a79c64f304ddb62cba827
+  resolved_ref: v1.18.0+249ea82
+  version: 1.18.0+249ea82
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1422,9 +1422,9 @@ dependencies:
     .agents/skills/test-discipline/SKILL.md: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
     .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:2c7d3683eeafeae7633cf4aca9a04f0030c1258a7f3f7da09ce869f3b46c6234
     .agents/skills/ts-react-style/SKILL.md: sha256:b911c804fbaa6e955258600f91702ca1dc0884136dd38bd7b5f5683387021947
-    .agents/skills/ts-react-style/references/react.md: sha256:7dcdd200c67bd8ddf740ab8d188f9afe5dadc88eedf8f8df306873d7244bd0de
+    .agents/skills/ts-react-style/references/react.md: sha256:e6d52fd8275fa50ed88d8d4674056295e2f10247a61a42b1439082b31ea43485
     .agents/skills/ts-react-style/references/typescript.md: sha256:4c624040b42b2c23ffc669515dbc55ba9e5fa6cd4bcf3d58989f360a0b2c517a
-    .agents/skills/vault-types/SKILL.md: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
+    .agents/skills/vault-types/SKILL.md: sha256:44cf7d0c57ca0a967aa26d2f93b9eca803eb891dd3dcd488d1c52431b9925a5b
     .agents/skills/vscode-marketplace/SKILL.md: sha256:e90041a63fe685dd9ba8b85bce17baeb716dddc641632ab131485776ef668710
     .agents/skills/vscode-marketplace/vscode-marketplace.py: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
     .agents/skills/worktree-open/SKILL.md: sha256:6e6a55e7f25f3039ebecc45b85fcb5c25ec3d82d85db1b4bcf81193c5011c386
@@ -1545,9 +1545,9 @@ dependencies:
     .claude/skills/test-discipline/SKILL.md: sha256:9c00a52f9d665bcf795fc56b44b93d1a05ff05bfb4febc8030d35d47648ff20d
     .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:2c7d3683eeafeae7633cf4aca9a04f0030c1258a7f3f7da09ce869f3b46c6234
     .claude/skills/ts-react-style/SKILL.md: sha256:b911c804fbaa6e955258600f91702ca1dc0884136dd38bd7b5f5683387021947
-    .claude/skills/ts-react-style/references/react.md: sha256:7dcdd200c67bd8ddf740ab8d188f9afe5dadc88eedf8f8df306873d7244bd0de
+    .claude/skills/ts-react-style/references/react.md: sha256:e6d52fd8275fa50ed88d8d4674056295e2f10247a61a42b1439082b31ea43485
     .claude/skills/ts-react-style/references/typescript.md: sha256:4c624040b42b2c23ffc669515dbc55ba9e5fa6cd4bcf3d58989f360a0b2c517a
-    .claude/skills/vault-types/SKILL.md: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
+    .claude/skills/vault-types/SKILL.md: sha256:44cf7d0c57ca0a967aa26d2f93b9eca803eb891dd3dcd488d1c52431b9925a5b
     .claude/skills/vscode-marketplace/SKILL.md: sha256:e90041a63fe685dd9ba8b85bce17baeb716dddc641632ab131485776ef668710
     .claude/skills/vscode-marketplace/vscode-marketplace.py: sha256:8b1004549d48c17b16b58c3734db2db2c32ca1f768113d88be2ff168cc1dfc78
     .claude/skills/worktree-open/SKILL.md: sha256:6e6a55e7f25f3039ebecc45b85fcb5c25ec3d82d85db1b4bcf81193c5011c386
@@ -1556,10 +1556,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:4c958786e4ed1181cd4f2b6329361ca276b1f89c81e01ee2fcaf41eee0a40309
+  content_hash: sha256:3471fdfc3f280f676fd51210e9e89fd73fe18a39e1fb8fdfe334b7720ee5737b
   constraint: ^1.0.0
-  resolved_tag: v1.17.0+81024b0
-  resolved_at: '2026-11-03T20:52:24+00:00'
+  resolved_tag: v1.18.0+249ea82
+  resolved_at: '2026-11-15T20:22:54+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -4666,7 +4666,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:7dcdd200c67bd8ddf740ab8d188f9afe5dadc88eedf8f8df306873d7244bd0de
+  content_hash: sha256:e6d52fd8275fa50ed88d8d4674056295e2f10247a61a42b1439082b31ea43485
 - kind: project-relative
   target: claude
   value: .claude/skills/ts-react-style/references/typescript.md
@@ -4693,7 +4693,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
+  content_hash: sha256:44cf7d0c57ca0a967aa26d2f93b9eca803eb891dd3dcd488d1c52431b9925a5b
 - kind: project-relative
   target: claude
   value: .claude/skills/vscode-marketplace
@@ -8419,7 +8419,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:7dcdd200c67bd8ddf740ab8d188f9afe5dadc88eedf8f8df306873d7244bd0de
+  content_hash: sha256:e6d52fd8275fa50ed88d8d4674056295e2f10247a61a42b1439082b31ea43485
 - kind: project-relative
   target: legacy
   value: .agents/skills/ts-react-style/references/typescript.md
@@ -8446,7 +8446,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:9c3a6d5f864a42a41de72b415f4426540a15c5e3d4a148933b3eea09e84126ab
+  content_hash: sha256:44cf7d0c57ca0a967aa26d2f93b9eca803eb891dd3dcd488d1c52431b9925a5b
 - kind: project-relative
   target: legacy
   value: .agents/skills/vscode-marketplace

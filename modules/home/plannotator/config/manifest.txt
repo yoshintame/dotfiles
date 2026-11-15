@@ -1,1 +1,2 @@
 vscode-theme    # code highlighting in the VSCode theme; never upstreaming
+md-split-view   # two-pane rendered markdown diff for Changes + Split, with line comments

@@ -45,10 +45,6 @@ myLib.mkModule config "claude" {
     "~/.local/bin/cc-fork-recover" = "modules/home/agents-shared/config/bin/cc-fork-recover";
     "~/.local/bin/clean-session-log" = "modules/home/agents-shared/config/bin/clean-session-log";
     "~/.local/bin/extract-images" = "modules/home/agents-shared/config/bin/extract-images";
-    "~/.local/bin/search-reddit" = "modules/home/agents-shared/config/bin/search-reddit";
-    "~/.local/bin/search-hn" = "modules/home/agents-shared/config/bin/search-hn";
-    "~/.local/bin/search-github" = "modules/home/agents-shared/config/bin/search-github";
-    "~/.local/bin/search-discourse" = "modules/home/agents-shared/config/bin/search-discourse";
     "~/.local/bin/claude-settings-relink" = "modules/home/claude/config/bin/claude-settings-relink";
   };
 }

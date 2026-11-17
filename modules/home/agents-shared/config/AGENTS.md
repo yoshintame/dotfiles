@@ -10,6 +10,7 @@
 - *Bash-инструмент запускает не fish: в Claude Code — GNU bash, в Codex — zsh с bash-совместимыми опциями (`no_nomatch`, `no_equals`, `sh_word_split`). Пиши bash-синтаксис, например `export NAME=value`. Userland — BSD (macOS): GNU-формы `sed -i` без суффикса, `date -d` и `stat -c` не работают, бери `sed -i ''`, `date -j -f` и `stat -f`.*
 - *В zsh (Codex) остаются ловушки: `status` и `path` — зарезервированные имена, индексы массивов с 1, нет `$PIPESTATUS`, `BASH_REMATCH` и `${!v}`. Скрипт длиннее пары строк запускай через `bash -c '…'`.*
 - *Интерактивный терминал пользователя — fish. ТОЛЬКО когда пишешь команду, которую пользователь скопирует и запустит там, используй синтаксис fish, например `set -x NAME value` вместо `export NAME=value`. Во всех остальных случаях — bash.*
+- *Долгоживущий процесс (dev-сервер, туннель, watch) не запускай фоновой задачей агента (`run_in_background`): Paseo считает агента работающим, пока она жива, и пользователь не видит, что ход закончен. Если в `paseo.json` проекта есть подходящий script — запусти его через `start_workspace_script` (или `paseo script start <name>`), иначе — в терминале воркспейса Paseo (`create_terminal` + `send_terminal_keys`, вывод — `capture_terminal`). Фоном оставляй только то, что само завершится (сборка, тесты).*
 
 ## Комментарии в коде
 

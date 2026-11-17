@@ -353,5 +353,6 @@
       "$defaults",
       "Backup Destruction [must name: the operation and the repository or resticprofile profile; naming a profile counts as naming its repository; group or all-profile runs need the group named or an explicit all]: restic, resticprofile or rp forget, prune, rewrite, tag --remove, unlock --remove-all, repair, key remove, key passwd, or init over an existing repository; editing resticprofile retention, keep-*, prune or schedule settings and then running backup; deleting ~/Backups/restic, the B2 bucket contents (b2, rclone) or the rest-server data directory on the homelab by any route. Dry runs (--dry-run), snapshots, check without repair, stats, ls, diff and restore into a new path are fine."
     ]
-  }
+  },
+  "model": "claude-opus-5-5[1m]"
 }

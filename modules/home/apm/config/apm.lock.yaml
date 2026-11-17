@@ -778,9 +778,9 @@ dependencies:
 - repo_url: senate-exchange/ai-skills
   name: senate-skills
   host: github.com
-  resolved_commit: f9d867afe1ede0a9da1921a25e4073f846b4aab9
-  resolved_ref: v1.6.5
-  version: 1.6.5
+  resolved_commit: c863f4e550b4de53ae66939df7f68ab258bdda2c
+  resolved_ref: v1.7.0
+  version: 1.7.0
   package_type: marketplace_plugin
   deployed_files:
   - .agents/skills/senate-backlog-outline
@@ -789,6 +789,9 @@ dependencies:
   - .agents/skills/senate-business-docs/SKILL.md
   - .agents/skills/senate-code-to-jira-task
   - .agents/skills/senate-code-to-jira-task/SKILL.md
+  - .agents/skills/senate-dev-db-refresh
+  - .agents/skills/senate-dev-db-refresh/SKILL.md
+  - .agents/skills/senate-dev-db-refresh/scripts/prod-db-config.sh
   - .agents/skills/senate-docs-audit
   - .agents/skills/senate-docs-audit/SKILL.md
   - .agents/skills/senate-docs-audit/scripts/inventory.ts
@@ -833,6 +836,9 @@ dependencies:
   - .claude/skills/senate-business-docs/SKILL.md
   - .claude/skills/senate-code-to-jira-task
   - .claude/skills/senate-code-to-jira-task/SKILL.md
+  - .claude/skills/senate-dev-db-refresh
+  - .claude/skills/senate-dev-db-refresh/SKILL.md
+  - .claude/skills/senate-dev-db-refresh/scripts/prod-db-config.sh
   - .claude/skills/senate-docs-audit
   - .claude/skills/senate-docs-audit/SKILL.md
   - .claude/skills/senate-docs-audit/scripts/inventory.ts
@@ -875,14 +881,16 @@ dependencies:
     .agents/skills/senate-backlog-outline/SKILL.md: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
     .agents/skills/senate-business-docs/SKILL.md: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
     .agents/skills/senate-code-to-jira-task/SKILL.md: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
+    .agents/skills/senate-dev-db-refresh/SKILL.md: sha256:e66793550d7e2753bc31b13f9c49ff4e3188bb8815a6ff878b22c6d25437e397
+    .agents/skills/senate-dev-db-refresh/scripts/prod-db-config.sh: sha256:81212194edf341e52afe8c22f8fc9c450c3c1ffd184022f5077ad54819be9439
     .agents/skills/senate-docs-audit/SKILL.md: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
     .agents/skills/senate-docs-audit/scripts/inventory.ts: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
     .agents/skills/senate-docs-to-jira-tasks/SKILL.md: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
-    .agents/skills/senate-frontend-api/SKILL.md: sha256:f6f424b09aa4f5079fb418231686278a3b377279c168307a3a38198604c2cf7a
-    .agents/skills/senate-frontend-ui/SKILL.md: sha256:fbebbbc88b6fc3c182207f85dd53ef042c6d82a40011f87639f631a1a7addad6
+    .agents/skills/senate-frontend-api/SKILL.md: sha256:84ac336a766b11c6e344e4150c54bce9c551959e46915030d2a24d0ada555579
+    .agents/skills/senate-frontend-ui/SKILL.md: sha256:33a4dbe8978f5e2608f3c8bf689aa25ed5be824f4adb69a5fe566c48980cb2dc
     .agents/skills/senate-frontend-ui/references/focus-and-fields.md: sha256:03c4e29e2b350774558a1134b5edc8358a37b68acdeb2a5a3d4de6d57c2f5599
-    .agents/skills/senate-frontend-ui/references/permissions.md: sha256:d802bc06340bf9f49d5e9c086b92a8625c0a5e1b26eaa0e8271225ce5f4af096
-    .agents/skills/senate-frontend-ui/references/ui-layers.md: sha256:127537424effd2bf3d3b8bb4df487f3d9ed43e1bf7ae0424d2557662a28fd4eb
+    .agents/skills/senate-frontend-ui/references/permissions.md: sha256:25505494cc03357b9371a4a8a8c499a74ce5a9f377b4749662833b27320b51e6
+    .agents/skills/senate-frontend-ui/references/ui-layers.md: sha256:81d205d3f9a6cad60b0986cf1b4e4e4af8b21533f8e5580af4068b37e171b6be
     .agents/skills/senate-grafana/SKILL.md: sha256:1e2739aba630890500c9af095a215490731d7d8686b49b00d02f29d83015f5b0
     .agents/skills/senate-grafana/scripts/discover.ts: sha256:93ba85c84cd71be049c1cc3b9428839936575908e0e74755365de256d90f97d3
     .agents/skills/senate-i18n/SKILL.md: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
@@ -903,14 +911,16 @@ dependencies:
     .claude/skills/senate-backlog-outline/SKILL.md: sha256:0c0b537fc32480e19cde973a14a386a704c1307a53ce739543feff8cbef47547
     .claude/skills/senate-business-docs/SKILL.md: sha256:d31067d02a4116581a185b8c6eafd4ec574137aa720abb2d224bdf98a86b16a1
     .claude/skills/senate-code-to-jira-task/SKILL.md: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
+    .claude/skills/senate-dev-db-refresh/SKILL.md: sha256:e66793550d7e2753bc31b13f9c49ff4e3188bb8815a6ff878b22c6d25437e397
+    .claude/skills/senate-dev-db-refresh/scripts/prod-db-config.sh: sha256:81212194edf341e52afe8c22f8fc9c450c3c1ffd184022f5077ad54819be9439
     .claude/skills/senate-docs-audit/SKILL.md: sha256:c97ab6ba82214831fd1f283469f4aafc18c6658f7995440ebd7392ad1996c427
     .claude/skills/senate-docs-audit/scripts/inventory.ts: sha256:dd7d9f6a6d26ecf83ce6f4b44277b97fa56896f7834172514d8723a991cd26c5
     .claude/skills/senate-docs-to-jira-tasks/SKILL.md: sha256:860a61928726f76a1aa99fca432c5e59e3a85aebe82b1e5883c2dc8b76580e43
-    .claude/skills/senate-frontend-api/SKILL.md: sha256:f6f424b09aa4f5079fb418231686278a3b377279c168307a3a38198604c2cf7a
-    .claude/skills/senate-frontend-ui/SKILL.md: sha256:fbebbbc88b6fc3c182207f85dd53ef042c6d82a40011f87639f631a1a7addad6
+    .claude/skills/senate-frontend-api/SKILL.md: sha256:84ac336a766b11c6e344e4150c54bce9c551959e46915030d2a24d0ada555579
+    .claude/skills/senate-frontend-ui/SKILL.md: sha256:33a4dbe8978f5e2608f3c8bf689aa25ed5be824f4adb69a5fe566c48980cb2dc
     .claude/skills/senate-frontend-ui/references/focus-and-fields.md: sha256:03c4e29e2b350774558a1134b5edc8358a37b68acdeb2a5a3d4de6d57c2f5599
-    .claude/skills/senate-frontend-ui/references/permissions.md: sha256:d802bc06340bf9f49d5e9c086b92a8625c0a5e1b26eaa0e8271225ce5f4af096
-    .claude/skills/senate-frontend-ui/references/ui-layers.md: sha256:127537424effd2bf3d3b8bb4df487f3d9ed43e1bf7ae0424d2557662a28fd4eb
+    .claude/skills/senate-frontend-ui/references/permissions.md: sha256:25505494cc03357b9371a4a8a8c499a74ce5a9f377b4749662833b27320b51e6
+    .claude/skills/senate-frontend-ui/references/ui-layers.md: sha256:81d205d3f9a6cad60b0986cf1b4e4e4af8b21533f8e5580af4068b37e171b6be
     .claude/skills/senate-grafana/SKILL.md: sha256:1e2739aba630890500c9af095a215490731d7d8686b49b00d02f29d83015f5b0
     .claude/skills/senate-grafana/scripts/discover.ts: sha256:93ba85c84cd71be049c1cc3b9428839936575908e0e74755365de256d90f97d3
     .claude/skills/senate-i18n/SKILL.md: sha256:1906297acb74420e5f483c67ed93c6cf1d0eeb3b7862bae4423edc4f09a4feb7
@@ -928,10 +938,10 @@ dependencies:
     .claude/skills/senate-release-note/SKILL.md: sha256:3fb871be2c1cfbd3600370de2c6d933050cdf456cd9777cab86000503474b7ee
     .claude/skills/senate-update-docs-from-changes/SKILL.md: sha256:9680c572f2472c3b1d86e9e091f850a20a38aa8731a5093ea6774e945f8936b7
     .claude/skills/senate-vault/SKILL.md: sha256:b43f6645d82836eed0c81c8d8613ef6f9219c55bab764c26982a62d20c409fd3
-  content_hash: sha256:e2523f1f292783257f98feed23b55200b591600a4254a046bac46129b8d74428
+  content_hash: sha256:8d9e1f8fb333465d9b6f0bee512435c53054f97eed70870acfb773e5c2fb34ea
   constraint: ^1.1.0
-  resolved_tag: v1.6.5
-  resolved_at: '2026-11-05T07:10:19+00:00'
+  resolved_tag: v1.7.0
+  resolved_at: '2026-11-17T09:26:04+00:00'
   declared_license: UNLICENSED
 - repo_url: yoshintame/agent-skills
   name: agent-skills
@@ -4147,6 +4157,33 @@ deployments:
   content_hash: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
 - kind: project-relative
   target: claude
+  value: .claude/skills/senate-dev-db-refresh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-dev-db-refresh/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:e66793550d7e2753bc31b13f9c49ff4e3188bb8815a6ff878b22c6d25437e397
+- kind: project-relative
+  target: claude
+  value: .claude/skills/senate-dev-db-refresh/scripts/prod-db-config.sh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:81212194edf341e52afe8c22f8fc9c450c3c1ffd184022f5077ad54819be9439
+- kind: project-relative
+  target: claude
   value: .claude/skills/senate-docs-audit
   runtime: null
   scope: project
@@ -4207,7 +4244,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:f6f424b09aa4f5079fb418231686278a3b377279c168307a3a38198604c2cf7a
+  content_hash: sha256:84ac336a766b11c6e344e4150c54bce9c551959e46915030d2a24d0ada555579
 - kind: project-relative
   target: claude
   value: .claude/skills/senate-frontend-ui
@@ -4225,7 +4262,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:fbebbbc88b6fc3c182207f85dd53ef042c6d82a40011f87639f631a1a7addad6
+  content_hash: sha256:33a4dbe8978f5e2608f3c8bf689aa25ed5be824f4adb69a5fe566c48980cb2dc
 - kind: project-relative
   target: claude
   value: .claude/skills/senate-frontend-ui/references/focus-and-fields.md
@@ -4243,7 +4280,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:d802bc06340bf9f49d5e9c086b92a8625c0a5e1b26eaa0e8271225ce5f4af096
+  content_hash: sha256:25505494cc03357b9371a4a8a8c499a74ce5a9f377b4749662833b27320b51e6
 - kind: project-relative
   target: claude
   value: .claude/skills/senate-frontend-ui/references/ui-layers.md
@@ -4252,7 +4289,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:127537424effd2bf3d3b8bb4df487f3d9ed43e1bf7ae0424d2557662a28fd4eb
+  content_hash: sha256:81d205d3f9a6cad60b0986cf1b4e4e4af8b21533f8e5580af4068b37e171b6be
 - kind: project-relative
   target: claude
   value: .claude/skills/senate-grafana
@@ -7900,6 +7937,33 @@ deployments:
   content_hash: sha256:f1e9dad16b490ad80300b429ae8c2b28ae456dbfc864ce211c7b17c4053d1cdc
 - kind: project-relative
   target: legacy
+  value: .agents/skills/senate-dev-db-refresh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/senate-dev-db-refresh/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:e66793550d7e2753bc31b13f9c49ff4e3188bb8815a6ff878b22c6d25437e397
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/senate-dev-db-refresh/scripts/prod-db-config.sh
+  runtime: null
+  scope: project
+  owners:
+  - senate-exchange/ai-skills
+  active_owner: senate-exchange/ai-skills
+  content_hash: sha256:81212194edf341e52afe8c22f8fc9c450c3c1ffd184022f5077ad54819be9439
+- kind: project-relative
+  target: legacy
   value: .agents/skills/senate-docs-audit
   runtime: null
   scope: project
@@ -7960,7 +8024,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:f6f424b09aa4f5079fb418231686278a3b377279c168307a3a38198604c2cf7a
+  content_hash: sha256:84ac336a766b11c6e344e4150c54bce9c551959e46915030d2a24d0ada555579
 - kind: project-relative
   target: legacy
   value: .agents/skills/senate-frontend-ui
@@ -7978,7 +8042,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:fbebbbc88b6fc3c182207f85dd53ef042c6d82a40011f87639f631a1a7addad6
+  content_hash: sha256:33a4dbe8978f5e2608f3c8bf689aa25ed5be824f4adb69a5fe566c48980cb2dc
 - kind: project-relative
   target: legacy
   value: .agents/skills/senate-frontend-ui/references/focus-and-fields.md
@@ -7996,7 +8060,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:d802bc06340bf9f49d5e9c086b92a8625c0a5e1b26eaa0e8271225ce5f4af096
+  content_hash: sha256:25505494cc03357b9371a4a8a8c499a74ce5a9f377b4749662833b27320b51e6
 - kind: project-relative
   target: legacy
   value: .agents/skills/senate-frontend-ui/references/ui-layers.md
@@ -8005,7 +8069,7 @@ deployments:
   owners:
   - senate-exchange/ai-skills
   active_owner: senate-exchange/ai-skills
-  content_hash: sha256:127537424effd2bf3d3b8bb4df487f3d9ed43e1bf7ae0424d2557662a28fd4eb
+  content_hash: sha256:81d205d3f9a6cad60b0986cf1b4e4e4af8b21533f8e5580af4068b37e171b6be
 - kind: project-relative
   target: legacy
   value: .agents/skills/senate-grafana

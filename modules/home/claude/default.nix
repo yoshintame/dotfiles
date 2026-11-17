@@ -4,27 +4,9 @@
   myLib,
   ...
 }:
-let
-  home = config.home.homeDirectory;
-in
 myLib.mkModule config "claude" {
   programs.fish.shellAbbrs = lib.mkIf config.programs.fish.enable {
     ccr = "bun ~/.claude/skills/reset-sessions/scripts/reset-sessions.ts --all";
-  };
-
-  launchd.agents.claude-settings-relink = {
-    enable = true;
-    config = {
-      ProgramArguments = [ "${home}/.local/bin/claude-settings-relink" ];
-      WatchPaths = [ "${home}/.claude/settings.json" ];
-      EnvironmentVariables = {
-        PATH = myLib.launchdPath config [ ];
-        HOME = home;
-      };
-      RunAtLoad = true;
-      StandardOutPath = "/tmp/claude-settings-relink.log";
-      StandardErrorPath = "/tmp/claude-settings-relink.err";
-    };
   };
 
   nixLink.links = {
@@ -44,7 +26,5 @@ myLib.mkModule config "claude" {
     "~/.config/cd4a/config.json" = "modules/home/agents-shared/config/chrome-cdp/cd4a.json";
     "~/.local/bin/cc-fork-recover" = "modules/home/agents-shared/config/bin/cc-fork-recover";
     "~/.local/bin/clean-session-log" = "modules/home/agents-shared/config/bin/clean-session-log";
-    "~/.local/bin/extract-images" = "modules/home/agents-shared/config/bin/extract-images";
-    "~/.local/bin/claude-settings-relink" = "modules/home/claude/config/bin/claude-settings-relink";
-  };
+    "~/.local/bin/extract-images" = "modules/home/agents-shared/config/bin/extract-images";  };
 }

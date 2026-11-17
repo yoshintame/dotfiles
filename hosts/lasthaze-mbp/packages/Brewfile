@@ -23,8 +23,6 @@ brew "coreutils"
 brew "difftastic"
 # Embeddable SQL OLAP Database Management System
 brew "duckdb"
-# Play, record, convert, and stream select audio and video codecs
-brew "ffmpeg"
 # GitHub command-line tool
 brew "gh"
 # Quickly rewrite git repository history
@@ -43,8 +41,6 @@ brew "logrotate"
 brew "mas"
 # Mac command-line tool that automatically downloads macOS Firmwares / Installers
 brew "mist-cli"
-# CLI for NextDNS's DNS-over-HTTPS (DoH)
-brew "nextdns"
 # HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
 brew "nginx"
 # Painless compression and decompression for your terminal

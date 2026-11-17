@@ -11,7 +11,16 @@ TMP="$(mktemp)"
 
 brew bundle dump --force --file="$TMP"
 
-mas list | awk '{ id=$1; $1=""; line=$0; sub(/^[ \t]+/, "", line); sub(/[ \t]+\([^)]*\)[ \t]*$/, "", line); printf "mas \"%s\", id: %s\n", line, id }' >>"$TMP"
+MAS_APPS=0
+if command -v mas >/dev/null 2>&1; then
+  MAS_APPS=$(mas list 2>/dev/null | grep -c . || true)
+fi
+
+if [ "$MAS_APPS" -gt 0 ] && ! grep -q '^mas ' "$TMP"; then
+  echo "dump-brewfile: mas lists $MAS_APPS apps but brew bundle dump has no mas entries; keeping existing Brewfile" >&2
+  rm -f "$TMP"
+  exit 1
+fi
 
 if grep -q '^brew ' "$TMP" && grep -q '^cask ' "$TMP"; then
   mv "$TMP" "$BF"

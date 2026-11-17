@@ -6,6 +6,7 @@ includes = [
 
 [tools]
 "pipx:apm-cli" = "0.29.1"
+biome = "latest"
 bun = "latest"
 go = "latest"
 hk = "2.6.0"

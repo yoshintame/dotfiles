@@ -104,9 +104,6 @@ in
       };
       programs.bash.enable = true;
       programs.bash.historyFile = "${hostFacts.homeDir}/.local/state/bash/history";
-      xdg.configFile."wgetrc".text = ''
-        hsts-file = ${hostFacts.homeDir}/.local/share/wget-hsts
-      '';
       home.activation.xdgHistoryDirs = {
         after = [ "writeBoundary" ];
         before = [ ];

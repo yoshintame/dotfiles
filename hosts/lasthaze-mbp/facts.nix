@@ -15,7 +15,6 @@ let
     BUNDLE_USER_PLUGIN = "${homeDir}/.local/share/bundle";
     ANSIBLE_HOME = "${homeDir}/.local/share/ansible";
     LESSHISTFILE = "${homeDir}/.local/state/less/history";
-    WGETRC = "${homeDir}/.config/wgetrc";
     PNPM_HOME = "${homeDir}/.local/share/pnpm";
     BUN_INSTALL = "${homeDir}/.local/share/bun";
     BUN_INSTALL_CACHE_DIR = "${homeDir}/.cache/.bun/install/cache";

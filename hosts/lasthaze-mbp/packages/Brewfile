@@ -1,14 +1,8 @@
-tap "ajayrmk/tap", trusted: true
 tap "crmne/tap"
-tap "gateway-of-last-resort/tap", trusted: true
-tap "gu1llaum-3/sshm", "https://github.com/Gu1llaum-3/homebrew-sshm", trusted: true
 tap "hongkongkiwi/vsix-cli", trusted: true
-tap "madzarm/tap", trusted: true
-tap "mylee04/tools", trusted: true
 tap "nikitabobko/tap", trusted: true
 tap "openai/tools", trusted: true
 tap "peterldowns/tap", trusted: true
-tap "raine/claude-history", trusted: true
 tap "teamookla/speedtest", trusted: true
 tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew", trusted: true
 tap "xwjdsh/tap", trusted: true
@@ -19,22 +13,14 @@ brew "ack"
 brew "act"
 # Simple, modern, secure file encryption
 brew "age"
-# Command-line tool for formatting Nix Code
-brew "alejandra"
 # Official Amazon AWS command-line interface
 brew "awscli"
-# Toolchain of the web
-brew "biome"
 # Cloudflare Tunnel client (formerly Argo Tunnel)
 brew "cloudflared"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Diff that understands syntax
 brew "difftastic"
-# Pack, ship and run any application as a lightweight container
-brew "docker"
-# CLI for interacting with Doppler secrets and configuration
-brew "doppler"
 # Embeddable SQL OLAP Database Management System
 brew "duckdb"
 # Play, record, convert, and stream select audio and video codecs
@@ -47,20 +33,10 @@ brew "git-filter-repo"
 brew "git-subrepo"
 # GNU Privacy Guard (OpenPGP)
 brew "gnupg"
-# Review-first terminal diff viewer for agent-authored changesets
-brew "hunk"
-# Tools and libraries to manipulate images in select formats
-brew "imagemagick"
-# TUI playground to experiment and play with jq
-brew "jqp"
 # Handy way to save and run project-specific commands
 brew "just"
-# Terminal-based SSH manager
-brew "lazyssh"
 # Postgres C API library
 brew "libpq"
-# Linux virtual machines
-brew "lima"
 # Rotates, compresses, and mails system logs
 brew "logrotate"
 # Mac App Store command-line interface
@@ -71,54 +47,28 @@ brew "mist-cli"
 brew "nextdns"
 # HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
 brew "nginx"
-# Port scanning utility for large networks
-brew "nmap"
 # Painless compression and decompression for your terminal
 brew "ouch"
 # Package compiler and linker metadata toolkit
 brew "pkgconf"
-# Fast, disk space efficient package manager
-brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
-# Object-relational database system
-brew "postgresql@16"
 # Fast, efficient and secure backup program
 brew "restic"
 # Configuration profiles manager and scheduler for restic backup
 brew "resticprofile"
-# Rich git commit graph in your terminal
-brew "serie"
-# Add a public key to a remote machine's authorized_keys file
-brew "ssh-copy-id"
-# Graphical command-line client for SSH
-brew "sshs"
-# Programmatically correct mistyped console commands
-brew "thefuck"
 # Execute commands when watched files change
 brew "watchexec"
-# Internet file retriever
-brew "wget"
 # CLI for Git worktree management, designed for parallel AI agent workflows
 brew "worktrunk"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
-# Offline meeting transcription for macOS — auto-detects meetings, transcribes locally, saves to Claude Desktop via MCP
-brew "ajayrmk/tap/trnscrb"
-# A modern SSH connection manager for your terminal
-brew "gu1llaum-3/sshm/sshm", trusted: true
 # Download VS Code extensions (.vsix files) from official or open-source marketplaces
 brew "hongkongkiwi/vsix-cli/vsix-cli"
-# Hybrid search CLI for Claude Code chat sessions (BM25 + vector + RRF)
-brew "madzarm/tap/ccsearch", trusted: true
-# Cross-platform desktop notifications for AI coding tools
-brew "mylee04/tools/code-notify"
 # Run macOS and Linux VMs on Apple Hardware
 brew "openai/tools/tart", trusted: true
 # Localias is a tool for developers to securely manage local aliases for development servers.
 brew "peterldowns/tap/localias"
-# Fuzzy-search Claude Code conversation history from the terminal
-brew "raine/claude-history/claude-history"
 # Ookla Speedtest
 brew "teamookla/speedtest/speedtest", trusted: true
 # Modern TUI for managing Homebrew packages and casks on macOS and Linux
@@ -149,8 +99,6 @@ cask "codex-app"
 cask "cotypist"
 # Disk space visualiser
 cask "daisydisk"
-# Command-line tool to set the desktop picture
-cask "desktoppr"
 # Voice and text chat software
 cask "discord"
 cask "font-cascadia-code"
@@ -166,14 +114,10 @@ cask "font-jetbrains-mono-nerd-font"
 cask "font-symbols-only-nerd-font"
 # Git client
 cask "fork"
-# Set of tools to manage resources and applications hosted on Google Cloud
-cask "gcloud-cli"
 # Web browser
 cask "google-chrome"
 # Desktop automation application
 cask "hammerspoon"
-# Keyboard-centric window switcher
-cask "yoshintame/cask/hyperswitch"
 # Free and open-source media player
 cask "iina"
 # iOS Sideloading Companion
@@ -182,8 +126,6 @@ cask "iloader"
 cask "jordanbaird-ice"
 # Keyboard customiser
 cask "karabiner-elements"
-# Terminal UI for SSH keys, ~/.ssh/config, security audits, and encrypted backups
-cask "gateway-of-last-resort/tap/keyward", trusted: true
 # Wallet desktop application to maintain multiple cryptocurrencies
 cask "ledger-wallet"
 # UI replacement for volume, brightness and now playing controls
@@ -192,8 +134,6 @@ cask "mediamate"
 cask "microsoft-auto-update"
 # Office suite
 cask "microsoft-office"
-# Reverse proxy, secure introspectable tunnels to localhost
-cask "ngrok"
 # Open-source software for live streaming and screen recording
 cask "obs"
 # Knowledge base that works on top of a local folder of plain text Markdown files
@@ -212,8 +152,6 @@ cask "pearcleaner"
 cask "yoshintame/cask/qbittorrent", trusted: true
 # All-in-one bookmark manager
 cask "raindropio"
-# Archive manager for data compression and backups
-cask "yoshintame/cask/rar", trusted: true
 # Control your tools with a few keystrokes
 cask "raycast"
 # AI-powered writing assistant
@@ -228,8 +166,6 @@ cask "setapp"
 cask "signal"
 # Native Spotify client
 cask "crmne/tap/spotifast", trusted: true
-# Music streaming service
-cask "spotify"
 # Video game digital distribution service
 cask "steam"
 # Open-source media center
@@ -250,8 +186,6 @@ cask "ticktick"
 cask "visual-studio-code"
 # Voice to text app
 cask "voiceink"
-# Menu bar toolkit with keep-awake, system monitor and volume mixer
-cask "vorssaint"
 # App that provides drivers for older model scanners that are no longer supported
 cask "vuescan"
 # Rust-based terminal
@@ -268,12 +202,8 @@ cask "zed"
 cask "zoom"
 mas "1Password for Safari", id: 1569813296
 mas "Dropover", id: 1355679052
-mas "ExcalidrawZ", id: 6636493997
 mas "Happ", id: 6504287215
-mas "Klack", id: 6446206067
 mas "LINE", id: 539883307
-mas "PDFgear", id: 6469021132
-mas "TaskForge", id: 6744716215
 mas "Xcode", id: 497799835
 vscode "1password.op-vscode"
 vscode "aaron-bond.better-comments"

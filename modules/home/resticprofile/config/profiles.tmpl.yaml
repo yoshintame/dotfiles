@@ -152,6 +152,7 @@ profiles:
         - ".config"
         - ".dotfiles"
         - ".local/share/worktrees"
+        - ".agents/handoffs"
         - ".claude"
         - ".claude.json"
         - ".codex"

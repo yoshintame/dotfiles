@@ -103,6 +103,17 @@ in
         inherit (homelabFacts) prometheus;
       };
       programs.bash.enable = true;
+      programs.bash.historyFile = "${hostFacts.homeDir}/.local/state/bash/history";
+      xdg.configFile."wgetrc".text = ''
+        hsts-file = ${hostFacts.homeDir}/.local/share/wget-hsts
+      '';
+      home.activation.xdgHistoryDirs = {
+        after = [ "writeBoundary" ];
+        before = [ ];
+        data = ''
+          /bin/mkdir -p -m 700 "${hostFacts.homeDir}/.local/state/bash" "${hostFacts.homeDir}/.local/state/less"
+        '';
+      };
       programs.zsh.enable = true;
       programs.zsh.envExtra = ''
         autoload -Uz add-zsh-hook

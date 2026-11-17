@@ -4,7 +4,18 @@ let
   sharedEnv = {
     EDITOR = "zed --wait";
     VISUAL = "zed --wait";
-    GOPATH = "${homeDir}/go";
+    GOPATH = "${homeDir}/.local/share/go";
+    CARGO_HOME = "${homeDir}/.local/share/cargo";
+    RUSTUP_HOME = "${homeDir}/.local/share/rustup";
+    NPM_CONFIG_USERCONFIG = "${homeDir}/.config/npm/npmrc";
+    NPM_CONFIG_CACHE = "${homeDir}/.cache/npm";
+    PKG_CACHE_PATH = "${homeDir}/.cache/pkg-cache";
+    BUNDLE_USER_CONFIG = "${homeDir}/.config/bundle";
+    BUNDLE_USER_CACHE = "${homeDir}/.cache/bundle";
+    BUNDLE_USER_PLUGIN = "${homeDir}/.local/share/bundle";
+    ANSIBLE_HOME = "${homeDir}/.local/share/ansible";
+    LESSHISTFILE = "${homeDir}/.local/state/less/history";
+    WGETRC = "${homeDir}/.config/wgetrc";
     PNPM_HOME = "${homeDir}/.local/share/pnpm";
     BUN_INSTALL = "${homeDir}/.local/share/bun";
     BUN_INSTALL_CACHE_DIR = "${homeDir}/.cache/.bun/install/cache";
@@ -28,7 +39,8 @@ let
     "${homeDir}/.local/share/mise/shims"
     "${homeDir}/.local/share/pnpm"
     "${homeDir}/.local/share/bun/bin"
-    "${homeDir}/go/bin"
+    "${homeDir}/.local/share/go/bin"
+    "${homeDir}/.local/share/cargo/bin"
     "${homeDir}/.local/bin"
     "${homeDir}/bin"
     "/usr/local/bin"

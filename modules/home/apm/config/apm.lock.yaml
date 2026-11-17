@@ -946,9 +946,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 249ea826ee32e0f6e70a79c64f304ddb62cba827
-  resolved_ref: v1.18.0+249ea82
-  version: 1.18.0+249ea82
+  resolved_commit: 68a86c1317e02398da6cf97af8815cf87d4d07b9
+  resolved_ref: v1.19.0+68a86c1
+  version: 1.19.0+68a86c1
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -987,6 +987,29 @@ dependencies:
   - .agents/skills/deep-research/references/corpus-market.md
   - .agents/skills/deep-research/references/corpus-software.md
   - .agents/skills/deep-research/references/evidence.md
+  - .agents/skills/deep-research/scripts/lib/chrome.ts
+  - .agents/skills/deep-research/scripts/lib/cleanup.ts
+  - .agents/skills/deep-research/scripts/lib/cli.ts
+  - .agents/skills/deep-research/scripts/lib/desktop.ts
+  - .agents/skills/deep-research/scripts/lib/http.ts
+  - .agents/skills/deep-research/scripts/lib/index.ts
+  - .agents/skills/deep-research/scripts/lib/lock.ts
+  - .agents/skills/deep-research/scripts/lib/process.ts
+  - .agents/skills/deep-research/scripts/lib/text.ts
+  - .agents/skills/deep-research/scripts/reddit/arctic.ts
+  - .agents/skills/deep-research/scripts/reddit/browser.ts
+  - .agents/skills/deep-research/scripts/reddit/cache.ts
+  - .agents/skills/deep-research/scripts/reddit/collect.ts
+  - .agents/skills/deep-research/scripts/reddit/human-fix.ts
+  - .agents/skills/deep-research/scripts/reddit/index.ts
+  - .agents/skills/deep-research/scripts/reddit/page.ts
+  - .agents/skills/deep-research/scripts/reddit/query.ts
+  - .agents/skills/deep-research/scripts/reddit/session.ts
+  - .agents/skills/deep-research/scripts/reddit/thread.ts
+  - .agents/skills/deep-research/scripts/search-discourse.ts
+  - .agents/skills/deep-research/scripts/search-github.ts
+  - .agents/skills/deep-research/scripts/search-hn.ts
+  - .agents/skills/deep-research/scripts/search-reddit.ts
   - .agents/skills/delete-session
   - .agents/skills/delete-session/SKILL.md
   - .agents/skills/delete-session/scripts/delete-session.ts
@@ -1172,6 +1195,29 @@ dependencies:
   - .claude/skills/deep-research/references/corpus-market.md
   - .claude/skills/deep-research/references/corpus-software.md
   - .claude/skills/deep-research/references/evidence.md
+  - .claude/skills/deep-research/scripts/lib/chrome.ts
+  - .claude/skills/deep-research/scripts/lib/cleanup.ts
+  - .claude/skills/deep-research/scripts/lib/cli.ts
+  - .claude/skills/deep-research/scripts/lib/desktop.ts
+  - .claude/skills/deep-research/scripts/lib/http.ts
+  - .claude/skills/deep-research/scripts/lib/index.ts
+  - .claude/skills/deep-research/scripts/lib/lock.ts
+  - .claude/skills/deep-research/scripts/lib/process.ts
+  - .claude/skills/deep-research/scripts/lib/text.ts
+  - .claude/skills/deep-research/scripts/reddit/arctic.ts
+  - .claude/skills/deep-research/scripts/reddit/browser.ts
+  - .claude/skills/deep-research/scripts/reddit/cache.ts
+  - .claude/skills/deep-research/scripts/reddit/collect.ts
+  - .claude/skills/deep-research/scripts/reddit/human-fix.ts
+  - .claude/skills/deep-research/scripts/reddit/index.ts
+  - .claude/skills/deep-research/scripts/reddit/page.ts
+  - .claude/skills/deep-research/scripts/reddit/query.ts
+  - .claude/skills/deep-research/scripts/reddit/session.ts
+  - .claude/skills/deep-research/scripts/reddit/thread.ts
+  - .claude/skills/deep-research/scripts/search-discourse.ts
+  - .claude/skills/deep-research/scripts/search-github.ts
+  - .claude/skills/deep-research/scripts/search-hn.ts
+  - .claude/skills/deep-research/scripts/search-reddit.ts
   - .claude/skills/delete-session
   - .claude/skills/delete-session/SKILL.md
   - .claude/skills/delete-session/scripts/delete-session.ts
@@ -1196,11 +1242,6 @@ dependencies:
   - .claude/skills/extract/SKILL.md
   - .claude/skills/extract/references/types.md
   - .claude/skills/extract/scripts/history-lint.ts
-  - .claude/skills/fetch-reddit
-  - .claude/skills/fetch-reddit/SKILL.md
-  - .claude/skills/fetch-reddit/scripts/fetch-reddit.py
-  - .claude/skills/find-best
-  - .claude/skills/find-best/SKILL.md
   - .claude/skills/find-session
   - .claude/skills/find-session/SKILL.md
   - .claude/skills/find-session/assets/cc.sql
@@ -1338,11 +1379,34 @@ dependencies:
     .agents/skills/chromatic/scripts/pairs.ts: sha256:2c07f4420b8935a400c652471c453d7b1597b966d6e7e42a7381b0fee8fa7553
     .agents/skills/create-skill/SKILL.md: sha256:20b71f8096a1d7bf0e692bf6acae05c093a7304fe0f99c015056971acc6b5d95
     .agents/skills/create-skill/scripts/slop-lint.ts: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
-    .agents/skills/deep-research/SKILL.md: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
-    .agents/skills/deep-research/references/choice.md: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
-    .agents/skills/deep-research/references/corpus-market.md: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
-    .agents/skills/deep-research/references/corpus-software.md: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
+    .agents/skills/deep-research/SKILL.md: sha256:b02cd927092457459615e1140419e20c8a6c20b6203d3f5dd74fef35f6890e22
+    .agents/skills/deep-research/references/choice.md: sha256:bb9470a85a677acf287242457bfce2d19f050133ce1707011fc37459819c5ab3
+    .agents/skills/deep-research/references/corpus-market.md: sha256:e251626fdf7d3cc192f00876c05cde93225b36677b5d088faf8a61ba4689da1a
+    .agents/skills/deep-research/references/corpus-software.md: sha256:1c2231b2229ddd4347f4e566bf9ff614d525854c9ced9f741b3d85db6d2b3eb1
     .agents/skills/deep-research/references/evidence.md: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+    .agents/skills/deep-research/scripts/lib/chrome.ts: sha256:c48989a00324c5c2930144f5033443e1fa6055f680692e14b021eabca434a077
+    .agents/skills/deep-research/scripts/lib/cleanup.ts: sha256:310bc115218603cee797417f5c1982ee0d62ea9d9d5df1a000d6f6cafcd1ed71
+    .agents/skills/deep-research/scripts/lib/cli.ts: sha256:278f78e72d69f9344d41e608ad7f28fc87d5615a656ddc605825cd3de8920896
+    .agents/skills/deep-research/scripts/lib/desktop.ts: sha256:a31c4fd19f3e8c0b258d665141f8ea468898e281ff486d419c96e817fef89560
+    .agents/skills/deep-research/scripts/lib/http.ts: sha256:0ffc48b5c8f674cd2a190d52e725ad2aca05d19c5ba9e7b917f3fad072d7ea93
+    .agents/skills/deep-research/scripts/lib/index.ts: sha256:e26686469ad83476118c8815b6d53fcc1a335f5ed74a668b56066417aeb1dd69
+    .agents/skills/deep-research/scripts/lib/lock.ts: sha256:4d9f6539f26fdea91cc36c537bbd327c2aa4ed964fa494a66461c6543ba838dd
+    .agents/skills/deep-research/scripts/lib/process.ts: sha256:56b2a33955789527335cff387908e783ed49db38181832fdb6c05e0742a6c063
+    .agents/skills/deep-research/scripts/lib/text.ts: sha256:cc10c035f471cadc2a8ef391db4a5331a5101477b5a4dfda6d1fe4a5baad1b7b
+    .agents/skills/deep-research/scripts/reddit/arctic.ts: sha256:a1343542d1f342f4eed6601d7574cd7e3ad6a53212d6e40a87973493ded0f5d7
+    .agents/skills/deep-research/scripts/reddit/browser.ts: sha256:2859982a38234a294d7c71aad7f605f780ac22357246fd8a19cc847e1b743e79
+    .agents/skills/deep-research/scripts/reddit/cache.ts: sha256:af4c9d0225f0bee74384e04f3d2f4d7011bb77e883910fb9bae39352d45eb3e2
+    .agents/skills/deep-research/scripts/reddit/collect.ts: sha256:292e3ce5ed65feaefbf802f5e0f2895162410de979e61ca7c1476dbbf342bf7f
+    .agents/skills/deep-research/scripts/reddit/human-fix.ts: sha256:cc9bf8107ee911a68e513cf997c378c54e000ed115ec212e85a775c6f7018043
+    .agents/skills/deep-research/scripts/reddit/index.ts: sha256:4544a3e7826159171536c63f310f76ae2307f8c5608ea3aee5256c8dc290f093
+    .agents/skills/deep-research/scripts/reddit/page.ts: sha256:91c629a37823e9d1604d329c404caf0392f943af44e5471e13713e72ddb7c265
+    .agents/skills/deep-research/scripts/reddit/query.ts: sha256:973257ed1a819d23c4d613e36780939fb6ffd6715fa358984c5dbf151d5fb977
+    .agents/skills/deep-research/scripts/reddit/session.ts: sha256:13a4fd6ad261f54b16e1ad16f7ad8e96b73308958ccd877297f8867d6cc813cb
+    .agents/skills/deep-research/scripts/reddit/thread.ts: sha256:8c2d652c170a42f73814ebbeeb7e1d4451a84b483726aec731972ed3387af706
+    .agents/skills/deep-research/scripts/search-discourse.ts: sha256:ad6586dc9cadcfbf24baed2fce73c7c722369088468971081bdf8c5eea1b6c1f
+    .agents/skills/deep-research/scripts/search-github.ts: sha256:f0f4a32704ef0f228e672098c36bc4533c6b36dea0d2538e632317aad55a6dee
+    .agents/skills/deep-research/scripts/search-hn.ts: sha256:199e4bb20e20a58776328f8f84bf117dc1a0ad9df3982dd3d218d941d9864fd6
+    .agents/skills/deep-research/scripts/search-reddit.ts: sha256:786d461e805a0c3ffb774742b990e5732ca44f6528e0d5b135df660c799b9c67
     .agents/skills/delete-session/SKILL.md: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
     .agents/skills/delete-session/scripts/delete-session.ts: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
     .agents/skills/desvio-update/SKILL.md: sha256:4f6bc21a80c17c8090891445a4bb2e89d8733d5fb2ee1da814a6210c210ef7ab
@@ -1464,11 +1528,34 @@ dependencies:
     .claude/skills/chromatic/scripts/pairs.ts: sha256:2c07f4420b8935a400c652471c453d7b1597b966d6e7e42a7381b0fee8fa7553
     .claude/skills/create-skill/SKILL.md: sha256:20b71f8096a1d7bf0e692bf6acae05c093a7304fe0f99c015056971acc6b5d95
     .claude/skills/create-skill/scripts/slop-lint.ts: sha256:3c7792eb313fd4d5756f71bf580867a2bbe6813ef75458275ac4c797b249dfbc
-    .claude/skills/deep-research/SKILL.md: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
-    .claude/skills/deep-research/references/choice.md: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
-    .claude/skills/deep-research/references/corpus-market.md: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
-    .claude/skills/deep-research/references/corpus-software.md: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
+    .claude/skills/deep-research/SKILL.md: sha256:b02cd927092457459615e1140419e20c8a6c20b6203d3f5dd74fef35f6890e22
+    .claude/skills/deep-research/references/choice.md: sha256:bb9470a85a677acf287242457bfce2d19f050133ce1707011fc37459819c5ab3
+    .claude/skills/deep-research/references/corpus-market.md: sha256:e251626fdf7d3cc192f00876c05cde93225b36677b5d088faf8a61ba4689da1a
+    .claude/skills/deep-research/references/corpus-software.md: sha256:1c2231b2229ddd4347f4e566bf9ff614d525854c9ced9f741b3d85db6d2b3eb1
     .claude/skills/deep-research/references/evidence.md: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+    .claude/skills/deep-research/scripts/lib/chrome.ts: sha256:c48989a00324c5c2930144f5033443e1fa6055f680692e14b021eabca434a077
+    .claude/skills/deep-research/scripts/lib/cleanup.ts: sha256:310bc115218603cee797417f5c1982ee0d62ea9d9d5df1a000d6f6cafcd1ed71
+    .claude/skills/deep-research/scripts/lib/cli.ts: sha256:278f78e72d69f9344d41e608ad7f28fc87d5615a656ddc605825cd3de8920896
+    .claude/skills/deep-research/scripts/lib/desktop.ts: sha256:a31c4fd19f3e8c0b258d665141f8ea468898e281ff486d419c96e817fef89560
+    .claude/skills/deep-research/scripts/lib/http.ts: sha256:0ffc48b5c8f674cd2a190d52e725ad2aca05d19c5ba9e7b917f3fad072d7ea93
+    .claude/skills/deep-research/scripts/lib/index.ts: sha256:e26686469ad83476118c8815b6d53fcc1a335f5ed74a668b56066417aeb1dd69
+    .claude/skills/deep-research/scripts/lib/lock.ts: sha256:4d9f6539f26fdea91cc36c537bbd327c2aa4ed964fa494a66461c6543ba838dd
+    .claude/skills/deep-research/scripts/lib/process.ts: sha256:56b2a33955789527335cff387908e783ed49db38181832fdb6c05e0742a6c063
+    .claude/skills/deep-research/scripts/lib/text.ts: sha256:cc10c035f471cadc2a8ef391db4a5331a5101477b5a4dfda6d1fe4a5baad1b7b
+    .claude/skills/deep-research/scripts/reddit/arctic.ts: sha256:a1343542d1f342f4eed6601d7574cd7e3ad6a53212d6e40a87973493ded0f5d7
+    .claude/skills/deep-research/scripts/reddit/browser.ts: sha256:2859982a38234a294d7c71aad7f605f780ac22357246fd8a19cc847e1b743e79
+    .claude/skills/deep-research/scripts/reddit/cache.ts: sha256:af4c9d0225f0bee74384e04f3d2f4d7011bb77e883910fb9bae39352d45eb3e2
+    .claude/skills/deep-research/scripts/reddit/collect.ts: sha256:292e3ce5ed65feaefbf802f5e0f2895162410de979e61ca7c1476dbbf342bf7f
+    .claude/skills/deep-research/scripts/reddit/human-fix.ts: sha256:cc9bf8107ee911a68e513cf997c378c54e000ed115ec212e85a775c6f7018043
+    .claude/skills/deep-research/scripts/reddit/index.ts: sha256:4544a3e7826159171536c63f310f76ae2307f8c5608ea3aee5256c8dc290f093
+    .claude/skills/deep-research/scripts/reddit/page.ts: sha256:91c629a37823e9d1604d329c404caf0392f943af44e5471e13713e72ddb7c265
+    .claude/skills/deep-research/scripts/reddit/query.ts: sha256:973257ed1a819d23c4d613e36780939fb6ffd6715fa358984c5dbf151d5fb977
+    .claude/skills/deep-research/scripts/reddit/session.ts: sha256:13a4fd6ad261f54b16e1ad16f7ad8e96b73308958ccd877297f8867d6cc813cb
+    .claude/skills/deep-research/scripts/reddit/thread.ts: sha256:8c2d652c170a42f73814ebbeeb7e1d4451a84b483726aec731972ed3387af706
+    .claude/skills/deep-research/scripts/search-discourse.ts: sha256:ad6586dc9cadcfbf24baed2fce73c7c722369088468971081bdf8c5eea1b6c1f
+    .claude/skills/deep-research/scripts/search-github.ts: sha256:f0f4a32704ef0f228e672098c36bc4533c6b36dea0d2538e632317aad55a6dee
+    .claude/skills/deep-research/scripts/search-hn.ts: sha256:199e4bb20e20a58776328f8f84bf117dc1a0ad9df3982dd3d218d941d9864fd6
+    .claude/skills/deep-research/scripts/search-reddit.ts: sha256:786d461e805a0c3ffb774742b990e5732ca44f6528e0d5b135df660c799b9c67
     .claude/skills/delete-session/SKILL.md: sha256:e9be2afa9ff776274f6005c619f9baf23198ff195fe2bec4d14baec158036d63
     .claude/skills/delete-session/scripts/delete-session.ts: sha256:b11cb4e420172080cac91513c5d6be09c438aa939ca658096e510b76de942968
     .claude/skills/desvio-update/SKILL.md: sha256:4f6bc21a80c17c8090891445a4bb2e89d8733d5fb2ee1da814a6210c210ef7ab
@@ -1487,9 +1574,6 @@ dependencies:
     .claude/skills/extract/SKILL.md: sha256:4dbdb01f3573267f0c51fe262c8b50961ba31b449b0a4083620360b4a11bdacb
     .claude/skills/extract/references/types.md: sha256:60213ec3f45b738c180cc66cfe05b228335d47e7baf7a8eca944282ebff93f7e
     .claude/skills/extract/scripts/history-lint.ts: sha256:a751f07080de402780c1a5c98597ec0323918b9a37910347e8815ab5727945fd
-    .claude/skills/fetch-reddit/SKILL.md: sha256:5a82547d5fc776492c1b05e4b0e4a835be3330e758c5c758679ecf21341788c4
-    .claude/skills/fetch-reddit/scripts/fetch-reddit.py: sha256:47c48ddd8d412ce721b3e8abe4cd2f4d2cf43807a639811ecf4c83987fc80770
-    .claude/skills/find-best/SKILL.md: sha256:ea84d45656b8dc4d8d9e083e6a9102ab505079642ac59f2bd15eb78f2f0f72a4
     .claude/skills/find-session/SKILL.md: sha256:8c16f797121bc1b51ba0462ea9c81f1feda05bddfef25f4291f00adc3e8abc50
     .claude/skills/find-session/assets/cc.sql: sha256:95e3f9b22b837d4c6b32dd9df97bc50808421afdf9e24e6fcf9ba191f21ae6a8
     .claude/skills/find-session/scripts/open-session.ts: sha256:5f935ff44a1beb8fe1290321e70b60b3ec707ec87ed23b1fa27b4a4b250f175e
@@ -1566,10 +1650,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:3471fdfc3f280f676fd51210e9e89fd73fe18a39e1fb8fdfe334b7720ee5737b
+  content_hash: sha256:8a13249bd7fe3edf1b39eb89999098fd183b4a264b216faeeb3656646f8919b8
   constraint: ^1.0.0
-  resolved_tag: v1.18.0+249ea82
-  resolved_at: '2026-11-15T20:22:54+00:00'
+  resolved_tag: v1.19.0+68a86c1
+  resolved_at: '2026-11-17T17:15:36+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -1895,7 +1979,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
+  content_hash: sha256:b02cd927092457459615e1140419e20c8a6c20b6203d3f5dd74fef35f6890e22
 - kind: project-relative
   target: claude
   value: .claude/skills/deep-research/references/choice.md
@@ -1904,7 +1988,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
+  content_hash: sha256:bb9470a85a677acf287242457bfce2d19f050133ce1707011fc37459819c5ab3
 - kind: project-relative
   target: claude
   value: .claude/skills/deep-research/references/corpus-market.md
@@ -1913,7 +1997,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
+  content_hash: sha256:e251626fdf7d3cc192f00876c05cde93225b36677b5d088faf8a61ba4689da1a
 - kind: project-relative
   target: claude
   value: .claude/skills/deep-research/references/corpus-software.md
@@ -1922,7 +2006,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
+  content_hash: sha256:1c2231b2229ddd4347f4e566bf9ff614d525854c9ced9f741b3d85db6d2b3eb1
 - kind: project-relative
   target: claude
   value: .claude/skills/deep-research/references/evidence.md
@@ -1932,6 +2016,213 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/chrome.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:c48989a00324c5c2930144f5033443e1fa6055f680692e14b021eabca434a077
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/cleanup.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:310bc115218603cee797417f5c1982ee0d62ea9d9d5df1a000d6f6cafcd1ed71
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/cli.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:278f78e72d69f9344d41e608ad7f28fc87d5615a656ddc605825cd3de8920896
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/desktop.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:a31c4fd19f3e8c0b258d665141f8ea468898e281ff486d419c96e817fef89560
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/http.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:0ffc48b5c8f674cd2a190d52e725ad2aca05d19c5ba9e7b917f3fad072d7ea93
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/index.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:e26686469ad83476118c8815b6d53fcc1a335f5ed74a668b56066417aeb1dd69
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/lock.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:4d9f6539f26fdea91cc36c537bbd327c2aa4ed964fa494a66461c6543ba838dd
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/process.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:56b2a33955789527335cff387908e783ed49db38181832fdb6c05e0742a6c063
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/lib/text.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:cc10c035f471cadc2a8ef391db4a5331a5101477b5a4dfda6d1fe4a5baad1b7b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/arctic.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:a1343542d1f342f4eed6601d7574cd7e3ad6a53212d6e40a87973493ded0f5d7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/browser.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:2859982a38234a294d7c71aad7f605f780ac22357246fd8a19cc847e1b743e79
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/cache.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:af4c9d0225f0bee74384e04f3d2f4d7011bb77e883910fb9bae39352d45eb3e2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/collect.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:292e3ce5ed65feaefbf802f5e0f2895162410de979e61ca7c1476dbbf342bf7f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/human-fix.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:cc9bf8107ee911a68e513cf997c378c54e000ed115ec212e85a775c6f7018043
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/index.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:4544a3e7826159171536c63f310f76ae2307f8c5608ea3aee5256c8dc290f093
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/page.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:91c629a37823e9d1604d329c404caf0392f943af44e5471e13713e72ddb7c265
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/query.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:973257ed1a819d23c4d613e36780939fb6ffd6715fa358984c5dbf151d5fb977
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/session.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:13a4fd6ad261f54b16e1ad16f7ad8e96b73308958ccd877297f8867d6cc813cb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/reddit/thread.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:8c2d652c170a42f73814ebbeeb7e1d4451a84b483726aec731972ed3387af706
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/search-discourse.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:ad6586dc9cadcfbf24baed2fce73c7c722369088468971081bdf8c5eea1b6c1f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/search-github.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:f0f4a32704ef0f228e672098c36bc4533c6b36dea0d2538e632317aad55a6dee
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/search-hn.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:199e4bb20e20a58776328f8f84bf117dc1a0ad9df3982dd3d218d941d9864fd6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-research/scripts/search-reddit.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:786d461e805a0c3ffb774742b990e5732ca44f6528e0d5b135df660c799b9c67
 - kind: project-relative
   target: claude
   value: .claude/skills/delete-session
@@ -2706,51 +2997,6 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:a751f07080de402780c1a5c98597ec0323918b9a37910347e8815ab5727945fd
-- kind: project-relative
-  target: claude
-  value: .claude/skills/fetch-reddit
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: null
-- kind: project-relative
-  target: claude
-  value: .claude/skills/fetch-reddit/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:5a82547d5fc776492c1b05e4b0e4a835be3330e758c5c758679ecf21341788c4
-- kind: project-relative
-  target: claude
-  value: .claude/skills/fetch-reddit/scripts/fetch-reddit.py
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:47c48ddd8d412ce721b3e8abe4cd2f4d2cf43807a639811ecf4c83987fc80770
-- kind: project-relative
-  target: claude
-  value: .claude/skills/find-best
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: null
-- kind: project-relative
-  target: claude
-  value: .claude/skills/find-best/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - yoshintame/agent-skills
-  active_owner: yoshintame/agent-skills
-  content_hash: sha256:ea84d45656b8dc4d8d9e083e6a9102ab505079642ac59f2bd15eb78f2f0f72a4
 - kind: project-relative
   target: claude
   value: .claude/skills/find-session
@@ -5648,7 +5894,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:adc91237d6d36db388ad612c2cbad4066fed8235f4f947e0043e5ea378adea19
+  content_hash: sha256:b02cd927092457459615e1140419e20c8a6c20b6203d3f5dd74fef35f6890e22
 - kind: project-relative
   target: legacy
   value: .agents/skills/deep-research/references/choice.md
@@ -5657,7 +5903,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:929fe4025e8b2bb64dca558c614ac73de9d8119cc4f6fb58d15a8796425cb9d2
+  content_hash: sha256:bb9470a85a677acf287242457bfce2d19f050133ce1707011fc37459819c5ab3
 - kind: project-relative
   target: legacy
   value: .agents/skills/deep-research/references/corpus-market.md
@@ -5666,7 +5912,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:ae09f6828ab3a60ad37cb1e999756aa6c431206847af3371f1cd9d295cbdf60d
+  content_hash: sha256:e251626fdf7d3cc192f00876c05cde93225b36677b5d088faf8a61ba4689da1a
 - kind: project-relative
   target: legacy
   value: .agents/skills/deep-research/references/corpus-software.md
@@ -5675,7 +5921,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:a10082290c1d4966d39dcc78c18f8dec0475b806d5401bf3579e0762d4e23f15
+  content_hash: sha256:1c2231b2229ddd4347f4e566bf9ff614d525854c9ced9f741b3d85db6d2b3eb1
 - kind: project-relative
   target: legacy
   value: .agents/skills/deep-research/references/evidence.md
@@ -5685,6 +5931,213 @@ deployments:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
   content_hash: sha256:fb31c7ebac3df971a0eebb269b62d123c44e9490d4e540da4073c0c12c561b3a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/chrome.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:c48989a00324c5c2930144f5033443e1fa6055f680692e14b021eabca434a077
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/cleanup.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:310bc115218603cee797417f5c1982ee0d62ea9d9d5df1a000d6f6cafcd1ed71
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/cli.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:278f78e72d69f9344d41e608ad7f28fc87d5615a656ddc605825cd3de8920896
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/desktop.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:a31c4fd19f3e8c0b258d665141f8ea468898e281ff486d419c96e817fef89560
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/http.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:0ffc48b5c8f674cd2a190d52e725ad2aca05d19c5ba9e7b917f3fad072d7ea93
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/index.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:e26686469ad83476118c8815b6d53fcc1a335f5ed74a668b56066417aeb1dd69
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/lock.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:4d9f6539f26fdea91cc36c537bbd327c2aa4ed964fa494a66461c6543ba838dd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/process.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:56b2a33955789527335cff387908e783ed49db38181832fdb6c05e0742a6c063
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/lib/text.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:cc10c035f471cadc2a8ef391db4a5331a5101477b5a4dfda6d1fe4a5baad1b7b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/arctic.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:a1343542d1f342f4eed6601d7574cd7e3ad6a53212d6e40a87973493ded0f5d7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/browser.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:2859982a38234a294d7c71aad7f605f780ac22357246fd8a19cc847e1b743e79
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/cache.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:af4c9d0225f0bee74384e04f3d2f4d7011bb77e883910fb9bae39352d45eb3e2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/collect.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:292e3ce5ed65feaefbf802f5e0f2895162410de979e61ca7c1476dbbf342bf7f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/human-fix.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:cc9bf8107ee911a68e513cf997c378c54e000ed115ec212e85a775c6f7018043
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/index.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:4544a3e7826159171536c63f310f76ae2307f8c5608ea3aee5256c8dc290f093
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/page.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:91c629a37823e9d1604d329c404caf0392f943af44e5471e13713e72ddb7c265
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/query.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:973257ed1a819d23c4d613e36780939fb6ffd6715fa358984c5dbf151d5fb977
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/session.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:13a4fd6ad261f54b16e1ad16f7ad8e96b73308958ccd877297f8867d6cc813cb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/reddit/thread.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:8c2d652c170a42f73814ebbeeb7e1d4451a84b483726aec731972ed3387af706
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/search-discourse.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:ad6586dc9cadcfbf24baed2fce73c7c722369088468971081bdf8c5eea1b6c1f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/search-github.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:f0f4a32704ef0f228e672098c36bc4533c6b36dea0d2538e632317aad55a6dee
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/search-hn.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:199e4bb20e20a58776328f8f84bf117dc1a0ad9df3982dd3d218d941d9864fd6
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-research/scripts/search-reddit.ts
+  runtime: null
+  scope: project
+  owners:
+  - yoshintame/agent-skills
+  active_owner: yoshintame/agent-skills
+  content_hash: sha256:786d461e805a0c3ffb774742b990e5732ca44f6528e0d5b135df660c799b9c67
 - kind: project-relative
   target: legacy
   value: .agents/skills/delete-session

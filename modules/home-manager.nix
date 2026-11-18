@@ -47,6 +47,7 @@
       )
 
       ./home/aerospace
+      ./home/agent-telemetry
       ./home/apm
       ./home/app-state
       ./home/atuin

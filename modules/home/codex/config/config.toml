@@ -149,3 +149,12 @@ command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.
 args = ["mcp"]
 cwd = "."
 enabled = false
+
+[otel]
+environment = "dev"
+log_user_prompt = true
+log_agent_responses = true
+log_guardian_assessments = true
+exporter = { otlp-grpc = { endpoint = "http://127.0.0.1:4317" } }
+trace_exporter = { otlp-grpc = { endpoint = "http://127.0.0.1:4317" } }
+metrics_exporter = { otlp-grpc = { endpoint = "http://127.0.0.1:4317" } }

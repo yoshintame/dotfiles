@@ -498,7 +498,7 @@ spoon.LeaderFlow:setup({
             { "r", "Hard Reopen", hardReopenFront },
         }},
 
-        { "Q", "[power]", {
+        { "o", "[power]", {
             { "r", "Restart", osa('tell application "System Events" to restart') },
             { "R", "Hard Restart", osaAdmin("shutdown -r now") },
             { "s", "Shutdown", osa('tell application "System Events" to shut down') },
@@ -506,16 +506,17 @@ spoon.LeaderFlow:setup({
             { "o", "Log Out", osa('tell application "System Events" to log out') },
             { "l", "Lock", function() hs.caffeinate.lockScreen() end },
             { "z", "Sleep", function() hs.caffeinate.systemSleep() end },
-            { "a", "[awake]", {
-                { "a", "Toggle", coffee.toggle },
-                { "1", "1 hour", coffee.awakeFor(1) },
-                { "2", "2 hours", coffee.awakeFor(2) },
-                { "4", "4 hours", coffee.awakeFor(4) },
-                { "8", "8 hours", coffee.awakeFor(8) },
-            }},
         }},
 
-        { "R", "[restart]", {
+        { "w", "[awake]", {
+            { "w", "Toggle", coffee.toggle },
+            { "1", "1 hour", coffee.awakeFor(1) },
+            { "2", "2 hours", coffee.awakeFor(2) },
+            { "4", "4 hours", coffee.awakeFor(4) },
+            { "8", "8 hours", coffee.awakeFor(8) },
+        }},
+
+        { "k", "[restart]", {
             { "k", "Karabiner", kickstartKarabiner },
             { "s", "AeroSpace", restartApp("bobko.aerospace") },
             { "r", "Raycast", restartApp("com.raycast.macos") },

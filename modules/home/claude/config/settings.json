@@ -6,7 +6,21 @@
     "CLAUDE_TRUSTED_DIRS_MODE": "prefix",
     "GIT_CONFIG_GLOBAL": "/Users/yoshintame/.dotfiles/modules/home/claude/config/agent.gitconfig",
     "CLAUDE_CODE_SHELL": "/run/current-system/sw/bin/bash",
-    "SHELL": "/run/current-system/sw/bin/bash"
+    "SHELL": "/run/current-system/sw/bin/bash",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "CLAUDE_CODE_ENHANCED_TELEMETRY_BETA": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_TRACES_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://127.0.0.1:4317",
+    "OTEL_METRICS_INCLUDE_VERSION": "true",
+    "OTEL_METRICS_INCLUDE_ENTRYPOINT": "true",
+    "OTEL_METRICS_INCLUDE_REPOSITORY": "true",
+    "OTEL_LOG_USER_PROMPTS": "1",
+    "OTEL_LOG_ASSISTANT_RESPONSES": "1",
+    "OTEL_LOG_TOOL_DETAILS": "1",
+    "OTEL_LOG_TOOL_CONTENT": "1"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -202,6 +216,18 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/agent-env.sh",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p \"$HOME/.local/state/agent-telemetry\" && /etc/profiles/per-user/yoshintame/bin/jq -c '. + {ts: (now | strftime(\"%Y-%m-%dT%H:%M:%SZ\")), ts_ms: (now * 1000 | floor)}' >> \"$HOME/.local/state/agent-telemetry/session-end.jsonl\"",
+            "timeout": 5
           }
         ]
       }

@@ -271,7 +271,7 @@ hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 require("raycast-nav").start()
 require("onepassword-focus-guard").start()
 require("afk-indicator").start()
-require("coffee-lid").start()
+local coffee = require("coffee-lid").start()
 hs.loadSpoon("SmsOtp")
 spoon.SmsOtp:start()
 
@@ -506,6 +506,13 @@ spoon.LeaderFlow:setup({
             { "o", "Log Out", osa('tell application "System Events" to log out') },
             { "l", "Lock", function() hs.caffeinate.lockScreen() end },
             { "z", "Sleep", function() hs.caffeinate.systemSleep() end },
+            { "a", "[awake]", {
+                { "a", "Toggle", coffee.toggle },
+                { "1", "1 hour", coffee.awakeFor(1) },
+                { "2", "2 hours", coffee.awakeFor(2) },
+                { "4", "4 hours", coffee.awakeFor(4) },
+                { "8", "8 hours", coffee.awakeFor(8) },
+            }},
         }},
 
         { "R", "[restart]", {

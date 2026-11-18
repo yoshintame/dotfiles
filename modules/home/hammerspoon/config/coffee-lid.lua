@@ -87,6 +87,23 @@ local function sync()
     updateIndicator(session)
 end
 
+function M.toggle()
+    if sessionEnd() then
+        spoon.Coffee:endSession()
+        hs.alert.show("Сон включён")
+    else
+        spoon.Coffee:startSession()
+        hs.alert.show("Сон отключён без срока")
+    end
+end
+
+function M.awakeFor(hours)
+    return function()
+        spoon.Coffee:startSession(hours * 60)
+        hs.alert.show("Сон отключён до " .. os.date("%H:%M", os.time() + hours * 3600))
+    end
+end
+
 function M.start()
     if hs.settings.get(SETTINGS_KEY) == nil then
         hs.settings.set(SETTINGS_KEY, { endOnLowBattery = true })

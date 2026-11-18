@@ -66,6 +66,10 @@ in
     computer = 30;
   };
 
+  security.sudo.extraConfig = ''
+    ${hostFacts.username} ALL = (root) NOPASSWD: /usr/bin/pmset -a disablesleep 0, /usr/bin/pmset -a disablesleep 1
+  '';
+
   users.users.${hostFacts.username} = {
     name = hostFacts.username;
     home = hostFacts.homeDir;

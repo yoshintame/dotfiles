@@ -271,6 +271,7 @@ hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 require("raycast-nav").start()
 require("onepassword-focus-guard").start()
 require("afk-indicator").start()
+require("coffee-lid").start()
 hs.loadSpoon("SmsOtp")
 spoon.SmsOtp:start()
 

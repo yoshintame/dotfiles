@@ -47,6 +47,7 @@
   };
   users.groups.gatus-secrets = { };
   services.tailscale = {
+    openFirewall = true;
     useRoutingFeatures = "none";
     authKeyFile = config.sops.secrets."TAILSCALE_AUTHKEY".path;
     authKeyParameters = {

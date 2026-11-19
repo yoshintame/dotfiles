@@ -7,7 +7,7 @@ M.author = "Mikhail Ivanov <m.ivanov0427@gmail.com>"
 
 function M:launchOrFocusWarpApp(name)
     local app = hs.application.get("Warp")
-    local window = app:findWindow(name)
+    local window = app and app:findWindow(name)
     if window ~= nil then
         window:focus()
     else

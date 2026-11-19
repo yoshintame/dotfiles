@@ -1,19 +1,12 @@
-local MODULES = {
-    "features.raycast-nav",
-    "features.onepassword-focus-guard",
-    "features.afk-indicator",
-    "features.coffee-lid",
-    "features.sms-otp",
-    "features.clipboard-history",
-    "features.meeting",
-    "features.hyper-setup",
-    "binds",
-}
+local apps = require("actions.apps")
+local bind = require("engine.bind")
+local leader = require("engine.leader")
 
+local features = require("user.features")
 local started, failed = {}, {}
 
-for _, name in ipairs(MODULES) do
-    local ok, err = xpcall(function() require(name).start() end, debug.traceback)
+local function run(name, fn)
+    local ok, err = xpcall(fn, debug.traceback)
     if ok then
         started[#started + 1] = name
     else
@@ -22,13 +15,32 @@ for _, name in ipairs(MODULES) do
     end
 end
 
+local enabled = {}
+for name in pairs(features) do enabled[#enabled + 1] = name end
+table.sort(enabled)
+
+for _, name in ipairs(enabled) do
+    run("features." .. name, function() require("features." .. name).start(features[name]) end)
+end
+
+run("binds", function()
+    local leaderConfig = require("user.leader")
+    leader.start(leaderConfig)
+    local direct = require("user.direct")
+    local rows = apps.launcher(direct.launcher)
+    for _, row in ipairs(direct.binds) do rows[#rows + 1] = row end
+    for _, row in ipairs(bind.fromChords(direct.proxy)) do rows[#rows + 1] = row end
+    bind.direct(rows, { leaderConfig.trigger })
+    switchCurrentAppWindows = apps.switchWindows
+end)
+
 if #failed > 0 then
-    hs.notify.new({ title = "Hammerspoon", informativeText = "Не стартовали: " .. table.concat(failed, ", ") }):send()
+    hs.notify.new({ title = "Hammerspoon", informativeText = "Failed to start: " .. table.concat(failed, ", ") }):send()
 end
 
 hs.shutdownCallback = function()
     for i = #started, 1, -1 do
         local module = package.loaded[started[i]]
-        if module.stop then pcall(module.stop) end
+        if module and module.stop then pcall(module.stop) end
     end
 end

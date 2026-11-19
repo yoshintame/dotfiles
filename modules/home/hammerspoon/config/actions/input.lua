@@ -1,4 +1,4 @@
-local chord = require("core.chord")
+local chord = require("engine.chord")
 
 local M = {}
 

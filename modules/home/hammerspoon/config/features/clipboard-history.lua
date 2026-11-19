@@ -1,8 +1,8 @@
 local M = {}
 
-local MAX = 9
 local POLL = 0.2
 
+local config = nil
 local history = {}
 local lastChange = nil
 local watcher = nil
@@ -36,7 +36,7 @@ local function record()
     local item = snapshot()
     if not item then return end
     table.insert(history, 1, item)
-    while #history > MAX do
+    while #history > config.size do
         table.remove(history)
     end
 end
@@ -60,7 +60,8 @@ function M.pasteAt(n)
     return function() pasteIndex(n) end
 end
 
-function M.start()
+function M.start(settings)
+    config = settings
     lastChange = hs.pasteboard.changeCount()
     record()
     watcher = hs.timer.new(POLL, function()

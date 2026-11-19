@@ -1,5 +1,6 @@
-local deeplink = require("core.deeplink")
-local sys = require("core.sys")
+local deeplink = require("engine.deeplink")
+local process = require("engine.process")
+local timer = require("engine.timer")
 
 local M = {}
 
@@ -7,26 +8,13 @@ local ESCAPE_KEYCODE = 53
 local ARROW_UP_KEYCODE = 126
 local ARROW_DOWN_KEYCODE = 125
 
+local config = nil
 local modal = nil
 local isNavMode = false
 local searchModeActive = false
 local escapeTap = nil
 local appWatcher = nil
 local windowFilter = nil
-
-local NAV_BINDINGS = {
-    { key = "j", mods = { "ctrl" }, toKey = "b" },
-    { key = "l", mods = { "ctrl" }, toKey = "l" },
-    { key = "left", mods = { "ctrl" }, toKey = "b" },
-    { key = "right", mods = { "ctrl" }, toKey = "l" },
-    { key = "d", mods = { "ctrl", "shift" }, toKey = "d" },
-    { key = "y", mods = { "ctrl", "shift" }, toKey = "y" },
-    { key = "c", mods = { "ctrl", "shift" }, toKey = "c" },
-    { key = "v", mods = { "ctrl", "shift" }, toKey = "v" },
-    { key = "u", mods = { "ctrl", "shift" }, toKey = "u" },
-    { key = "space", mods = { "ctrl", "shift" }, toKey = "space" },
-    { key = "return", mods = { "ctrl", "shift" }, toKey = "return" },
-}
 
 local function sendModeSignal(mode)
     local app = hs.application.find("com.raycast.macos")
@@ -63,7 +51,7 @@ end
 local function buildModal()
     modal = hs.hotkey.modal.new()
 
-    for _, binding in ipairs(NAV_BINDINGS) do
+    for _, binding in ipairs(config.keys) do
         local action = function()
             local app = hs.application.find("com.raycast.macos")
             hs.eventtap.keyStroke(binding.mods, binding.toKey, nil, app)
@@ -90,11 +78,12 @@ local function buildModal()
 end
 
 function M.openDownloads()
-    sys.open(deeplink.raycast("extensions/thomas/downloads-manager-nav/manage-downloads"), { background = true })
-    sys.after(0.3, enterNavMode)
+    process.open(deeplink.raycast("extensions/thomas/downloads-manager-nav/manage-downloads"), { background = true })
+    timer.after(0.3, enterNavMode)
 end
 
-function M.start()
+function M.start(settings)
+    config = settings
     buildModal()
 
     escapeTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)

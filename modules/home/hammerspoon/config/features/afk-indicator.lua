@@ -2,15 +2,7 @@ local M = {}
 
 local CONFIG = os.getenv("HOME") .. "/Library/Application Support/activitywatch/aw-watcher-afk/aw-watcher-afk.toml"
 local DEFAULT_TIMEOUT = 180
-local WARN_BEFORE = 30
 local POLL = 2
-local SIZE = 12
-local MARGIN = 8
-
-local COLORS = {
-    warn = { red = 1, green = 0.6, blue = 0, alpha = 0.9 },
-    afk = { white = 0.6, alpha = 0.7 },
-}
 
 local function readTimeout()
     local f = io.open(CONFIG, "r")
@@ -28,16 +20,17 @@ local function readTimeout()
     return DEFAULT_TIMEOUT
 end
 
+local config = nil
 local timeout = DEFAULT_TIMEOUT
 local state = nil
 local dot = nil
 local timer = nil
 
 local function createDot()
-    dot = hs.canvas.new({ x = 0, y = 0, w = SIZE, h = SIZE })
+    dot = hs.canvas.new({ x = 0, y = 0, w = config.size, h = config.size })
     dot:level(hs.canvas.windowLevels.overlay)
     dot:behavior({ "canJoinAllSpaces", "stationary", "fullScreenAuxiliary" })
-    dot[1] = { type = "circle", action = "fill", fillColor = COLORS.warn }
+    dot[1] = { type = "circle", action = "fill", fillColor = config.colors.warn }
 end
 
 local function suppressed()
@@ -54,14 +47,14 @@ local function show(next)
         return
     end
     local f = hs.screen.mainScreen():frame()
-    dot:frame({ x = f.x + f.w - SIZE - MARGIN, y = f.y + MARGIN, w = SIZE, h = SIZE })
-    dot[1].fillColor = COLORS[next]
+    dot:frame({ x = f.x + f.w - config.size - config.margin, y = f.y + config.margin, w = config.size, h = config.size })
+    dot[1].fillColor = config.colors[next]
     dot:show()
 end
 
 local function tick()
     local idle = hs.host.idleTime()
-    if idle < timeout - WARN_BEFORE or suppressed() then
+    if idle < timeout - config.warnBeforeSeconds or suppressed() then
         show(nil)
     elseif idle < timeout then
         show("warn")
@@ -70,7 +63,8 @@ local function tick()
     end
 end
 
-function M.start()
+function M.start(settings)
+    config = settings
     timeout = readTimeout()
     createDot()
     timer = hs.timer.new(POLL, tick)

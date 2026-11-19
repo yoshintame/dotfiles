@@ -1,5 +1,5 @@
-local bin = require("core.bin")
-local sys = require("core.sys")
+local bin = require("engine.bin")
+local process = require("engine.process")
 
 local M = {}
 
@@ -9,7 +9,7 @@ end
 
 local function asAdmin(shellCommand)
     return function()
-        sys.run(bin.osascript, { "-e", 'do shell script "' .. shellCommand .. '" with administrator privileges' })
+        process.run(bin.osascript, { "-e", 'do shell script "' .. shellCommand .. '" with administrator privileges' })
     end
 end
 

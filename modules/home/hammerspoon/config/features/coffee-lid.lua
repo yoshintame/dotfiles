@@ -1,13 +1,12 @@
-local bin = require("core.bin")
-local sys = require("core.sys")
+local bin = require("engine.bin")
+local process = require("engine.process")
 
 local M = {}
 
 local SETTINGS_KEY = "Coffee"
-local LOW_BATTERY = 20
 local INDICATOR = "CoffeeActive"
-local INDICATOR_POSITION = 300
 
+local config = nil
 local applied
 local indicator
 
@@ -36,8 +35,8 @@ local ticker = nil
 
 local function seedIndicatorPosition()
     if hs.settings.get("HSNSStatusItem Preferred Position " .. INDICATOR) ~= nil then return end
-    hs.settings.set("NSStatusItem Preferred Position " .. INDICATOR, INDICATOR_POSITION)
-    hs.settings.set("HSNSStatusItem Preferred Position " .. INDICATOR, INDICATOR_POSITION)
+    hs.settings.set("NSStatusItem Preferred Position " .. INDICATOR, config.indicatorPosition)
+    hs.settings.set("HSNSStatusItem Preferred Position " .. INDICATOR, config.indicatorPosition)
 end
 
 local function updateIndicator(session)
@@ -69,7 +68,7 @@ end
 local function setSleepDisabled(disabled)
     if applied == disabled then return end
     applied = disabled
-    sys.run(bin.sudo, { "-n", bin.pmset, "-a", "disablesleep", disabled and "1" or "0" }, {
+    process.run(bin.sudo, { "-n", bin.pmset, "-a", "disablesleep", disabled and "1" or "0" }, {
         onExit = function(code, _, stderr)
             if code ~= 0 then
                 applied = nil
@@ -105,13 +104,14 @@ function M.awakeFor(hours)
     end
 end
 
-function M.start()
+function M.start(settings)
+    config = settings
     if hs.settings.get(SETTINGS_KEY) == nil then
         hs.settings.set(SETTINGS_KEY, { endOnLowBattery = true })
     end
 
     hs.loadSpoon("Coffee")
-    spoon.Coffee.lowBatteryThreshold = LOW_BATTERY
+    spoon.Coffee.lowBatteryThreshold = config.lowBatteryPercent
     spoon.Coffee:start()
 
     ticker = hs.timer.new(1, function()
@@ -125,7 +125,7 @@ function M.start()
 end
 
 function M.stop()
-    sys.detach("/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
+    process.detach("/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
         .. bin.sudo .. " -n " .. bin.pmset .. " -a disablesleep 0")
 end
 

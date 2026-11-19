@@ -1,13 +1,13 @@
-local keys = require("core.keys")
+local keycodes = require("engine.keycodes")
 
 local M = {}
 
-local KEYCODES = keys.ANSI
+local KEYCODES = keycodes.US_ANSI
 local KEY_LABELS = { space = "SPC" }
 
 local style, root, current, helper, modal, trigger, mouseTap
 
-local keycode = keys.code
+local keycode = keycodes.resolve
 
 local function idOf(shift, code)
     return (shift and "S" or "") .. code

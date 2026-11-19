@@ -1,13 +1,9 @@
-local bin = require("core.bin")
-local sys = require("core.sys")
+local bin = require("engine.bin")
+local process = require("engine.process")
 
 local M = {}
 
-local SCRIPTS_DIR = os.getenv("HOME") .. "/Documents/obsidian/yoshintame/_scripts"
-local SCRIPT = SCRIPTS_DIR .. "/meeting-note.ts"
-local AUTO_OPEN_AFTER_MEETING = true
-local HINT_TTL = 150
-
+local config = nil
 local pendingHint = nil
 local currentMeeting = nil
 local outcomeChooser = nil
@@ -18,19 +14,19 @@ local function trim(s)
 end
 
 local function runScript(args, onDone)
-    local full = { SCRIPT }
+    local full = { config.scriptsDir .. "/" .. config.script }
     for _, a in ipairs(args) do table.insert(full, a) end
-    sys.run(bin.bun, full, { cwd = SCRIPTS_DIR, onExit = onDone })
+    process.run(bin.bun, full, { cwd = config.scriptsDir, onExit = onDone })
 end
 
 local function openNote(path)
     if not path or path == "" then return end
-    sys.open("obsidian://open?path=" .. hs.http.encodeForQuery(path))
+    process.open("obsidian://open?path=" .. hs.http.encodeForQuery(path))
 end
 
 local function consumeHint()
     local mtype = "ad-hoc"
-    if pendingHint and (hs.timer.secondsSinceEpoch() - pendingHint.at) <= HINT_TTL then
+    if pendingHint and (hs.timer.secondsSinceEpoch() - pendingHint.at) <= config.joinHintSeconds then
         mtype = pendingHint.type
     end
     pendingHint = nil
@@ -60,7 +56,7 @@ local function onMeetingEnd()
         runScript({ "set-status", meeting.path, status }, function(code, _, err)
             if code ~= 0 then print("[meeting] set-status error: " .. err) end
         end)
-        if AUTO_OPEN_AFTER_MEETING then openNote(meeting.path) end
+        if config.openNoteAfterMeeting then openNote(meeting.path) end
     end
 
     outcomeChooser = hs.chooser.new(function(choice)
@@ -76,10 +72,12 @@ local function onMeetingEnd()
     outcomeChooser:show()
 end
 
-function M.join(link, mtype)
-    return function()
-        pendingHint = { type = mtype, at = hs.timer.secondsSinceEpoch() }
-        sys.open(link)
+function M.join(mtype)
+    return function(link)
+        return function()
+            pendingHint = { type = mtype, at = hs.timer.secondsSinceEpoch() }
+            process.open(link)
+        end
     end
 end
 
@@ -100,7 +98,8 @@ function M.markRelisten()
     hs.alert.show("🔴 Помечено: переслушать")
 end
 
-function M.start()
+function M.start(settings)
+    config = settings
     hs.loadSpoon("Zoom")
     spoon.Zoom:setStatusCallback(function()
         local now = spoon.Zoom:inMeeting()

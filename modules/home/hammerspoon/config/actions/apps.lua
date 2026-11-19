@@ -1,5 +1,6 @@
-local deeplink = require("core.deeplink")
-local sys = require("core.sys")
+local deeplink = require("engine.deeplink")
+local process = require("engine.process")
+local timer = require("engine.timer")
 
 local M = {}
 
@@ -17,6 +18,16 @@ function M.focus(name, opts)
     end
 end
 
+function M.launcher(rows)
+    local binds = {}
+    for _, row in ipairs(rows) do
+        local name, mods, key = row[1], row[2], row[3]
+        local opts = { layout = row.layout }
+        binds[#binds + 1] = { mods, key, row.warp and M.warpTab(name, opts) or M.focus(name, opts) }
+    end
+    return binds
+end
+
 function M.warpTab(name, opts)
     local layout = opts and opts.layout
     return function()
@@ -25,7 +36,7 @@ function M.warpTab(name, opts)
         if window then
             window:focus()
         else
-            sys.open("warp://launch/" .. name)
+            process.open("warp://launch/" .. name)
         end
         switchLayout(layout)
     end
@@ -34,7 +45,7 @@ end
 function M.killAndReopen(bundleID)
     local app = hs.application.get(bundleID)
     if app then app:kill9() end
-    sys.after(REOPEN_DELAY, function()
+    timer.after(REOPEN_DELAY, function()
         hs.application.launchOrFocusByBundleID(bundleID)
     end)
 end
@@ -63,7 +74,7 @@ function M.switchWindows()
     local app = hs.application.frontmostApplication()
     local bundleID = app and app:bundleID()
     if not bundleID then return end
-    sys.open(deeplink.raycast("extensions/yoshintame/raycast-app-switcher/app-windows-by-id", {
+    process.open(deeplink.raycast("extensions/yoshintame/raycast-app-switcher/app-windows-by-id", {
         arguments = { appIdentifier = bundleID },
     }), { background = true })
 end

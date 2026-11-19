@@ -1,5 +1,6 @@
-local bin = require("core.bin")
-local sys = require("core.sys")
+local bin = require("engine.bin")
+local process = require("engine.process")
+local timer = require("engine.timer")
 
 local M = {}
 
@@ -30,7 +31,7 @@ end
 
 local function disarm()
     guardApp = nil
-    sys.cancel(expiry)
+    timer.cancel(expiry)
     expiry = nil
     inputTap:stop()
 end
@@ -38,7 +39,7 @@ end
 local function pinAerospaceFocus(app)
     local win = app:focusedWindow() or app:mainWindow()
     if not win then return end
-    sys.run(bin.aerospace, { "focus", "--window-id", tostring(win:id()) })
+    process.run(bin.aerospace, { "focus", "--window-id", tostring(win:id()) })
 end
 
 local function arm()
@@ -47,7 +48,7 @@ local function arm()
     guardApp = lastApp
     lastInputAt = 0
     inputTap:start()
-    expiry = sys.after(GUARD_SECONDS, disarm)
+    expiry = timer.after(GUARD_SECONDS, disarm)
     pinAerospaceFocus(guardApp)
 end
 

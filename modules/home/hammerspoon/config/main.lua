@@ -301,17 +301,9 @@ require("clipboard-history").start({
 })
 
 hs.loadSpoon("Zoom")
-local meetingDndActive = false
-local function setMeetingDnd(active)
-    if active == meetingDndActive then return end
-    meetingDndActive = active
-    hs.task.new("/usr/bin/shortcuts", nil, { "run", active and "DND On" or "DND Off" }):start()
-    hs.alert.show(active and "🔕 Zoom meeting → DND on" or "🔔 Meeting ended → DND off")
-end
 local inMeeting = false
 spoon.Zoom:setStatusCallback(function()
     local now = spoon.Zoom:inMeeting()
-    setMeetingDnd(now)
     if now and not inMeeting then
         meetingNotes.onMeetingStart()
     elseif inMeeting and not now then

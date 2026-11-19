@@ -93,11 +93,4 @@ function M.start()
     end)
 end
 
-function M.stop()
-    if inputTap then disarm() end
-    if appWatcher then appWatcher:stop() end
-    if popupFilter then popupFilter:unsubscribeAll() end
-    if mainWindowFilter then mainWindowFilter:unsubscribeAll() end
-end
-
 return M

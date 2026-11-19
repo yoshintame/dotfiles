@@ -107,9 +107,7 @@ function M.markRelisten()
   hs.alert.show("🔴 Помечено: переслушать")
 end
 
-function M.setup(opts)
-  opts = opts or {}
-  for k, v in pairs(opts) do config[k] = v end
+function M.start()
   config.bun = config.bun or resolveBun()
   config.scriptPath = config.scriptPath or (config.scriptsDir .. "/meeting-note.ts")
   return M

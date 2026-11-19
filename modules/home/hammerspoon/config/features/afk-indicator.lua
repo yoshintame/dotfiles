@@ -30,11 +30,15 @@ end
 
 local timeout = DEFAULT_TIMEOUT
 local state = nil
+local dot = nil
+local timer = nil
 
-local dot = hs.canvas.new({ x = 0, y = 0, w = SIZE, h = SIZE })
-dot:level(hs.canvas.windowLevels.overlay)
-dot:behavior({ "canJoinAllSpaces", "stationary", "fullScreenAuxiliary" })
-dot[1] = { type = "circle", action = "fill", fillColor = COLORS.warn }
+local function createDot()
+    dot = hs.canvas.new({ x = 0, y = 0, w = SIZE, h = SIZE })
+    dot:level(hs.canvas.windowLevels.overlay)
+    dot:behavior({ "canJoinAllSpaces", "stationary", "fullScreenAuxiliary" })
+    dot[1] = { type = "circle", action = "fill", fillColor = COLORS.warn }
+end
 
 local function suppressed()
     if hs.caffeinate.sessionProperties().CGSSessionScreenIsLocked then return true end
@@ -66,10 +70,10 @@ local function tick()
     end
 end
 
-local timer = hs.timer.new(POLL, tick)
-
 function M.start()
     timeout = readTimeout()
+    createDot()
+    timer = hs.timer.new(POLL, tick)
     timer:start()
     return M
 end

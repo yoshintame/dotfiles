@@ -4,7 +4,8 @@ local MAX = 9
 local POLL = 0.2
 
 local history = {}
-local lastChange = hs.pasteboard.changeCount()
+local lastChange = nil
+local watcher = nil
 
 local PRIVATE_TYPES = {
     ["org.nspasteboard.ConcealedType"] = true,
@@ -40,18 +41,6 @@ local function record()
     end
 end
 
-local function parseChord(chord)
-    local mods, key = {}, nil
-    for token in string.gmatch(chord, "%S+") do
-        if token == "cmd" or token == "alt" or token == "ctrl" or token == "shift" then
-            table.insert(mods, token)
-        else
-            key = token
-        end
-    end
-    return mods, key
-end
-
 local function pasteIndex(n)
     local item = history[n]
     if not item then
@@ -67,20 +56,20 @@ local function pasteIndex(n)
     hs.eventtap.keyStroke({ "cmd" }, "v")
 end
 
-local watcher = hs.timer.new(POLL, function()
-    local cc = hs.pasteboard.changeCount()
-    if cc == lastChange then return end
-    lastChange = cc
-    record()
-end)
+function M.pasteAt(n)
+    return function() pasteIndex(n) end
+end
 
-function M.start(chords)
+function M.start()
+    lastChange = hs.pasteboard.changeCount()
     record()
+    watcher = hs.timer.new(POLL, function()
+        local cc = hs.pasteboard.changeCount()
+        if cc == lastChange then return end
+        lastChange = cc
+        record()
+    end)
     watcher:start()
-    for i, chord in ipairs(chords) do
-        local mods, key = parseChord(chord)
-        hs.hotkey.bind(mods, key, function() pasteIndex(i) end)
-    end
     return M
 end
 

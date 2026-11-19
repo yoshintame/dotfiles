@@ -31,9 +31,7 @@ local function indicatorTitle()
     return "● " .. formatClock(math.max(0, session - os.time()))
 end
 
-local ticker = hs.timer.new(1, function()
-    if indicator then indicator:setTitle(indicatorTitle()) end
-end)
+local ticker = nil
 
 local function seedIndicatorPosition()
     if hs.settings.get("HSNSStatusItem Preferred Position " .. INDICATOR) ~= nil then return end
@@ -113,15 +111,19 @@ function M.start()
     spoon.Coffee.lowBatteryThreshold = LOW_BATTERY
     spoon.Coffee:start()
 
+    ticker = hs.timer.new(1, function()
+        if indicator then indicator:setTitle(indicatorTitle()) end
+    end)
+
     hs.settings.watchKey("coffee-lid", SETTINGS_KEY, sync)
     sync()
 
-    hs.shutdownCallback = function()
-        hs.execute("(/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
-            .. SUDO .. " -n " .. PMSET .. " -a disablesleep 0) >/dev/null 2>&1 &")
-    end
-
     return M
+end
+
+function M.stop()
+    hs.execute("(/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
+        .. SUDO .. " -n " .. PMSET .. " -a disablesleep 0) >/dev/null 2>&1 &")
 end
 
 return M

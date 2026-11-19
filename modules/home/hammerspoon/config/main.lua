@@ -226,7 +226,7 @@ local function osaAdmin(shellCommand)
     end
 end
 
-local meetingNotes = require("meeting-notes").setup({ autoOpenAfterMeeting = true })
+local meetingNotes = require("features.meeting-notes")
 
 local function joinMeeting(zoomUrl, mtype)
     return function()
@@ -286,22 +286,31 @@ local function newDraft(ext)
 end
 hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 
-require("raycast-nav").start()
-require("onepassword-focus-guard").start()
-require("afk-indicator").start()
-local coffee = require("coffee-lid").start()
-hs.loadSpoon("SmsOtp")
-spoon.SmsOtp:start()
+local coffee = require("features.coffee-lid")
 
-require("finder-copy-path").start()
+local function parseChord(chord)
+    local mods, key = {}, nil
+    for token in string.gmatch(chord, "%S+") do
+        if token == "cmd" or token == "alt" or token == "ctrl" or token == "shift" then
+            table.insert(mods, token)
+        else
+            key = token
+        end
+    end
+    return mods, key
+end
 
-require("clipboard-history").start({
+local clipboard = require("features.clipboard-history")
+for i, chord in ipairs({
     proxy.paste_history1,
     proxy.paste_history2,
     proxy.paste_history3,
     proxy.paste_history4,
     proxy.paste_history5,
-})
+}) do
+    local mods, key = parseChord(chord)
+    hs.hotkey.bind(mods, key, clipboard.pasteAt(i))
+end
 
 hs.loadSpoon("Zoom")
 local inMeeting = false
@@ -452,7 +461,7 @@ require("leader").start({
         { "f", "Downloads Nav", function()
             raycast("raycast://extensions/thomas/downloads-manager-nav/manage-downloads")()
             hs.timer.doAfter(0.3, function()
-                require("raycast-nav").activate()
+                require("features.raycast-nav").activate()
             end)
         end },
 

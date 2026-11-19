@@ -4,7 +4,7 @@ local ESCAPE_KEYCODE = 53
 local ARROW_UP_KEYCODE = 126
 local ARROW_DOWN_KEYCODE = 125
 
-local modal = hs.hotkey.modal.new()
+local modal = nil
 local isNavMode = false
 local searchModeActive = false
 local escapeTap = nil
@@ -57,40 +57,42 @@ local function forceDeactivate()
     searchModeActive = false
 end
 
-for _, binding in ipairs(NAV_BINDINGS) do
-    local action = function()
-        local app = hs.application.find("com.raycast.macos")
-        hs.eventtap.keyStroke(binding.mods, binding.toKey, nil, app)
+local function buildModal()
+    modal = hs.hotkey.modal.new()
+
+    for _, binding in ipairs(NAV_BINDINGS) do
+        local action = function()
+            local app = hs.application.find("com.raycast.macos")
+            hs.eventtap.keyStroke(binding.mods, binding.toKey, nil, app)
+        end
+        modal:bind({}, binding.key, action, nil, action)
     end
-    modal:bind({}, binding.key, action, nil, action)
+
+    modal:bind({}, "/", nil, function()
+        exitNavMode()
+        searchModeActive = true
+    end)
+
+    modal:bind({}, "escape", nil, function()
+        exitNavMode("silent")
+        searchModeActive = false
+        hs.eventtap.keyStroke({}, "escape", 0)
+    end)
+
+    modal:bind({}, "q", nil, function()
+        exitNavMode("silent")
+        searchModeActive = false
+        hs.eventtap.keyStroke({}, "escape", 0)
+    end)
 end
-
-modal:bind({}, "/", nil, function()
-    exitNavMode()
-    searchModeActive = true
-end)
-
-modal:bind({}, "escape", nil, function()
-    exitNavMode("silent")
-    searchModeActive = false
-    hs.eventtap.keyStroke({}, "escape", 0)
-end)
-
-modal:bind({}, "q", nil, function()
-    exitNavMode("silent")
-    searchModeActive = false
-    hs.eventtap.keyStroke({}, "escape", 0)
-end)
 
 function M.activate()
     enterNavMode()
 end
 
-function M.deactivate()
-    forceDeactivate()
-end
-
 function M.start()
+    buildModal()
+
     escapeTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)
         if not searchModeActive then return false end
         local code = e:getKeyCode()
@@ -132,13 +134,6 @@ function M.start()
     windowFilter:subscribe(hs.window.filter.windowUnfocused, function()
         forceDeactivate()
     end)
-end
-
-function M.stop()
-    forceDeactivate()
-    if escapeTap then escapeTap:stop() end
-    if appWatcher then appWatcher:stop() end
-    if windowFilter then windowFilter:unsubscribeAll() end
 end
 
 return M

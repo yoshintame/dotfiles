@@ -31,7 +31,6 @@ run("binds", function()
     for _, row in ipairs(direct.binds) do rows[#rows + 1] = row end
     for _, row in ipairs(bind.fromChords(direct.proxy)) do rows[#rows + 1] = row end
     bind.direct(rows, { leaderConfig.trigger })
-    switchCurrentAppWindows = apps.switchWindows
 end)
 
 if #failed > 0 then

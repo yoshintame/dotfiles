@@ -1,3 +1,4 @@
+local apps = require("actions.apps")
 local finder = require("actions.finder")
 local open = require("actions.open")
 local windows = require("actions.windows")
@@ -42,10 +43,11 @@ return {
     },
 
     proxy = {
-        { proxy.paste_history1, clipboard.pasteAt(1) },
-        { proxy.paste_history2, clipboard.pasteAt(2) },
-        { proxy.paste_history3, clipboard.pasteAt(3) },
-        { proxy.paste_history4, clipboard.pasteAt(4) },
-        { proxy.paste_history5, clipboard.pasteAt(5) },
+        { proxy.paste_history1,      clipboard.pasteAt(1) },
+        { proxy.paste_history2,      clipboard.pasteAt(2) },
+        { proxy.paste_history3,      clipboard.pasteAt(3) },
+        { proxy.paste_history4,      clipboard.pasteAt(4) },
+        { proxy.paste_history5,      clipboard.pasteAt(5) },
+        { proxy.current_app_windows, apps.switchWindows },
     },
 }

@@ -117,7 +117,8 @@ function M.start()
     sync()
 
     hs.shutdownCallback = function()
-        hs.execute(SUDO .. " -n " .. PMSET .. " -a disablesleep 0")
+        hs.execute("(/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
+            .. SUDO .. " -n " .. PMSET .. " -a disablesleep 0) >/dev/null 2>&1 &")
     end
 
     return M

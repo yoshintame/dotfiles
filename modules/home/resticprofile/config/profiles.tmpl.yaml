@@ -169,6 +169,7 @@ profiles:
         - ".gnupg"
         - ".zsh_history"
         - ".local/state/bash"
+        - ".local/state/agent-telemetry"
         - ".history.db"
         - ".local/share/fish/fish_history"
         - ".local/share/atuin"

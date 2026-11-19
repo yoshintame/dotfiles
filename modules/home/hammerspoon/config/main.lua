@@ -12,7 +12,7 @@ spoon.AppLauncher:bindHotkeys({
 
     ["Dia"]                = { { "alt"                  }, "A" },
     ["Safari"]             = { { "alt", "shift"         }, "A" },
-    ["Spotify"]            = { { "alt"                  }, "S" },
+    ["Spotifast"]          = { { "alt"                  }, "S" },
     ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
     ["Paseo"]              = { { "alt"                  }, "D" },
     ["Jira"]               = { { "alt", "shift"         }, "D" },

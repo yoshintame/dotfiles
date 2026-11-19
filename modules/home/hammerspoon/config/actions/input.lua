@@ -18,18 +18,14 @@ function M.text(s)
     end
 end
 
-function M.currentDate()
+function M.date(fmt)
     return M.text(function()
-        local t = os.date("*t")
-        local months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
-        return string.format("%d %s %d", t.day, months[t.month], t.year)
+        return (os.date(fmt):gsub("^%s+", ""))
     end)
 end
 
-function M.date(fmt)
-    return M.text(function()
-        return os.date(fmt)
-    end)
+function M.unixTime()
+    return M.text(function() return tostring(os.time()) end)
 end
 
 return M

@@ -124,10 +124,11 @@ local input = require("actions.input")
 local open = require("actions.open")
 local shortcut = input.shortcut
 local text = input.text
-local currentDate = input.currentDate
 local date = input.date
+local unixTime = input.unixTime
 local url = open.url
 local raycast = open.raycast
+local changeCase = open.changeCase
 local editor = open.editor
 local launch = open.launch
 
@@ -250,10 +251,7 @@ function switchCurrentAppWindows()
     local app = hs.application.frontmostApplication()
     local bundleID = app and app:bundleID()
     if not bundleID then return end
-    raycast(
-        "raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22"
-        .. bundleID .. "%22%7D"
-    )()
+    raycast("extensions/yoshintame/raycast-app-switcher/app-windows-by-id", { arguments = { appIdentifier = bundleID } })()
 end
 
 local floatMaximizePrevFrames = {}
@@ -348,16 +346,16 @@ require("leader").start({
 
     tree = {
         { "t", "[text]", {
-            { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
+            { "t", "Translator", raycast("extensions/isfeng/easydict/easydict", { arguments = { queryText = "" } }) },
         }},
 
         { "c", "Case", {
-            { "k", "Kebab", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Kebab%20Case%22%7D") },
-            { "s", "Snake", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Snake%20Case%22%7D") },
-            { "c", "Camel", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Camel%20Case%22%7D") },
-            { "u", "Upper", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Upper%20Case%22%7D") },
-            { "l", "Lower", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Lower%20Case%22%7D") },
-            { "o", "Constant", raycast("raycast://extensions/erics118/change-case/change-case?context=%7B%22case%22%3A%22Constant%20Case%22%7D") },
+            { "k", "Kebab", changeCase("Kebab") },
+            { "s", "Snake", changeCase("Snake") },
+            { "c", "Camel", changeCase("Camel") },
+            { "u", "Upper", changeCase("Upper") },
+            { "l", "Lower", changeCase("Lower") },
+            { "o", "Constant", changeCase("Constant") },
         }},
 
         { "p", "Passwords", shortcut(proxy.passwords) },
@@ -375,8 +373,8 @@ require("leader").start({
             { "c", "Color Picker", shortcut(proxy.color_picker) },
             { "r", "Roulette", shortcut(proxy.roulette) },
             { "x", "Roulette Clear", shortcut(proxy.roulette_clear) },
-            { "e", "Emojis", raycast("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols") },
-            { "k", "Kill Process", raycast("raycast://extensions/rolandleth/kill-process/index") },
+            { "e", "Emojis", raycast("extensions/raycast/emoji-symbols/search-emoji-symbols") },
+            { "k", "Kill Process", raycast("extensions/rolandleth/kill-process/index") },
             { "h", "Hyper Setup ⇄", toggleHyperSetup },
             { "l", "keySwitcher log ⇄", toggleKeySwitcherLog },
         }},
@@ -388,7 +386,7 @@ require("leader").start({
             { "m", "google.com/maps", url("https://www.google.com/maps") },
             { "d", "Senate daily", fromPrivate("zoomSenateDaily", function(link) return joinMeeting(link, "daily") end) },
             { "w", "Senate weekly", fromPrivate("zoomSenateWeekly", function(link) return joinMeeting(link, "weekly") end) },
-            { "h", "Homelab Services", raycast("raycast://extensions/yoshintame/raycast-homelab/list") },
+            { "h", "Homelab Services", raycast("extensions/yoshintame/raycast-homelab/list") },
             { "l", "[localhost]", {
                     { "c", "CRM", url("http://localhost:4003") },
                     { "t", "TG-Mini", url("http://localhost:8004") },
@@ -428,12 +426,12 @@ require("leader").start({
                 { "f", "Filename-safe",  date("%Y-%m-%d_%H-%M-%S") },
                 { "r", "RU dotted",      date("%d.%m.%Y") },
                 { "u", "US slash",       date("%m/%d/%Y") },
-                { "l", "Long",           text(function() return (os.date("%e %B %Y"):gsub("^%s+", "")) end) },
+                { "l", "Long",           date("%e %B %Y") },
                 { "w", "ISO week",       date("%G-W%V") },
                 { "t", "Time",           date("%H:%M") },
                 { "T", "Time w/ sec",    date("%H:%M:%S") },
-                { "n", "Unix timestamp", text(function() return tostring(os.time()) end) },
-                { "h", "Short human",    currentDate() },
+                { "n", "Unix timestamp", unixTime() },
+                { "h", "Short human",    date("%e %b %Y") },
             }},
 
             { "k", "[keys]", {
@@ -458,15 +456,15 @@ require("leader").start({
         }},
 
         { "f", "Downloads Nav", function()
-            raycast("raycast://extensions/thomas/downloads-manager-nav/manage-downloads")()
+            raycast("extensions/thomas/downloads-manager-nav/manage-downloads")()
             sys.after(0.3, function()
                 require("features.raycast-nav").activate()
             end)
         end },
 
         { "d", "[development]", {
-            { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
-            { "d", "VSCode Windows", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D") },
+            { "g", "Git Repos", raycast("extensions/moored/git-repos/list") },
+            { "d", "VSCode Windows", raycast("extensions/yoshintame/raycast-app-switcher/app-windows-by-id", { arguments = { appIdentifier = "com.microsoft.VSCode" } }) },
 
             { "c", "CRM", editor("~/Development/work/senate/senate@crm-frontend") },
             { "f", "dotfiles", editor("~/.dotfiles") },

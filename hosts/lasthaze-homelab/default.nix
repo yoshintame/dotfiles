@@ -56,6 +56,8 @@ in
     };
   };
 
+  services.tailscale.port = 41642;
+  services.tailscale.openFirewall = true;
   services.tailscale.extraSetFlags = [ "--advertise-routes=192.168.1.48/32" ];
   services.tailscale.extraUpFlags = [ "--advertise-tags=tag:homelab" ];
 

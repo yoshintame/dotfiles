@@ -10,6 +10,7 @@ local config = {
 
 local pendingHint = nil
 local currentMeeting = nil
+local outcomeChooser = nil
 
 local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
@@ -76,16 +77,17 @@ function M.onMeetingEnd()
     if config.autoOpenAfterMeeting then openNote(meeting.path) end
   end
 
-  local chooser = hs.chooser.new(function(choice)
+  outcomeChooser = hs.chooser.new(function(choice)
+    outcomeChooser = nil
     finish((choice and choice.status) or "completed")
   end)
-  chooser:placeholderText("Что с митингом?")
-  chooser:choices({
+  outcomeChooser:placeholderText("Что с митингом?")
+  outcomeChooser:choices({
     { text = "🔴 Важное — надо переслушать", subText = "status: needs-review", status = "needs-review" },
     { text = "✓ Ничего особенного", subText = "status: completed", status = "completed" },
   })
-  chooser:rows(2)
-  chooser:show()
+  outcomeChooser:rows(2)
+  outcomeChooser:show()
 end
 
 function M.openCurrent()

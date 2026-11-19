@@ -11,7 +11,8 @@
     "globals": [
       "hs",
       "spoon",
-      "ipc"
+      "ipc",
+      "configWatcher"
     ],
     "disable": [
       "lowercase-global"

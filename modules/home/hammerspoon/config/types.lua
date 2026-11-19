@@ -37,7 +37,6 @@ hs.notify = {}
 local _hs_notify_object = {}
 
 ---@class spoon
----@field ReloadConfiguration ReloadConfiguration
 ---@field AppLauncher AppLauncher
 ---@field SmsOtp SmsOtp
 spoon = {}
@@ -51,12 +50,6 @@ spoon = {}
 ---@field start fun(self: SmsOtp): SmsOtp
 ---@field stop fun(self: SmsOtp): SmsOtp
 local SmsOtp = {}
-
----@class ReloadConfiguration
----@field watch_paths string[]
----@field start fun(self: ReloadConfiguration): ReloadConfiguration
----@field bindHotkeys fun(self: ReloadConfiguration, mapping: table)
-local ReloadConfiguration = {}
 
 ---@class AppLauncher
 ---@field bindHotkeys fun(self: AppLauncher, mapping: table)

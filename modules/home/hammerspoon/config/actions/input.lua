@@ -1,16 +1,9 @@
+local chord = require("core.chord")
+
 local M = {}
 
-local function parseKeystroke(keystroke)
-    local parts = {}
-    for part in keystroke:gmatch("%S+") do
-        table.insert(parts, part)
-    end
-    local key = table.remove(parts)
-    return parts, key
-end
-
 function M.shortcut(keystroke)
-    local mods, key = parseKeystroke(keystroke)
+    local mods, key = chord.parse(keystroke)
     return function() hs.eventtap.keyStroke(mods, key) end
 end
 

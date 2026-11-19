@@ -1,3 +1,7 @@
+local bin = require("core.bin")
+local sys = require("core.sys")
+local chord = require("core.chord")
+
 hs.loadSpoon("AppLauncher")
 spoon.AppLauncher:bindHotkeys({
     ["1password"]          = { { "alt"                  }, "1", keyboardLayout = "ABC" },
@@ -60,18 +64,7 @@ end
 local keySwitcherId = "com.granin.keyswitcher"
 local keySwitcherRestart = nil
 
-local function toggleKeySwitcherLog()
-    if keySwitcherRestart then
-        hs.alert.show("keySwitcher ещё перезапускается")
-        return
-    end
-    local verbose = hs.execute("/usr/bin/defaults read " .. keySwitcherId .. " QKBVerboseLogging 2>/dev/null"):match("1") ~= nil
-    if verbose then
-        hs.execute("/usr/bin/defaults delete " .. keySwitcherId .. " QKBVerboseLogging")
-    else
-        hs.execute("/usr/bin/defaults write " .. keySwitcherId .. " QKBVerboseLogging -bool YES")
-    end
-    local label = verbose and "keySwitcher: журнал обезличенный" or "keySwitcher: журнал ПОДРОБНЫЙ (текст открыто)"
+local function restartKeySwitcher(label)
     local app = hs.application.get(keySwitcherId)
     if not app then
         hs.alert.show(label .. " — со следующего запуска")
@@ -79,7 +72,7 @@ local function toggleKeySwitcherLog()
     end
     app:kill()
     local deadline = hs.timer.secondsSinceEpoch() + 5
-    keySwitcherRestart = hs.timer.waitUntil(function()
+    keySwitcherRestart = sys.waitUntil(function()
         return hs.application.get(keySwitcherId) == nil or hs.timer.secondsSinceEpoch() > deadline
     end, function()
         keySwitcherRestart = nil
@@ -87,9 +80,31 @@ local function toggleKeySwitcherLog()
             hs.alert.show("keySwitcher не закрылся, флаг сменится после перезапуска")
             return
         end
-        hs.execute("/usr/bin/open -g -b " .. keySwitcherId)
+        sys.open(nil, { background = true, bundle = keySwitcherId })
         hs.alert.show(label)
     end, 0.2)
+end
+
+local function toggleKeySwitcherLog()
+    if keySwitcherRestart then
+        hs.alert.show("keySwitcher ещё перезапускается")
+        return
+    end
+    keySwitcherRestart = true
+    sys.run(bin.defaults, { "read", keySwitcherId, "QKBVerboseLogging" }, {
+        onExit = function(_, out)
+            local verbose = out:match("1") ~= nil
+            local args = verbose and { "delete", keySwitcherId, "QKBVerboseLogging" }
+                or { "write", keySwitcherId, "QKBVerboseLogging", "-bool", "YES" }
+            sys.run(bin.defaults, args, {
+                onExit = function()
+                    keySwitcherRestart = nil
+                    restartKeySwitcher(verbose and "keySwitcher: журнал обезличенный"
+                        or "keySwitcher: журнал ПОДРОБНЫЙ (текст открыто)")
+                end,
+            })
+        end,
+    })
 end
 
 local proxy = require("generated.proxy-bindings")
@@ -113,7 +128,7 @@ local currentDate = input.currentDate
 local date = input.date
 local url = open.url
 local raycast = open.raycast
-local code = open.code
+local editor = open.editor
 local launch = open.launch
 
 local function reload()
@@ -123,7 +138,7 @@ local function reload()
     end
 end
 
-local function dotmod(name) return code("~/.dotfiles/modules/home/" .. name .. "/config") end
+local function dotmod(name) return editor("~/.dotfiles/modules/home/" .. name .. "/config") end
 
 local function hardCloseFront()
     local app = hs.application.frontmostApplication()
@@ -136,18 +151,16 @@ local function hardReopenFront()
     local bundleID = app:bundleID()
     app:kill9()
     if bundleID then
-        hs.timer.doAfter(0.8, function()
+        sys.after(0.8, function()
             hs.application.launchOrFocusByBundleID(bundleID)
         end)
     end
 end
 
-local restartUid = (hs.execute("id -u") or "501"):gsub("%s+", "")
-
 local function killAndReopen(bundleID)
     local app = hs.application.get(bundleID)
     if app then app:kill9() end
-    hs.timer.doAfter(0.8, function()
+    sys.after(0.8, function()
         hs.application.launchOrFocusByBundleID(bundleID)
     end)
 end
@@ -157,8 +170,7 @@ local function restartApp(bundleID)
 end
 
 local function karabinerKickstartTask()
-    hs.task.new("/bin/launchctl", nil,
-        { "kickstart", "-k", "gui/" .. restartUid .. "/org.pqrs.service.agent.karabiner_console_user_server" }):start()
+    sys.run(bin.sh, { "-c", "exec /bin/launchctl kickstart -k gui/$(/usr/bin/id -u)/org.pqrs.service.agent.karabiner_console_user_server" })
 end
 
 local function kickstartKarabiner()
@@ -176,7 +188,7 @@ local restartStack = {
 local function restartAll()
     karabinerKickstartTask()
     for i, bundleID in ipairs(restartStack) do
-        hs.timer.doAfter((i - 1) * 0.15, function()
+        sys.after((i - 1) * 0.15, function()
             killAndReopen(bundleID)
         end)
     end
@@ -185,34 +197,34 @@ end
 
 local function resetClaudeSessions()
     local home = os.getenv("HOME")
-    local bun = home .. "/.local/share/mise/shims/bun"
-    local script = home .. "/.claude/skills/reset-sessions/scripts/reset-sessions.ts"
     hs.alert.show("♻︎ Resetting Claude Code sessions…")
-    local task = hs.task.new(bun, function(exitCode, stdOut)
-        local summary = stdOut and (stdOut:match("Убито:[^\n]*") or stdOut:match("Нечего убивать[^\n]*"))
-        if exitCode == 0 and summary then
-            hs.alert.show("✅ " .. summary)
-        elseif exitCode == 0 then
-            hs.alert.show("✅ Claude Code sessions reset")
-        else
-            hs.alert.show("⚠️ reset-sessions failed (exit " .. tostring(exitCode) .. ")")
-        end
-    end, { script, "--all" })
-    task:setEnvironment({ HOME = home, PATH = "/usr/bin:/bin:/usr/sbin:/sbin" })
-    task:start()
+    sys.run(bin.bun, { home .. "/.claude/skills/reset-sessions/scripts/reset-sessions.ts", "--all" }, {
+        env = { HOME = home, PATH = "/usr/bin:/bin:/usr/sbin:/sbin" },
+        onExit = function(exitCode, stdOut)
+            local summary = stdOut:match("Убито:[^\n]*") or stdOut:match("Нечего убивать[^\n]*")
+            if exitCode == 0 and summary then
+                hs.alert.show("✅ " .. summary)
+            elseif exitCode == 0 then
+                hs.alert.show("✅ Claude Code sessions reset")
+            else
+                hs.alert.show("⚠️ reset-sessions failed (exit " .. tostring(exitCode) .. ")")
+            end
+        end,
+    })
 end
 
 local function restartPaseoDaemon()
     hs.alert.show("♻︎ Restarting Paseo daemon…")
-    local task = hs.task.new("/opt/homebrew/bin/paseo", function(exitCode)
-        if exitCode == 0 then
-            hs.alert.show("✅ Paseo daemon restarted")
-        else
-            hs.alert.show("⚠️ paseo daemon restart failed (exit " .. tostring(exitCode) .. ")")
-        end
-    end, { "daemon", "restart" })
-    task:setEnvironment({ HOME = os.getenv("HOME"), PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" })
-    task:start()
+    sys.run(bin.paseo, { "daemon", "restart" }, {
+        env = { HOME = os.getenv("HOME"), PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" },
+        onExit = function(exitCode)
+            if exitCode == 0 then
+                hs.alert.show("✅ Paseo daemon restarted")
+            else
+                hs.alert.show("⚠️ paseo daemon restart failed (exit " .. tostring(exitCode) .. ")")
+            end
+        end,
+    })
 end
 
 local function osa(script)
@@ -221,8 +233,7 @@ end
 
 local function osaAdmin(shellCommand)
     return function()
-        hs.task.new("/usr/bin/osascript", nil,
-            { "-e", 'do shell script "' .. shellCommand .. '" with administrator privileges' }):start()
+        sys.run(bin.osascript, { "-e", 'do shell script "' .. shellCommand .. '" with administrator privileges' })
     end
 end
 
@@ -231,7 +242,7 @@ local meetingNotes = require("features.meeting-notes")
 local function joinMeeting(zoomUrl, mtype)
     return function()
         meetingNotes.expectMeeting(mtype)
-        hs.task.new("/usr/bin/open", nil, { zoomUrl }):start()
+        sys.open(zoomUrl)
     end
 end
 
@@ -278,37 +289,25 @@ hs.hotkey.bind({ "alt" }, "F", toggleFloatMaximize)
 
 local function newDraft(ext)
     local dir = os.getenv("HOME") .. "/.local/share/scratchpad"
-    hs.execute("/bin/mkdir -p '" .. dir .. "'")
+    hs.fs.mkdir(dir)
     local path = dir .. "/draft-" .. os.date("%Y-%m-%d--%H-%M-%S") .. "." .. (ext or "md")
     local f = io.open(path, "w")
     if f then f:close() end
-    hs.task.new("/usr/bin/open", nil, { "-a", "Zed", path }):start()
+    sys.open(path, { app = "Zed" })
 end
 hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
 
 local coffee = require("features.coffee-lid")
 
-local function parseChord(chord)
-    local mods, key = {}, nil
-    for token in string.gmatch(chord, "%S+") do
-        if token == "cmd" or token == "alt" or token == "ctrl" or token == "shift" then
-            table.insert(mods, token)
-        else
-            key = token
-        end
-    end
-    return mods, key
-end
-
 local clipboard = require("features.clipboard-history")
-for i, chord in ipairs({
+for i, pasteChord in ipairs({
     proxy.paste_history1,
     proxy.paste_history2,
     proxy.paste_history3,
     proxy.paste_history4,
     proxy.paste_history5,
 }) do
-    local mods, key = parseChord(chord)
+    local mods, key = chord.parse(pasteChord)
     hs.hotkey.bind(mods, key, clipboard.pasteAt(i))
 end
 
@@ -460,7 +459,7 @@ require("leader").start({
 
         { "f", "Downloads Nav", function()
             raycast("raycast://extensions/thomas/downloads-manager-nav/manage-downloads")()
-            hs.timer.doAfter(0.3, function()
+            sys.after(0.3, function()
                 require("features.raycast-nav").activate()
             end)
         end },
@@ -469,12 +468,12 @@ require("leader").start({
             { "g", "Git Repos", raycast("raycast://extensions/moored/git-repos/list") },
             { "d", "VSCode Windows", raycast("raycast://extensions/yoshintame/raycast-app-switcher/app-windows-by-id?arguments=%7B%22appIdentifier%22%3A%22com.microsoft.VSCode%22%7D") },
 
-            { "c", "CRM", code("~/Development/work/senate/senate@crm-frontend") },
-            { "f", "dotfiles", code("~/.dotfiles") },
+            { "c", "CRM", editor("~/Development/work/senate/senate@crm-frontend") },
+            { "f", "dotfiles", editor("~/.dotfiles") },
             { "k", "karabiner", dotmod("karabiner") },
             { "h", "hammerspoon", dotmod("hammerspoon") },
             { "v", "vscode", dotmod("vscode") },
-            { "s", "obsidian/yoshintame", code("~/Documents/obsidian/yoshintame") },
+            { "s", "obsidian/yoshintame", editor("~/Documents/obsidian/yoshintame") },
         }},
 
         { "s", "[screenshots]", {

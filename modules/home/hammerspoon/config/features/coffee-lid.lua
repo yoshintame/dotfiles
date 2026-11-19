@@ -1,7 +1,8 @@
+local bin = require("core.bin")
+local sys = require("core.sys")
+
 local M = {}
 
-local SUDO = "/usr/bin/sudo"
-local PMSET = "/usr/bin/pmset"
 local SETTINGS_KEY = "Coffee"
 local LOW_BATTERY = 20
 local INDICATOR = "CoffeeActive"
@@ -68,15 +69,17 @@ end
 local function setSleepDisabled(disabled)
     if applied == disabled then return end
     applied = disabled
-    hs.task.new(SUDO, function(code, _, stderr)
-        if code ~= 0 then
-            applied = nil
-            hs.notify.new({
-                title = "Coffee",
-                informativeText = "pmset disablesleep failed: " .. (stderr or ""),
-            }):send()
-        end
-    end, { "-n", PMSET, "-a", "disablesleep", disabled and "1" or "0" }):start()
+    sys.run(bin.sudo, { "-n", bin.pmset, "-a", "disablesleep", disabled and "1" or "0" }, {
+        onExit = function(code, _, stderr)
+            if code ~= 0 then
+                applied = nil
+                hs.notify.new({
+                    title = "Coffee",
+                    informativeText = "pmset disablesleep failed: " .. stderr,
+                }):send()
+            end
+        end,
+    })
 end
 
 local function sync()
@@ -122,8 +125,8 @@ function M.start()
 end
 
 function M.stop()
-    hs.execute("(/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
-        .. SUDO .. " -n " .. PMSET .. " -a disablesleep 0) >/dev/null 2>&1 &")
+    sys.detach("/bin/sleep 5; /usr/bin/pgrep -x Hammerspoon >/dev/null || "
+        .. bin.sudo .. " -n " .. bin.pmset .. " -a disablesleep 0")
 end
 
 return M

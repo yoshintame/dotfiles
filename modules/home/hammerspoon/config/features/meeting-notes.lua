@@ -1,7 +1,9 @@
+local bin = require("core.bin")
+local sys = require("core.sys")
+
 local M = {}
 
 local config = {
-  bun = nil,
   scriptsDir = os.getenv("HOME") .. "/Documents/obsidian/yoshintame/_scripts",
   scriptPath = nil,
   autoOpenAfterMeeting = true,
@@ -16,26 +18,15 @@ local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
-local function resolveBun()
-  local found = trim(hs.execute("/bin/sh -lc 'command -v bun'") or "")
-  if found ~= "" then return found end
-  return os.getenv("HOME") .. "/.local/share/mise/shims/bun"
-end
-
 local function runScript(args, onDone)
   local full = { config.scriptPath }
   for _, a in ipairs(args) do table.insert(full, a) end
-  local task = hs.task.new(config.bun, function(code, out, err)
-    if onDone then onDone(code, out or "", err or "") end
-  end, full)
-  task:setWorkingDirectory(config.scriptsDir)
-  task:start()
+  sys.run(bin.bun, full, { cwd = config.scriptsDir, onExit = onDone })
 end
 
 local function openNote(path)
   if not path or path == "" then return end
-  local uri = "obsidian://open?path=" .. hs.http.encodeForQuery(path)
-  hs.task.new("/usr/bin/open", nil, { uri }):start()
+  sys.open("obsidian://open?path=" .. hs.http.encodeForQuery(path))
 end
 
 function M.expectMeeting(mtype)
@@ -108,7 +99,6 @@ function M.markRelisten()
 end
 
 function M.start()
-  config.bun = config.bun or resolveBun()
   config.scriptPath = config.scriptPath or (config.scriptsDir .. "/meeting-note.ts")
   return M
 end

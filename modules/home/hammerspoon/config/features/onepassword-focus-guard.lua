@@ -1,9 +1,11 @@
+local bin = require("core.bin")
+local sys = require("core.sys")
+
 local M = {}
 
 local ONEPASSWORD_BUNDLE = "com.1password.1password"
 local ONEPASSWORD_NAME = "1Password"
 local POPUP_TITLES = { "^Quick Access", "^1Password$" }
-local AEROSPACE = "/opt/homebrew/bin/aerospace"
 local GUARD_SECONDS = 1.5
 local INPUT_GRACE_SECONDS = 0.3
 
@@ -28,14 +30,15 @@ end
 
 local function disarm()
     guardApp = nil
-    if expiry then expiry:stop() end
+    sys.cancel(expiry)
+    expiry = nil
     inputTap:stop()
 end
 
 local function pinAerospaceFocus(app)
     local win = app:focusedWindow() or app:mainWindow()
     if not win then return end
-    hs.task.new(AEROSPACE, nil, { "focus", "--window-id", tostring(win:id()) }):start()
+    sys.run(bin.aerospace, { "focus", "--window-id", tostring(win:id()) })
 end
 
 local function arm()
@@ -44,7 +47,7 @@ local function arm()
     guardApp = lastApp
     lastInputAt = 0
     inputTap:start()
-    expiry = hs.timer.doAfter(GUARD_SECONDS, disarm)
+    expiry = sys.after(GUARD_SECONDS, disarm)
     pinAerospaceFocus(guardApp)
 end
 

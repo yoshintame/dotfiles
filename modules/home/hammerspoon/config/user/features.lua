@@ -25,6 +25,13 @@ return {
         size = 9,
     },
 
+    ["downloads-copy-path"] = {
+        dir = os.getenv("HOME") .. "/Downloads",
+        debounceSeconds = 0.5,
+        alertSeconds = 1.5,
+        ignoreSuffixes = { ".crdownload", ".download", ".part", ".partial", ".tmp", ".opdownload" },
+    },
+
     ["onepassword-focus-guard"] = {},
     ["sms-otp"] = {},
     ["hyper-setup"] = {},

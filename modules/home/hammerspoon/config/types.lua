@@ -39,8 +39,6 @@ local _hs_notify_object = {}
 ---@class spoon
 ---@field ReloadConfiguration ReloadConfiguration
 ---@field AppLauncher AppLauncher
----@field RecursiveBinder RecursiveBinder
----@field LeaderFlow LeaderFlow
 ---@field SmsOtp SmsOtp
 spoon = {}
 
@@ -66,24 +64,6 @@ local ReloadConfiguration = {}
 ---@field launchOrFocusWarpApp fun(self: AppLauncher, name: string)
 local AppLauncher = {}
 
----@class RecursiveBinder
----@field escapeKey any
----@field helperEntryEachLine number
----@field helperEntryLengthInChar number
----@field helperFormat table
----@field showBindHelper boolean
----@field helperModifierMapping table
----@field singleKey fun(key: string, name: string): any
----@field recursiveBind fun(keymap: table, modals?: any[]): fun()
-local RecursiveBinder = {}
-
----@class LeaderFlow
----@field actions table
----@field setup fun(self: LeaderFlow, cfg: table)
-local LeaderFlow = {}
-
 ---@class ipc
 ---@field cliInstall fun()
 ipc = {}
-
-keyNone = nil

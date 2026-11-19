@@ -92,8 +92,6 @@ local function toggleKeySwitcherLog()
     end, 0.2)
 end
 
-hs.loadSpoon("LeaderFlow")
-
 local proxy = require("generated.proxy-bindings")
 local input = require("actions.input")
 local open = require("actions.open")
@@ -321,32 +319,29 @@ spoon.Zoom:setStatusCallback(function()
 end)
 spoon.Zoom:start()
 
-spoon.LeaderFlow:setup({
-    leader = { mods = {}, key = "F18" },
+require("leader").start({
+    trigger = "f18",
+    escape = { "escape" },
     abortOnMouseClick = true,
+    columns = 3,
 
-    ui = {
-        show = true,
-        escapeKey = { { {}, "F18" }, { {}, "escape" } },
-        helperEntryEachLine = 3,
-        format = {
-            atScreenEdge = 0,
-            padding = 16,
-            radius = 8,
-            fillColor = { alpha = .80, hex = "0a0a0a" },
-            strokeColor = { alpha = .85, hex = "89b4fa" },
-            textColor = { alpha = 1, hex = "cdd6f4" },
-            textStyle = {
-                paragraphStyle = { lineSpacing = 6 },
-                shadow = { offset = { h = -1, w = 1 }, blurRadius = 12, color = { alpha = .60, white = 0 } }
-            },
-            strokeWidth = 2,
-            textFont = "Monaco",
-            textSize = 12
-        }
+    style = {
+        atScreenEdge = 0,
+        padding = 16,
+        radius = 8,
+        fillColor = { alpha = .80, hex = "0a0a0a" },
+        strokeColor = { alpha = .85, hex = "89b4fa" },
+        textColor = { alpha = 1, hex = "cdd6f4" },
+        textStyle = {
+            paragraphStyle = { lineSpacing = 6 },
+            shadow = { offset = { h = -1, w = 1 }, blurRadius = 12, color = { alpha = .60, white = 0 } }
+        },
+        strokeWidth = 2,
+        textFont = "Monaco",
+        textSize = 12
     },
 
-    spec = {
+    tree = {
         { "t", "[text]", {
             { "t", "Translator", raycast("raycast://extensions/isfeng/easydict/easydict?arguments=%7B%22queryText%22%3A%22%22%7D") },
         }},

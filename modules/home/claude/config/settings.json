@@ -238,7 +238,8 @@
     "fallow@fallow-skills": true,
     "serena@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": true,
-    "warp@claude-code-warp": true
+    "warp@claude-code-warp": true,
+    "cachebeat@cachebeat": true
   },
   "extraKnownMarketplaces": {
     "worktrunk": {
@@ -257,6 +258,12 @@
       "source": {
         "source": "github",
         "repo": "warpdotdev/claude-code-warp"
+      }
+    },
+    "cachebeat": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/yoshintame/.cache/repos/404mayank/cachebeat"
       }
     }
   },

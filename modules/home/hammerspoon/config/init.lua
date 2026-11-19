@@ -1,6 +1,9 @@
 ipc = require("hs.ipc")
 ipc.cliInstall()
 
+hs.keycodes.log.setLogLevel("error")
+hs.hotkey.setLogLevel("warning")
+
 hs.loadSpoon("ReloadConfiguration")
 local resolvedInit = hs.fs.pathToAbsolute(hs.configdir .. "/init.lua")
 spoon.ReloadConfiguration.watch_paths = { resolvedInit and resolvedInit:match("^(.*)/") or hs.configdir }

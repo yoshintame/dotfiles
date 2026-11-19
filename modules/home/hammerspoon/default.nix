@@ -12,6 +12,11 @@ myLib.mkModule config "hammerspoon" {
     };
   };
 
+  stencil.files."~/.local/share/hammerspoon/site/private.lua" = {
+    template = ./private.lua.tmpl;
+    sopsFile = ./secrets.yaml;
+  };
+
   home.file.".hammerspoon/Spoons/Coffee.spoon".source = pkgs.fetchFromGitHub {
     owner = "Necrom4";
     repo = "Coffee.spoon";

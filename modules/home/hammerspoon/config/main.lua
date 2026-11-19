@@ -93,6 +93,18 @@ local function toggleKeySwitcherLog()
 end
 
 local proxy = require("generated.proxy-bindings")
+local hasPrivate, private = pcall(require, "private")
+if not hasPrivate then
+    print("private.lua is not rendered: " .. tostring(private))
+    private = {}
+end
+
+local function fromPrivate(key, build)
+    local value = private[key]
+    if value then return build(value) end
+    return function() hs.alert.show("Нет значения " .. key .. ": private.lua не отрендерен") end
+end
+
 local input = require("actions.input")
 local open = require("actions.open")
 local shortcut = input.shortcut
@@ -366,8 +378,8 @@ require("leader").start({
             { "s", "senate-exchange repos", url("https://github.com/orgs/senate-exchange/repositories") },
             { "y", "youtube.com", url("https://youtube.com") },
             { "m", "google.com/maps", url("https://www.google.com/maps") },
-            { "d", "Senate daily", joinMeeting("REDACTED_ZOOM_SENATE_DAILY", "daily") },
-            { "w", "Senate weekly", joinMeeting("REDACTED_ZOOM_SENATE_WEEKLY", "weekly") },
+            { "d", "Senate daily", fromPrivate("zoomSenateDaily", function(link) return joinMeeting(link, "daily") end) },
+            { "w", "Senate weekly", fromPrivate("zoomSenateWeekly", function(link) return joinMeeting(link, "weekly") end) },
             { "h", "Homelab Services", raycast("raycast://extensions/yoshintame/raycast-homelab/list") },
             { "l", "[localhost]", {
                     { "c", "CRM", url("http://localhost:4003") },
@@ -386,7 +398,7 @@ require("leader").start({
             { "n", "First Name", text("Михаил") },
             { "l", "Last Name", text("Иванов") },
             { "i", "Name with initials", text("Иванов М.А.") },
-            { "p", "Phone", text("REDACTED_PHONE_RU") },
+            { "p", "Phone", fromPrivate("phoneRu", text) },
         }},
 
         { "e", "[snippets]", {
@@ -396,10 +408,10 @@ require("leader").start({
             { "l", "Last Name", text("Ivanov") },
             { "i", "Name with initials", text("Ivanov M.A.") },
             { "u", "Username", text("yoshintame") },
-            { "p", "Phone", text("REDACTED_PHONE") },
-            { "s", "Intr. Passport", text("REDACTED_PASSPORT") },
-            { "b", "Birthday", text("REDACTED_BIRTHDAY") },
-            { "a", "Address", text("REDACTED_ADDRESS") },
+            { "p", "Phone", fromPrivate("phone", text) },
+            { "s", "Intr. Passport", fromPrivate("passport", text) },
+            { "b", "Birthday", fromPrivate("birthday", text) },
+            { "a", "Address", fromPrivate("address", text) },
 
             { "d", "[dates]", {
                 { "d", "ISO date",       date("%Y-%m-%d") },
@@ -432,8 +444,8 @@ require("leader").start({
 
             { "m", "[emails]", {
                 { "m", "Main", text("m.ivanov0427@gmail.com") },
-                { "u", "Ursus", text("REDACTED_EMAIL_URSUS") },
-                { "v", "Vbirf", text("REDACTED_EMAIL_VBIRF") },
+                { "u", "Ursus", fromPrivate("emailUrsus", text) },
+                { "v", "Vbirf", fromPrivate("emailVbirf", text) },
             }},
         }},
 

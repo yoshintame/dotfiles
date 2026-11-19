@@ -281,22 +281,7 @@ local coffee = require("coffee-lid").start()
 hs.loadSpoon("SmsOtp")
 spoon.SmsOtp:start()
 
-hs.hotkey.bind({"cmd", "shift"}, "C", function()
-    local app = hs.application.frontmostApplication()
-    if not app or app:bundleID() ~= "com.apple.finder" then return end
-    local _, path = hs.osascript.applescript([[
-        tell application "Finder"
-            set sel to selection
-            if (count of sel) > 0 then
-                return POSIX path of (item 1 of sel as alias)
-            end if
-        end tell
-    ]])
-    if path then
-        hs.pasteboard.setContents(path)
-        hs.alert.show("Copied: " .. path)
-    end
-end)
+require("finder-copy-path").start()
 
 require("clipboard-history").start({
     proxy.paste_history1,

@@ -6,7 +6,7 @@ local MODULES = {
     "features.sms-otp",
     "features.finder-copy-path",
     "features.clipboard-history",
-    "features.meeting-notes",
+    "features.meeting",
     "features.hyper-setup",
 }
 

@@ -64,14 +64,8 @@ local launch = open.launch
 
 local function dotmod(name) return editor("~/.dotfiles/modules/home/" .. name .. "/config") end
 
-local meetingNotes = require("features.meeting-notes")
+local meeting = require("features.meeting")
 
-local function joinMeeting(zoomUrl, mtype)
-    return function()
-        meetingNotes.expectMeeting(mtype)
-        sys.open(zoomUrl)
-    end
-end
 switchCurrentAppWindows = apps.switchWindows
 
 hs.hotkey.bind({ "alt" }, "F", windows.toggleFloatMaximize)
@@ -90,19 +84,6 @@ for i, pasteChord in ipairs({
     local mods, key = chord.parse(pasteChord)
     hs.hotkey.bind(mods, key, clipboard.pasteAt(i))
 end
-
-hs.loadSpoon("Zoom")
-local inMeeting = false
-spoon.Zoom:setStatusCallback(function()
-    local now = spoon.Zoom:inMeeting()
-    if now and not inMeeting then
-        meetingNotes.onMeetingStart()
-    elseif inMeeting and not now then
-        meetingNotes.onMeetingEnd()
-    end
-    inMeeting = now
-end)
-spoon.Zoom:start()
 
 local RESTARTABLE = {
     { "s", "AeroSpace", "bobko.aerospace" },
@@ -191,8 +172,8 @@ require("leader").start({
             { "s", "senate-exchange repos", url("https://github.com/orgs/senate-exchange/repositories") },
             { "y", "youtube.com", url("https://youtube.com") },
             { "m", "google.com/maps", url("https://www.google.com/maps") },
-            { "d", "Senate daily", fromPrivate("zoomSenateDaily", function(link) return joinMeeting(link, "daily") end) },
-            { "w", "Senate weekly", fromPrivate("zoomSenateWeekly", function(link) return joinMeeting(link, "weekly") end) },
+            { "d", "Senate daily", fromPrivate("zoomSenateDaily", function(link) return meeting.join(link, "daily") end) },
+            { "w", "Senate weekly", fromPrivate("zoomSenateWeekly", function(link) return meeting.join(link, "weekly") end) },
             { "h", "Homelab Services", raycast("extensions/yoshintame/raycast-homelab/list") },
             { "l", "[localhost]", {
                     { "c", "CRM", url("http://localhost:4003") },
@@ -202,8 +183,8 @@ require("leader").start({
         }},
 
         { "v", "[meeting]", {
-            { "o", "Open current note", meetingNotes.openCurrent },
-            { "r", "Mark re-listen", meetingNotes.markRelisten },
+            { "o", "Open current note", meeting.openCurrent },
+            { "r", "Mark re-listen", meeting.markRelisten },
         }},
 
         { "r", "[ru snippets]", {

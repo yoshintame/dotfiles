@@ -50,7 +50,7 @@ function obj:initCursor()
         "SELECT COALESCE(MAX(ROWID), 0) AS id FROM message WHERE date < %d",
         appleNanoseconds(self.startedAt)))
     if not rows then
-        self:warn("access", "Нет доступа к chat.db — выдай Hammerspoon Full Disk Access (" .. tostring(err) .. ")")
+        self:warn("access", "No access to chat.db, grant Hammerspoon Full Disk Access (" .. tostring(err) .. ")")
         return false
     end
     self.lastRowId = tonumber(rows[1].id)
@@ -73,7 +73,7 @@ end
 function obj:deliver(code, sender)
     self:copyConcealed(code)
     hs.notify.new({
-        title = "Код " .. code .. " скопирован",
+        title = "Code " .. code .. " copied",
         subTitle = sender,
         withdrawAfter = 30,
     }):send()
@@ -91,7 +91,7 @@ function obj:scan()
         ORDER BY m.ROWID
     ]], self.lastRowId))
     if not rows then
-        self:warn("read", "Не читается chat.db: " .. tostring(err))
+        self:warn("read", "Cannot read chat.db: " .. tostring(err))
         return
     end
     self.warned = {}

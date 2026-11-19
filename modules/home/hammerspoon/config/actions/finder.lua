@@ -29,15 +29,15 @@ function M.copySelectedPath()
     local ok, paths, details = hs.osascript.applescript(SCRIPT)
     if not ok then
         if details and details.OSAScriptErrorNumberKey == NOT_AUTHORIZED then
-            notify("Нет доступа к Finder", "Настройки → Конфиденциальность и безопасность → Автоматизация → Hammerspoon → Finder")
+            notify("No access to Finder", "System Settings → Privacy & Security → Automation → Hammerspoon → Finder")
         else
-            notify("Путь не скопирован", tostring(details and details.OSAScriptErrorBriefMessageKey))
+            notify("Path not copied", tostring(details and details.OSAScriptErrorBriefMessageKey))
         end
         return
     end
     hs.pasteboard.setContents(paths)
     local count = select(2, paths:gsub("\n", "")) + 1
-    notify(count == 1 and "Путь скопирован" or ("Скопировано путей: " .. count), paths)
+    notify(count == 1 and "Path copied" or ("Copied " .. count .. " paths"), paths)
 end
 
 return M

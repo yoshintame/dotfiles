@@ -37,7 +37,7 @@ function M.resetClaudeSessions()
     process.run(bin.bun, { home .. "/.claude/skills/reset-sessions/scripts/reset-sessions.ts", "--all" }, {
         env = { HOME = home, PATH = "/usr/bin:/bin:/usr/sbin:/sbin" },
         onExit = function(exitCode, stdOut)
-            local summary = stdOut:match("Убито:[^\n]*") or stdOut:match("Нечего убивать[^\n]*")
+            local summary = stdOut:match("Killed:[^\n]*") or stdOut:match("Nothing to kill[^\n]*")
             if exitCode == 0 and summary then
                 hs.alert.show("✅ " .. summary)
             elseif exitCode == 0 then
@@ -66,7 +66,7 @@ end
 local function restartKeySwitcher(label)
     local app = hs.application.get(KEYSWITCHER)
     if not app then
-        hs.alert.show(label .. " — со следующего запуска")
+        hs.alert.show(label .. " from the next launch")
         return
     end
     app:kill()
@@ -76,7 +76,7 @@ local function restartKeySwitcher(label)
     end, function()
         keySwitcherRestart = nil
         if hs.application.get(KEYSWITCHER) then
-            hs.alert.show("keySwitcher не закрылся, флаг сменится после перезапуска")
+            hs.alert.show("keySwitcher did not quit, the flag applies after its next restart")
             return
         end
         process.open(nil, { background = true, bundle = KEYSWITCHER })
@@ -86,7 +86,7 @@ end
 
 function M.toggleKeySwitcherLog()
     if keySwitcherRestart then
-        hs.alert.show("keySwitcher ещё перезапускается")
+        hs.alert.show("keySwitcher is still restarting")
         return
     end
     keySwitcherRestart = true
@@ -98,8 +98,8 @@ function M.toggleKeySwitcherLog()
             process.run(bin.defaults, args, {
                 onExit = function()
                     keySwitcherRestart = nil
-                    restartKeySwitcher(verbose and "keySwitcher: журнал обезличенный"
-                        or "keySwitcher: журнал ПОДРОБНЫЙ (текст открыто)")
+                    restartKeySwitcher(verbose and "keySwitcher: anonymized log"
+                        or "keySwitcher: VERBOSE log, typed text in plain sight")
                 end,
             })
         end,

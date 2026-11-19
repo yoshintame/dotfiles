@@ -53,7 +53,7 @@ local function updateIndicator(session)
         seedIndicatorPosition()
         indicator = hs.menubar.new(true, INDICATOR)
         indicator:setMenu({
-            { title = "Остановить", fn = function() spoon.Coffee:endSession() end },
+            { title = "Stop", fn = function() spoon.Coffee:endSession() end },
         })
     end
     indicator:setTitle(indicatorTitle())
@@ -90,17 +90,17 @@ end
 function M.toggle()
     if sessionEnd() then
         spoon.Coffee:endSession()
-        hs.alert.show("Сон включён")
+        hs.alert.show("Sleep enabled")
     else
         spoon.Coffee:startSession()
-        hs.alert.show("Сон отключён без срока")
+        hs.alert.show("Sleep disabled indefinitely")
     end
 end
 
 function M.awakeFor(hours)
     return function()
         spoon.Coffee:startSession(hours * 60)
-        hs.alert.show("Сон отключён до " .. os.date("%H:%M", os.time() + hours * 3600))
+        hs.alert.show("Sleep disabled until " .. os.date("%H:%M", os.time() + hours * 3600))
     end
 end
 

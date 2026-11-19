@@ -39,7 +39,7 @@ local function onMeetingStart()
         if code == 0 then
             local path = trim(out)
             currentMeeting = { path = path }
-            hs.alert.show("📝 " .. (path:match("([^/]+)%.md$") or "заметка митинга создана"))
+            hs.alert.show("📝 " .. (path:match("([^/]+)%.md$") or "meeting note created"))
         else
             hs.alert.show("⚠️ meeting-note create failed")
             print("[meeting] create error: " .. err)
@@ -63,10 +63,10 @@ local function onMeetingEnd()
         outcomeChooser = nil
         finish((choice and choice.status) or "completed")
     end)
-    outcomeChooser:placeholderText("Что с митингом?")
+    outcomeChooser:placeholderText("How did the meeting go?")
     outcomeChooser:choices({
-        { text = "🔴 Важное — надо переслушать", subText = "status: needs-review", status = "needs-review" },
-        { text = "✓ Ничего особенного", subText = "status: completed", status = "completed" },
+        { text = "🔴 Important — needs a re-listen", subText = "status: needs-review", status = "needs-review" },
+        { text = "✓ Nothing special", subText = "status: completed", status = "completed" },
     })
     outcomeChooser:rows(2)
     outcomeChooser:show()
@@ -85,17 +85,17 @@ function M.openCurrent()
     if currentMeeting and currentMeeting.path then
         openNote(currentMeeting.path)
     else
-        hs.alert.show("Нет активного митинга")
+        hs.alert.show("No active meeting")
     end
 end
 
 function M.markRelisten()
     if not (currentMeeting and currentMeeting.path) then
-        hs.alert.show("Нет активного митинга")
+        hs.alert.show("No active meeting")
         return
     end
     runScript({ "set-status", currentMeeting.path, "needs-review" })
-    hs.alert.show("🔴 Помечено: переслушать")
+    hs.alert.show("🔴 Marked for a re-listen")
 end
 
 function M.start(settings)

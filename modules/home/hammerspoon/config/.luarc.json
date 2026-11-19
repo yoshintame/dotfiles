@@ -12,7 +12,8 @@
       "hs",
       "spoon",
       "ipc",
-      "configWatcher"
+      "configWatcher",
+      "switchCurrentAppWindows"
     ],
     "disable": [
       "lowercase-global"

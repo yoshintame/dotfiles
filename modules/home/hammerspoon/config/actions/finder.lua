@@ -1,8 +1,5 @@
 local M = {}
 
-local hotkey
-local watcher
-
 local SCRIPT = [[
     tell application "Finder"
         set sel to selection as alias list
@@ -28,7 +25,7 @@ local function notify(title, text)
     hs.notify.new({ title = title, informativeText = text }):send()
 end
 
-local function copySelectedPath()
+function M.copySelectedPath()
     local ok, paths, details = hs.osascript.applescript(SCRIPT)
     if not ok then
         if details and details.OSAScriptErrorNumberKey == NOT_AUTHORIZED then
@@ -41,25 +38,6 @@ local function copySelectedPath()
     hs.pasteboard.setContents(paths)
     local count = select(2, paths:gsub("\n", "")) + 1
     notify(count == 1 and "Путь скопирован" or ("Скопировано путей: " .. count), paths)
-end
-
-local function isFinder(app)
-    return app ~= nil and app:bundleID() == "com.apple.finder"
-end
-
-function M.start()
-    hotkey = hs.hotkey.new({ "cmd", "shift" }, "C", copySelectedPath)
-    watcher = hs.application.watcher.new(function(_, event, app)
-        if not isFinder(app) then return end
-        if event == hs.application.watcher.activated then
-            hotkey:enable()
-        elseif event == hs.application.watcher.deactivated then
-            hotkey:disable()
-        end
-    end)
-    watcher:start()
-    if isFinder(hs.application.frontmostApplication()) then hotkey:enable() end
-    return M
 end
 
 return M

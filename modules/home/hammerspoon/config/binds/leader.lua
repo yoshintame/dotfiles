@@ -1,38 +1,14 @@
-local sys = require("core.sys")
-local chord = require("core.chord")
-
-hs.loadSpoon("AppLauncher")
-spoon.AppLauncher:bindHotkeys({
-    ["1password"]          = { { "alt"                  }, "1", keyboardLayout = "ABC" },
-
-    ["Telegram"]           = { { "alt"                  }, "Q" },
-    ["Warp"]               = { { "alt"                  }, "W", keyboardLayout = "ABC" },
-    ["yazi"]               = { { "alt"                  }, "R", isWarp = true, keyboardLayout = "ABC" },
-    ["btop"]               = { { "alt"                  }, "B", isWarp = true, keyboardLayout = "ABC" },
-    ["Terminal"]           = { { "alt", "shift"         }, "W", keyboardLayout = "ABC" },
-    ["Zed"]                = { { "alt"                  }, "E", keyboardLayout = "ABC" },
-    ["Finder"]             = { { "alt", "shift"         }, "E", keyboardLayout = "ABC" },
-
-    ["Dia"]                = { { "alt"                  }, "A" },
-    ["Safari"]             = { { "alt", "shift"         }, "A" },
-    ["Spotifast"]          = { { "alt"                  }, "S" },
-    ["Spark Mail"]         = { { "alt", "shift"         }, "S" },
-    ["Paseo"]              = { { "alt"                  }, "D" },
-    ["Jira"]               = { { "alt", "shift"         }, "D" },
-    ["Fork"]               = { { "alt"                  }, "X" },
-
-    ["TickTick"]           = { { "alt"                  }, "T" },
-    ["Claude"]             = { { "alt"                  }, "Z" },
-    ["yaak"]               = { { "alt"                  }, "G" },
-    ["Discord"]            = { { "alt"                  }, "C" },
-    ["Activity Monitor"]   = { { { "alt"                }, "V" },
-                               { { "alt"                }, "escape" },
-                               { { "shift", "ctrl"      }, "escape" } },
-
-    ["System Settings"]    = { { "alt"                  }, "," },
-})
-
+local apps = require("actions.apps")
+local input = require("actions.input")
+local maintenance = require("actions.maintenance")
+local open = require("actions.open")
+local power = require("actions.power")
+local coffee = require("features.coffee-lid")
+local hyperSetup = require("features.hyper-setup")
+local meeting = require("features.meeting")
+local raycastNav = require("features.raycast-nav")
 local proxy = require("generated.proxy-bindings")
+
 local hasPrivate, private = pcall(require, "private")
 if not hasPrivate then
     print("private.lua is not rendered: " .. tostring(private))
@@ -45,13 +21,6 @@ local function fromPrivate(key, build)
     return function() hs.alert.show("Нет значения " .. key .. ": private.lua не отрендерен") end
 end
 
-local input = require("actions.input")
-local open = require("actions.open")
-local apps = require("actions.apps")
-local maintenance = require("actions.maintenance")
-local power = require("actions.power")
-local windows = require("actions.windows")
-local hyperSetup = require("features.hyper-setup")
 local shortcut = input.shortcut
 local text = input.text
 local date = input.date
@@ -63,27 +32,6 @@ local editor = open.editor
 local launch = open.launch
 
 local function dotmod(name) return editor("~/.dotfiles/modules/home/" .. name .. "/config") end
-
-local meeting = require("features.meeting")
-
-switchCurrentAppWindows = apps.switchWindows
-
-hs.hotkey.bind({ "alt" }, "F", windows.toggleFloatMaximize)
-hs.hotkey.bind({ "alt" }, "N", open.draft)
-
-local coffee = require("features.coffee-lid")
-
-local clipboard = require("features.clipboard-history")
-for i, pasteChord in ipairs({
-    proxy.paste_history1,
-    proxy.paste_history2,
-    proxy.paste_history3,
-    proxy.paste_history4,
-    proxy.paste_history5,
-}) do
-    local mods, key = chord.parse(pasteChord)
-    hs.hotkey.bind(mods, key, clipboard.pasteAt(i))
-end
 
 local RESTARTABLE = {
     { "s", "AeroSpace", "bobko.aerospace" },
@@ -110,27 +58,12 @@ local function restartGroup()
     return leaves
 end
 
-require("leader").start({
+return {
     trigger = "f18",
     escape = { "escape" },
     abortOnMouseClick = true,
     columns = 3,
-
-    style = {
-        atScreenEdge = 0,
-        padding = 16,
-        radius = 8,
-        fillColor = { alpha = .80, hex = "0a0a0a" },
-        strokeColor = { alpha = .85, hex = "89b4fa" },
-        textColor = { alpha = 1, hex = "cdd6f4" },
-        textStyle = {
-            paragraphStyle = { lineSpacing = 6 },
-            shadow = { offset = { h = -1, w = 1 }, blurRadius = 12, color = { alpha = .60, white = 0 } }
-        },
-        strokeWidth = 2,
-        textFont = "Monaco",
-        textSize = 12
-    },
+    style = require("leader.theme"),
 
     tree = {
         { "t", "[text]", {
@@ -243,12 +176,7 @@ require("leader").start({
             }},
         }},
 
-        { "f", "Downloads Nav", function()
-            raycast("extensions/thomas/downloads-manager-nav/manage-downloads")()
-            sys.after(0.3, function()
-                require("features.raycast-nav").activate()
-            end)
-        end },
+        { "f", "Downloads Nav", raycastNav.openDownloads },
 
         { "d", "[development]", {
             { "g", "Git Repos", raycast("extensions/moored/git-repos/list") },
@@ -308,4 +236,4 @@ require("leader").start({
             { "r", "reload", maintenance.reload },
         }},
     }
-})
+}

@@ -37,7 +37,6 @@ hs.notify = {}
 local _hs_notify_object = {}
 
 ---@class spoon
----@field AppLauncher AppLauncher
 ---@field SmsOtp SmsOtp
 spoon = {}
 
@@ -50,12 +49,6 @@ spoon = {}
 ---@field start fun(self: SmsOtp): SmsOtp
 ---@field stop fun(self: SmsOtp): SmsOtp
 local SmsOtp = {}
-
----@class AppLauncher
----@field bindHotkeys fun(self: AppLauncher, mapping: table)
----@field launchOrFocusApp fun(self: AppLauncher, name: string)
----@field launchOrFocusWarpApp fun(self: AppLauncher, name: string)
-local AppLauncher = {}
 
 ---@class ipc
 ---@field cliInstall fun()

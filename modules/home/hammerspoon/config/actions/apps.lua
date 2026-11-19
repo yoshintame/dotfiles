@@ -5,6 +5,32 @@ local M = {}
 
 local REOPEN_DELAY = 0.8
 
+local function switchLayout(layout)
+    if layout then hs.keycodes.setLayout(layout) end
+end
+
+function M.focus(name, opts)
+    local layout = opts and opts.layout
+    return function()
+        hs.application.launchOrFocus(name)
+        switchLayout(layout)
+    end
+end
+
+function M.warpTab(name, opts)
+    local layout = opts and opts.layout
+    return function()
+        local warp = hs.application.get("Warp")
+        local window = warp and warp:findWindow(name)
+        if window then
+            window:focus()
+        else
+            sys.open("warp://launch/" .. name)
+        end
+        switchLayout(layout)
+    end
+end
+
 function M.killAndReopen(bundleID)
     local app = hs.application.get(bundleID)
     if app then app:kill9() end

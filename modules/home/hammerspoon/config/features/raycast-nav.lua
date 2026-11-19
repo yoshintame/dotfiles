@@ -1,3 +1,6 @@
+local deeplink = require("core.deeplink")
+local sys = require("core.sys")
+
 local M = {}
 
 local ESCAPE_KEYCODE = 53
@@ -86,8 +89,9 @@ local function buildModal()
     end)
 end
 
-function M.activate()
-    enterNavMode()
+function M.openDownloads()
+    sys.open(deeplink.raycast("extensions/thomas/downloads-manager-nav/manage-downloads"), { background = true })
+    sys.after(0.3, enterNavMode)
 end
 
 function M.start()

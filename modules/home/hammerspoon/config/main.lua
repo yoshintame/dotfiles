@@ -437,17 +437,17 @@ spoon.LeaderFlow:setup({
             }},
 
             { "k", "[keys]", {
-                { "shift", "⇧", text("⇧") },
-                { "ctrl", "⌃", text("⌃") },
-                { "alt", "⌥", text("⌥") },
-                { "cmd", "⌘", text("⌘") },
-                { "fn", "fn", text("fn") },
-                { "capslock", "⇪", text("⇪") },
+                { "s", "⇧", text("⇧") },
+                { "c", "⌃", text("⌃") },
+                { "o", "⌥", text("⌥") },
+                { "m", "⌘", text("⌘") },
+                { "f", "fn", text("fn") },
+                { "l", "⇪", text("⇪") },
                 { "left", "←", text("←") },
                 { "right", "→", text("→") },
                 { "up", "↑", text("↑") },
                 { "down", "↓", text("↓") },
-                { "escape", "⎋", text("⎋") },
+                { "e", "⎋", text("⎋") },
             }},
 
             { "m", "[emails]", {

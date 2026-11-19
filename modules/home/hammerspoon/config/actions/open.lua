@@ -29,4 +29,13 @@ function M.launch(app)
     return function() hs.application.launchOrFocus(app) end
 end
 
+function M.draft()
+    local dir = os.getenv("HOME") .. "/.local/share/scratchpad"
+    hs.fs.mkdir(dir)
+    local path = dir .. "/draft-" .. os.date("%Y-%m-%d--%H-%M-%S") .. ".md"
+    local f = io.open(path, "w")
+    if f then f:close() end
+    sys.open(path, { app = "Zed" })
+end
+
 return M

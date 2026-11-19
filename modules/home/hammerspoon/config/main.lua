@@ -1,4 +1,3 @@
-local bin = require("core.bin")
 local sys = require("core.sys")
 local chord = require("core.chord")
 
@@ -33,80 +32,6 @@ spoon.AppLauncher:bindHotkeys({
     ["System Settings"]    = { { "alt"                  }, "," },
 })
 
-local hyperSetup = false
-local tabHeld = false
-local hyperTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.types.keyUp }, function(e)
-    local tabCode = hs.keycodes.map["tab"]
-    local eventType = e:getType()
-
-    if e:getKeyCode() == tabCode then
-        tabHeld = (eventType == hs.eventtap.event.types.keyDown)
-        return true
-    end
-
-    if tabHeld and eventType == hs.eventtap.event.types.keyDown then
-        e:setFlags({ cmd = true, alt = true, ctrl = true, shift = true })
-    end
-    return false
-end)
-
-local function toggleHyperSetup()
-    hyperSetup = not hyperSetup
-    if hyperSetup then
-        hyperTap:start()
-        hs.alert.show("Hyper Setup ON — Tab = ⌃⌥⇧⌘")
-    else
-        hyperTap:stop()
-        hs.alert.show("Hyper Setup OFF")
-    end
-end
-
-local keySwitcherId = "com.granin.keyswitcher"
-local keySwitcherRestart = nil
-
-local function restartKeySwitcher(label)
-    local app = hs.application.get(keySwitcherId)
-    if not app then
-        hs.alert.show(label .. " — со следующего запуска")
-        return
-    end
-    app:kill()
-    local deadline = hs.timer.secondsSinceEpoch() + 5
-    keySwitcherRestart = sys.waitUntil(function()
-        return hs.application.get(keySwitcherId) == nil or hs.timer.secondsSinceEpoch() > deadline
-    end, function()
-        keySwitcherRestart = nil
-        if hs.application.get(keySwitcherId) then
-            hs.alert.show("keySwitcher не закрылся, флаг сменится после перезапуска")
-            return
-        end
-        sys.open(nil, { background = true, bundle = keySwitcherId })
-        hs.alert.show(label)
-    end, 0.2)
-end
-
-local function toggleKeySwitcherLog()
-    if keySwitcherRestart then
-        hs.alert.show("keySwitcher ещё перезапускается")
-        return
-    end
-    keySwitcherRestart = true
-    sys.run(bin.defaults, { "read", keySwitcherId, "QKBVerboseLogging" }, {
-        onExit = function(_, out)
-            local verbose = out:match("1") ~= nil
-            local args = verbose and { "delete", keySwitcherId, "QKBVerboseLogging" }
-                or { "write", keySwitcherId, "QKBVerboseLogging", "-bool", "YES" }
-            sys.run(bin.defaults, args, {
-                onExit = function()
-                    keySwitcherRestart = nil
-                    restartKeySwitcher(verbose and "keySwitcher: журнал обезличенный"
-                        or "keySwitcher: журнал ПОДРОБНЫЙ (текст открыто)")
-                end,
-            })
-        end,
-    })
-end
-
 local proxy = require("generated.proxy-bindings")
 local hasPrivate, private = pcall(require, "private")
 if not hasPrivate then
@@ -122,6 +47,11 @@ end
 
 local input = require("actions.input")
 local open = require("actions.open")
+local apps = require("actions.apps")
+local maintenance = require("actions.maintenance")
+local power = require("actions.power")
+local windows = require("actions.windows")
+local hyperSetup = require("features.hyper-setup")
 local shortcut = input.shortcut
 local text = input.text
 local date = input.date
@@ -132,111 +62,7 @@ local changeCase = open.changeCase
 local editor = open.editor
 local launch = open.launch
 
-local function reload()
-    return function()
-        hs.reload()
-        hs.console.clearConsole()
-    end
-end
-
 local function dotmod(name) return editor("~/.dotfiles/modules/home/" .. name .. "/config") end
-
-local function hardCloseFront()
-    local app = hs.application.frontmostApplication()
-    if app then app:kill9() end
-end
-
-local function hardReopenFront()
-    local app = hs.application.frontmostApplication()
-    if not app then return end
-    local bundleID = app:bundleID()
-    app:kill9()
-    if bundleID then
-        sys.after(0.8, function()
-            hs.application.launchOrFocusByBundleID(bundleID)
-        end)
-    end
-end
-
-local function killAndReopen(bundleID)
-    local app = hs.application.get(bundleID)
-    if app then app:kill9() end
-    sys.after(0.8, function()
-        hs.application.launchOrFocusByBundleID(bundleID)
-    end)
-end
-
-local function restartApp(bundleID)
-    return function() killAndReopen(bundleID) end
-end
-
-local function karabinerKickstartTask()
-    sys.run(bin.sh, { "-c", "exec /bin/launchctl kickstart -k gui/$(/usr/bin/id -u)/org.pqrs.service.agent.karabiner_console_user_server" })
-end
-
-local function kickstartKarabiner()
-    karabinerKickstartTask()
-    hs.alert.show("⌨︎ Karabiner console_user_server kickstarted")
-end
-
-local restartStack = {
-    "bobko.aerospace",
-    "com.raycast.macos",
-    "com.getcleanshot.app-setapp",
-    "io.sipapp.Sip-setapp",
-}
-
-local function restartAll()
-    karabinerKickstartTask()
-    for i, bundleID in ipairs(restartStack) do
-        sys.after((i - 1) * 0.15, function()
-            killAndReopen(bundleID)
-        end)
-    end
-    hs.alert.show("♻︎ Restarting tool stack…")
-end
-
-local function resetClaudeSessions()
-    local home = os.getenv("HOME")
-    hs.alert.show("♻︎ Resetting Claude Code sessions…")
-    sys.run(bin.bun, { home .. "/.claude/skills/reset-sessions/scripts/reset-sessions.ts", "--all" }, {
-        env = { HOME = home, PATH = "/usr/bin:/bin:/usr/sbin:/sbin" },
-        onExit = function(exitCode, stdOut)
-            local summary = stdOut:match("Убито:[^\n]*") or stdOut:match("Нечего убивать[^\n]*")
-            if exitCode == 0 and summary then
-                hs.alert.show("✅ " .. summary)
-            elseif exitCode == 0 then
-                hs.alert.show("✅ Claude Code sessions reset")
-            else
-                hs.alert.show("⚠️ reset-sessions failed (exit " .. tostring(exitCode) .. ")")
-            end
-        end,
-    })
-end
-
-local function restartPaseoDaemon()
-    hs.alert.show("♻︎ Restarting Paseo daemon…")
-    sys.run(bin.paseo, { "daemon", "restart" }, {
-        env = { HOME = os.getenv("HOME"), PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" },
-        onExit = function(exitCode)
-            if exitCode == 0 then
-                hs.alert.show("✅ Paseo daemon restarted")
-            else
-                hs.alert.show("⚠️ paseo daemon restart failed (exit " .. tostring(exitCode) .. ")")
-            end
-        end,
-    })
-end
-
-local function osa(script)
-    return function() hs.osascript.applescript(script) end
-end
-
-local function osaAdmin(shellCommand)
-    return function()
-        sys.run(bin.osascript, { "-e", 'do shell script "' .. shellCommand .. '" with administrator privileges' })
-    end
-end
 
 local meetingNotes = require("features.meeting-notes")
 
@@ -246,54 +72,10 @@ local function joinMeeting(zoomUrl, mtype)
         sys.open(zoomUrl)
     end
 end
+switchCurrentAppWindows = apps.switchWindows
 
-function switchCurrentAppWindows()
-    local app = hs.application.frontmostApplication()
-    local bundleID = app and app:bundleID()
-    if not bundleID then return end
-    raycast("extensions/yoshintame/raycast-app-switcher/app-windows-by-id", { arguments = { appIdentifier = bundleID } })()
-end
-
-local floatMaximizePrevFrames = {}
-local function toggleFloatMaximize()
-    local win = hs.window.focusedWindow()
-    if not win then return end
-    local screenFrame = win:screen():frame()
-    local frame = win:frame()
-    local isMaximized = frame.x <= screenFrame.x + 8
-        and frame.y <= screenFrame.y + 8
-        and frame.w >= screenFrame.w - 16
-        and frame.h >= screenFrame.h - 16
-    if isMaximized then
-        local prev = floatMaximizePrevFrames[win:id()]
-        if prev then
-            win:setFrame(prev)
-        else
-            local w = 420
-            local h = math.min(860, screenFrame.h - 60)
-            win:setFrame({
-                x = screenFrame.x + (screenFrame.w - w) / 2,
-                y = screenFrame.y + (screenFrame.h - h) / 2,
-                w = w,
-                h = h,
-            })
-        end
-    else
-        floatMaximizePrevFrames[win:id()] = frame
-        win:setFrame(screenFrame)
-    end
-end
-hs.hotkey.bind({ "alt" }, "F", toggleFloatMaximize)
-
-local function newDraft(ext)
-    local dir = os.getenv("HOME") .. "/.local/share/scratchpad"
-    hs.fs.mkdir(dir)
-    local path = dir .. "/draft-" .. os.date("%Y-%m-%d--%H-%M-%S") .. "." .. (ext or "md")
-    local f = io.open(path, "w")
-    if f then f:close() end
-    sys.open(path, { app = "Zed" })
-end
-hs.hotkey.bind({ "alt" }, "N", function() newDraft("md") end)
+hs.hotkey.bind({ "alt" }, "F", windows.toggleFloatMaximize)
+hs.hotkey.bind({ "alt" }, "N", open.draft)
 
 local coffee = require("features.coffee-lid")
 
@@ -321,6 +103,31 @@ spoon.Zoom:setStatusCallback(function()
     inMeeting = now
 end)
 spoon.Zoom:start()
+
+local RESTARTABLE = {
+    { "s", "AeroSpace", "bobko.aerospace" },
+    { "r", "Raycast", "com.raycast.macos" },
+    { "c", "CleanShot X", "com.getcleanshot.app-setapp" },
+    { "p", "Color Picker", "io.sipapp.Sip-setapp" },
+}
+
+local function restartGroup()
+    local leaves = { { "k", "Karabiner", maintenance.kickstartKarabiner } }
+    local bundleIDs = {}
+    for _, app in ipairs(RESTARTABLE) do
+        leaves[#leaves + 1] = { app[1], app[2], apps.restart(app[3]) }
+        bundleIDs[#bundleIDs + 1] = app[3]
+    end
+    for _, leaf in ipairs({
+        { "e", "Paseo daemon", maintenance.restartPaseoDaemon },
+        { "h", "Hammerspoon", maintenance.reload },
+        { "a", "All", maintenance.restartStack(bundleIDs) },
+        { "d", "Reset CC Sessions", maintenance.resetClaudeSessions },
+    }) do
+        leaves[#leaves + 1] = leaf
+    end
+    return leaves
+end
 
 require("leader").start({
     trigger = "f18",
@@ -375,8 +182,8 @@ require("leader").start({
             { "x", "Roulette Clear", shortcut(proxy.roulette_clear) },
             { "e", "Emojis", raycast("extensions/raycast/emoji-symbols/search-emoji-symbols") },
             { "k", "Kill Process", raycast("extensions/rolandleth/kill-process/index") },
-            { "h", "Hyper Setup ⇄", toggleHyperSetup },
-            { "l", "keySwitcher log ⇄", toggleKeySwitcherLog },
+            { "h", "Hyper Setup ⇄", hyperSetup.toggle },
+            { "l", "keySwitcher log ⇄", maintenance.toggleKeySwitcherLog },
         }},
 
         { "l", "[links]", {
@@ -395,8 +202,8 @@ require("leader").start({
         }},
 
         { "v", "[meeting]", {
-            { "o", "Open current note", function() meetingNotes.openCurrent() end },
-            { "r", "Mark re-listen", function() meetingNotes.markRelisten() end },
+            { "o", "Open current note", meetingNotes.openCurrent },
+            { "r", "Mark re-listen", meetingNotes.markRelisten },
         }},
 
         { "r", "[ru snippets]", {
@@ -491,19 +298,19 @@ require("leader").start({
         }},
 
         { "q", "[quit app]", {
-            { "q", "Hard Close (kill)", hardCloseFront },
+            { "q", "Hard Close (kill)", apps.killFront },
             { "d", "Force Quit dialog", shortcut("cmd alt escape") },
-            { "r", "Hard Reopen", hardReopenFront },
+            { "r", "Hard Reopen", apps.reopenFront },
         }},
 
         { "o", "[power]", {
-            { "r", "Restart", osa('tell application "System Events" to restart') },
-            { "R", "Hard Restart", osaAdmin("shutdown -r now") },
-            { "s", "Shutdown", osa('tell application "System Events" to shut down') },
-            { "S", "Hard Shutdown", osaAdmin("shutdown -h now") },
-            { "o", "Log Out", osa('tell application "System Events" to log out') },
-            { "l", "Lock", function() hs.caffeinate.lockScreen() end },
-            { "z", "Sleep", function() hs.caffeinate.systemSleep() end },
+            { "r", "Restart", power.restart },
+            { "R", "Hard Restart", power.hardRestart },
+            { "s", "Shutdown", power.shutdown },
+            { "S", "Hard Shutdown", power.hardShutdown },
+            { "o", "Log Out", power.logout },
+            { "l", "Lock", power.lock },
+            { "z", "Sleep", power.sleep },
         }},
 
         { "w", "[awake]", {
@@ -514,20 +321,10 @@ require("leader").start({
             { "8", "8 hours", coffee.awakeFor(8) },
         }},
 
-        { "k", "[restart]", {
-            { "k", "Karabiner", kickstartKarabiner },
-            { "s", "AeroSpace", restartApp("bobko.aerospace") },
-            { "r", "Raycast", restartApp("com.raycast.macos") },
-            { "c", "CleanShot X", restartApp("com.getcleanshot.app-setapp") },
-            { "p", "Color Picker", restartApp("io.sipapp.Sip-setapp") },
-            { "e", "Paseo daemon", restartPaseoDaemon },
-            { "h", "Hammerspoon", reload() },
-            { "a", "All", restartAll },
-            { "d", "Reset CC Sessions", resetClaudeSessions },
-        }},
+        { "k", "[restart]", restartGroup() },
 
         { "h", "[hammerspoon]", {
-            { "r", "reload", reload() },
+            { "r", "reload", maintenance.reload },
         }},
     }
 })

@@ -7,6 +7,7 @@ local MODULES = {
     "features.finder-copy-path",
     "features.clipboard-history",
     "features.meeting-notes",
+    "features.hyper-setup",
 }
 
 local started, failed = {}, {}

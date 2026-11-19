@@ -9614,6 +9614,15 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
+  value: raindrop
+  runtime: claude
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
   value: tana-local
   runtime: claude
   scope: project
@@ -9668,6 +9677,15 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
+  value: raindrop
+  runtime: codex
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
   value: tana-local
   runtime: codex
   scope: project
@@ -9681,6 +9699,7 @@ mcp_servers:
 - grafana-monitor
 - linear
 - metabase
+- raindrop
 - tana-local
 mcp_configs:
   answeroverflow:
@@ -9718,6 +9737,11 @@ mcp_configs:
     transport: http
     registry: false
     url: https://mb.senateexchange.com/api/metabase-mcp
+  raindrop:
+    name: raindrop
+    transport: http
+    registry: false
+    url: https://api.raindrop.io/rest/v2/ai/mcp
   tana-local:
     name: tana-local
     transport: http
@@ -9733,6 +9757,7 @@ mcp_target_servers:
   - grafana-monitor
   - linear
   - metabase
+  - raindrop
   - tana-local
   codex:
   - answeroverflow
@@ -9740,4 +9765,5 @@ mcp_target_servers:
   - grafana-monitor
   - linear
   - metabase
+  - raindrop
   - tana-local

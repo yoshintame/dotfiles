@@ -95,15 +95,23 @@ end
 hs.loadSpoon("LeaderFlow")
 
 local proxy = require("generated.proxy-bindings")
-local shortcut = spoon.LeaderFlow.actions.shortcut
-local text = spoon.LeaderFlow.actions.text
-local currentDate = spoon.LeaderFlow.actions.currentDate
-local date = spoon.LeaderFlow.actions.date
-local url = spoon.LeaderFlow.actions.openURL
-local raycast = spoon.LeaderFlow.actions.raycast
-local code = spoon.LeaderFlow.actions.code
-local launch = spoon.LeaderFlow.actions.launch
-local reload = spoon.LeaderFlow.actions.reload
+local input = require("actions.input")
+local open = require("actions.open")
+local shortcut = input.shortcut
+local text = input.text
+local currentDate = input.currentDate
+local date = input.date
+local url = open.url
+local raycast = open.raycast
+local code = open.code
+local launch = open.launch
+
+local function reload()
+    return function()
+        hs.reload()
+        hs.console.clearConsole()
+    end
+end
 
 local function dotmod(name) return code("~/.dotfiles/modules/home/" .. name .. "/config") end
 

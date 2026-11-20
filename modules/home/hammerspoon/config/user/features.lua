@@ -43,6 +43,10 @@ return {
         maxApps = 12,
         lateStepSeconds = 0.15,
         idleCloseSeconds = 8,
+        external = {
+            commit = { mods = { "cmd", "alt", "shift" }, key = "f18" },
+            commitDelaySeconds = 0.08,
+        },
         background = { white = 0.12, alpha = 0.92 },
         highlight = { white = 1, alpha = 0.18 },
         text = { white = 1, alpha = 0.9 },

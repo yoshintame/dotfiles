@@ -112,7 +112,20 @@ local function close()
     apps = {}
 end
 
+local function late()
+    return hs.timer.secondsSinceEpoch() - lastCommitAt < settings.lateStepSeconds
+end
+
+local function externalStep()
+    if not late() then return end
+    local commit = settings.external.commit
+    timer.after(settings.external.commitDelaySeconds, function()
+        hs.eventtap.keyStroke(commit.mods, commit.key, 0)
+    end)
+end
+
 local function step(delta)
+    if settings.external then return externalStep() end
     if canvas then
         local count = math.min(#apps, settings.maxApps)
         choose((index - 1 + delta) % count + 1)
@@ -121,7 +134,7 @@ local function step(delta)
         if #apps == 0 then return end
         local count = math.min(#apps, settings.maxApps)
         index = delta > 0 and math.min(2, count) or count
-        if hs.timer.secondsSinceEpoch() - lastCommitAt < settings.lateStepSeconds then
+        if late() then
             local app = apps[index]
             apps = {}
             if app then app:activate() end
@@ -138,7 +151,7 @@ function M.prev() step(-1) end
 
 function M.commit()
     lastCommitAt = hs.timer.secondsSinceEpoch()
-    if not canvas then return end
+    if settings.external or not canvas then return end
     local app = apps[index]
     close()
     if app then app:activate() end

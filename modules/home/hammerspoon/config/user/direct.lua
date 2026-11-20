@@ -4,6 +4,7 @@ local open = require("actions.open")
 local windows = require("actions.windows")
 local clipboard = require("features.clipboard-history")
 local proxy = require("generated.proxy-bindings")
+local appSwitcher = require("features.app-switcher")
 
 return {
     launcher = {
@@ -49,5 +50,8 @@ return {
         { proxy.paste_history4,      clipboard.pasteAt(4) },
         { proxy.paste_history5,      clipboard.pasteAt(5) },
         { proxy.current_app_windows, apps.switchWindows },
+        { proxy.app_switcher_next,   appSwitcher.next },
+        { proxy.app_switcher_prev,   appSwitcher.prev },
+        { proxy.app_switcher_commit, appSwitcher.commit },
     },
 }

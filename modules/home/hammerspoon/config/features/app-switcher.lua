@@ -120,7 +120,10 @@ local function externalStep()
     if not late() then return end
     local commit = settings.external.commit
     timer.after(settings.external.commitDelaySeconds, function()
-        hs.eventtap.keyStroke(commit.mods, commit.key, 0)
+        for _, mod in ipairs(commit.mods) do hs.eventtap.event.newKeyEvent(mod, true):post() end
+        hs.eventtap.event.newKeyEvent(commit.mods, commit.key, true):post()
+        hs.eventtap.event.newKeyEvent(commit.mods, commit.key, false):post()
+        for i = #commit.mods, 1, -1 do hs.eventtap.event.newKeyEvent(commit.mods[i], false):post() end
     end)
 end
 

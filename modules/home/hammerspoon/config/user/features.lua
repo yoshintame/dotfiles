@@ -32,6 +32,20 @@ return {
         ignoreSuffixes = { ".crdownload", ".download", ".part", ".partial", ".tmp", ".opdownload" },
     },
 
+    ["app-switcher"] = {
+        iconSize = 72,
+        gap = 16,
+        padding = 24,
+        highlightInset = 8,
+        radius = 18,
+        labelHeight = 28,
+        textSize = 15,
+        maxApps = 12,
+        background = { white = 0.12, alpha = 0.92 },
+        highlight = { white = 1, alpha = 0.18 },
+        text = { white = 1, alpha = 0.9 },
+    },
+
     ["onepassword-focus-guard"] = {},
     ["sms-otp"] = {},
     ["hyper-setup"] = {},

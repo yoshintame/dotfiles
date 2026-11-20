@@ -53,3 +53,7 @@ bindings:
   pasteHistory5: cmd alt ctrl shift f17
 
   currentAppWindows: cmd alt ctrl shift f19
+
+  appSwitcherNext: cmd alt ctrl shift f20
+  appSwitcherPrev: cmd alt ctrl f20
+  appSwitcherCommit: cmd alt shift f20

@@ -54,6 +54,6 @@ bindings:
 
   currentAppWindows: cmd alt ctrl shift f19
 
-  appSwitcherNext: cmd alt ctrl shift f20
-  appSwitcherPrev: cmd alt ctrl f20
-  appSwitcherCommit: cmd alt shift f20
+  appSwitcherNext: cmd alt f20
+  appSwitcherPrev: cmd ctrl f20
+  appSwitcherCommit: alt ctrl f20

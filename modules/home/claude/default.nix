@@ -26,5 +26,6 @@ myLib.mkModule config "claude" {
     "~/.config/cd4a/config.json" = "modules/home/agents-shared/config/chrome-cdp/cd4a.json";
     "~/.local/bin/cc-fork-recover" = "modules/home/agents-shared/config/bin/cc-fork-recover";
     "~/.local/bin/clean-session-log" = "modules/home/agents-shared/config/bin/clean-session-log";
-    "~/.local/bin/extract-images" = "modules/home/agents-shared/config/bin/extract-images";  };
+    "~/.local/bin/extract-images" = "modules/home/agents-shared/config/bin/extract-images";
+  };
 }

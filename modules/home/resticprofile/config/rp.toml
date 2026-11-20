@@ -111,7 +111,14 @@ esac
 
 ["rp:save"]
 description = "Quick-save current dir (global excludes apply)"
-run = 'RP_SAVE_DIR="$(pwd)" resticprofile -n quicksave backup'
+run = '''
+dir="${MISE_ORIGINAL_CWD:-$(pwd)}"
+if [ "$dir" = "$HOME" ] || [ "$dir" = "/" ]; then
+    echo "rp save: refusing to quick-save $dir" >&2
+    exit 1
+fi
+RP_SAVE_DIR="$dir" resticprofile -n quicksave backup
+'''
 
 ["rp:load"]
 description = "Load current dir from latest snapshot"
@@ -119,11 +126,22 @@ usage = '''
 flag "--no-clean" help="Don't delete existing files before restore"
 '''
 run = '''
-dir="$(pwd)"
+dir="${MISE_ORIGINAL_CWD:-$(pwd)}"
+if [ "$dir" = "$HOME" ] || [ "$dir" = "/" ]; then
+    echo "rp load: refusing to load into $dir" >&2
+    exit 1
+fi
+export RP_SAVE_DIR="$dir"
+snapshots=$(resticprofile -n quicksave snapshots --no-lock --tag quicksave --path "$dir" --json 2>/dev/null) || snapshots=""
+count=$(printf '%s\n' "$snapshots" | grep '^\[' | jq length 2>/dev/null)
+if [ "${count:-0}" -eq 0 ]; then
+    echo "rp load: no quicksave snapshot of $dir" >&2
+    exit 1
+fi
 if [ "${usage_no_clean:-false}" = "false" ]; then
     find "$dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 fi
-resticprofile -n quicksave restore "latest:$dir" --target "$dir"
+resticprofile -n quicksave restore "latest:$dir" --no-lock --tag quicksave --path "$dir" --target "$dir"
 '''
 
 # --- Restore ---

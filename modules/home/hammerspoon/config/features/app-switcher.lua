@@ -1,3 +1,5 @@
+local timer = require("engine.timer")
+
 local M = {}
 
 local settings = nil
@@ -8,6 +10,8 @@ local index = 0
 local icons = {}
 local HIGHLIGHT = 2
 local label = nil
+local lastCommitAt = 0
+local idle = nil
 
 local function regularApps()
     local seen, list = {}, {}
@@ -100,28 +104,43 @@ local function choose(i)
     canvas[label].text = apps[index]:name() or ""
 end
 
+local function close()
+    timer.cancel(idle)
+    idle = nil
+    if canvas then canvas:delete() end
+    canvas = nil
+    apps = {}
+end
+
 local function step(delta)
     if canvas then
         local count = math.min(#apps, settings.maxApps)
         choose((index - 1 + delta) % count + 1)
-        return
+    else
+        apps = regularApps()
+        if #apps == 0 then return end
+        local count = math.min(#apps, settings.maxApps)
+        index = delta > 0 and math.min(2, count) or count
+        if hs.timer.secondsSinceEpoch() - lastCommitAt < settings.lateStepSeconds then
+            local app = apps[index]
+            apps = {}
+            if app then app:activate() end
+            return
+        end
+        render()
     end
-    apps = regularApps()
-    if #apps == 0 then return end
-    local count = math.min(#apps, settings.maxApps)
-    index = delta > 0 and math.min(2, count) or count
-    render()
+    timer.cancel(idle)
+    idle = timer.after(settings.idleCloseSeconds, close)
 end
 
 function M.next() step(1) end
 function M.prev() step(-1) end
 
 function M.commit()
+    lastCommitAt = hs.timer.secondsSinceEpoch()
     if not canvas then return end
     local app = apps[index]
-    canvas:delete()
-    canvas = nil
-    apps = {}
+    close()
     if app then app:activate() end
 end
 
@@ -133,8 +152,7 @@ function M.start(config)
 end
 
 function M.stop()
-    if canvas then canvas:delete() end
-    canvas = nil
+    close()
     if focusFilter then focusFilter:unsubscribeAll() end
     focusFilter = nil
 end

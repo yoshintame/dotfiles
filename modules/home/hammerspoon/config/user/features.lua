@@ -41,6 +41,8 @@ return {
         labelHeight = 28,
         textSize = 15,
         maxApps = 12,
+        lateStepSeconds = 0.15,
+        idleCloseSeconds = 8,
         background = { white = 0.12, alpha = 0.92 },
         highlight = { white = 1, alpha = 0.18 },
         text = { white = 1, alpha = 0.9 },

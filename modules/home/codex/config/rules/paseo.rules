@@ -1,0 +1,10 @@
+prefix_rule(
+    pattern=["paseo", "workspace", "archive"],
+    decision="forbidden",
+    justification="Archiving a Paseo workspace loses its sessions; the user archives workspaces by hand.",
+)
+prefix_rule(
+    pattern=["paseo", "project", "delete"],
+    decision="forbidden",
+    justification="Deleting a Paseo project archives all of its workspaces and loses their sessions.",
+)

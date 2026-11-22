@@ -1,6 +1,5 @@
-local bin = require("engine.bin")
-local process = require("engine.process")
 local timer = require("engine.timer")
+local windows = require("actions.windows")
 
 local M = {}
 
@@ -39,7 +38,7 @@ end
 local function pinAerospaceFocus(app)
     local win = app:focusedWindow() or app:mainWindow()
     if not win then return end
-    process.run(bin.aerospace, { "focus", "--window-id", tostring(win:id()) })
+    windows.focusById(win:id())
 end
 
 local function arm()

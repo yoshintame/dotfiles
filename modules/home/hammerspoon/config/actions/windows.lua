@@ -1,6 +1,17 @@
+local bin = require("engine.bin")
+local process = require("engine.process")
+
 local M = {}
 
 local previousFrames = {}
+
+function M.focusById(id, fallback)
+    process.run(bin.aerospace, { "focus", "--window-id", tostring(id) }, {
+        onExit = function(code)
+            if code ~= 0 and fallback then fallback() end
+        end,
+    })
+end
 
 local function isMaximized(frame, screenFrame)
     return frame.x <= screenFrame.x + 8

@@ -12,3 +12,5 @@ apple:
   amp-app-stores: media-services-guides
 google:
   takeout-*: takeout
+spotify:
+  my_spotify_data: my-spotify-data

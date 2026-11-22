@@ -1,22 +1,17 @@
-# Нативная замена nix-dotbot: живые симлинки через home-manager, без dotbot.
-# Drop-in для DSL `nixLink` — модули-потребители не меняются.
 { config, lib, ... }:
 let
   cfg = config.nixLink;
   mkOOS = config.lib.file.mkOutOfStoreSymlink;
 
-  forceOn = cfg.defaults.link.force or false; # create/relink нативны (no-op)
+  forceOn = cfg.defaults.link.force or false;
 
-  toKey = dest: lib.removeSuffix "/" (lib.removePrefix "~/" dest); # home.file — от $HOME
+  toKey = dest: lib.removeSuffix "/" (lib.removePrefix "~/" dest);
 
-  # имена, которые live-enumeration НЕ линкует: build/VCS-артефакты (node_modules
-  # часто gitignored и локально доустановлен — линковать его в конфиг не нужно)
   pruneNames = [
     "node_modules"
     ".git"
   ];
 
-  # рекурсивный список относительных путей файлов под абсолютным dir (имена)
   collectRel =
     baseAbs:
     if !builtins.pathExists baseAbs then
@@ -27,7 +22,7 @@ let
           rel:
           let
             here = baseAbs + (lib.optionalString (rel != "") "/${rel}");
-            entries = builtins.readDir here; # impure: репо уже на --impure
+            entries = builtins.readDir here;
           in
           lib.concatMap (
             name:
@@ -44,36 +39,125 @@ let
       in
       walk "";
 
-  globBase = p: lib.removeSuffix "/" (lib.removeSuffix "**" p); # снять хвост "/**"
+  globBase = p: lib.removeSuffix "/" (lib.removeSuffix "**" p);
 
-  entry = target: { source = mkOOS target; } // lib.optionalAttrs forceOn { force = true; };
+  mkEntry = source: { inherit source; } // lib.optionalAttrs forceOn { force = true; };
+
+  under = base: path: if path == "" then base else "${base}/${path}";
+
+  rootLive =
+    name: root:
+    if root.live != null then
+      root.live
+    else if cfg.liveBase != null then
+      "${cfg.liveBase}/${name}"
+    else
+      null;
+
+  resolveRoot =
+    name:
+    let
+      root = cfg.roots.${name} or (throw "nixLink: unknown root '${name}'");
+      live = rootLive name root;
+      pinned = if root.pinned == null then null else "${root.pinned}";
+    in
+    if live != null && (pinned == null || builtins.pathExists live) then
+      {
+        base = live;
+        link = target: mkEntry (mkOOS target);
+      }
+    else if pinned != null then
+      lib.warnIf (live != null)
+        "nixLink: root '${name}' has no checkout at ${live}, linking the pinned copy"
+        {
+          base = pinned;
+          link = mkEntry;
+        }
+    else
+      throw "nixLink: root '${name}' has neither a live checkout nor a pinned source";
+
+  normalize =
+    value:
+    if builtins.isString value then
+      {
+        root = null;
+        path = value;
+        glob = false;
+        exclude = [ ];
+      }
+    else
+      value;
 
   linkFiles =
     dest: value:
-    if builtins.isString value then
-      { ${toKey dest} = entry "${cfg.dotfilesDir}/${value}"; } # whole-path (dir целиком)
-    else if (value.glob or false) then
+    let
+      link = normalize value;
+      root = resolveRoot (if link.root == null then cfg.defaultRoot else link.root);
+    in
+    if link.glob then
       let
-        liveBase = "${cfg.dotfilesDir}/${globBase value.path}";
-        keep = f: !(lib.elem f (value.exclude or [ ]));
+        base = under root.base (globBase link.path);
+        keep = f: !(lib.elem f link.exclude);
       in
       lib.listToAttrs (
-        map (rel: lib.nameValuePair "${toKey dest}/${rel}" (entry "${liveBase}/${rel}")) (
-          builtins.filter keep (collectRel liveBase)
+        map (rel: lib.nameValuePair "${toKey dest}/${rel}" (root.link "${base}/${rel}")) (
+          builtins.filter keep (collectRel base)
         )
       )
     else
-      { ${toKey dest} = entry "${cfg.dotfilesDir}/${value.path}"; };
+      { ${toKey dest} = root.link (under root.base link.path); };
+
+  rootType = lib.types.submodule {
+    options = {
+      pinned = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+      };
+      live = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+    };
+  };
+
+  linkType = lib.types.submodule {
+    options = {
+      root = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+      path = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
+      glob = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+      exclude = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+      };
+    };
+  };
 in
 {
   options.nixLink = {
     enable = lib.mkEnableOption "native live-symlink linking (dotbot-free)";
-    dotfilesDir = lib.mkOption {
+    defaultRoot = lib.mkOption {
       type = lib.types.str;
-      default = "~/.dotfiles";
+      default = "dotfiles";
+    };
+    liveBase = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+    };
+    roots = lib.mkOption {
+      type = lib.types.attrsOf rootType;
+      default = { };
     };
     links = lib.mkOption {
-      type = lib.types.attrsOf lib.types.anything;
+      type = lib.types.attrsOf (lib.types.either lib.types.str linkType);
       default = { };
     };
     defaults = lib.mkOption {
@@ -83,7 +167,7 @@ in
     clean = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-    }; # no-op
+    };
   };
   config = lib.mkIf cfg.enable {
     home.file = lib.mkMerge (lib.mapAttrsToList linkFiles cfg.links);

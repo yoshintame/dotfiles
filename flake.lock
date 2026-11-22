@@ -393,6 +393,23 @@
         "url": "ssh://git@github.com/yoshintame/lasthaze-homelab"
       }
     },
+    "karabiner-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795369951,
+        "narHash": "sha256-i6XaE1zLraXZ8eBjBd6wvSxpEwwvrFs9tacQGneWFwY=",
+        "owner": "yoshintame",
+        "repo": "karabiner-config",
+        "rev": "9e8ce511887271d6e69d4bcd67d43fda43db3f95",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yoshintame",
+        "repo": "karabiner-config",
+        "rev": "9e8ce511887271d6e69d4bcd67d43fda43db3f95",
+        "type": "github"
+      }
+    },
     "nix": {
       "inputs": {
         "bdwgc": "bdwgc",
@@ -675,6 +692,7 @@
         "flake-parts": "flake-parts_2",
         "home-manager": "home-manager",
         "homelab": "homelab",
+        "karabiner-config": "karabiner-config",
         "nix-darwin": "nix-darwin",
         "nix-stencil": "nix-stencil",
         "nix-win": "nix-win",

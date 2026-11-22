@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>yoshintame/renovate-config"],
+  "enabledManagers": ["nix", "git-submodules"],
+  "nix": {
+    "enabled": true
+  },
+  "git-submodules": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Only component inputs and their submodule pointers are bumped here",
+      "matchManagers": ["nix", "git-submodules"],
+      "enabled": false
+    },
+    {
+      "description": "karabiner-config: flake.lock input and the submodule pointer move together in one auto-merged PR",
+      "matchDepNames": ["karabiner-config", "modules/home/karabiner/config"],
+      "enabled": true,
+      "groupName": "karabiner-config",
+      "groupSlug": "karabiner-config",
+      "minimumReleaseAge": "0 days",
+      "schedule": ["at any time"],
+      "automerge": true
+    }
+  ]
+}

@@ -19,6 +19,12 @@
 
     sharedModules = [
       ../lib/nix-link.nix
+      {
+        nixLink.roots = {
+          dotfiles.live = flakeRoot;
+          karabiner-config.pinned = inputs.karabiner-config;
+        };
+      }
       inputs.sops-nix.homeManagerModules.sops
       inputs.nix-stencil.homeManagerModules.default
       (

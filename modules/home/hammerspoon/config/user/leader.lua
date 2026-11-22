@@ -164,7 +164,7 @@ return {
 
             { "c", "CRM",                 editor("~/Development/work/senate/senate@crm-frontend") },
             { "f", "dotfiles",            editor("~/.dotfiles") },
-            { "k", "karabiner",           editor("~/.dotfiles/modules/home/karabiner/config") },
+            { "k", "karabiner",           editor("~/Development/yoshintame/karabiner-config") },
             { "h", "hammerspoon",         editor("~/.dotfiles/modules/home/hammerspoon/config") },
             { "v", "vscode",              editor("~/.dotfiles/modules/home/vscode/config") },
             { "s", "obsidian/yoshintame", editor("~/Documents/obsidian/yoshintame") },

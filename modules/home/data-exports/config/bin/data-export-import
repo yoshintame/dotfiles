@@ -13,26 +13,17 @@ import { homedir } from 'node:os'
 import { basename, join } from 'node:path'
 import { defineCommand, runMain } from 'citty'
 import { $ } from 'dax-sh'
+import { z } from 'zod'
 
-enum Service {
-  Apple = 'apple',
-}
+const archiveNamesPath = join(import.meta.dir, '..', 'archive-names.yaml')
 
-const slugsByOriginalName = {
-  [Service.Apple]: {
-    'Apple.com и Apple Store': 'apple-store',
-    AppleCare: 'applecare',
-    'Действия в Wallet': 'wallet',
-    'Информация об Аккаунте Apple и устройстве': 'account-and-devices',
-    'История push-уведомлений и установки приложений': 'push-and-app-installs',
-    'Календари и Напоминания iCloud': 'icloud-calendars-reminders',
-    'Контакты iCloud': 'icloud-contacts',
-    'iCloud Mail': 'icloud-mail',
-    'Сведения о мультимедийных сервисах Apple Часть 1 из 2': 'media-services-part-1',
-    'Сведения о мультимедийных сервисах Apple Часть 2 из 2': 'media-services-part-2',
-    'amp-app-stores': 'media-services-guides',
-  },
-} as const satisfies Record<Service, Record<string, string>>
+const archiveNamesSchema = z.record(
+  z.string().regex(/^[a-z0-9-]+$/),
+  z.record(z.string(), z.string().regex(/^[a-z0-9-]+$/)),
+)
+
+const slugsByOriginalNameByService = loadArchiveNames()
+const services = Object.keys(slugsByOriginalNameByService)
 
 interface Archive {
   path: string
@@ -50,7 +41,7 @@ interface ManifestEntry {
 }
 
 interface Manifest {
-  service: `${Service}`
+  service: string
   date: string
   archives: Record<string, ManifestEntry>
 }
@@ -62,7 +53,7 @@ const main = defineCommand({
       'Unpack a service data export from Downloads into ~/Backups/remote/<service>/<date>/<slug>/ under stable kebab-case names',
   },
   args: {
-    service: { type: 'positional', required: true, description: Object.values(Service).join(' | ') },
+    service: { type: 'positional', required: true, description: services.join(' | ') },
     from: { type: 'string', default: join(homedir(), 'Downloads'), description: 'Folder with the downloaded archives' },
     to: { type: 'string', default: join(homedir(), 'Backups', 'remote'), description: 'Root of the remote dumps' },
     date: { type: 'string', default: getToday(), description: 'Export date, YYYY-MM-DD' },
@@ -70,14 +61,15 @@ const main = defineCommand({
     keep: { type: 'boolean', default: false, description: 'Keep the source archives after unpacking' },
   },
   async run({ args }) {
-    const service = parseService(args.service)
+    const service = args.service
+    const slugsByOriginalName = getSlugsByOriginalName(service)
     if (!/^\d{4}-\d{2}-\d{2}$/.test(args.date)) die(`--date must be YYYY-MM-DD, got ${JSON.stringify(args.date)}`)
 
-    const { archives, duplicates, unmatched } = await findArchives({ service, from: args.from })
+    const { archives, duplicates, unmatched } = await findArchives({ slugsByOriginalName, from: args.from })
     if (archives.length === 0) die(`no ${service} archives found in ${args.from}`)
 
     const target = join(args.to, service, args.date)
-    const knownNames = Object.keys(slugsByOriginalName[service])
+    const knownNames = Object.keys(slugsByOriginalName)
     const missing = knownNames.filter((name) => !archives.some((archive) => archive.originalName === name))
 
     printPlan({ archives, duplicates, unmatched, missing, target })
@@ -103,12 +95,11 @@ const main = defineCommand({
 void runMain(main)
 
 interface FindArchivesInput {
-  service: Service
+  slugsByOriginalName: Record<string, string>
   from: string
 }
 
-async function findArchives({ service, from }: FindArchivesInput) {
-  const slugsByName: Record<string, string> = slugsByOriginalName[service]
+async function findArchives({ slugsByOriginalName, from }: FindArchivesInput) {
   const archivesBySlug = new Map<string, Archive>()
   const duplicates: string[] = []
   const unmatched: string[] = []
@@ -123,7 +114,7 @@ async function findArchives({ service, from }: FindArchivesInput) {
 
   for (const fileName of orderedFileNames) {
     const originalName = getOriginalName(fileName)
-    const slug = slugsByName[originalName]
+    const slug = slugsByOriginalName[originalName]
     if (slug === undefined) {
       unmatched.push(fileName)
       continue
@@ -162,7 +153,7 @@ function printPlan({ archives, duplicates, unmatched, missing, target }: PrintPl
 
 interface ReadManifestInput {
   target: string
-  service: Service
+  service: string
   date: string
 }
 
@@ -249,11 +240,22 @@ async function getSha256(path: string) {
   return hasher.digest('hex')
 }
 
-function parseService(value: string) {
-  const service = Object.values(Service).find((candidate) => candidate === value)
-  if (service === undefined) die(`unknown service ${JSON.stringify(value)}, expected ${Object.values(Service).join(' | ')}`)
+function getSlugsByOriginalName(service: string) {
+  const slugsByOriginalName = slugsByOriginalNameByService[service]
+  if (slugsByOriginalName === undefined) {
+    die(`unknown service ${JSON.stringify(service)}, expected ${services.join(' | ')} (from ${archiveNamesPath})`)
+  }
 
-  return service
+  return Object.fromEntries(
+    Object.entries(slugsByOriginalName).map(([originalName, slug]) => [originalName.normalize('NFC'), slug]),
+  )
+}
+
+function loadArchiveNames() {
+  const parsed = archiveNamesSchema.safeParse(Bun.YAML.parse(readFileSync(archiveNamesPath, 'utf8')))
+  if (!parsed.success) die(`invalid ${archiveNamesPath}: ${z.prettifyError(parsed.error)}`)
+
+  return parsed.data
 }
 
 function getToday() {

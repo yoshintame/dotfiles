@@ -57,3 +57,4 @@ bindings:
   appSwitcherNext: cmd alt f20
   appSwitcherPrev: cmd ctrl f20
   appSwitcherCommit: alt ctrl f20
+  appSwitcherArm: ctrl f20

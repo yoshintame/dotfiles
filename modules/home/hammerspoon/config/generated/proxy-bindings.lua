@@ -29,5 +29,6 @@ M.current_app_windows = "cmd alt ctrl shift f19"
 M.app_switcher_next = "cmd alt f20"
 M.app_switcher_prev = "cmd ctrl f20"
 M.app_switcher_commit = "alt ctrl f20"
+M.app_switcher_arm = "ctrl f20"
 
 return M

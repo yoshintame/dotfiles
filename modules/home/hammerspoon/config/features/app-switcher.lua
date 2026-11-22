@@ -10,7 +10,8 @@ local index = 0
 local icons = {}
 local HIGHLIGHT = 2
 local label = nil
-local lastCommitAt = 0
+local held = false
+local externalOpen = false
 local idle = nil
 
 local function regularApps()
@@ -112,19 +113,20 @@ local function close()
     apps = {}
 end
 
-local function late()
-    return hs.timer.secondsSinceEpoch() - lastCommitAt < settings.lateStepSeconds
+local function externalCommit()
+    local commit = settings.external.commit
+    for _, mod in ipairs(commit.mods) do hs.eventtap.event.newKeyEvent(mod, true):post() end
+    hs.eventtap.event.newKeyEvent(commit.mods, commit.key, true):post()
+    hs.eventtap.event.newKeyEvent(commit.mods, commit.key, false):post()
+    for i = #commit.mods, 1, -1 do hs.eventtap.event.newKeyEvent(commit.mods[i], false):post() end
 end
 
 local function externalStep()
-    if not late() then return end
-    local commit = settings.external.commit
-    timer.after(settings.external.commitDelaySeconds, function()
-        for _, mod in ipairs(commit.mods) do hs.eventtap.event.newKeyEvent(mod, true):post() end
-        hs.eventtap.event.newKeyEvent(commit.mods, commit.key, true):post()
-        hs.eventtap.event.newKeyEvent(commit.mods, commit.key, false):post()
-        for i = #commit.mods, 1, -1 do hs.eventtap.event.newKeyEvent(commit.mods[i], false):post() end
-    end)
+    if held then
+        externalOpen = true
+        return
+    end
+    timer.after(settings.external.commitDelaySeconds, externalCommit)
 end
 
 local function step(delta)
@@ -137,7 +139,7 @@ local function step(delta)
         if #apps == 0 then return end
         local count = math.min(#apps, settings.maxApps)
         index = delta > 0 and math.min(2, count) or count
-        if late() then
+        if not held then
             local app = apps[index]
             apps = {}
             if app then app:activate() end
@@ -152,9 +154,18 @@ end
 function M.next() step(1) end
 function M.prev() step(-1) end
 
+function M.arm()
+    held = true
+end
+
 function M.commit()
-    lastCommitAt = hs.timer.secondsSinceEpoch()
-    if settings.external or not canvas then return end
+    held = false
+    if settings.external then
+        if externalOpen then externalCommit() end
+        externalOpen = false
+        return
+    end
+    if not canvas then return end
     local app = apps[index]
     close()
     if app then app:activate() end

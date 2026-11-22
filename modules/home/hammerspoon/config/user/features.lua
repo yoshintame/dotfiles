@@ -41,7 +41,6 @@ return {
         labelHeight = 28,
         textSize = 15,
         maxApps = 12,
-        lateStepSeconds = 0.15,
         idleCloseSeconds = 8,
         external = {
             commit = { mods = { "cmd", "alt", "shift" }, key = "f18" },

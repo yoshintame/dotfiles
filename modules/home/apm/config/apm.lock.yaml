@@ -946,9 +946,9 @@ dependencies:
 - repo_url: yoshintame/agent-skills
   name: agent-skills
   host: github.com
-  resolved_commit: 68a86c1317e02398da6cf97af8815cf87d4d07b9
-  resolved_ref: v1.19.0+68a86c1
-  version: 1.19.0+68a86c1
+  resolved_commit: 664fcbc9bfedac1b17c1249a322c9e2972d546b5
+  resolved_ref: v1.19.1+664fcbc
+  version: 1.19.1+664fcbc
   package_type: apm_package
   deployed_files:
   - .agents/skills/actualize
@@ -1449,7 +1449,7 @@ dependencies:
     .agents/skills/homelab-add-service/scripts/compose-to-homelab.ts: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
     .agents/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .agents/skills/homelab-deploy/SKILL.md: sha256:490134dadf01bf74b95ca3b3a3ad565e7b94b1fd21543c4df1a678807540220f
-    .agents/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
+    .agents/skills/keybind/SKILL.md: sha256:ea2993b636fc598b9eb1b8dca4c4c7f4b5a1c9ee0babcc2e8ef7b3b7cb199c72
     .agents/skills/keyswitcher-update/SKILL.md: sha256:2f7a416b4717ae2b248cdf4a0fca4e486acbcebefb27935a96ed241b0fe728d8
     .agents/skills/keyswitcher-update/references/signing-cert.md: sha256:ccc28a89411fe8de367c1b57cf3f1fc392ae41c0367d58855b1856231cc89e2d
     .agents/skills/keyswitcher-update/references/threat-model.md: sha256:898a0a5c906ab485ef170c19ce6f2c7284d4cd16ff4319283e4d32024ba5a9ca
@@ -1595,7 +1595,7 @@ dependencies:
     .claude/skills/homelab-add-service/scripts/compose-to-homelab.ts: sha256:8b8e89f9db9c02496cbf8576101fa85ccd65952b2ab2438d2e34549285fe8233
     .claude/skills/homelab-add-service/scripts/convert.ts: sha256:92617eaa4641a990319d71cc7394f7417da85e2e59e2a2c5472ff614992f1ba0
     .claude/skills/homelab-deploy/SKILL.md: sha256:490134dadf01bf74b95ca3b3a3ad565e7b94b1fd21543c4df1a678807540220f
-    .claude/skills/keybind/SKILL.md: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
+    .claude/skills/keybind/SKILL.md: sha256:ea2993b636fc598b9eb1b8dca4c4c7f4b5a1c9ee0babcc2e8ef7b3b7cb199c72
     .claude/skills/keyswitcher-update/SKILL.md: sha256:2f7a416b4717ae2b248cdf4a0fca4e486acbcebefb27935a96ed241b0fe728d8
     .claude/skills/keyswitcher-update/references/signing-cert.md: sha256:ccc28a89411fe8de367c1b57cf3f1fc392ae41c0367d58855b1856231cc89e2d
     .claude/skills/keyswitcher-update/references/threat-model.md: sha256:898a0a5c906ab485ef170c19ce6f2c7284d4cd16ff4319283e4d32024ba5a9ca
@@ -1650,10 +1650,10 @@ dependencies:
     .claude/skills/wt-workflow/SKILL.md: sha256:dd84e2e58982cb8d20fffa9ce7796d58aec2196267b42a6e7c6b6c4de0453431
     .claude/skills/youtube-summary/SKILL.md: sha256:2e00a437a8b861dac47d4461f1fb712b9822b5261931ff60c738aa4e50834e52
     .claude/skills/youtube-summary/scripts/yt-transcript: sha256:adadfdfc852ff5abb056507c883f467358ff739e7a652cdf756a5d73d0bd2f98
-  content_hash: sha256:8a13249bd7fe3edf1b39eb89999098fd183b4a264b216faeeb3656646f8919b8
+  content_hash: sha256:2bffe3ed6be21ab8f7383d91ff83fb8b719dd84045a9c0d1557f9b40f68a34f1
   constraint: ^1.0.0
-  resolved_tag: v1.19.0+68a86c1
-  resolved_at: '2026-11-17T17:15:36+00:00'
+  resolved_tag: v1.19.1+664fcbc
+  resolved_at: '2026-11-22T19:48:20+00:00'
   declared_license: UNLICENSED
 deployments:
 - kind: project-relative
@@ -3284,7 +3284,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
+  content_hash: sha256:ea2993b636fc598b9eb1b8dca4c4c7f4b5a1c9ee0babcc2e8ef7b3b7cb199c72
 - kind: project-relative
   target: claude
   value: .claude/skills/keyswitcher-update
@@ -7244,7 +7244,7 @@ deployments:
   owners:
   - yoshintame/agent-skills
   active_owner: yoshintame/agent-skills
-  content_hash: sha256:e5d0417278eda79b8bab336162faadb68052f2b88b35d9467e6d32031de1e3c8
+  content_hash: sha256:ea2993b636fc598b9eb1b8dca4c4c7f4b5a1c9ee0babcc2e8ef7b3b7cb199c72
 - kind: project-relative
   target: legacy
   value: .agents/skills/keyswitcher-update

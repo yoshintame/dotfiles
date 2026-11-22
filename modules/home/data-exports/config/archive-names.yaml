@@ -14,3 +14,5 @@ google:
   takeout-*: takeout
 spotify:
   my_spotify_data: my-spotify-data
+reddit:
+  export_*: export

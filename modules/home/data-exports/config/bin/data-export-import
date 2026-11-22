@@ -34,7 +34,6 @@ interface NamePattern {
 interface Archive {
   path: string
   originalName: string
-  pattern: string
   slug: string
   sha256: string
   bytes: number
@@ -81,8 +80,8 @@ const main = defineCommand({
 
     const target = join(args.to, service, args.date)
     const missing = namePatterns
+      .filter(({ slug }) => !archives.some((archive) => archive.slug === slug))
       .map(({ pattern }) => pattern)
-      .filter((pattern) => !archives.some((archive) => archive.pattern === pattern))
 
     printPlan({ archives, duplicates, unmatched, missing, target })
     if (args['dry-run']) return
@@ -143,7 +142,6 @@ async function findArchives({ namePatterns, from }: FindArchivesInput) {
     archivesBySha256.set(sha256, {
       path,
       originalName,
-      pattern: namePattern.pattern,
       slug: namePattern.slug,
       sha256,
       bytes: statSync(path).size,

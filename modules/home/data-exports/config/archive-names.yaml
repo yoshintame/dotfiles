@@ -7,8 +7,8 @@ apple:
   Календари и Напоминания iCloud: icloud-calendars-reminders
   Контакты iCloud: icloud-contacts
   iCloud Mail: icloud-mail
-  Сведения о мультимедийных сервисах Apple Часть 1 из 2: media-services-part-1
-  Сведения о мультимедийных сервисах Apple Часть 2 из 2: media-services-part-2
+  Сведения о мультимедийных сервисах Apple: media-services
+  Сведения о мультимедийных сервисах Apple Часть *: media-services
   amp-app-stores: media-services-guides
 google:
   takeout-*: takeout

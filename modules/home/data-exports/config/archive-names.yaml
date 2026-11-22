@@ -10,3 +10,5 @@ apple:
   Сведения о мультимедийных сервисах Apple Часть 1 из 2: media-services-part-1
   Сведения о мультимедийных сервисах Apple Часть 2 из 2: media-services-part-2
   amp-app-stores: media-services-guides
+google:
+  takeout-*: takeout

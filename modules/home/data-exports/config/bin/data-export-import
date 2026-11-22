@@ -10,7 +10,7 @@ import {
   writeFileSync,
 } from 'node:fs'
 import { homedir } from 'node:os'
-import { basename, join } from 'node:path'
+import { basename, dirname, join, relative } from 'node:path'
 import { defineCommand, runMain } from 'citty'
 import { $ } from 'dax-sh'
 import { z } from 'zod'
@@ -22,35 +22,46 @@ const archiveNamesSchema = z.record(
   z.record(z.string(), z.string().regex(/^[a-z0-9-]+$/)),
 )
 
-const slugsByOriginalNameByService = loadArchiveNames()
-const services = Object.keys(slugsByOriginalNameByService)
+const slugsByNamePatternByService = loadArchiveNames()
+const services = Object.keys(slugsByNamePatternByService)
+
+interface NamePattern {
+  pattern: string
+  glob: Bun.Glob
+  slug: string
+}
 
 interface Archive {
   path: string
   originalName: string
+  pattern: string
   slug: string
   sha256: string
   bytes: number
 }
 
-interface ManifestEntry {
-  original: string
-  sha256: string
-  bytes: number
-  files: number
-}
+const manifestSchema = z.object({
+  service: z.string(),
+  date: z.string(),
+  archives: z.array(
+    z.object({
+      original: z.string(),
+      slug: z.string(),
+      sha256: z.string(),
+      bytes: z.number(),
+      files: z.number(),
+    }),
+  ),
+})
 
-interface Manifest {
-  service: string
-  date: string
-  archives: Record<string, ManifestEntry>
-}
+type Manifest = z.infer<typeof manifestSchema>
+type ManifestEntry = Manifest['archives'][number]
 
 const main = defineCommand({
   meta: {
     name: 'data-export-import',
     description:
-      'Unpack a service data export from Downloads into ~/Backups/remote/<service>/<date>/<slug>/ under stable kebab-case names',
+      'Unpack a service data export from Downloads into ~/Backups/remote/<service>/<date>/<slug>/; archives matching one slug are merged into one folder',
   },
   args: {
     service: { type: 'positional', required: true, description: services.join(' | ') },
@@ -62,15 +73,16 @@ const main = defineCommand({
   },
   async run({ args }) {
     const service = args.service
-    const slugsByOriginalName = getSlugsByOriginalName(service)
+    const namePatterns = getNamePatterns(service)
     if (!/^\d{4}-\d{2}-\d{2}$/.test(args.date)) die(`--date must be YYYY-MM-DD, got ${JSON.stringify(args.date)}`)
 
-    const { archives, duplicates, unmatched } = await findArchives({ slugsByOriginalName, from: args.from })
+    const { archives, duplicates, unmatched } = await findArchives({ namePatterns, from: args.from })
     if (archives.length === 0) die(`no ${service} archives found in ${args.from}`)
 
     const target = join(args.to, service, args.date)
-    const knownNames = Object.keys(slugsByOriginalName)
-    const missing = knownNames.filter((name) => !archives.some((archive) => archive.originalName === name))
+    const missing = namePatterns
+      .map(({ pattern }) => pattern)
+      .filter((pattern) => !archives.some((archive) => archive.pattern === pattern))
 
     printPlan({ archives, duplicates, unmatched, missing, target })
     if (args['dry-run']) return
@@ -78,9 +90,10 @@ const main = defineCommand({
     mkdirSync(target, { recursive: true })
     const manifest = readManifest({ target, service, date: args.date })
 
-    for (const archive of archives) {
-      manifest.archives[archive.slug] = await importArchive({ archive, target })
-      console.log(`unpacked  ${archive.slug}  (${manifest.archives[archive.slug].files} files)`)
+    for (const slug of new Set(archives.map((archive) => archive.slug))) {
+      const entries = await importSlug({ archives: archives.filter((archive) => archive.slug === slug), slug, target })
+      manifest.archives.push(...entries)
+      console.log(`unpacked  ${slug}  (${entries.reduce((sum, entry) => sum + entry.files, 0)} files)`)
     }
 
     writeFileSync(join(target, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
@@ -95,12 +108,12 @@ const main = defineCommand({
 void runMain(main)
 
 interface FindArchivesInput {
-  slugsByOriginalName: Record<string, string>
+  namePatterns: NamePattern[]
   from: string
 }
 
-async function findArchives({ slugsByOriginalName, from }: FindArchivesInput) {
-  const archivesBySlug = new Map<string, Archive>()
+async function findArchives({ namePatterns, from }: FindArchivesInput) {
+  const archivesBySha256 = new Map<string, Archive>()
   const duplicates: string[] = []
   const unmatched: string[] = []
 
@@ -114,25 +127,30 @@ async function findArchives({ slugsByOriginalName, from }: FindArchivesInput) {
 
   for (const fileName of orderedFileNames) {
     const originalName = getOriginalName(fileName)
-    const slug = slugsByOriginalName[originalName]
-    if (slug === undefined) {
+    const namePattern = namePatterns.find(({ glob }) => glob.match(originalName))
+    if (namePattern === undefined) {
       unmatched.push(fileName)
       continue
     }
 
     const path = join(from, fileName)
-    const archive = { path, originalName, slug, sha256: await getSha256(path), bytes: statSync(path).size }
-    const existing = archivesBySlug.get(slug)
-    if (existing === undefined) {
-      archivesBySlug.set(slug, archive)
+    const sha256 = await getSha256(path)
+    if (archivesBySha256.has(sha256)) {
+      duplicates.push(path)
       continue
     }
-    if (existing.sha256 !== archive.sha256) die(`${basename(existing.path)} and ${fileName} differ, keep one of them`)
 
-    duplicates.push(path)
+    archivesBySha256.set(sha256, {
+      path,
+      originalName,
+      pattern: namePattern.pattern,
+      slug: namePattern.slug,
+      sha256,
+      bytes: statSync(path).size,
+    })
   }
 
-  return { archives: [...archivesBySlug.values()], duplicates, unmatched }
+  return { archives: [...archivesBySha256.values()], duplicates, unmatched }
 }
 
 interface PrintPlanInput {
@@ -145,7 +163,7 @@ interface PrintPlanInput {
 
 function printPlan({ archives, duplicates, unmatched, missing, target }: PrintPlanInput) {
   console.log(`target    ${target}`)
-  for (const archive of archives) console.log(`import    ${archive.originalName}  ->  ${archive.slug}`)
+  for (const archive of archives) console.log(`import    ${basename(archive.path)}  ->  ${archive.slug}`)
   for (const path of duplicates) console.log(`duplicate ${basename(path)}  (identical copy, removed with the sources)`)
   for (const name of missing) console.log(`missing   ${name}`)
   for (const name of unmatched) console.log(`skip      ${name}`)
@@ -159,31 +177,65 @@ interface ReadManifestInput {
 
 function readManifest({ target, service, date }: ReadManifestInput): Manifest {
   const path = join(target, 'manifest.json')
-  if (!existsSync(path)) return { service, date, archives: {} }
+  if (!existsSync(path)) return { service, date, archives: [] }
 
-  return JSON.parse(readFileSync(path, 'utf8')) as Manifest
+  const parsed = manifestSchema.safeParse(JSON.parse(readFileSync(path, 'utf8')))
+  if (!parsed.success) die(`cannot extend ${path}, it has an unexpected shape: ${z.prettifyError(parsed.error)}`)
+
+  return parsed.data
 }
 
-interface ImportArchiveInput {
-  archive: Archive
+interface ImportSlugInput {
+  archives: Archive[]
+  slug: string
   target: string
 }
 
-async function importArchive({ archive, target }: ImportArchiveInput): Promise<ManifestEntry> {
-  const destination = join(target, archive.slug)
+async function importSlug({ archives, slug, target }: ImportSlugInput): Promise<ManifestEntry[]> {
+  const destination = join(target, slug)
   if (existsSync(destination)) die(`${destination} already exists`)
 
   const partial = `${destination}.partial`
   rmSync(partial, { recursive: true, force: true })
-  await $`ditto -x -k ${archive.path} ${partial}`
-  await extractNestedArchives(partial)
+  mkdirSync(partial)
+
+  const entries: ManifestEntry[] = []
+  for (const archive of archives) {
+    const unpacked = `${partial}.archive`
+    rmSync(unpacked, { recursive: true, force: true })
+    await $`ditto -x -k ${archive.path} ${unpacked}`
+    await extractNestedArchives(unpacked)
+    const files = listFiles(unpacked)
+    mergeFiles({ files, from: unpacked, into: partial, archiveName: basename(archive.path) })
+    rmSync(unpacked, { recursive: true })
+
+    entries.push({
+      original: basename(archive.path),
+      slug,
+      sha256: archive.sha256,
+      bytes: archive.bytes,
+      files: files.length,
+    })
+  }
+
   renameSync(partial, destination)
 
-  return {
-    original: basename(archive.path),
-    sha256: archive.sha256,
-    bytes: archive.bytes,
-    files: listFiles(destination).length,
+  return entries
+}
+
+interface MergeFilesInput {
+  files: string[]
+  from: string
+  into: string
+  archiveName: string
+}
+
+function mergeFiles({ files, from, into, archiveName }: MergeFilesInput) {
+  for (const file of files) {
+    const target = join(into, relative(from, file))
+    if (existsSync(target)) die(`${archiveName} overlaps an earlier archive at ${relative(into, target)}`)
+    mkdirSync(dirname(target), { recursive: true })
+    renameSync(file, target)
   }
 }
 
@@ -227,15 +279,17 @@ async function getSha256(path: string) {
   return hasher.digest('hex')
 }
 
-function getSlugsByOriginalName(service: string) {
-  const slugsByOriginalName = slugsByOriginalNameByService[service]
-  if (slugsByOriginalName === undefined) {
+function getNamePatterns(service: string): NamePattern[] {
+  const slugsByNamePattern = slugsByNamePatternByService[service]
+  if (slugsByNamePattern === undefined) {
     die(`unknown service ${JSON.stringify(service)}, expected ${services.join(' | ')} (from ${archiveNamesPath})`)
   }
 
-  return Object.fromEntries(
-    Object.entries(slugsByOriginalName).map(([originalName, slug]) => [originalName.normalize('NFC'), slug]),
-  )
+  return Object.entries(slugsByNamePattern).map(([pattern, slug]) => ({
+    pattern,
+    glob: new Bun.Glob(pattern.normalize('NFC')),
+    slug,
+  }))
 }
 
 function loadArchiveNames() {

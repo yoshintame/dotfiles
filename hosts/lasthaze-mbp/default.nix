@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  flakeRoot,
   hostFacts,
   edgeFacts,
   homelabFacts,
@@ -141,7 +140,7 @@ in
 
       nixLink = {
         enable = true;
-        dotfilesDir = flakeRoot;
+        liveBase = "${hostFacts.homeDir}/Development/yoshintame";
         defaults = {
           link = {
             relink = true;

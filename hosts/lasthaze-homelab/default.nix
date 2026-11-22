@@ -1,5 +1,4 @@
 {
-  flakeRoot,
   pkgs,
   edgeFacts,
   homelabFacts,
@@ -102,7 +101,6 @@ in
 
     nixLink = {
       enable = true;
-      dotfilesDir = flakeRoot;
       defaults = {
         link = {
           relink = true;

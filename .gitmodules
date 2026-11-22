@@ -9,3 +9,4 @@
 [submodule "modules/home/karabiner/config"]
 	path = modules/home/karabiner/config
 	url = https://github.com/yoshintame/karabiner-config.git
+	update = none

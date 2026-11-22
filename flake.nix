@@ -60,6 +60,11 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
 
+    karabiner-config = {
+      url = "github:yoshintame/karabiner-config/9e8ce511887271d6e69d4bcd67d43fda43db3f95";
+      flake = false;
+    };
+
     homelab = {
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -177,7 +177,6 @@ async function importArchive({ archive, target }: ImportArchiveInput): Promise<M
   rmSync(partial, { recursive: true, force: true })
   await $`ditto -x -k ${archive.path} ${partial}`
   await extractNestedArchives(partial)
-  flattenSingleDirectoryChain(partial)
   renameSync(partial, destination)
 
   return {
@@ -200,18 +199,6 @@ async function extractNestedArchives(dir: string) {
   }
 
   await extractNestedArchives(dir)
-}
-
-function flattenSingleDirectoryChain(dir: string) {
-  const entries = readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.name !== '.DS_Store')
-  const onlyDirectory = entries.length === 1 ? entries.find((entry) => entry.isDirectory()) : undefined
-  if (onlyDirectory === undefined) return
-
-  const lifted = `${dir}.lifted`
-  renameSync(join(dir, onlyDirectory.name), lifted)
-  rmSync(dir, { recursive: true })
-  renameSync(lifted, dir)
-  flattenSingleDirectoryChain(dir)
 }
 
 function listFiles(dir: string) {

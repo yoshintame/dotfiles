@@ -2,6 +2,7 @@ let
   username = "yoshintame";
   homeDir = "/Users/${username}";
   sharedEnv = {
+    LANG = "en_US.UTF-8";
     EDITOR = "zed --wait";
     VISUAL = "zed --wait";
     GOPATH = "${homeDir}/.local/share/go";

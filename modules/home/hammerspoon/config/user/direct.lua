@@ -53,5 +53,6 @@ return {
         { proxy.app_switcher_next,   appSwitcher.next },
         { proxy.app_switcher_prev,   appSwitcher.prev },
         { proxy.app_switcher_commit, appSwitcher.commit },
+        { proxy.app_switcher_arm,    appSwitcher.arm },
     },
 }

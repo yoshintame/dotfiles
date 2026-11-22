@@ -26,8 +26,9 @@ M.paste_history3 = "cmd alt ctrl shift f15"
 M.paste_history4 = "cmd alt ctrl shift f16"
 M.paste_history5 = "cmd alt ctrl shift f17"
 M.current_app_windows = "cmd alt ctrl shift f19"
-M.app_switcher_next = "cmd alt ctrl shift f20"
-M.app_switcher_prev = "cmd alt ctrl f20"
-M.app_switcher_commit = "cmd alt shift f20"
+M.app_switcher_next = "cmd alt ctrl shift n"
+M.app_switcher_prev = "cmd alt ctrl shift b"
+M.app_switcher_commit = "cmd alt ctrl shift f20"
+M.app_switcher_arm = "cmd alt ctrl shift f18"
 
 return M

@@ -61,6 +61,7 @@
       ./home/claude-code-patch
       ./home/claude-rc
       ./home/codex
+      ./home/data-exports
       ./home/desvio
       ./home/docker
       ./home/eza

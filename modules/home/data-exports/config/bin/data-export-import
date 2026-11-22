@@ -1,0 +1,266 @@
+#!/usr/bin/env bun
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs'
+import { homedir } from 'node:os'
+import { basename, join } from 'node:path'
+import { defineCommand, runMain } from 'citty'
+import { $ } from 'dax-sh'
+
+enum Service {
+  Apple = 'apple',
+}
+
+const slugsByOriginalName = {
+  [Service.Apple]: {
+    'Apple.com и Apple Store': 'apple-store',
+    AppleCare: 'applecare',
+    'Действия в Wallet': 'wallet',
+    'Информация об Аккаунте Apple и устройстве': 'account-and-devices',
+    'История push-уведомлений и установки приложений': 'push-and-app-installs',
+    'Календари и Напоминания iCloud': 'icloud-calendars-reminders',
+    'Контакты iCloud': 'icloud-contacts',
+    'iCloud Mail': 'icloud-mail',
+    'Сведения о мультимедийных сервисах Apple Часть 1 из 2': 'media-services-part-1',
+    'Сведения о мультимедийных сервисах Apple Часть 2 из 2': 'media-services-part-2',
+    'amp-app-stores': 'media-services-guides',
+  },
+} as const satisfies Record<Service, Record<string, string>>
+
+interface Archive {
+  path: string
+  originalName: string
+  slug: string
+  sha256: string
+  bytes: number
+}
+
+interface ManifestEntry {
+  original: string
+  sha256: string
+  bytes: number
+  files: number
+}
+
+interface Manifest {
+  service: `${Service}`
+  date: string
+  archives: Record<string, ManifestEntry>
+}
+
+const main = defineCommand({
+  meta: {
+    name: 'data-export-import',
+    description:
+      'Unpack a service data export from Downloads into ~/Backups/remote/<service>/<date>/<slug>/ under stable kebab-case names',
+  },
+  args: {
+    service: { type: 'positional', required: true, description: Object.values(Service).join(' | ') },
+    from: { type: 'string', default: join(homedir(), 'Downloads'), description: 'Folder with the downloaded archives' },
+    to: { type: 'string', default: join(homedir(), 'Backups', 'remote'), description: 'Root of the remote dumps' },
+    date: { type: 'string', default: getToday(), description: 'Export date, YYYY-MM-DD' },
+    'dry-run': { type: 'boolean', default: false, description: 'Print the plan without touching files' },
+    keep: { type: 'boolean', default: false, description: 'Keep the source archives after unpacking' },
+  },
+  async run({ args }) {
+    const service = parseService(args.service)
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(args.date)) die(`--date must be YYYY-MM-DD, got ${JSON.stringify(args.date)}`)
+
+    const { archives, duplicates, unmatched } = await findArchives({ service, from: args.from })
+    if (archives.length === 0) die(`no ${service} archives found in ${args.from}`)
+
+    const target = join(args.to, service, args.date)
+    const knownNames = Object.keys(slugsByOriginalName[service])
+    const missing = knownNames.filter((name) => !archives.some((archive) => archive.originalName === name))
+
+    printPlan({ archives, duplicates, unmatched, missing, target })
+    if (args['dry-run']) return
+
+    mkdirSync(target, { recursive: true })
+    const manifest = readManifest({ target, service, date: args.date })
+
+    for (const archive of archives) {
+      manifest.archives[archive.slug] = await importArchive({ archive, target })
+      console.log(`unpacked  ${archive.slug}  (${manifest.archives[archive.slug].files} files)`)
+    }
+
+    writeFileSync(join(target, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+
+    if (args.keep) return
+
+    for (const path of [...archives.map((archive) => archive.path), ...duplicates]) rmSync(path)
+    console.log(`removed ${archives.length + duplicates.length} source archives from ${args.from}`)
+  },
+})
+
+void runMain(main)
+
+interface FindArchivesInput {
+  service: Service
+  from: string
+}
+
+async function findArchives({ service, from }: FindArchivesInput) {
+  const slugsByName: Record<string, string> = slugsByOriginalName[service]
+  const archivesBySlug = new Map<string, Archive>()
+  const duplicates: string[] = []
+  const unmatched: string[] = []
+
+  const fileNames = readdirSync(from)
+    .filter((name) => name.endsWith('.zip'))
+    .sort()
+  const orderedFileNames = [
+    ...fileNames.filter((name) => !isDownloadCopy(name)),
+    ...fileNames.filter((name) => isDownloadCopy(name)),
+  ]
+
+  for (const fileName of orderedFileNames) {
+    const originalName = getOriginalName(fileName)
+    const slug = slugsByName[originalName]
+    if (slug === undefined) {
+      unmatched.push(fileName)
+      continue
+    }
+
+    const path = join(from, fileName)
+    const archive = { path, originalName, slug, sha256: await getSha256(path), bytes: statSync(path).size }
+    const existing = archivesBySlug.get(slug)
+    if (existing === undefined) {
+      archivesBySlug.set(slug, archive)
+      continue
+    }
+    if (existing.sha256 !== archive.sha256) die(`${basename(existing.path)} and ${fileName} differ, keep one of them`)
+
+    duplicates.push(path)
+  }
+
+  return { archives: [...archivesBySlug.values()], duplicates, unmatched }
+}
+
+interface PrintPlanInput {
+  archives: Archive[]
+  duplicates: string[]
+  unmatched: string[]
+  missing: string[]
+  target: string
+}
+
+function printPlan({ archives, duplicates, unmatched, missing, target }: PrintPlanInput) {
+  console.log(`target    ${target}`)
+  for (const archive of archives) console.log(`import    ${archive.originalName}  ->  ${archive.slug}`)
+  for (const path of duplicates) console.log(`duplicate ${basename(path)}  (identical copy, removed with the sources)`)
+  for (const name of missing) console.log(`missing   ${name}`)
+  for (const name of unmatched) console.log(`skip      ${name}`)
+}
+
+interface ReadManifestInput {
+  target: string
+  service: Service
+  date: string
+}
+
+function readManifest({ target, service, date }: ReadManifestInput): Manifest {
+  const path = join(target, 'manifest.json')
+  if (!existsSync(path)) return { service, date, archives: {} }
+
+  return JSON.parse(readFileSync(path, 'utf8')) as Manifest
+}
+
+interface ImportArchiveInput {
+  archive: Archive
+  target: string
+}
+
+async function importArchive({ archive, target }: ImportArchiveInput): Promise<ManifestEntry> {
+  const destination = join(target, archive.slug)
+  if (existsSync(destination)) die(`${destination} already exists`)
+
+  const partial = `${destination}.partial`
+  rmSync(partial, { recursive: true, force: true })
+  await $`ditto -x -k ${archive.path} ${partial}`
+  await extractNestedArchives(partial)
+  flattenSingleDirectoryChain(partial)
+  renameSync(partial, destination)
+
+  return {
+    original: basename(archive.path),
+    sha256: archive.sha256,
+    bytes: archive.bytes,
+    files: listFiles(destination).length,
+  }
+}
+
+async function extractNestedArchives(dir: string) {
+  const nested = listFiles(dir).filter((path) => path.endsWith('.zip'))
+  if (nested.length === 0) return
+
+  for (const path of nested) {
+    const destination = path.slice(0, -'.zip'.length)
+    if (existsSync(destination)) die(`cannot unpack nested ${path}: ${destination} already exists`)
+    await $`ditto -x -k ${path} ${destination}`
+    rmSync(path)
+  }
+
+  await extractNestedArchives(dir)
+}
+
+function flattenSingleDirectoryChain(dir: string) {
+  const entries = readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.name !== '.DS_Store')
+  const onlyDirectory = entries.length === 1 ? entries.find((entry) => entry.isDirectory()) : undefined
+  if (onlyDirectory === undefined) return
+
+  const lifted = `${dir}.lifted`
+  renameSync(join(dir, onlyDirectory.name), lifted)
+  rmSync(dir, { recursive: true })
+  renameSync(lifted, dir)
+  flattenSingleDirectoryChain(dir)
+}
+
+function listFiles(dir: string) {
+  return readdirSync(dir, { recursive: true, encoding: 'utf8' })
+    .map((relative) => join(dir, relative))
+    .filter((path) => statSync(path).isFile())
+}
+
+function getOriginalName(fileName: string) {
+  return fileName
+    .normalize('NFC')
+    .replace(/\.zip$/, '')
+    .replace(downloadCopySuffix, '')
+}
+
+const downloadCopySuffix = / \(\d+\)$/
+
+function isDownloadCopy(fileName: string) {
+  return downloadCopySuffix.test(fileName.replace(/\.zip$/, ''))
+}
+
+async function getSha256(path: string) {
+  const hasher = new Bun.CryptoHasher('sha256')
+  for await (const chunk of Bun.file(path).stream()) hasher.update(chunk)
+
+  return hasher.digest('hex')
+}
+
+function parseService(value: string) {
+  const service = Object.values(Service).find((candidate) => candidate === value)
+  if (service === undefined) die(`unknown service ${JSON.stringify(value)}, expected ${Object.values(Service).join(' | ')}`)
+
+  return service
+}
+
+function getToday() {
+  return new Date().toLocaleDateString('sv-SE')
+}
+
+function die(message: string): never {
+  process.stderr.write(`data-export-import: ${message}\n`)
+  process.exit(1)
+}

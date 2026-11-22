@@ -24,6 +24,7 @@
     "claude-code-patch"
     "claude-rc"
     "codex"
+    "data-exports"
     "desvio"
     "docker"
     "eza"

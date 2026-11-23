@@ -1,10 +1,12 @@
 local apps = require("actions.apps")
 local finder = require("actions.finder")
+local input = require("actions.input")
 local open = require("actions.open")
 local windows = require("actions.windows")
 local clipboard = require("features.clipboard-history")
 local proxy = require("generated.proxy-bindings")
 local appSwitcher = require("features.app-switcher")
+local selection = require("features.selection")
 
 return {
     launcher = {
@@ -54,5 +56,9 @@ return {
         { proxy.app_switcher_prev,   appSwitcher.prev },
         { proxy.app_switcher_commit, appSwitcher.commit },
         { proxy.app_switcher_arm,    appSwitcher.arm },
+        { proxy.text_fix,            appSwitcher.unlessActive(selection.withSelected(input.shortcut(proxy.fix))) },
+        { proxy.text_polish,         appSwitcher.unlessActive(selection.withSelected(input.shortcut(proxy.polish))) },
+        { proxy.text_translate,      appSwitcher.unlessActive(selection.withSelected(open.raycast("extensions/isfeng/easydict/easydict", { arguments = { queryText = "" } }))) },
+        { proxy.text_search,         appSwitcher.unlessActive(selection.withText(open.search("https://www.google.com/search?udm=14&q=%s"))) },
     },
 }

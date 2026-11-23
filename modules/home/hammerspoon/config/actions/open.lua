@@ -14,6 +14,13 @@ function M.url(url)
     return function() process.open(url) end
 end
 
+function M.search(template)
+    return function(text)
+        local query = hs.http.encodeForQuery((text:match("^%s*(.-)%s*$"):gsub("%s+", " ")))
+        process.open((template:gsub("%%s", function() return query end)))
+    end
+end
+
 function M.raycast(path, params)
     local url = deeplink.raycast(path, params)
     -- open in background to preserve focus for pasting etc.

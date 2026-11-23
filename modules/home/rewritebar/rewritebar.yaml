@@ -1,0 +1,10 @@
+proxyBindings: ../../shared/proxy-bindings.yaml
+
+commands:
+  fix:
+    id: 9814127C-DF4B-4CE0-BA67-B55F989F0443
+    name: Fix
+
+  polish:
+    id: ABBD2D27-67BD-47B0-8051-80CBD1FED710
+    name: Polish

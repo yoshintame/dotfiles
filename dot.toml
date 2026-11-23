@@ -134,6 +134,11 @@ dir = "~/.dotfiles/modules/home/btt-gestures"
 raw = true
 run = 'bun run ~/.dotfiles/packages/btt-gestures/src/cli.ts "$@"'
 
+["dot:rewritebar"]
+description = "Sync RewriteBar commands and shortcuts from YAML (quits and relaunches RewriteBar)"
+dir = "{{env.DOTFILES}}"
+run = 'bun run packages/rewritebar-sync/src/cli.ts -c modules/home/rewritebar/rewritebar.yaml "$@"'
+
 ["dot:dump-packages"]
 description = "Dump unmanaged apps and Setapp list for backup"
 run = 'bun run "$HOME/.dotfiles/packages/dump-packages/src/cli.ts"'

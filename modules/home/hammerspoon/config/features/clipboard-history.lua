@@ -1,11 +1,16 @@
+local keycodes = require("engine.keycodes")
+local timer = require("engine.timer")
+
 local M = {}
 
 local POLL = 0.2
+local RESTORE_DELAY = 0.3
 
 local config = nil
 local history = {}
 local lastChange = nil
 local watcher = nil
+local restoring = false
 
 local PRIVATE_TYPES = {
     ["org.nspasteboard.ConcealedType"] = true,
@@ -53,11 +58,29 @@ local function pasteIndex(n)
         hs.pasteboard.setContents(item.data)
     end
     lastChange = hs.pasteboard.changeCount()
-    hs.eventtap.keyStroke({ "cmd" }, "v")
+    hs.eventtap.keyStroke({ "cmd" }, keycodes.US_ANSI.v)
 end
 
 function M.pasteAt(n)
     return function() pasteIndex(n) end
+end
+
+function M.pasteTransformed(transform)
+    return function()
+        if restoring then return end
+        local text = hs.pasteboard.readString()
+        if not text or text == "" then return end
+        local saved = hs.pasteboard.readAllData()
+        M.suspend()
+        restoring = true
+        hs.pasteboard.setContents(transform(text))
+        pcall(hs.eventtap.keyStroke, { "cmd" }, keycodes.US_ANSI.v, 0)
+        timer.after(RESTORE_DELAY, function()
+            hs.pasteboard.writeAllData(saved)
+            restoring = false
+            M.resume()
+        end)
+    end
 end
 
 function M.suspend()

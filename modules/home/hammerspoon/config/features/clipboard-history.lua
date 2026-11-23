@@ -60,6 +60,15 @@ function M.pasteAt(n)
     return function() pasteIndex(n) end
 end
 
+function M.suspend()
+    if watcher then watcher:stop() end
+end
+
+function M.resume()
+    lastChange = hs.pasteboard.changeCount()
+    if watcher then watcher:start() end
+end
+
 function M.start(settings)
     config = settings
     lastChange = hs.pasteboard.changeCount()

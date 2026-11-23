@@ -275,6 +275,12 @@ end
 function M.next() step(1) end
 function M.prev() step(-1) end
 
+function M.unlessActive(fn)
+    return function(...)
+        if not session then return fn(...) end
+    end
+end
+
 function M.arm()
     armed = true
 end

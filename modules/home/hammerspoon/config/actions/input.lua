@@ -3,7 +3,7 @@ local chord = require("engine.chord")
 local M = {}
 
 function M.shortcut(keystroke)
-    local mods, key = chord.parse(keystroke)
+    local mods, key = chord.hotkey(keystroke)
     return function() hs.eventtap.keyStroke(mods, key) end
 end
 

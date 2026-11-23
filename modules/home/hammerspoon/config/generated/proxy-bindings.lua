@@ -2,6 +2,7 @@
 local M = {}
 
 M.fix = "cmd alt ctrl shift r"
+M.polish = "cmd alt ctrl shift y"
 M.passwords = "cmd alt ctrl shift p"
 M.color_picker = "cmd alt ctrl shift c"
 M.roulette = "cmd alt ctrl shift x"
@@ -30,5 +31,9 @@ M.app_switcher_next = "cmd alt ctrl shift n"
 M.app_switcher_prev = "cmd alt ctrl shift b"
 M.app_switcher_commit = "cmd alt ctrl shift f20"
 M.app_switcher_arm = "cmd alt ctrl shift f18"
+M.text_fix = "cmd alt ctrl shift e"
+M.text_polish = "cmd alt ctrl shift u"
+M.text_translate = "cmd alt ctrl shift t"
+M.text_search = "cmd alt ctrl shift g"
 
 return M

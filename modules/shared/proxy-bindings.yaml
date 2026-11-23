@@ -5,6 +5,7 @@ outputs:
 bindings:
   # Text processing (RewriteBar)
   fix: cmd alt ctrl shift r
+  polish: cmd alt ctrl shift y
 
   # 1Password
   passwords: cmd alt ctrl shift p
@@ -58,3 +59,8 @@ bindings:
   appSwitcherPrev: cmd alt ctrl shift b
   appSwitcherCommit: cmd alt ctrl shift f20
   appSwitcherArm: cmd alt ctrl shift f18
+
+  textFix: cmd alt ctrl shift e
+  textPolish: cmd alt ctrl shift u
+  textTranslate: cmd alt ctrl shift t
+  textSearch: cmd alt ctrl shift g

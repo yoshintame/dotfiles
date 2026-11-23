@@ -52,6 +52,7 @@ bindings:
   pasteHistory3: cmd alt ctrl shift f15
   pasteHistory4: cmd alt ctrl shift f16
   pasteHistory5: cmd alt ctrl shift f17
+  pasteCodeBlock: cmd alt ctrl shift k
 
   currentAppWindows: cmd alt ctrl shift f19
 

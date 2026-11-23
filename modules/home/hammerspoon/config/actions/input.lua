@@ -7,6 +7,11 @@ function M.shortcut(keystroke)
     return function() hs.eventtap.keyStroke(mods, key) end
 end
 
+function M.codeBlock(text)
+    local newline = text:sub(-1) == "\n" and "" or "\n"
+    return "```\n" .. text .. newline .. "```"
+end
+
 function M.text(s)
     return function()
         local out = s

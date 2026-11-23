@@ -396,17 +396,17 @@
     "karabiner-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1795369951,
-        "narHash": "sha256-i6XaE1zLraXZ8eBjBd6wvSxpEwwvrFs9tacQGneWFwY=",
+        "lastModified": 1795416023,
+        "narHash": "sha256-QlfDv7RJ2m4MNt2xn8wjjNy1dxLhxEuUwF/R3KSRtU4=",
         "owner": "yoshintame",
         "repo": "karabiner-config",
-        "rev": "9e8ce511887271d6e69d4bcd67d43fda43db3f95",
+        "rev": "0a9656fd1b396ab6dfb292d2436bfefdeefc7e70",
         "type": "github"
       },
       "original": {
         "owner": "yoshintame",
         "repo": "karabiner-config",
-        "rev": "9e8ce511887271d6e69d4bcd67d43fda43db3f95",
+        "rev": "0a9656fd1b396ab6dfb292d2436bfefdeefc7e70",
         "type": "github"
       }
     },

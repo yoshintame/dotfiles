@@ -51,7 +51,7 @@ local function validate(rows, reserved)
         else
             global[id] = name
         end
-        parsed[#parsed + 1] = { mods = modList, code = code, action = action, app = app }
+        parsed[#parsed + 1] = { mods = modList, code = code, action = action, app = app, onRepeat = row.onRepeat }
     end
     return parsed
 end
@@ -60,7 +60,7 @@ function M.fromChords(rows)
     local out = {}
     for _, row in ipairs(rows) do
         local mods, key = chord.parse(row[1])
-        out[#out + 1] = { table.concat(mods, " "), key, row[2], app = row.app }
+        out[#out + 1] = { table.concat(mods, " "), key, row[2], app = row.app, onRepeat = row.onRepeat }
     end
     return out
 end
@@ -68,9 +68,9 @@ end
 function M.direct(rows, reserved)
     for _, row in ipairs(validate(rows, reserved)) do
         if row.app then
-            scoped[#scoped + 1] = { app = row.app, hotkey = hs.hotkey.new(row.mods, row.code, row.action) }
+            scoped[#scoped + 1] = { app = row.app, hotkey = hs.hotkey.new(row.mods, row.code, row.action, nil, row.onRepeat) }
         else
-            hs.hotkey.bind(row.mods, row.code, row.action)
+            hs.hotkey.bind(row.mods, row.code, row.action, nil, row.onRepeat)
         end
     end
     if #scoped > 0 and not watcher then

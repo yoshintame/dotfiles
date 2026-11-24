@@ -52,9 +52,9 @@ return {
         preview = {
             width = 200,
             aspect = 0.625,
+            titleSize = 12,
             radius = 10,
             edgeInset = 1,
-            titleSize = 12,
             maxAgeSeconds = 1,
             background = { white = 1, alpha = 0.06 },
         },

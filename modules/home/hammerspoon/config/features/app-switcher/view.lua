@@ -9,54 +9,8 @@ local function iconFor(app)
     return icons[id] or nil
 end
 
-local function layout(c, appCount, windowCount, screenWidth)
-    local inset = c.margin + c.highlightInset
-    local appRow = appCount * c.iconSize + (appCount - 1) * c.gap
-    local fit = (screenWidth * c.maxScreenShare - inset * 2 - (windowCount - 1) * c.gap) / math.max(windowCount, 1)
-    local previewW = math.max(1, math.min(c.preview.width, fit))
-    local previewH = previewW * c.preview.aspect
-    local windowRow = windowCount > 0 and windowCount * previewW + (windowCount - 1) * c.gap or 0
-    local content = math.max(appRow, windowRow)
-    local appLeft = inset + (content - appRow) / 2
-    local windowLeft = inset + (content - windowRow) / 2
-    local labelY = inset + c.iconSize + c.highlightInset + c.labelGap
-    local previewY = labelY + c.labelHeight + c.sectionGap + c.highlightInset
-    local titleY = previewY + previewH + c.labelGap
-    local baseHeight = labelY + c.labelHeight + c.margin
-    local function grow(f)
-        return { x = f.x - c.highlightInset, y = f.y - c.highlightInset, w = f.w + c.highlightInset * 2, h = f.h + c.highlightInset * 2 }
-    end
-    local function icon(i)
-        return { x = appLeft + (i - 1) * (c.iconSize + c.gap), y = inset, w = c.iconSize, h = c.iconSize }
-    end
-    local function preview(j)
-        return { x = windowLeft + (j - 1) * (previewW + c.gap), y = previewY, w = previewW, h = previewH }
-    end
-    return {
-        width = content + inset * 2,
-        height = windowCount > 0 and titleY + c.labelHeight + c.highlightInset + c.margin or baseHeight,
-        baseHeight = baseHeight,
-        slotRadius = c.radius / 2,
-        previewRadius = c.radius / 3,
-        icon = icon,
-        slot = function(i) return grow(icon(i)) end,
-        label = { x = inset, y = labelY, w = content, h = c.labelHeight },
-        preview = preview,
-        title = function(j)
-            local f = preview(j)
-            return { x = f.x, y = titleY, w = f.w, h = c.labelHeight }
-        end,
-        card = function(j)
-            local f = preview(j)
-            return grow({ x = f.x, y = f.y, w = f.w, h = titleY + c.labelHeight - f.y })
-        end,
-        fit = function(j, size)
-            local box = preview(j)
-            local scale = math.min(box.w / size.w, box.h / size.h)
-            local w, h = size.w * scale, size.h * scale
-            return { x = box.x + (box.w - w) / 2, y = box.y + (box.h - h) / 2, w = w, h = h }
-        end,
-    }
+local function grow(c, f)
+    return { x = f.x - c.highlightInset, y = f.y - c.highlightInset, w = f.w + c.highlightInset * 2, h = f.h + c.highlightInset * 2 }
 end
 
 local function text(c, value, frame, size)
@@ -95,53 +49,107 @@ local function previewElements(c, cached, frame)
     }, { type = "image", image = cached.image, imageScaling = "scaleToFit", frame = frame }, { type = "resetClip" }
 end
 
-function M.render(canvas, s, c, previewOf)
-    local app = s.apps[s.appIndex]
-    local windows = s.row and s.row.windows or {}
-    local geo = layout(c, #s.apps, #windows, s.screen.w)
+local function fit(box, size)
+    local scale = math.min(box.w / size.w, box.h / size.h)
+    local w, h = size.w * scale, size.h * scale
+    return { x = box.x + (box.w - w) / 2, y = box.y + (box.h - h) / 2, w = w, h = h }
+end
+
+local function place(canvas, screen, width, height)
     canvas:frame({
-        x = s.screen.x + (s.screen.w - geo.width) / 2,
-        y = s.screen.y + (s.screen.h - geo.baseHeight) / 2,
-        w = geo.width,
-        h = geo.height,
+        x = screen.x + (screen.w - width) / 2,
+        y = screen.y + (screen.h - height) / 2,
+        w = width,
+        h = height,
     })
+end
+
+local function renderApps(canvas, s, c)
+    local inset = c.margin + c.highlightInset
+    local count = #s.apps
+    local content = count * c.iconSize + (count - 1) * c.gap
+    local labelY = inset + c.iconSize + c.highlightInset + c.labelGap
+    local function icon(i)
+        return { x = inset + (i - 1) * (c.iconSize + c.gap), y = inset, w = c.iconSize, h = c.iconSize }
+    end
+    place(canvas, s.screen, content + inset * 2, labelY + c.labelHeight + c.margin)
+
     local elements = {
         rectangle(c.background, nil, c.radius),
-        rectangle(c.highlight, geo.slot(s.appIndex), geo.slotRadius),
+        rectangle(c.highlight, grow(c, icon(s.appIndex)), c.radius / 2),
     }
-    if s.row then elements[#elements + 1] = rectangle(c.highlight, geo.card(s.row.index), geo.slotRadius) end
     local targets = {}
     for i, candidate in ipairs(s.apps) do
         local image = iconFor(candidate)
         if image then
             local id = "app" .. i
-            if i ~= s.appIndex then targets[id] = { app = i } end
+            if i ~= s.appIndex then targets[id] = { kind = "app", index = i } end
             elements[#elements + 1] = {
                 id = id,
                 type = "image",
                 image = image,
                 trackMouseEnterExit = true,
                 trackMouseMove = true,
-                frame = geo.icon(i),
+                frame = icon(i),
             }
         end
     end
-    elements[#elements + 1] = text(c, app:name() or "", geo.label, c.textSize)
-    for j, entry in ipairs(windows) do
+    local app = s.apps[s.appIndex]
+    elements[#elements + 1] = text(c, app:name() or "", { x = inset, y = labelY, w = content, h = c.labelHeight }, c.textSize)
+    canvas:replaceElements(elements)
+    return targets
+end
+
+local function renderWindows(canvas, s, c, previewOf)
+    local app = s.apps[s.appIndex]
+    local column = s.column
+    local count = #column.windows
+    local inset = c.margin + c.highlightInset
+    local headerH = c.labelHeight + c.sectionGap
+    local captionH = c.labelGap + c.labelHeight
+    local available = s.screen.h * c.maxScreenShare - inset * 2 - headerH - (count - 1) * c.gap
+    local previewH = math.max(1, math.min(c.preview.width * c.preview.aspect, available / count - captionH))
+    local previewW = previewH / c.preview.aspect
+    local rowH = previewH + captionH
+    local top = inset + headerH
+    local function preview(j)
+        return { x = inset, y = top + (j - 1) * (rowH + c.gap), w = previewW, h = previewH }
+    end
+    local function card(j)
+        local f = preview(j)
+        return { x = f.x, y = f.y, w = f.w, h = rowH }
+    end
+    place(canvas, s.screen, previewW + inset * 2, top + count * rowH + (count - 1) * c.gap + inset)
+
+    local elements = {
+        rectangle(c.background, nil, c.radius),
+        rectangle(c.highlight, grow(c, card(column.index)), c.radius / 2),
+        text(c, app:name() or "", { x = inset, y = inset, w = previewW, h = c.labelHeight }, c.textSize),
+    }
+    local targets = {}
+    for j, entry in ipairs(column.windows) do
         local id = "win" .. j
-        if j ~= s.row.index then targets[id] = { window = j } end
-        elements[#elements + 1] = rectangle(c.preview.background, geo.preview(j), geo.previewRadius, id)
+        if j ~= column.index then targets[id] = { kind = "window", index = j } end
+        local frame = preview(j)
+        elements[#elements + 1] = rectangle(c.preview.background, frame, c.radius / 3)
         local cached = previewOf(entry.id)
         if cached and cached.image then
-            for _, element in ipairs({ previewElements(c, cached, geo.fit(j, cached.image:size())) }) do
+            for _, element in ipairs({ previewElements(c, cached, fit(frame, cached.image:size())) }) do
                 elements[#elements + 1] = element
             end
         end
         local title = entry.title ~= "" and entry.title or (app:name() or "")
-        elements[#elements + 1] = text(c, title, geo.title(j), c.preview.titleSize)
+        local caption = { x = frame.x, y = frame.y + frame.h + c.labelGap, w = frame.w, h = c.labelHeight }
+        elements[#elements + 1] = text(c, title, caption, c.preview.titleSize)
+        elements[#elements + 1] = rectangle({ white = 0, alpha = 0 }, card(j), c.radius / 3, id)
     end
     canvas:replaceElements(elements)
     return targets
+end
+
+function M.render(canvas, s, c, previewOf)
+    if s.column then return renderWindows(canvas, s, c, previewOf) end
+    return renderApps(canvas, s, c)
 end
 
 return M

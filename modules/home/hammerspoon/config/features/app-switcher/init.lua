@@ -61,8 +61,8 @@ end
 
 local function capture()
     stopCapture()
-    if not session.row then return end
-    session.stopCapture = previews.refresh(session.row.windows, config.preview, function()
+    if not session.column then return end
+    session.stopCapture = previews.refresh(session.column.windows, config.preview, function()
         if session then draw() end
     end)
 end
@@ -106,33 +106,46 @@ local function interact(fn)
     if session then touch() end
 end
 
-local function refreshRow(keepId)
-    local row = session.row
-    if not row then return end
-    local windows = windowsOf(session.apps[session.appIndex])
-    if #windows == 0 then
-        session.row = nil
-        return stopCapture()
+local function columnFor(app, keep)
+    local windows = windowsOf(app)
+    if #windows == 0 then return nil end
+    if keep then
+        local index = math.min(keep.index, #windows)
+        for j, entry in ipairs(windows) do
+            if entry.id == keep.id then index = j end
+        end
+        return { windows = windows, index = index }
     end
-    local index = math.min(row.index, #windows)
-    for j, entry in ipairs(windows) do
-        if entry.id == keepId then index = j end
-    end
-    session.row = { windows = windows, index = index }
+    local frontmost = hs.application.frontmostApplication()
+    local current = frontmost and frontmost:pid() == app:pid()
+    return { windows = windows, index = (current and #windows > 1) and 2 or 1 }
+end
+
+local function setColumn(column)
+    session.column = column
     capture()
 end
 
+local function selectedEntry()
+    local column = session.column
+    return column and column.windows[column.index]
+end
+
+local function refreshColumn()
+    local column = session.column
+    if not column then return end
+    local entry = selectedEntry()
+    setColumn(columnFor(session.apps[session.appIndex], { id = entry and entry.id, index = column.index }))
+end
+
 local function selectApp(i)
+    setColumn(nil)
     session.appIndex = i
-    if session.row then
-        session.row.index = 1
-        refreshRow()
-    end
     draw()
 end
 
 local function selectWindow(j)
-    session.row.index = j
+    session.column.index = j
     draw()
 end
 
@@ -140,35 +153,15 @@ local function moveApp(delta)
     selectApp((session.appIndex - 1 + delta) % #session.apps + 1)
 end
 
+local function enterColumn()
+    setColumn(columnFor(session.apps[session.appIndex]))
+    draw()
+end
+
 local function moveWindow(delta)
-    local row = session.row
-    selectWindow((row.index - 1 + delta) % #row.windows + 1)
-end
-
-local function horizontal(delta)
-    if session.row then return moveWindow(delta) end
-    moveApp(delta)
-end
-
-local function enterRow()
-    if session.row then return end
-    local windows = windowsOf(session.apps[session.appIndex])
-    if #windows == 0 then return end
-    session.row = { windows = windows, index = 1 }
-    capture()
-    draw()
-end
-
-local function leaveRow()
-    if not session.row then return end
-    session.row = nil
-    stopCapture()
-    draw()
-end
-
-local function selectedEntry()
-    local row = session.row
-    return row and row.windows[row.index]
+    local column = session.column
+    if not column then return enterColumn() end
+    selectWindow((column.index - 1 + delta) % #column.windows + 1)
 end
 
 local function quitApp()
@@ -183,7 +176,7 @@ end
 local function onMouse(_, message, id)
     local target = session and session.targets[id]
     if not target or (message ~= "mouseEnter" and message ~= "mouseMove") or not mouseMoved() then return end
-    if target.window then selectWindow(target.window) else selectApp(target.app) end
+    if target.kind == "window" then selectWindow(target.index) else selectApp(target.index) end
     touch()
 end
 
@@ -213,27 +206,30 @@ local function prunePreviews()
     previews.prune(alive)
 end
 
-local function open(apps, index)
+local function open(apps, index, column, mode)
     prunePreviews()
     local canvas = hs.canvas.new({ x = 0, y = 0, w = 1, h = 1 })
     canvas:level(hs.canvas.windowLevels.overlay)
     canvas:clickActivating(false)
     canvas:mouseCallback(onMouse)
-    session = { apps = apps, appIndex = index, canvas = canvas, screen = hs.screen.mainScreen():frame(), timers = {} }
+    session = {
+        apps = apps,
+        appIndex = index,
+        column = column,
+        mode = mode,
+        canvas = canvas,
+        screen = hs.screen.mainScreen():frame(),
+        timers = {},
+    }
     anchorMouse()
+    capture()
     draw()
     session.timers.show = timer.after(config.showDelaySeconds, show)
     touch()
 end
 
-local function step(delta)
-    if session then return interact(function() moveApp(delta) end) end
-    if not armed and committedAt and now() - committedAt < config.lateTapSeconds then return end
-    local apps = regularApps()
-    if #apps == 0 then return end
-    local index = delta > 0 and math.min(2, #apps) or #apps
-    if armed then return open(apps, index) end
-    apps[index]:activate()
+local function lateTap()
+    return not armed and committedAt and now() - committedAt < config.lateTapSeconds
 end
 
 local function focus(app, entry)
@@ -242,6 +238,33 @@ local function focus(app, entry)
         app:activate()
         entry.win:focus()
     end)
+end
+
+local tapMoves = {
+    app = { app = { move = moveApp, delta = 1 }, window = { move = moveApp, delta = -1 } },
+    window = { app = { move = moveWindow, delta = -1 }, window = { move = moveWindow, delta = 1 } },
+}
+
+local function entry(kind, apps)
+    if kind == "window" then
+        local column = columnFor(apps[1])
+        if column then return "window", 1, column end
+    end
+    return "app", math.min(2, #apps)
+end
+
+local function step(kind)
+    if session then
+        local tap = tapMoves[session.mode][kind]
+        return interact(function() tap.move(tap.delta) end)
+    end
+    if lateTap() then return end
+    local apps = regularApps()
+    if #apps == 0 then return end
+    local mode, index, column = entry(kind, apps)
+    if armed then return open(apps, index, column, mode) end
+    if mode ~= kind then return end
+    focus(apps[index], column and column.windows[column.index])
 end
 
 local function dropTerminated(_, event)
@@ -255,8 +278,13 @@ local function dropTerminated(_, event)
     end
     if #kept == #session.apps then return end
     if #kept == 0 then return close() end
+    local selectedAlive = session.apps[session.appIndex]:isRunning()
     session.apps = kept
     anchorMouse()
+    if selectedAlive then
+        session.appIndex = before + 1
+        return draw()
+    end
     selectApp(math.min(before + 1, #kept))
 end
 
@@ -265,15 +293,20 @@ local function windowsChanged(win, _, event)
         local id = win and win:id()
         if id then previews.forget(id) end
     end
-    if not session or not session.row then return end
-    local entry = selectedEntry()
+    if not session or not session.column then return end
     anchorMouse()
-    refreshRow(entry and entry.id)
+    refreshColumn()
     draw()
 end
 
-function M.next() step(1) end
-function M.prev() step(-1) end
+function M.app() step("app") end
+function M.window() step("window") end
+
+function M.whileOpen(fn)
+    return function(...)
+        if session then return fn(...) end
+    end
+end
 
 function M.unlessActive(fn)
     return function(...)
@@ -298,10 +331,10 @@ local actions = {
     cancel = { press = close },
     quit = { press = quitApp },
     close = { press = closeWindow },
-    left = { press = function() horizontal(-1) end, repeats = true },
-    right = { press = function() horizontal(1) end, repeats = true },
-    up = { press = leaveRow },
-    down = { press = enterRow },
+    left = { press = function() moveApp(-1) end, repeats = true },
+    right = { press = function() moveApp(1) end, repeats = true },
+    up = { press = function() moveWindow(-1) end, repeats = true },
+    down = { press = function() moveWindow(1) end, repeats = true },
 }
 
 local function bindKeys()

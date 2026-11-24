@@ -61,7 +61,7 @@
     };
 
     karabiner-config = {
-      url = "github:yoshintame/karabiner-config/0a9656fd1b396ab6dfb292d2436bfefdeefc7e70";
+      url = "github:yoshintame/karabiner-config/6db8050a8b95a47e84e038fc81a28cade940681b";
       flake = false;
     };
 

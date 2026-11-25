@@ -103,7 +103,12 @@
       "Write(//Users/yoshintame/.claude/skills/**)",
       "Edit(//Users/yoshintame/.agents/skills/**)",
       "Write(//Users/yoshintame/.agents/skills/**)",
-      "mcp__paseo__respond_to_permission"
+      "mcp__paseo__respond_to_permission",
+      "mcp__paseo__archive_workspace",
+      "Bash(paseo workspace archive *)",
+      "Bash(paseo * workspace archive *)",
+      "Bash(paseo project delete *)",
+      "Bash(paseo * project delete *)"
     ],
     "ask": [
       "Bash(scp:*)",

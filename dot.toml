@@ -128,6 +128,77 @@ description = "Generate proxy-binding files from YAML config"
 dir = "{{env.DOTFILES}}"
 run = 'bun run packages/proxy-bindings/src/cli.ts generate -c modules/shared/proxy-bindings.yaml "$@"'
 
+["dot:dev"]
+description = "Point a live config at a worktree: hs (Hammerspoon from a dotfiles worktree) or kar (Karabiner from a karabiner-config worktree); off restores the home-manager link, no target shows the mode"
+usage = '''
+arg "<tool>" help="hs or kar"
+arg "[target]" help="worktree branch or path; off restores the home-manager link; empty shows the mode"
+'''
+run = '''
+set -euo pipefail
+case "$usage_tool" in
+  hs) rel=.hammerspoon; sub=modules/home/hammerspoon/config ;;
+  kar) rel=.config/karabiner/karabiner.json; sub=build/karabiner.json ;;
+  *) echo "unknown tool $usage_tool: use hs or kar" >&2; exit 2 ;;
+esac
+hm=$(readlink "$HOME/.local/state/home-manager/gcroots/current-home/home-files")
+live="$HOME/$rel"
+managed="$hm/$rel"
+[ -e "$managed" ] || { echo "no home-manager link at $managed" >&2; exit 1; }
+repo=$(readlink -f "$managed")
+repo=${repo%/"$sub"}
+
+reload() {
+  if [ "$usage_tool" = kar ]; then
+    launchctl kickstart -k "gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server"
+    return
+  fi
+  osascript -e 'tell application "Hammerspoon" to quit' >/dev/null 2>&1 || true
+  for _ in $(seq 50); do pgrep -x Hammerspoon >/dev/null || break; sleep 0.2; done
+  if pgrep -x Hammerspoon >/dev/null; then pkill -x Hammerspoon; sleep 0.5; fi
+  open -g -a Hammerspoon
+}
+
+relink() {
+  [ ! -e "$live" ] || [ -L "$live" ] || { echo "$live is not a symlink, leaving it alone" >&2; exit 1; }
+  ln -sfn "$1" "$live"
+  reload
+}
+
+worktree() {
+  local found
+  found=$(git -C "$repo" worktree list --porcelain | awk -v b="branch refs/heads/$1" '/^worktree /{p=substr($0,10)} $0==b{print p; exit}')
+  [ -n "$found" ] || found=$(cd "${MISE_ORIGINAL_CWD:-$PWD}" && cd "$1" 2>/dev/null && pwd) || { echo "no worktree for $1 in $repo" >&2; return 1; }
+  [ "$(git -C "$found" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" = "$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir)" ] || { echo "$found is not a worktree of $repo" >&2; return 1; }
+  echo "$found"
+}
+
+case "${usage_target:-}" in
+  "")
+    current=$(readlink "$live" || true)
+    if [ "$current" = "$managed" ]; then
+      echo "home-manager: $(readlink -f "$live")"
+    elif [ -n "$current" ] && [ -e "$live" ]; then
+      echo "dev: $current"
+    else
+      echo "dev: ${current:-$live} is not usable, run: dot dev $usage_tool off" >&2
+      exit 1
+    fi
+    ;;
+  off)
+    relink "$managed"
+    echo "$usage_tool: home-manager ($(readlink -f "$live"))"
+    ;;
+  *)
+    tree=$(worktree "$usage_target")
+    if [ "$usage_tool" = kar ]; then (cd "$tree" && bun run build >/dev/null); fi
+    [ -e "$tree/$sub" ] || { echo "no $sub in $tree" >&2; exit 1; }
+    relink "$tree/$sub"
+    echo "$usage_tool: dev ($tree/$sub)"
+    ;;
+esac
+'''
+
 ["dot:btt-gestures"]
 description = "Sync trackpad gestures from YAML to BetterTouchTool via REST API"
 dir = "~/.dotfiles/modules/home/btt-gestures"

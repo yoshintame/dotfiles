@@ -1,6 +1,7 @@
 local apps = require("actions.apps")
 local input = require("actions.input")
 local maintenance = require("actions.maintenance")
+local network = require("actions.network")
 local open = require("actions.open")
 local power = require("actions.power")
 local coffee = require("features.coffee-lid")
@@ -79,6 +80,7 @@ return {
             { "k", "Kill Process",      raycast("extensions/rolandleth/kill-process/index") },
             { "h", "Hyper Setup ⇄",     hyperSetup.toggle },
             { "l", "keySwitcher log ⇄", maintenance.toggleKeySwitcherLog },
+            { "w", "Phone Hotspot",     network.joinHotspot("lasthaze-phone") },
         }},
 
         { "l", "[links]",       {

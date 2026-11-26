@@ -44,7 +44,6 @@ in
           pkgs.nixd
           pkgs.just
           pkgs.nixfmt
-          pkgs.lua54Packages.busted
         ];
       };
 
@@ -75,17 +74,6 @@ in
               pkgs.runCommandLocal "homelab-channel" { } "touch $out"
             else
               throw "lasthaze-homelab checks its modules against nixpkgs-prod ${homelabChannel}, the hosts run ${hostChannel}: move nixpkgs-prod in lasthaze-homelab/flake.nix to ${hostChannel}";
-          sms-otp-spoon =
-            pkgs.runCommandLocal "sms-otp-spoon-tests"
-              {
-                nativeBuildInputs = [ pkgs.lua54Packages.busted ];
-                src = ../modules/home/hammerspoon/config/Spoons/SmsOtp.spoon;
-              }
-              ''
-                cd $src
-                busted --output=TAP
-                touch $out
-              '';
           image-builder-lasthaze-ru = evalToplevel "image-builder-lasthaze-ru" self.nixosConfigurations.lasthaze-ru.config.system.build.diskoImagesScript;
         }
         // lib.optionalAttrs (system == "aarch64-darwin") (

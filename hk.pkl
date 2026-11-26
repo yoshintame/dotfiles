@@ -5,7 +5,6 @@ local generated =
     "hosts/*/packages/**",
     "hosts/lasthaze-gaming/windows/autounattend*.xml",
     "modules/home/bat/config/theme/**",
-    "modules/home/hammerspoon/config/Spoons/**",
     "modules/home/resticprofile/config/repo.key.tmpl",
     "modules/home/vscode/dump/**",
     "modules/home/warp/config/workflows/**",

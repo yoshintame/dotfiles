@@ -357,6 +357,23 @@
         "type": "github"
       }
     },
+    "hammerspoon-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795687445,
+        "narHash": "sha256-fV5ZGOCXmTVmpr6fQvo7XnsQfIXXWXct1X8VzLldf88=",
+        "owner": "yoshintame",
+        "repo": "hammerspoon-config",
+        "rev": "87a9bcd8deb73e7e3d26a43e57ed891a277d9fcd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yoshintame",
+        "repo": "hammerspoon-config",
+        "rev": "87a9bcd8deb73e7e3d26a43e57ed891a277d9fcd",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -708,6 +725,7 @@
         "easy-hosts": "easy-hosts",
         "edge": "edge",
         "flake-parts": "flake-parts_2",
+        "hammerspoon-config": "hammerspoon-config",
         "home-manager": "home-manager",
         "homelab": "homelab",
         "karabiner-config": "karabiner-config",

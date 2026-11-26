@@ -20,7 +20,7 @@ return {
         { "Zed",              "alt",        "e", layout = "ABC" },
         { "Finder",           "alt shift",  "e", layout = "ABC" },
 
-        { "Dia",              "alt",        "a" },
+        { "yab",              "alt",        "a" },
         { "Safari",           "alt shift",  "a" },
         { "Spotifast",        "alt",        "s" },
         { "Spark Mail",       "alt shift",  "s" },

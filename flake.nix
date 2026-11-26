@@ -66,7 +66,7 @@
     };
 
     hammerspoon-config = {
-      url = "github:yoshintame/hammerspoon-config/87a9bcd8deb73e7e3d26a43e57ed891a277d9fcd";
+      url = "github:yoshintame/hammerspoon-config/e93726e8be4c42c086eed4eead4f45cfb82a7fe7";
       flake = false;
     };
 

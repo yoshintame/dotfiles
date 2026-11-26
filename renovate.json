@@ -23,6 +23,16 @@
       "minimumReleaseAge": "0 days",
       "schedule": ["at any time"],
       "automerge": true
+    },
+    {
+      "description": "hammerspoon-config: flake.lock input and the submodule pointer move together in one auto-merged PR",
+      "matchDepNames": ["hammerspoon-config", "modules/home/hammerspoon/config"],
+      "enabled": true,
+      "groupName": "hammerspoon-config",
+      "groupSlug": "hammerspoon-config",
+      "minimumReleaseAge": "0 days",
+      "schedule": ["at any time"],
+      "automerge": true
     }
   ]
 }

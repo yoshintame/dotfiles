@@ -23,6 +23,7 @@
         nixLink.roots = {
           dotfiles.live = flakeRoot;
           karabiner-config.pinned = inputs.karabiner-config;
+          hammerspoon-config.pinned = inputs.hammerspoon-config;
           agent-harness.pinned = inputs.agent-harness;
         };
       }

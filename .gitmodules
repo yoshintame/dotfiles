@@ -5,3 +5,7 @@
 	path = modules/home/karabiner/config
 	url = https://github.com/yoshintame/karabiner-config.git
 	update = none
+[submodule "modules/home/hammerspoon/config"]
+	path = modules/home/hammerspoon/config
+	url = https://github.com/yoshintame/hammerspoon-config.git
+	update = none

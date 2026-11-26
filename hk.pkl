@@ -5,7 +5,6 @@ local generated =
     "hosts/*/packages/**",
     "hosts/lasthaze-gaming/windows/autounattend*.xml",
     "modules/home/bat/config/theme/**",
-    "modules/home/hammerspoon/config/Spoons/**",
     "modules/home/resticprofile/config/repo.key.tmpl",
     "modules/home/vscode/dump/**",
     "modules/home/warp/config/workflows/**",
@@ -26,8 +25,7 @@ steps {
     check = "nix flake check --impure"
   }
   ["component-pointers"] {
-    check =
-      #"lock=$(git show :flake.lock | bun -e 'console.log(JSON.parse(await Bun.stdin.text()).nodes["karabiner-config"]?.locked.rev ?? "")') && { [ -z "$lock" ] || { link=$(git rev-parse -q --verify :modules/home/karabiner/config || true); [ "$lock" = "$link" ]; } || { echo "karabiner-config gitlink $link != flake.lock $lock" >&2; exit 1; }; }"#
+    check = "bun packages/component-pointers/src/check.ts"
   }
   ["darwin"] {
     check =

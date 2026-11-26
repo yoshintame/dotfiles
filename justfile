@@ -7,9 +7,6 @@ check:
 fmt:
     nix fmt
 
-test:
-    cd modules/home/hammerspoon/config/Spoons/SmsOtp.spoon && busted
-
 rebuild:
     mise run dot:rebuild
 

@@ -65,6 +65,11 @@
       flake = false;
     };
 
+    hammerspoon-config = {
+      url = "github:yoshintame/hammerspoon-config/87a9bcd8deb73e7e3d26a43e57ed891a277d9fcd";
+      flake = false;
+    };
+
     agent-harness = {
       url = "github:yoshintame/agent-harness/88231be6d9d1cf0a8aa38cc74f0d56f2d3d43117";
       flake = false;

@@ -5,7 +5,7 @@
   ...
 }:
 myLib.mkModule config "hammerspoon" {
-  nixLink.links."~/.hammerspoon" = "modules/home/hammerspoon/config";
+  nixLink.links."~/.hammerspoon".root = "hammerspoon-config";
 
   stencil.files."~/.local/share/hammerspoon/site/private.lua" = {
     template = ./private.lua.tmpl;

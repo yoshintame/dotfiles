@@ -1,5 +1,5 @@
 outputs:
-  lua: ../home/hammerspoon/config/generated/proxy-bindings.lua
+  lua: ~/Development/yoshintame/hammerspoon-config/generated/proxy-bindings.lua
   typescript: ~/Development/yoshintame/karabiner-config/src/generated/proxy-bindings.ts
 
 bindings:

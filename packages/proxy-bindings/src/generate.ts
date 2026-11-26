@@ -17,16 +17,6 @@ function expandHome(filePath: string) {
   return filePath.startsWith("~/") ? path.join(os.homedir(), filePath.slice(2)) : filePath;
 }
 
-function nearestExisting(dir: string) {
-  let current = dir;
-  while (!fs.existsSync(current)) current = path.dirname(current);
-  return current;
-}
-
-function insideWorkTree(dir: string) {
-  return Bun.spawnSync(["git", "-C", dir, "rev-parse", "--show-toplevel"], { stdout: "ignore", stderr: "ignore" }).exitCode === 0;
-}
-
 export function generate(configPath: string) {
   const config: Config = readConfig(configPath);
   const configDir = path.dirname(configPath);
@@ -42,11 +32,8 @@ export function generate(configPath: string) {
     const absPath = path.resolve(configDir, expandHome(outputPath));
     const dir = path.dirname(absPath);
     if (!fs.existsSync(dir)) {
-      if (!insideWorkTree(nearestExisting(dir))) {
-        console.warn(`  ${format} skipped: no checkout for ${dir}`);
-        continue;
-      }
-      fs.mkdirSync(dir, { recursive: true });
+      console.warn(`  ${format} skipped: no directory ${dir}`);
+      continue;
     }
     fs.writeFileSync(absPath, gen(config.bindings, relSource));
     console.log(`  ${format} → ${path.relative(process.cwd(), absPath)}`);

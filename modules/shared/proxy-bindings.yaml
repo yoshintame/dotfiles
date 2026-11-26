@@ -54,6 +54,9 @@ bindings:
   pasteHistory5: cmd alt ctrl shift f17
   pasteCodeBlock: cmd alt ctrl shift k
 
+  clipboardQuick: cmd alt ctrl shift o
+  clipbookHistory: cmd alt ctrl shift j
+
   currentAppWindows: cmd alt ctrl shift f19
 
   appSwitcherApp: cmd alt ctrl shift n

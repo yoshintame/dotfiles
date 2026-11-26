@@ -1,3 +1,5 @@
+local proxy = require("generated.proxy-bindings")
+
 return {
     meeting = {
         scriptsDir = os.getenv("HOME") .. "/Documents/obsidian/yoshintame/_scripts",
@@ -23,6 +25,17 @@ return {
 
     ["clipboard-history"] = {
         size = 9,
+    },
+
+    ["clipboard-quick"] = {
+        bundleID = "com.ikryanov.clipbook.v2",
+        navigationKeys = { "up", "down" },
+        closingKeys = { "return", "padenter", "escape" },
+        keys = {
+            open = proxy.clipbook_history,
+            next = "down",
+            select = "return",
+        },
     },
 
     ["downloads-copy-path"] = {

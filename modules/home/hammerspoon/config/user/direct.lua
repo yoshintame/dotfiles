@@ -4,9 +4,27 @@ local input = require("actions.input")
 local open = require("actions.open")
 local windows = require("actions.windows")
 local clipboard = require("features.clipboard-history")
+local clipboardQuick = require("features.clipboard-quick")
 local proxy = require("generated.proxy-bindings")
 local appSwitcher = require("features.app-switcher")
 local selection = require("features.selection")
+
+local function cancellingQuickPick(fn)
+    return function(...)
+        clipboardQuick.cancel()
+        return fn(...)
+    end
+end
+
+local function onHyperPress()
+    clipboardQuick.cancel()
+    appSwitcher.arm()
+end
+
+local function onHyperRelease()
+    clipboardQuick.commit()
+    appSwitcher.commit()
+end
 
 return {
     launcher = {
@@ -52,11 +70,12 @@ return {
         { proxy.paste_history4,      clipboard.pasteAt(4) },
         { proxy.paste_history5,      clipboard.pasteAt(5) },
         { proxy.paste_code_block,    clipboard.pasteTransformed(input.codeBlock) },
+        { proxy.clipboard_quick,     appSwitcher.unlessActive(clipboardQuick.trigger) },
         { proxy.current_app_windows, apps.switchWindows },
-        { proxy.app_switcher_app,    appSwitcher.app,    onRepeat = appSwitcher.whileOpen(appSwitcher.app) },
-        { proxy.app_switcher_window, appSwitcher.window, onRepeat = appSwitcher.whileOpen(appSwitcher.window) },
-        { proxy.app_switcher_commit, appSwitcher.commit },
-        { proxy.app_switcher_arm,    appSwitcher.arm },
+        { proxy.app_switcher_app,    cancellingQuickPick(appSwitcher.app),    onRepeat = appSwitcher.whileOpen(appSwitcher.app) },
+        { proxy.app_switcher_window, cancellingQuickPick(appSwitcher.window), onRepeat = appSwitcher.whileOpen(appSwitcher.window) },
+        { proxy.app_switcher_commit, onHyperRelease },
+        { proxy.app_switcher_arm,    onHyperPress },
         { proxy.text_fix,            appSwitcher.unlessActive(selection.withSelected(input.shortcut(proxy.fix))) },
         { proxy.text_polish,         appSwitcher.unlessActive(selection.withSelected(input.shortcut(proxy.polish))) },
         { proxy.text_translate,      appSwitcher.unlessActive(selection.withSelected(open.raycast("extensions/isfeng/easydict/easydict", { arguments = { queryText = "" } }))) },

@@ -17,10 +17,6 @@ local armed = false
 local committedAt = nil
 local session = nil
 
-local function now()
-    return hs.timer.absoluteTime() / 1e9
-end
-
 local function regularApps()
     local seen, list = {}, {}
     local function add(app)
@@ -229,7 +225,7 @@ local function open(apps, index, column, mode)
 end
 
 local function lateTap()
-    return not armed and committedAt and now() - committedAt < config.lateTapSeconds
+    return not armed and committedAt and timer.now() - committedAt < config.lateTapSeconds
 end
 
 local function focus(app, entry)
@@ -323,7 +319,7 @@ function M.commit()
     if not session then return end
     local app, entry = session.apps[session.appIndex], selectedEntry()
     close()
-    committedAt = now()
+    committedAt = timer.now()
     focus(app, entry)
 end
 

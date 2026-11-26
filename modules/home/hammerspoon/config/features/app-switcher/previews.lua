@@ -4,10 +4,6 @@ local M = {}
 
 local cache = {}
 
-local function now()
-    return hs.timer.absoluteTime() / 1e9
-end
-
 local function thumbnail(image, width)
     local size = image:size()
     local frame = { x = 0, y = 0, w = width, h = width * size.h / size.w }
@@ -36,7 +32,7 @@ function M.refresh(entries, settings, onUpdate)
     local queue = {}
     for _, entry in ipairs(entries) do
         local cached = cache[entry.id]
-        if not cached or now() - cached.at > settings.maxAgeSeconds then queue[#queue + 1] = entry end
+        if not cached or timer.now() - cached.at > settings.maxAgeSeconds then queue[#queue + 1] = entry end
     end
     local pending = nil
     local function captureNext()
@@ -53,7 +49,7 @@ function M.refresh(entries, settings, onUpdate)
             image = nil
             collectgarbage()
         end
-        cached.at = now()
+        cached.at = timer.now()
         cache[entry.id] = cached
         onUpdate()
         pending = timer.after(0, captureNext)

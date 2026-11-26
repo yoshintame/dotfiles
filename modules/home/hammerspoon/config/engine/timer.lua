@@ -2,6 +2,10 @@ local M = {}
 
 local pending = {}
 
+function M.now()
+    return hs.timer.absoluteTime() / 1e9
+end
+
 function M.after(seconds, fn)
     local timer
     timer = hs.timer.doAfter(seconds, function()

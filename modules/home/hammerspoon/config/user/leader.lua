@@ -5,7 +5,6 @@ local network = require("actions.network")
 local open = require("actions.open")
 local power = require("actions.power")
 local coffee = require("features.coffee-lid")
-local hyperSetup = require("features.hyper-setup")
 local meeting = require("features.meeting")
 local raycastNav = require("features.raycast-nav")
 local proxy = require("generated.proxy-bindings")
@@ -78,7 +77,6 @@ return {
             { "x", "Roulette Clear",    shortcut(proxy.roulette_clear) },
             { "e", "Emojis",            raycast("extensions/raycast/emoji-symbols/search-emoji-symbols") },
             { "k", "Kill Process",      raycast("extensions/rolandleth/kill-process/index") },
-            { "h", "Hyper Setup ⇄",     hyperSetup.toggle },
             { "l", "keySwitcher log ⇄", maintenance.toggleKeySwitcherLog },
             { "w", "Phone Hotspot",     network.joinHotspot("lasthaze-phone") },
         }},

@@ -87,7 +87,6 @@ return {
 
     ["onepassword-focus-guard"] = {},
     ["sms-otp"] = {},
-    ["hyper-setup"] = {},
 
     ["raycast-nav"] = {
         keys = {

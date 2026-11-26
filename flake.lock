@@ -360,17 +360,17 @@
     "hammerspoon-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1795687445,
-        "narHash": "sha256-fV5ZGOCXmTVmpr6fQvo7XnsQfIXXWXct1X8VzLldf88=",
+        "lastModified": 1795694378,
+        "narHash": "sha256-zzCGHSoP8d1QEw4jdDBrW6je3t+qd/dI5BIcih23JFM=",
         "owner": "yoshintame",
         "repo": "hammerspoon-config",
-        "rev": "87a9bcd8deb73e7e3d26a43e57ed891a277d9fcd",
+        "rev": "e93726e8be4c42c086eed4eead4f45cfb82a7fe7",
         "type": "github"
       },
       "original": {
         "owner": "yoshintame",
         "repo": "hammerspoon-config",
-        "rev": "87a9bcd8deb73e7e3d26a43e57ed891a277d9fcd",
+        "rev": "e93726e8be4c42c086eed4eead4f45cfb82a7fe7",
         "type": "github"
       }
     },

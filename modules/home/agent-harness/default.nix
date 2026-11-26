@@ -12,8 +12,7 @@ let
 in
 myLib.mkModule config "agent-harness" {
   nixLink.links = {
-    "~/.claude/CLAUDE.md" = harness "shared/instructions/AGENTS.md";
-    "~/.codex/AGENTS.md" = harness "shared/instructions/AGENTS.md";
+    "~/.codex/AGENTS.md" = harness "codex/instructions/AGENTS.md";
     "~/Development/CLAUDE.md" = harness "claude/instructions/dev-profile.md";
     "~/.local/share/worktrees/CLAUDE.md" = harness "claude/instructions/dev-profile.md";
     "~/.paseo/worktrees/CLAUDE.md" = harness "claude/instructions/dev-profile.md";

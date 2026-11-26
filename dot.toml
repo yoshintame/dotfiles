@@ -137,8 +137,23 @@ arg "[target]" help="worktree branch or path; off restores the home-manager link
 run = '''
 set -euo pipefail
 case "$usage_tool" in
-  hs) rel=.hammerspoon; sub=; build= ;;
-  kar) rel=.config/karabiner/karabiner.json; sub=build/karabiner.json; build="bun run build" ;;
+  hs)
+    rel=.hammerspoon
+    sub=
+    build() { :; }
+    reload() {
+      osascript -e 'tell application "Hammerspoon" to quit' >/dev/null 2>&1 || true
+      for _ in $(seq 50); do pgrep -x Hammerspoon >/dev/null || break; sleep 0.2; done
+      if pgrep -x Hammerspoon >/dev/null; then pkill -x Hammerspoon; sleep 0.5; fi
+      open -g -a Hammerspoon
+    }
+    ;;
+  kar)
+    rel=.config/karabiner/karabiner.json
+    sub=build/karabiner.json
+    build() { bun run build; }
+    reload() { launchctl kickstart -k "gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server"; }
+    ;;
   *) echo "unknown tool $usage_tool: use hs or kar" >&2; exit 2 ;;
 esac
 hm=$(readlink "$HOME/.local/state/home-manager/gcroots/current-home/home-files")
@@ -148,21 +163,10 @@ managed="$hm/$rel"
 repo=$(readlink -f "$managed")
 repo=${repo%/"$sub"}
 
-reload_kar() {
-  launchctl kickstart -k "gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server"
-}
-
-reload_hs() {
-  osascript -e 'tell application "Hammerspoon" to quit' >/dev/null 2>&1 || true
-  for _ in $(seq 50); do pgrep -x Hammerspoon >/dev/null || break; sleep 0.2; done
-  if pgrep -x Hammerspoon >/dev/null; then pkill -x Hammerspoon; sleep 0.5; fi
-  open -g -a Hammerspoon
-}
-
 relink() {
   [ ! -e "$live" ] || [ -L "$live" ] || { echo "$live is not a symlink, leaving it alone" >&2; exit 1; }
   ln -sfn "$1" "$live"
-  "reload_$usage_tool"
+  reload
 }
 
 worktree() {
@@ -192,7 +196,7 @@ case "${usage_target:-}" in
     ;;
   *)
     tree=$(worktree "$usage_target")
-    [ -z "$build" ] || (cd "$tree" && $build >/dev/null)
+    (cd "$tree" && build >/dev/null)
     dest=$tree${sub:+/$sub}
     [ -e "$dest" ] || { echo "no $dest" >&2; exit 1; }
     relink "$dest"

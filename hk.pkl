@@ -26,8 +26,7 @@ steps {
     check = "nix flake check --impure"
   }
   ["component-pointers"] {
-    check =
-      #"lock=$(git show :flake.lock | bun -e 'console.log(JSON.parse(await Bun.stdin.text()).nodes["karabiner-config"]?.locked.rev ?? "")') && { [ -z "$lock" ] || { link=$(git rev-parse -q --verify :modules/home/karabiner/config || true); [ "$lock" = "$link" ]; } || { echo "karabiner-config gitlink $link != flake.lock $lock" >&2; exit 1; }; }"#
+    check = "bun packages/component-pointers/src/check.ts"
   }
   ["darwin"] {
     check =

@@ -23,6 +23,7 @@
         nixLink.roots = {
           dotfiles.live = flakeRoot;
           karabiner-config.pinned = inputs.karabiner-config;
+          agent-harness.pinned = inputs.agent-harness;
         };
       }
       inputs.sops-nix.homeManagerModules.sops
@@ -53,6 +54,7 @@
       )
 
       ./home/aerospace
+      ./home/agent-harness
       ./home/agent-telemetry
       ./home/apm
       ./home/app-state

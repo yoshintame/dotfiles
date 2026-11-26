@@ -6,7 +6,7 @@
   ...
 }:
 let
-  hooksDir = "${hostFacts.sharedEnv.DOTFILES}/modules/home/agents-shared/config/hooks";
+  hooksDir = "${hostFacts.sharedEnv.AGENT_HARNESS}/shared/hooks";
 
   command =
     name: extra:

@@ -10,6 +10,7 @@
 
   home-manager.users.yoshintame.my = myLib.enableList [
     "aerospace"
+    "agent-harness"
     "agent-telemetry"
     "apm"
     "app-state"

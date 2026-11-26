@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
-import { repairLinks } from './links'
+import { harnessManifestDirectory, repairLinks } from './links'
 
 type Values = Record<string, string>
 
@@ -110,8 +110,8 @@ async function decrypt(path: string) {
 async function main() {
 	const home = Bun.env.HOME
 	const dotfiles = Bun.env.DOTFILES ?? resolve(import.meta.dir, '../../..')
-	if (!home) {
-		console.error('HOME must be set')
+	if (!home || !Bun.env.AGENT_HARNESS) {
+		console.error('HOME and AGENT_HARNESS must be set')
 		return 2
 	}
 	if (!Bun.which('apm')) {
@@ -119,7 +119,7 @@ async function main() {
 		return 0
 	}
 
-	const config = join(dotfiles, 'modules/home/apm/config/apm.yml')
+	const config = join(harnessManifestDirectory(), 'apm.yml')
 	const manifest = Bun.YAML.parse(await readFile(config, 'utf8')) as {
 		dependencies?: { mcp?: Dependency[] }
 	}

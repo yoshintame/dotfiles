@@ -5,10 +5,6 @@
   ...
 }:
 myLib.mkModule config "claude-code-patch" {
-  nixLink.links = {
-    "~/.local/bin/claude-code-patch" = "modules/home/claude-code-patch/config/patch.py";
-  };
-
   launchd.agents.claude-code-patch = {
     enable = true;
     config = {

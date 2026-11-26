@@ -20,6 +20,7 @@ let
     BUN_INSTALL = "${homeDir}/.local/share/bun";
     BUN_INSTALL_CACHE_DIR = "${homeDir}/.cache/.bun/install/cache";
     DOTFILES = "${homeDir}/.dotfiles";
+    AGENT_HARNESS = "${homeDir}/Development/yoshintame/agent-harness";
     OBSIDIAN_VAULT = "${homeDir}/Documents/obsidian/yoshintame";
     XDG_CONFIG_HOME = "${homeDir}/.config";
     XDG_DATA_HOME = "${homeDir}/.local/share";

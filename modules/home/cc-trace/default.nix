@@ -9,11 +9,6 @@ let
   stateDir = "${home}/.local/state/cc-trace";
 in
 myLib.mkModule config "cc-trace" {
-  nixLink.links = {
-    "~/.local/bin/cc-trace-compact" = "modules/home/cc-trace/config/cc-trace-compact.ts";
-    "~/.local/bin/cc-trace-break" = "modules/home/cc-trace/config/cc-trace-break.ts";
-  };
-
   home.activation.ccTraceState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     /bin/mkdir -p -m 700 "${stateDir}" "${stateDir}/bodies" "${stateDir}/sessions"
   '';

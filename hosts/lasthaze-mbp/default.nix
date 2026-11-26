@@ -141,6 +141,7 @@ in
       nixLink = {
         enable = true;
         liveBase = "${hostFacts.homeDir}/Development/yoshintame";
+        roots.agent-harness.live = hostFacts.sharedEnv.AGENT_HARNESS;
         defaults = {
           link = {
             relink = true;

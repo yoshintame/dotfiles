@@ -13,6 +13,8 @@ set -euo pipefail
 
 REPO_URL="${DOTFILES_REPO_URL:-https://github.com/yoshintame/dotfiles.git}"
 REPO_DIR="${DOTFILES_DIR:-${HOME}/.dotfiles}"
+HARNESS_URL="${AGENT_HARNESS_REPO_URL:-https://github.com/yoshintame/agent-harness.git}"
+HARNESS_DIR="${AGENT_HARNESS:-${HOME}/Development/yoshintame/agent-harness}"
 AGE_KEY="${HOME}/.config/sops/age/keys.txt"
 
 TEST_MODE=0
@@ -163,6 +165,16 @@ ensure_repo_cloned() {
   git clone --recurse-submodules "${REPO_URL}" "${REPO_DIR}"
 }
 
+ensure_harness_cloned() {
+  if [ -d "${HARNESS_DIR}/.git" ]; then
+    log "agent-harness already present at ${HARNESS_DIR}"
+    return 0
+  fi
+  log "Cloning ${HARNESS_URL} → ${HARNESS_DIR}"
+  mkdir -p "$(dirname "${HARNESS_DIR}")"
+  git clone "${HARNESS_URL}" "${HARNESS_DIR}"
+}
+
 ensure_nix_installed() {
   if command -v nix >/dev/null 2>&1 || [ -x /nix/var/nix/profiles/default/bin/nix ]; then
     log "Nix already installed"
@@ -240,7 +252,7 @@ setup_toolchains() {
     warn "Some mise tools did not install (listed above); continuing"
   fi
   log "Installing bun dependencies of the repo"
-  for dir in "${REPO_DIR}" "${REPO_DIR}"/packages/*; do
+  for dir in "${REPO_DIR}" "${REPO_DIR}"/packages/* "${HARNESS_DIR}"; do
     if [ -f "${dir}/package.json" ]; then
       if ! (cd "${dir}" && mise install bun && MISE_EXEC_AUTO_INSTALL=false mise exec -- bun install); then
         warn "bun install failed in ${dir}; continuing"
@@ -315,6 +327,7 @@ main() {
 
   ensure_xcode_clt
   ensure_repo_cloned
+  ensure_harness_cloned
 
   # If we were curl'd from the internet, bash is executing a tempfile.
   # Re-exec from the cloned repo so $0 / relative paths behave.

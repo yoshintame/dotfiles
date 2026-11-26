@@ -5,9 +5,9 @@ const rawArgs = Bun.argv.slice(2)
 const home = Bun.env.HOME
 const dotfiles = Bun.env.DOTFILES ?? resolve(import.meta.dir, '../../..')
 
-if (!home || !dotfiles || rawArgs.length === 0) {
+if (!home || !dotfiles || !Bun.env.AGENT_HARNESS || rawArgs.length === 0) {
 	console.error(
-		'Usage: run.ts <apm arguments...>; HOME and DOTFILES must be set',
+		'Usage: run.ts <apm arguments...>; HOME, DOTFILES and AGENT_HARNESS must be set',
 	)
 	process.exit(2)
 }

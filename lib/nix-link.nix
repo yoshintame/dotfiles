@@ -98,10 +98,15 @@ let
       let
         base = under root.base (globBase link.path);
         keep = f: !(lib.elem f link.exclude);
+        files =
+          if builtins.pathExists root.base && !builtins.pathExists base then
+            throw "nixLink: glob base ${base} does not exist"
+          else
+            collectRel base;
       in
       lib.listToAttrs (
         map (rel: lib.nameValuePair "${toKey dest}/${rel}" (root.link "${base}/${rel}")) (
-          builtins.filter keep (collectRel base)
+          builtins.filter keep files
         )
       )
     else

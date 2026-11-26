@@ -33,7 +33,7 @@ trusted_config_paths = ["~/Development/work", "~/Development/projects", "~/Devel
 description = "Вернуть дефолтную модель Claude Code на claude-opus-5-5[1m] (откат перезаписи нативным пикером расширения)"
 run = '''
 set -e
-f="$HOME/.dotfiles/modules/home/claude/config/settings.json"
+f="${AGENT_HARNESS:?AGENT_HARNESS is not set}/claude/settings.json"
 tmp="$(mktemp)"
 jq '.model = "claude-opus-5-5[1m]"' "$f" > "$tmp"
 cat "$tmp" > "$f"

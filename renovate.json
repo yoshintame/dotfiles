@@ -2,6 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>yoshintame/renovate-config"],
   "enabledManagers": ["nix", "git-submodules"],
+  "minimumReleaseAge": "0 days",
+  "schedule": ["at any time"],
+  "automerge": true,
   "nix": {
     "enabled": true
   },
@@ -15,24 +18,16 @@
       "enabled": false
     },
     {
-      "description": "karabiner-config: flake.lock input and the submodule pointer move together in one auto-merged PR",
+      "description": "karabiner-config: flake.lock input and the submodule pointer move together in one PR",
       "matchDepNames": ["karabiner-config", "modules/home/karabiner/config"],
       "enabled": true,
-      "groupName": "karabiner-config",
-      "groupSlug": "karabiner-config",
-      "minimumReleaseAge": "0 days",
-      "schedule": ["at any time"],
-      "automerge": true
+      "groupName": "karabiner-config"
     },
     {
-      "description": "hammerspoon-config: flake.lock input and the submodule pointer move together in one auto-merged PR",
+      "description": "hammerspoon-config: flake.lock input and the submodule pointer move together in one PR",
       "matchDepNames": ["hammerspoon-config", "modules/home/hammerspoon/config"],
       "enabled": true,
-      "groupName": "hammerspoon-config",
-      "groupSlug": "hammerspoon-config",
-      "minimumReleaseAge": "0 days",
-      "schedule": ["at any time"],
-      "automerge": true
+      "groupName": "hammerspoon-config"
     }
   ]
 }

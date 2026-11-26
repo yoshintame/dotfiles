@@ -57,9 +57,15 @@ async function persistReplacement(
 	return true
 }
 
+export function harnessManifestDirectory() {
+	const harness = Bun.env.AGENT_HARNESS
+	if (!harness) throw new Error('AGENT_HARNESS must point at the agent-harness clone')
+	return join(harness, 'shared/apm')
+}
+
 export async function repairLinks(home: string, dotfiles: string) {
 	const liveDirectory = join(home, '.apm')
-	const canonicalDirectory = join(dotfiles, 'modules/home/apm/config')
+	const canonicalDirectory = harnessManifestDirectory()
 	const needsRelink = (
 		await Promise.all(
 			names.map((name) =>

@@ -27,11 +27,13 @@ async function fixture(mode: 'success' | 'failure' | 'interrupt') {
 	roots.push(root)
 	const home = join(root, 'home')
 	const dotfiles = join(root, 'dotfiles')
+	const harness = join(root, 'agent-harness')
 	const live = join(home, '.apm')
-	const canonical = join(dotfiles, 'modules/home/apm/config')
+	const canonical = join(harness, 'shared/apm')
 	const bin = join(root, 'bin')
 	await Promise.all([
 		mkdir(live, { recursive: true }),
+		mkdir(dotfiles, { recursive: true }),
 		mkdir(canonical, { recursive: true }),
 		mkdir(bin),
 	])
@@ -66,7 +68,7 @@ async function fixture(mode: 'success' | 'failure' | 'interrupt') {
 		chmod(join(bin, 'apm'), 0o755),
 		chmod(join(bin, 'mise'), 0o755),
 	])
-	return { bin, canonical, home, live, root }
+	return { bin, canonical, dotfiles, harness, home, live, root }
 }
 
 async function runFixture(mode: 'success' | 'failure') {
@@ -75,7 +77,8 @@ async function runFixture(mode: 'success' | 'failure') {
 		cwd: paths.root,
 		env: {
 			...Bun.env,
-			DOTFILES: paths.canonical.split('/modules/home/apm/config')[0],
+			DOTFILES: paths.dotfiles,
+			AGENT_HARNESS: paths.harness,
 			HOME: paths.home,
 			PATH: `${paths.bin}:${Bun.env.PATH}`,
 		},
@@ -96,7 +99,8 @@ async function runArgs(argv: string[]) {
 		cwd: paths.root,
 		env: {
 			...Bun.env,
-			DOTFILES: paths.canonical.split('/modules/home/apm/config')[0],
+			DOTFILES: paths.dotfiles,
+			AGENT_HARNESS: paths.harness,
 			HOME: paths.home,
 			PATH: `${paths.bin}:${Bun.env.PATH}`,
 		},
@@ -167,7 +171,8 @@ describe('global APM wrapper', () => {
 			cwd: paths.root,
 			env: {
 				...Bun.env,
-				DOTFILES: paths.canonical.split('/modules/home/apm/config')[0],
+				DOTFILES: paths.dotfiles,
+				AGENT_HARNESS: paths.harness,
 				HOME: paths.home,
 				PATH: `${paths.bin}:${Bun.env.PATH}`,
 			},

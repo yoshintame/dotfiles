@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "agent-harness": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795677846,
+        "narHash": "sha256-kAKAvcRGnOh71X8fkOUGtcWcrg1u+VpKbkkVGPrldVo=",
+        "owner": "yoshintame",
+        "repo": "agent-harness",
+        "rev": "88231be6d9d1cf0a8aa38cc74f0d56f2d3d43117",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yoshintame",
+        "repo": "agent-harness",
+        "rev": "88231be6d9d1cf0a8aa38cc74f0d56f2d3d43117",
+        "type": "github"
+      }
+    },
     "bdwgc": {
       "flake": false,
       "locked": {
@@ -685,6 +702,7 @@
     },
     "root": {
       "inputs": {
+        "agent-harness": "agent-harness",
         "determinate": "determinate",
         "disko": "disko",
         "easy-hosts": "easy-hosts",

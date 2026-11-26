@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-exec "$HOME/.agents/skills/git-commit/scripts/gather-context.sh" "$@"

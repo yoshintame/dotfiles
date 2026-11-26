@@ -65,6 +65,11 @@
       flake = false;
     };
 
+    agent-harness = {
+      url = "github:yoshintame/agent-harness/88231be6d9d1cf0a8aa38cc74f0d56f2d3d43117";
+      flake = false;
+    };
+
     homelab = {
       url = "git+ssh://git@github.com/yoshintame/lasthaze-homelab";
       inputs.nixpkgs.follows = "nixpkgs";

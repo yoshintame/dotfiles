@@ -4,10 +4,9 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MODULE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-DOTFILES_DIR="$(cd "$MODULE_DIR/../.." && pwd)"
 
 CONFIG_SRC="$MODULE_DIR/config/config.toml"
-WORKTREE_HOOK="$DOTFILES_DIR/modules/agents-shared/config/hooks/worktree-create.sh"
+WORKTREE_HOOK="${AGENT_HARNESS:-$HOME/Development/yoshintame/agent-harness}/claude/hooks/worktree-create.sh"
 
 if [ ! -x "$WORKTREE_HOOK" ]; then
   echo "FATAL: WorktreeCreate hook not found at $WORKTREE_HOOK" >&2

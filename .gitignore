@@ -11,9 +11,6 @@ result-*
 # Ignore automatically generated direnv output
 .direnv
 
-# Claude permission analyzer backups
-modules/home/claude/config/settings.backup-*.json
-
 # VSCode workspace state (was polluted by markdown-inline-preview extension)
 /.vscode/
 
